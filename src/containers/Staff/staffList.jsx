@@ -208,8 +208,6 @@ class StaffListContainer extends React.Component {
 
         return (
             <div className="">
-                {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
-
                 <div>
                     <div className="form-btn-group">
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} />
@@ -217,7 +215,6 @@ class StaffListContainer extends React.Component {
                         <SaveButton  Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
                     </div>
                     <div>
-
                         <BootstrapTable data={this.staffList} options={options}
                             selectRow={this.selectRowProp}
                             striped hover
@@ -228,12 +225,9 @@ class StaffListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
                             <TableHeaderColumn width='50' dataField='status' >Status</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='phone' >Phone</TableHeaderColumn>
-                           
                         </BootstrapTable>
-
                     </div>
                 </div>
-          
             </div>
         )
 

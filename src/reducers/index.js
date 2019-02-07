@@ -1,5 +1,6 @@
 import combineReducers from 'redux/lib/combineReducers';
 import _get from 'lodash/get';
+import { reducer as formReducer } from 'redux-form'
 import userRoleReducer, { userRolesData as userRolesReducer } from './userRoles';
 import storeReducer, { storesData as storesReducer } from './store';
 import productReducer, { productData as productsReducer } from './products';
@@ -48,7 +49,7 @@ const rootReducer = combineReducers({
   posTerminalReducer,
   sessionReducer,
   sessionsReducer,
-
+  form: formReducer
 })
 
 export default rootReducer;
