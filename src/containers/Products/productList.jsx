@@ -61,9 +61,8 @@ class ProductListContainer extends React.Component {
                 prod.sku = product.sku;
                 prod.description = product.description;
                 prod.id = product.id;
-                prod.costPrice = _get(product,'costPrice.price','');
-                prod.sellingPrice = _get(product,'sellingPrice.price','');
-                prod.currencyCode = _get(product,'costPrice.currencyCode','');
+                prod.sellingPrice = _get(product,'salePrice.price','');
+                prod.currencyCode = _get(product,'salePrice.currencyCode','');
                 prod.image = product.imageLink;
                 
                 tempArray.push(prod);
@@ -74,13 +73,16 @@ class ProductListContainer extends React.Component {
     }
     componentDidMount(){
         const { dispatch, productsReducer } = this.props;
-        let url = '';
-        if(localStorage.getItem('role')==='Admin'){
-            url = '/products/'+localStorage.getItem('retailerID');
-        }else if(localStorage.getItem('role')==='Store Manager'){
-            url = '/product/'+localStorage.getItem('storeID');
+        let url = '/Product/ByRetailerId';
+        // if(localStorage.getItem('role')==='Admin'){
+        //     url = '/products/'+localStorage.getItem('retailerID');
+        // }else if(localStorage.getItem('role')==='Store Manager'){
+        //     url = '/product/'+localStorage.getItem('storeID');
+        // }
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
         }
-        dispatch(fetchProductLookupData(productsReducer,url));
+        dispatch(fetchProductLookupData(productsReducer,url, reqBody));
     }
     onUpdate(){
         const {dispatch, productsReducer} = this.props;
@@ -130,7 +132,7 @@ class ProductListContainer extends React.Component {
 
     }
     render() {
-
+        console.log(this.productList, 'this.props.productData')
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
@@ -147,10 +149,6 @@ class ProductListContainer extends React.Component {
                 <Redirect push to="/product" />
             )
         }
-
-
-
-
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
@@ -171,8 +169,7 @@ class ProductListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='sku' isKey={true} >SKU</TableHeaderColumn>
                             <TableHeaderColumn width='150' dataField='name' dataSort >
                                 Product Name
-                        </TableHeaderColumn>
-                            <TableHeaderColumn width='80' dataField='costPrice' >Cost Price</TableHeaderColumn>
+                            </TableHeaderColumn>
                             <TableHeaderColumn width='50' dataField='currencyCode' >Currency Code</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
                             <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>

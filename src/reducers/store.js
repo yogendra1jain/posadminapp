@@ -44,7 +44,9 @@ const storesData = (state = {
       return Object.assign({}, state, {
         isFetching: false,
         type: action.type, status: action.status,
-        didInvalidate: false, storeData: action.data,storePostData:[],
+        didInvalidate: false, 
+        storeData: action.data,
+        storePostData:[],
         lastUpdated: action.receivedAt
       });
     case REQUEST_STORE_POST:
@@ -55,8 +57,10 @@ const storesData = (state = {
     case RECEIVED_STORE_POST:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, status: action.status,
-        didInvalidate: false, storePostData: action.data,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        storePostData: action.data,
         lastUpdated: action.receivedAt
       });
       case REQUEST_POS_LOGIN:
@@ -82,7 +86,8 @@ const storesData = (state = {
       return Object.assign({}, state, {
         isFetching: false,
         type: action.type, didInvalidate: false, status: action.status,
-        selectedStore: action.data, lastUpdated: action.receivedAt
+        selectedStore: action.data, 
+        lastUpdated: action.receivedAt
       });
       case REQUEST_ADDRESS_FROM_ZIP:
       return Object.assign({}, state, {
