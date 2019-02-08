@@ -46,8 +46,8 @@ const receivePostStore = (subreddit, json, status )=> ({
 
 export const fetchPostStore = (subreddit, data,method) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STORE_CONSTANTS.STORE_URL+"/stores",
-        method: method,
+        path: STORE_CONSTANTS.STORE_URL+"/Store/Create",
+        method: 'POST',
         body: data,
         initCb: requestPostStore,
         successCb: receivePostStore,
@@ -96,13 +96,16 @@ const receiveStore = (subreddit, json, status )=> ({
 //     .catch(err => { return dispatch(receiveStoreError(subreddit,err,500)) } )
 // }
 
-export const fetchStore = (subreddit, data) => dispatch =>
+export const fetchStore = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STORE_CONSTANTS.STORE_URL+"/stores/" +data,
-        method: 'GET',
+        path: STORE_CONSTANTS.STORE_URL+url,
+        method: 'POST',
+        body: data,
         initCb: requestStore,
         successCb: receiveStore,
         failureCb: receiveStoreError,
+        resolve: '',
+        reject: '',
         subreddit,
         wrapperActionType: 'FETCH_STORE_WRAPPER',
         redirect: 'follow'

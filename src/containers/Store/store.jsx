@@ -50,6 +50,7 @@ class StoreListContainer extends React.Component {
         this.addNewStore = this.addNewStore.bind(this);
         this.saveHandler = this.saveHandler.bind(this);
         this.productList = [];
+        this.storeList = [];
         this.selectedIds = [];
         this.selectedInfo = {};
         this.selectedStore = {};
@@ -79,25 +80,23 @@ class StoreListContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
+        console.log(props.storeData, 'props.storeData')
         if (props.type === 'RECEIVED_STORE') {
             if (!_isEmpty(props.storeData)) {
                 this.storeList = [];
-                props.storeData.stores.map(store=>{
+                props.storeData.map(store=>{
                     let tempStore = {};
-                    tempStore.storeName = store.storeName;
-                    tempStore.owner = store.owner;
+                    tempStore.storeName = store.name;
                     tempStore.id = store.id;
-                    tempStore.displayAddress = _get(store.storeAddress,'streetAddress1','')+","+_get(store.storeAddress,'streetAddress2','')+","+_get(store.storeAddress,'city','')+","
-                    +_get(store.storeAddress,'state','')+","+_get(store.storeAddress,'country','');
-                    tempStore.streetAddress1 = _get(store.storeAddress,'streetAddress1','');
-                    tempStore.streetAddress2 = _get(store.storeAddress,'streetAddress2','');
-                    tempStore.city = _get(store.storeAddress,'city','');
-                    tempStore.state = _get(store.storeAddress,'state','');
-                    tempStore.zipCode = _get(store.storeAddress,'zipCode','');
-                    tempStore.country = _get(store.storeAddress,'country','');
-                    tempStore.latitude = _get(store.storeAddress,'latitude','');
-                    tempStore.longitude = _get(store.storeAddress,'longitude','');
-
+                    tempStore.retailerId = store.retailerId
+                    tempStore.displayAddress = _get(store.address,'city','')+", "+_get(store.address,'state','')+", "+_get(store.address,'country','')+", "
+                    +_get(store.address,'postalCode','')
+                    tempStore.addressLine1 = _get(store.address,'addressLine1','');
+                    tempStore.addressLine2 = _get(store.address,'addressLine2','');
+                    tempStore.city = _get(store.address,'city','');
+                    tempStore.state = _get(store.address,'state','');
+                    tempStore.postalCode = _get(store.address,'postalCode','');
+                    tempStore.country = _get(store.address,'country','');
                     this.storeList.push(tempStore);
                 })
                 // this.storeList = props.storeData.stores;
@@ -123,8 +122,11 @@ class StoreListContainer extends React.Component {
     }
     componentDidMount() {
         const { dispatch, storesReducer } = this.props;
-        let retailerId = localStorage.getItem('retailerID');
-        dispatch(fetchStore(storesReducer, retailerId));
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
+        }
+        let url = '/Store/ByRetailerId'
+        dispatch(fetchStore(storesReducer, url, reqBody));
     }
     onUpdate() {
         let tempStore = _find(this.storeList,{'id': this.selectedStore.id});
@@ -134,11 +136,12 @@ class StoreListContainer extends React.Component {
         //     storeName: this.store,
         //     storeId: this.id,
         // }
+        console.log(tempStore, 'tempStore data')
         this.open = true;
         const {dispatch,storesReducer} = this.props;
         dispatch(requestStoreUpdate(storesReducer, tempStore));
         this.isUpdate = true;
-        this.method = 'PUT';
+        this.method = 'POST';
         this.forceUpdate();
     }
     onRowSelect = (row, isSelected, e) => {
@@ -162,8 +165,6 @@ class StoreListContainer extends React.Component {
         // } else {
 
         this.selectedIds = [];
-
-
         // }
         this.selectRowProp.selected = this.selectedIds;
 
@@ -217,7 +218,7 @@ class StoreListContainer extends React.Component {
         }
 
 
-
+        console.log(this.storeList, 'this.storeList')
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
@@ -237,7 +238,6 @@ class StoreListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='storeName' dataSort >
                                 Store Name
                         </TableHeaderColumn>
-                            <TableHeaderColumn width='50' dataField='owner' >Owner</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='displayAddress' >Address</TableHeaderColumn>
 
 

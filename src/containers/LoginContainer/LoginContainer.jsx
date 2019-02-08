@@ -21,31 +21,32 @@ import { Formik } from 'formik';
 import { GenericInput } from '../../components/common/TextValidation.jsx';
 import Yup from 'yup';
 import Alert from 'react-s-alert';
+import jwtDecode from 'jwt-decode';
 
 class LoginContainer extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            userId: "",
+            email: "",
             password: "",
             redirect: false,
             redirectToSearch: false,
         };
         this.onPaste = this.onPaste.bind(this);
         this.loginCredentials = {
-            userId: "",
+            email: "",
             password: ""
         };
     }
 
     isValidEmailAddress() {
         var pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        return pattern.test(this.state.userId);
+        return pattern.test(this.state.email);
     }
 
     validateForm() {
-        return this.state.userId.length > 0 && this.isValidEmailAddress() && this.state.password.length > 0;
+        return this.state.email.length > 0 && this.isValidEmailAddress() && this.state.password.length > 0;
     }
 
     handleChange = (props, event) => {
@@ -99,18 +100,20 @@ class LoginContainer extends React.Component {
             this.setState({
                 redirectToSearch: true,
             });
-            let userPin = nextProps.user.pin;
-            // localStorage.setItem('userPin', userPin);
-            localStorage.setItem('userName', _get(nextProps.user.billingAddress, 'firstName', '') + " " + _get(nextProps.user.billingAddress, 'lastName', ''));
-            localStorage.setItem('retailerID', nextProps.user.owner);
-            localStorage.setItem('employeeID', nextProps.user.employeeId);
-
-            localStorage.setItem('role', nextProps.user.userInfo.role);
-            if (nextProps.user.userInfo.role === 'Store Manager') {
-                localStorage.setItem('storeManager', nextProps.user.id)
-            }
-            localStorage.setItem('storeID', nextProps.user.store);
-            // this.showAlert(false, 'User Authenticated.');
+            let token = nextProps.token;
+            let decodeToken = jwtDecode(token);
+            console.log(decodeToken, 'decoded json data')
+            localStorage.setItem('Token',token);    
+            localStorage.setItem('userPin', _get(decodeToken,'Operator.loginPin', ''));
+            localStorage.setItem('userName', _get(decodeToken,'Operator.person.firstName','') + " " + _get(decodeToken,'Operator.person.lastName',''));
+            localStorage.setItem('retailerID', _get(decodeToken, 'Retailer.id', ''));
+            localStorage.setItem('employeeID', _get(decodeToken, 'Operator.id', ''));
+            localStorage.setItem('role', _get(decodeToken, 'Operator.role', ''));
+            // if (nextProps.user.userInfo.role === 'Store Manager') {
+            //     localStorage.setItem('storeManager', nextProps.user.id)
+            // }
+            localStorage.setItem('storeID', _get(decodeToken, 'Store.id', ''));
+            this.showAlert(false, 'User Authenticated.');
 
         } else {
             if (nextProps.status !== 200 && nextProps.status !== '' && nextProps.status !== undefined)
@@ -176,12 +179,12 @@ class LoginContainer extends React.Component {
                                     placeholder="Email"
                                     /> */}
                                     <GenericInput
-                                        htmlFor="userId" displayName="UserName"
-                                        inputName="userId" defaultValue={this.loginCredentials.userId}
+                                        htmlFor="email" displayName="UserName"
+                                        inputName="email" defaultValue={this.loginCredentials.email}
                                         onChange={this.handleChange.bind(this, props)}
-                                        onBlur={props.handleBlur} errorMessage={props.errors.userId}
-                                        error={props.errors} errorValue={props.errors.userId} className="text-input error"
-                                        touched={props.touched} touchedValue={props.touched.userId}
+                                        onBlur={props.handleBlur} errorMessage={props.errors.email}
+                                        error={props.errors} errorValue={props.errors.email} className="text-input error"
+                                        touched={props.touched} touchedValue={props.touched.email}
                                     />
                                 </FormGroup>
                                 <FormGroup controlId="password" bsSize="large">
@@ -234,7 +237,7 @@ class LoginContainer extends React.Component {
 
 const LoginFormSchema = Yup.object().shape({
 
-    userId: Yup.string()
+    email: Yup.string()
         // .email('email is not valid')
         .min(5, 'username should be atleast 5 characters long.')
         .max(50, 'username should be atmost 50 characters long.')
@@ -250,10 +253,10 @@ const mapStateToProps = state => {
 
     let { userRolesReducer, commonLoginReducer } = state
 
-    let { status } = userRolesReducer['userRolesData'] || '';
+    let { status } = userRolesReducer || '';
     let { isFetching } = userRolesReducer || false;
     // let { userRoleData } = loginReducer[commonLoginReducer] || [];
-    let { user, retailerId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
+    let { token } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
 
 
 
@@ -262,8 +265,7 @@ const mapStateToProps = state => {
         status,
         isFetching,
         // userRoleData,
-        user,
-        retailerId
+        token
 
     }
 }

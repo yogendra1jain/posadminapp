@@ -113,13 +113,16 @@ const receiveProductLookupDataError = (subreddit, error) => ({
 //                 status || 500)))
 // }
 
-export const fetchProductLookupData = (subreddit, url) => dispatch =>
+export const fetchProductLookupData = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
-        method: 'GET',
+        method: 'POST',
+        body: data,
         initCb: requestProductLookupData,
         successCb: receiveProductLookupData,
         failureCb: receiveProductLookupDataError,
+        resolve: '',
+        reject: '',
         subreddit,
         wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
         redirect: 'follow'

@@ -52,7 +52,8 @@ const fetchMiddleware = store => next => action => {
 
     const metaHeaders = {
         "CorrelationId": generateV1uuid(),
-        "Content-Type": config.contentType || 'application/json'
+        "Content-Type": config.contentType || 'application/json',
+        "Authorization":`Bearer ${localStorage.getItem('Token')}`
     };
 
     if (!config.doNotSendAuthHeader) {

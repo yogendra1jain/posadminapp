@@ -7,7 +7,7 @@ import ModalFooter  from 'react-bootstrap/lib/ModalFooter';
 import ModalTitle  from 'react-bootstrap/lib/ModalTitle';
 
 import { findDOMNode } from 'react-dom';
-import Button from "react-bootstrap";
+import Button from "react-bootstrap/lib/Button";
 
 import SaveButton from "../components/common/SaveButton.jsx";
 
