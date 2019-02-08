@@ -13,7 +13,7 @@ if (process.env.NODE_ENV == "production") {
 }
 if (process.env.NODE_ENV == "development") {
 
-  configObject.APPLICATION_BFF_URL = "http://pos.allonblock.com/pos-bff"
+  configObject.APPLICATION_BFF_URL = "http://13.126.59.19:20029/api"
   configObject.DEFAULT_COMPANY_ID = "abc"
   configObject.MEDIA_SERVICE_ADDRESS = "http://13.126.252.40:2003/media-service"
 

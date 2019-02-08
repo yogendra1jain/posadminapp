@@ -22,8 +22,7 @@ class AddEditStoreContainer extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.storeInfo = {
-            retailer: localStorage.getItem('retailerID'),
-            storeAddress: {}
+            retailerId: localStorage.getItem('retailerID')
         };
         this.storeList = [];
         this.props1 = null;
@@ -41,14 +40,14 @@ class AddEditStoreContainer extends React.Component {
     componentDidMount() {
         if (!_isEmpty(this.props.selectedStore)) {
             this.storeInfo = this.props.selectedStore;
-            _set(this.storeInfo, 'retailer', localStorage.getItem('retailerID'));
+            _set(this.storeInfo, 'retailerId', localStorage.getItem('retailerID'));
             // if(!_isEmpty(this.storeInfo.storeAddress)){
             //     _set(this.storeInfo,'storeAddress',{});
             // }
             delete this.storeInfo['displayAddress'];
             this.updatedStoreInfo = _cloneDeep(this.storeInfo);
             // _set(this.storeInfo,'id', localStorage.getItem('retailerID'));
-            this.method = 'PUT';
+            this.method = 'POST';
             this.forceUpdate();
         }
     }
@@ -87,28 +86,21 @@ class AddEditStoreContainer extends React.Component {
                 html: true
             });
         }
-
     }
     onSave() {
         const { dispatch, storesReducer } = this.props;
-        // let retailerId = localStorage.getItem('retailerID');
+        console.log(this.storeInfo, 'this.storeInfo')
         let data = {};
-        data = this.storeInfo;
-        delete data['storeAddress'];
-        _set(data, 'storeAddress.streetAddress1', this.storeInfo.streetAddress1);
-        _set(data, 'storeAddress.streetAddress2', this.storeInfo.streetAddress2);
-        _set(data, 'storeAddress.city', this.storeInfo.city);
-        _set(data, 'storeAddress.state', this.storeInfo.state);
-        _set(data, 'storeAddress.zipCode', this.storeInfo.zipCode);
-        _set(data, 'storeAddress.country', this.storeInfo.country);
-        _set(data, 'storeAddress.latitude', this.storeInfo.latitude);
-        _set(data, 'storeAddress.longitude', this.storeInfo.longitude);
-        
-        
-
-
-        // data.retailer = localStorage.getItem('retailerID');
-        dispatch(fetchPostStore(storesReducer, data, this.method));
+        data.name = this.storeInfo.storeName
+        data.retailerId = this.storeInfo.retailerId
+        data.address = {}
+        data.address.addressLine1 = _get(this.storeInfo,'addressLine1', '')
+        data.address.addressLine2 = this.storeInfo.addressLine2
+        data.address.city = this.storeInfo.city
+        data.address.state = this.storeInfo.state
+        data.address.country = this.storeInfo.country
+        data.address.postalCode = this.storeInfo.postalCode
+        dispatch(fetchPostStore(storesReducer, data))
     }
     onCancel = () => {
         this.redirectToSearch = true;
@@ -122,23 +114,22 @@ class AddEditStoreContainer extends React.Component {
         if(props){
             this.props1 = props;
         }
-        if (name === 'zipCode') {
+        if (name === 'postalCode') {
             if(isNaN(value)){
                 return
             }else{
                 let intVal = parseInt(value);
-                _set(this.storeInfo,'zipCode',intVal);
+                _set(this.storeInfo,'postalCode',intVal);
             }
             const { dispatch, storesReducer } = this.props;
             let data = {
-                zipCode: value,
+                postalCode: value,
             }
-            dispatch(fetchAddressFromZip(storesReducer, this.storeInfo.zipCode));
+            dispatch(fetchAddressFromZip(storesReducer, this.storeInfo.postalCode));
             this.forceUpdate();
         }
     }
     componentWillReceiveProps(props) {
-
         if (props.type === 'RECEIVED_ADDRESS_FROM_ZIP' && this.getAddressFlag) {
             if (!_isEmpty(props.addressData)) {
                 this.gotAddressData = true;
@@ -153,11 +144,11 @@ class AddEditStoreContainer extends React.Component {
             }
         }
         else if (props.type === 'RECEIVED_STORE_POST') {
-            if (!_isEmpty(props.storePostData)) {
-                if (props.storePostData.status !== 200 && props.storePostData.status !== '') {
-                    this.showAlert(true, props.storePostData.message);
-                } else if (props.storePostData.status === 200) {
-                    this.showAlert(false, props.storePostData.message);
+            // if (!_isEmpty(props.storePostData)) {
+                if (props.status !== 200 && props.status !== '') {
+                    this.showAlert(true, 'Some Error Occured!');
+                } else if (props.status === 200) {
+                    this.showAlert(false, 'Store Created Successfully!');
                     this.redirectToSearch = true;
                     // const { dispatch, storesReducer } = this.props;
                     // let retailerId = localStorage.getItem('retailerID');
@@ -166,13 +157,11 @@ class AddEditStoreContainer extends React.Component {
                     // this.open = false;                    
                 }
                 this.forceUpdate();
-            }
+            // }
         }
-
     }
 
     render() {
-
         if (this.redirectToSearch) {
             return (
                 <Redirect push to="/stores" />
@@ -212,7 +201,7 @@ class AddEditStoreContainer extends React.Component {
                                     <label className="control-label">Retailer Id</label>
                                     <GenericInput
                                         htmlFor="retailerId" displayName="Retailer Id" disabled={true}
-                                        inputName="retailerId" defaultValue={_get(this.storeInfo, 'retailer', '')}
+                                        inputName="retailerId" defaultValue={_get(this.storeInfo, 'retailerId', '')}
                                         onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
@@ -235,8 +224,8 @@ class AddEditStoreContainer extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Street Address1</label>
                                     <GenericInput
-                                        htmlFor="streetAddress1" displayName="Street Address1"
-                                        inputName="streetAddress1" defaultValue={_get(this.storeInfo, 'streetAddress1', '')}
+                                        htmlFor="addressLine1" displayName="Street Address1"
+                                        inputName="addressLine1" defaultValue={_get(this.storeInfo, 'addressLine1', '')}
                                         onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
@@ -244,8 +233,8 @@ class AddEditStoreContainer extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Street Address2</label>
                                     <GenericInput
-                                        htmlFor="streetAddress2" displayName="Street Address2"
-                                        inputName="streetAddress2" defaultValue={_get(this.storeInfo, 'streetAddress2', '')}
+                                        htmlFor="addressLine2" displayName="Street Address2"
+                                        inputName="addressLine2" defaultValue={_get(this.storeInfo, 'addressLine2', '')}
                                         onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
@@ -262,8 +251,8 @@ class AddEditStoreContainer extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Zip Code</label>
                                     <GenericInput
-                                        htmlFor="zipCode" displayName="Zip Code" type="text"
-                                        inputName="zipCode" defaultValue={_get(this.storeInfo, 'zipCode', '')}
+                                        htmlFor="postalCode" displayName="Zip Code" type="text"
+                                        inputName="postalCode" defaultValue={_get(this.storeInfo, 'postalCode', '')}
                                         onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
                                         onBlur={(event) => this.handleBlur(event, props)}
                                         className="text-input error"
@@ -287,7 +276,7 @@ class AddEditStoreContainer extends React.Component {
                                         className="text-input error"
                                     />
                                 </div>
-                                <div className="col-sm-6 col-md-4 form-d">
+                                {/* <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Latitude</label>
                                     <GenericInput
                                         htmlFor="latitude" displayName="Latitude"
@@ -298,8 +287,8 @@ class AddEditStoreContainer extends React.Component {
                                         touched={props.touched} touchedValue={props.touched.latitude}
                                         className="text-input error"
                                     />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
+                                </div> */}
+                                {/* <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Longitude</label>
                                     <GenericInput
                                         htmlFor="longitude" displayName="Longitude"
@@ -310,15 +299,14 @@ class AddEditStoreContainer extends React.Component {
                                         touched={props.touched} touchedValue={props.touched.longitude}
                                         className="text-input error"
                                     />
-                                </div>
-
-
-
+                                </div> */}
                             </Row>
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        <SaveButton disabled={!props.isValid} buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.onSave} />
+                                        <SaveButton
+                                        //  disabled={!props.isValid} 
+                                         buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.onSave} />
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.onCancel} />
                                     </div>
                                 </div>

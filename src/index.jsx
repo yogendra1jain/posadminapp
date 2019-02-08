@@ -37,6 +37,8 @@ import "./assets/stylesheets/main.css";
 import customerChartsContainer from "./containers/Products/CustomerReports.jsx";
 import inventoryChartsContainer from './containers/Products/InventoryReports.jsx';
 import sessionManageContainer from './containers/SessionContainer/sessionManagementContainer.jsx';
+import CustomerListContainer from './containers/Customer/CustomerList';
+import AddCustomerContainer from './containers/Customer/AddEditCustomer/AddEditCustomer';
 
 const middleware = [ thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
@@ -83,9 +85,8 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer}/>
-
-
-
+        <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer}/>
       </Switch>    
                    
      
