@@ -85,7 +85,9 @@ const storesData = (state = {
       case REQUEST_STORE_UPDATE:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, didInvalidate: false, status: action.status,
+        type: action.type, 
+        didInvalidate: false, 
+        status: action.status,
         selectedStore: action.data, 
         lastUpdated: action.receivedAt
       });

@@ -19,6 +19,9 @@ import Yup from 'yup';
 class AddEditStoreContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isUpdating: false
+        }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.storeInfo = {
@@ -39,6 +42,7 @@ class AddEditStoreContainer extends React.Component {
 
     componentDidMount() {
         if (!_isEmpty(this.props.selectedStore)) {
+            this.setState({ isUpdating: true})
             this.storeInfo = this.props.selectedStore;
             _set(this.storeInfo, 'retailerId', localStorage.getItem('retailerID'));
             // if(!_isEmpty(this.storeInfo.storeAddress)){
@@ -46,6 +50,7 @@ class AddEditStoreContainer extends React.Component {
             // }
             delete this.storeInfo['displayAddress'];
             this.updatedStoreInfo = _cloneDeep(this.storeInfo);
+            console.log(this.updatedStoreInfo, 'this.updatedStoreInfo')
             // _set(this.storeInfo,'id', localStorage.getItem('retailerID'));
             this.method = 'POST';
             this.forceUpdate();
@@ -79,7 +84,7 @@ class AddEditStoreContainer extends React.Component {
             });
             this.forceUpdate();
         } else {
-            Alert.success(msg || 'successfully subimetted', {
+            Alert.success(msg || 'successfully submitted', {
                 position: 'bottom-right',
                 effect: 'slide',
                 timeout: 3000,
@@ -89,8 +94,14 @@ class AddEditStoreContainer extends React.Component {
     }
     onSave() {
         const { dispatch, storesReducer } = this.props;
-        console.log(this.storeInfo, 'this.storeInfo')
+        let url = ''
+        if(this.state.isUpdating) {
+            url = '/Store/Update';
+        } else {
+            url = '/Store/Create';
+        }
         let data = {};
+        let zip = this.storeInfo.postalCode.toString();
         data.name = this.storeInfo.storeName
         data.retailerId = this.storeInfo.retailerId
         data.address = {}
@@ -99,8 +110,11 @@ class AddEditStoreContainer extends React.Component {
         data.address.city = this.storeInfo.city
         data.address.state = this.storeInfo.state
         data.address.country = this.storeInfo.country
-        data.address.postalCode = this.storeInfo.postalCode
-        dispatch(fetchPostStore(storesReducer, data))
+        data.address.postalCode = zip 
+        if(this.state.isUpdating) {
+            data.id = this.updatedStoreInfo.id
+        }
+        dispatch(fetchPostStore(storesReducer, data, url))
     }
     onCancel = () => {
         this.redirectToSearch = true;

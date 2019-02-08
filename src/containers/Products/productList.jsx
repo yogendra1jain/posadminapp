@@ -53,8 +53,9 @@ class ProductListContainer extends React.Component {
         this.isAdmin =  localStorage.getItem('role')==='Admin';
     }
     componentWillReceiveProps(props) {
+        console.log(props.productData, 'props.productData')
         if(!_isEmpty(props.productData) && !props.productData.message){
-            let tempArray = [];
+            this.productList = [];
             props.productData.map(product=>{
                 let prod = {};
                 prod.name = product.name;
@@ -65,9 +66,9 @@ class ProductListContainer extends React.Component {
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
                 prod.image = product.imageLink;
                 
-                tempArray.push(prod);
+                this.productList.push(prod);
             });
-            this.productList = tempArray;
+            this.forceUpdate();
         }
         
     }
@@ -132,7 +133,6 @@ class ProductListContainer extends React.Component {
 
     }
     render() {
-        console.log(this.productList, 'this.props.productData')
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
@@ -154,12 +154,12 @@ class ProductListContainer extends React.Component {
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div>
-                    {this.isAdmin && 
+                    {/* {this.isAdmin &&  */}
                     <div className="form-btn-group">
                         <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update Product'} handlerSearch={this.onUpdate}/>
                         <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNewProduct}/>
                     </div>
-                    }
+                    {/* } */}
                     <div>
 
                         <BootstrapTable height='515' data={this.productList} options={options}
@@ -190,7 +190,7 @@ const mapStateToProps = state => {
 
     let { status } = productsReducer || '';
     let { isFetching } = productsReducer || false;
-    let { type, productData } = productsReducer || '';
+    let { type, productData } = productsReducer || [];
     
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
 
@@ -201,8 +201,6 @@ const mapStateToProps = state => {
         userId,
         type,
         productData
-
-
     }
 }
 

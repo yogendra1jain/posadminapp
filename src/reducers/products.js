@@ -77,8 +77,12 @@ const productData = (state = {
     case RECEIVE_PRODUCT_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, didInvalidate: false, status: action.status,selectedProduct:{},
-        productData: action.data, lastUpdated: action.receivedAt
+        type: action.type, 
+        didInvalidate: false, 
+        status: action.status,
+        selectedProduct:{},
+        productData: action.data, 
+        lastUpdated: action.receivedAt
       });
 
       case REQUEST_PRODUCT_LOOKUP_DATA:
@@ -97,14 +101,17 @@ const productData = (state = {
     return Object.assign({}, state, {
       isFetching: false,
       type: action.type, didInvalidate: false, status: action.status,
-      productData: action.error, lastUpdated: action.receivedAt
+      productData: '', lastUpdated: action.receivedAt
     });
 
     case REQUEST_PRODUCT_UPDATE:
     return Object.assign({}, state, {
       isFetching: false,
-      type: action.type, didInvalidate: false, status: action.status,
-      selectedProduct: action.data, lastUpdated: action.receivedAt
+      type: action.type, 
+      didInvalidate: false, 
+      status: action.status,
+      selectedProduct: action.data, 
+      lastUpdated: action.receivedAt
     });
 
     case REQUEST_SALE_TRANSACTION_DATA:

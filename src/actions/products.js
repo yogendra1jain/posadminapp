@@ -71,7 +71,7 @@ export const receiveProductData = (subreddit, json, status) => ({
 export const ProductDataSave = (data,subreddit,saveProductURL, method) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: saveProductURL,
-        method: method,
+        method: 'POST',
         body: data,
         initCb: requestProductData,
         successCb: receiveProductData,

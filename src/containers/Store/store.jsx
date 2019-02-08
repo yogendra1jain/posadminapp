@@ -136,7 +136,7 @@ class StoreListContainer extends React.Component {
         //     storeName: this.store,
         //     storeId: this.id,
         // }
-        console.log(tempStore, 'tempStore data')
+        console.log(tempStore, 'tempStore')
         this.open = true;
         const {dispatch,storesReducer} = this.props;
         dispatch(requestStoreUpdate(storesReducer, tempStore));
@@ -217,8 +217,6 @@ class StoreListContainer extends React.Component {
             </div>);
         }
 
-
-        console.log(this.storeList, 'this.storeList')
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}

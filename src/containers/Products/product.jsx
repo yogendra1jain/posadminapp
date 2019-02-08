@@ -17,6 +17,9 @@ import {RECEIVE_PRODUCT_DATA, RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE} from '.
 class ProductContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isUpdating: false
+        }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleFileChange = this.handleFileChange.bind(this);
@@ -43,8 +46,9 @@ class ProductContainer extends React.Component {
 
     componentDidMount() {
         if(!_isEmpty(this.props.selectedProduct)){
+            this.setState({ isUpdating: true})
             this.productInfo = this.props.selectedProduct;
-            this.method = 'PUT';
+            this.method = 'POST';
             this.imagePreviewUrl = this.productInfo.image;
         }
         this.forceUpdate();
@@ -108,14 +112,29 @@ class ProductContainer extends React.Component {
 
     }
     onSave () {
-        let url = `${process.env.APPLICATION_BFF_URL}/products`;;
+        let url = ''
+        if(this.state.isUpdating) {
+            url = `${process.env.APPLICATION_BFF_URL}/Product/Update`;
+        } else {
+            url = `${process.env.APPLICATION_BFF_URL}/Product/Create`;
+        }
         const { dispatch, productsReducer } = this.props;
         let data = {};
         data = this.productInfo;
-        data.retailer = localStorage.getItem('retailerID');
-        data.imageLink = this.imagePreviewUrl;
-        dispatch(ProductDataSave(data, productsReducer, url, this.method));
-       
+        console.log(data, 'data is here')
+        let price = parseFloat(this.productInfo.sellingPrice)
+        data.category = []
+        data.salePrice = {}
+        data.salePrice.currencyCode = '$'
+        data.salePrice.price = price
+        data.retailerId = localStorage.getItem('retailerID');
+        data.image = this.imagePreviewUrl;
+        if(this.state.isUpdating) {
+            data.id = this.productInfo.id
+        }
+        delete data['categories']
+        delete data['price']
+        dispatch(ProductDataSave(data, productsReducer, url));
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.type === RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE){
@@ -130,7 +149,7 @@ class ProductContainer extends React.Component {
             if( nextProps.status === 200){
                 this.redirectToSearch = true;
                 
-                this.showAlert(false, _get(nextProps.productData,'message','Submitted Successfully'));
+                this.showAlert(false, _get(nextProps.productData,'message','Product Added Successfully'));
     
             }else{
                 if(nextProps.status !== 200 && nextProps.status !== '')
@@ -138,9 +157,6 @@ class ProductContainer extends React.Component {
                 this.redirectToSearch = false
             }
         }
-            
-        
-      
         this.forceUpdate();
                
     }
@@ -150,7 +166,6 @@ class ProductContainer extends React.Component {
     }
 
     render() {
-        
         if(this.redirectToSearch){
             return(
                 <Redirect push to="/products" />
@@ -167,7 +182,6 @@ class ProductContainer extends React.Component {
                 </div>
             </div>);
         }
-
 
         return (
             <div className="strainBlock">
@@ -194,15 +208,15 @@ class ProductContainer extends React.Component {
                     </div>
                 
                 
-                    <div className="col-sm-6 col-md-4 form-d">
+                    {/* <div className="col-sm-6 col-md-4 form-d">
                         <label className="control-label">Price</label>
                         <GenericInput
-                            htmlFor="costPrice" displayName="Price" type="number"
-                            inputName="costPrice" defaultValue={_get(this.productInfo,'costPrice','')}
+                            htmlFor="price" displayName="Price" type="number"
+                            inputName="price" defaultValue={_get(this.productInfo,'price','')}
                             onChange={this.handleInputChange} errorCheck={false}
                             className="text-input error"
                         />
-                    </div>
+                    </div> */}
                     <div className="col-sm-6 col-md-4 form-d">
                         <label className="control-label">Product Detail</label>
                         <GenericInput
