@@ -44,9 +44,9 @@ const receivePostStore = (subreddit, json, status )=> ({
 //     .catch(err => { return dispatch(receivePostStoreError(subreddit,err,500)) } )
 // }
 
-export const fetchPostStore = (subreddit, data,method) => dispatch =>
+export const fetchPostStore = (subreddit, data, url) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STORE_CONSTANTS.STORE_URL+"/Store/Create",
+        path: STORE_CONSTANTS.STORE_URL+url,
         method: 'POST',
         body: data,
         initCb: requestPostStore,
