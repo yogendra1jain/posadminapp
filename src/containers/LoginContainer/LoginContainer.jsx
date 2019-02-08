@@ -104,11 +104,11 @@ class LoginContainer extends React.Component {
             let decodeToken = jwtDecode(token);
             console.log(decodeToken, 'decoded json data')
             localStorage.setItem('Token',token);    
-            localStorage.setItem('userPin', _get(decodeToken,'Operator.loginPin', ''));
-            localStorage.setItem('userName', _get(decodeToken,'Operator.person.firstName','') + " " + _get(decodeToken,'Operator.person.lastName',''));
+            // localStorage.setItem('userPin', _get(decodeToken,'Operator.loginPin', ''));
+            localStorage.setItem('userName', _get(decodeToken,'RetailerAdmin.person.firstName','') + " " + _get(decodeToken,'RetailerAdmin.person.lastName',''));
             localStorage.setItem('retailerID', _get(decodeToken, 'Retailer.id', ''));
-            localStorage.setItem('employeeID', _get(decodeToken, 'Operator.id', ''));
-            localStorage.setItem('role', _get(decodeToken, 'Operator.role', ''));
+            localStorage.setItem('employeeID', _get(decodeToken, 'RetailerAdmin.id', ''));
+            // localStorage.setItem('role', _get(decodeToken, 'Operator.role', ''));
             // if (nextProps.user.userInfo.role === 'Store Manager') {
             //     localStorage.setItem('storeManager', nextProps.user.id)
             // }
