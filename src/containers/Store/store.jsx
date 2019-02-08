@@ -80,6 +80,7 @@ class StoreListContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
+        console.log(props.storeData, 'props.storeData')
         if (props.type === 'RECEIVED_STORE') {
             if (!_isEmpty(props.storeData)) {
                 this.storeList = [];
@@ -87,17 +88,15 @@ class StoreListContainer extends React.Component {
                     let tempStore = {};
                     tempStore.storeName = store.name;
                     tempStore.id = store.id;
+                    tempStore.retailerId = store.retailerId
                     tempStore.displayAddress = _get(store.address,'city','')+", "+_get(store.address,'state','')+", "+_get(store.address,'country','')+", "
                     +_get(store.address,'postalCode','')
-                    tempStore.streetAddress1 = _get(store.storeAddress,'streetAddress1','');
-                    tempStore.streetAddress2 = _get(store.storeAddress,'streetAddress2','');
-                    tempStore.city = _get(store.storeAddress,'city','');
-                    tempStore.state = _get(store.storeAddress,'state','');
-                    tempStore.zipCode = _get(store.storeAddress,'zipCode','');
-                    tempStore.country = _get(store.storeAddress,'country','');
-                    tempStore.latitude = _get(store.storeAddress,'latitude','');
-                    tempStore.longitude = _get(store.storeAddress,'longitude','');
-
+                    tempStore.addressLine1 = _get(store.address,'addressLine1','');
+                    tempStore.addressLine2 = _get(store.address,'addressLine2','');
+                    tempStore.city = _get(store.address,'city','');
+                    tempStore.state = _get(store.address,'state','');
+                    tempStore.postalCode = _get(store.address,'postalCode','');
+                    tempStore.country = _get(store.address,'country','');
                     this.storeList.push(tempStore);
                 })
                 // this.storeList = props.storeData.stores;
@@ -137,6 +136,7 @@ class StoreListContainer extends React.Component {
         //     storeName: this.store,
         //     storeId: this.id,
         // }
+        console.log(tempStore, 'tempStore data')
         this.open = true;
         const {dispatch,storesReducer} = this.props;
         dispatch(requestStoreUpdate(storesReducer, tempStore));

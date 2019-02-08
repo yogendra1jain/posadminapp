@@ -38,8 +38,6 @@ class AddEditStoreContainer extends React.Component {
 
 
     componentDidMount() {
-        console.log(this.props.selectedStore, 'this.props.selectedStore')
-        console.log(this.props.selectedStore, 'this.storeInfo')
         if (!_isEmpty(this.props.selectedStore)) {
             this.storeInfo = this.props.selectedStore;
             _set(this.storeInfo, 'retailerId', localStorage.getItem('retailerID'));
@@ -93,7 +91,7 @@ class AddEditStoreContainer extends React.Component {
         const { dispatch, storesReducer } = this.props;
         console.log(this.storeInfo, 'this.storeInfo')
         let data = {};
-        data.name = this.storeInfo.name
+        data.name = this.storeInfo.storeName
         data.retailerId = this.storeInfo.retailerId
         data.address = {}
         data.address.addressLine1 = _get(this.storeInfo,'addressLine1', '')
@@ -132,7 +130,6 @@ class AddEditStoreContainer extends React.Component {
         }
     }
     componentWillReceiveProps(props) {
-        debugger;
         if (props.type === 'RECEIVED_ADDRESS_FROM_ZIP' && this.getAddressFlag) {
             if (!_isEmpty(props.addressData)) {
                 this.gotAddressData = true;
@@ -212,12 +209,12 @@ class AddEditStoreContainer extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Store Name</label>
                                     <GenericInput
-                                        htmlFor="name" displayName="Store Name"
-                                        inputName="name" defaultValue={_get(this.storeInfo, 'name', '')}
+                                        htmlFor="storeName" displayName="Store Name"
+                                        inputName="storeName" defaultValue={_get(this.storeInfo, 'storeName', '')}
                                         onChange={(event)=>this.handleInputChange(event, props)} errorCheck={true}
-                                        onBlur={props.handleBlur} errorMessage={props.errors.name}
-                                        error={props.errors} errorValue={props.errors.name}
-                                        touched={props.touched} touchedValue={props.touched.name}
+                                        onBlur={props.handleBlur} errorMessage={props.errors.storeName}
+                                        error={props.errors} errorValue={props.errors.storeName}
+                                        touched={props.touched} touchedValue={props.touched.storeName}
                                         className="text-input error"
                                     />
                                 </div>
@@ -308,7 +305,7 @@ class AddEditStoreContainer extends React.Component {
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
                                         <SaveButton
-                                         disabled={!props.isValid} 
+                                        //  disabled={!props.isValid} 
                                          buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.onSave} />
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.onCancel} />
                                     </div>
@@ -327,7 +324,7 @@ class AddEditStoreContainer extends React.Component {
 
 }
 const storeFormValidation = Yup.object().shape({
-    name:Yup.string().required('Store Name is required'), 
+    storeName:Yup.string().required('Store Name is required'), 
     latitude: Yup.string().required('Latitude is required'),
     longitude: Yup.string().required('Longitude is required'),
 
