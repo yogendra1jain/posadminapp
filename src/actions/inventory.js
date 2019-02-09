@@ -79,10 +79,11 @@ const receiveInventoryLookupDataError = (subreddit, error) => ({
 //                 status || 500)))
 // }
 
-export const fetchInventoryLookupData = (subreddit, url) => dispatch =>
+export const fetchInventoryLookupData = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: INVENTORY_CONSTANT.INVENTORY_URL + url,
-        method: 'Get',
+        body: data,
+        method: 'POST',
         initCb: requestInventoryLookupData,
         successCb: receiveInventoryLookupData,
         failureCb: receiveInventoryLookupDataError,

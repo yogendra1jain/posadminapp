@@ -164,7 +164,6 @@ class ProductContainer extends React.Component {
         this.redirectToSearch = true;
         this.forceUpdate();
     }
-
     render() {
         if(this.redirectToSearch){
             return(
@@ -182,7 +181,7 @@ class ProductContainer extends React.Component {
                 </div>
             </div>);
         }
-
+        console.log(this.categories, 'this.categories')
         return (
             <div className="strainBlock">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}

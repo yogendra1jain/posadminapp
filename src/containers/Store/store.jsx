@@ -136,7 +136,6 @@ class StoreListContainer extends React.Component {
         //     storeName: this.store,
         //     storeId: this.id,
         // }
-        console.log(tempStore, 'tempStore')
         this.open = true;
         const { dispatch, storesReducer } = this.props;
         dispatch(requestStoreUpdate(storesReducer, tempStore));
@@ -167,8 +166,6 @@ class StoreListContainer extends React.Component {
         this.selectedIds = [];
         // }
         this.selectRowProp.selected = this.selectedIds;
-
-
         this.forceUpdate();
     }
     addNewStore() {

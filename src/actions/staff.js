@@ -96,10 +96,11 @@ const receiveStaffList = (subreddit, json, status )=> ({
 //     .catch(err => { return dispatch(receiveStaffListError(subreddit,err,500)) } )
 // }
 
-export const fetchStaffList = (subreddit, url) => dispatch =>
+export const fetchStaffList = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STAFF_CONSTANTS.STAFF_URL+"/staff/search"+url,
-        method: 'GET',
+        path: STAFF_CONSTANTS.STAFF_URL+url,
+        method: 'POST',
+        body: data,
         initCb: requestStaffList,
         successCb: receiveStaffList,
         failureCb: receiveStaffListError,
@@ -110,9 +111,10 @@ export const fetchStaffList = (subreddit, url) => dispatch =>
 
 
 
-const requestStaffUpdate = (subreddit, staff) => ({
+export const requestStaffUpdate = (subreddit, staff, id) => ({
     type: STAFF_CONSTANTS.REQUEST_STAFF_UPDATE,
     subreddit,
+    id: id,
     data:staff
 });
 
@@ -150,14 +152,14 @@ const receiveStaffUpdate = (subreddit, json, status )=> ({
 //     .catch(err => { return dispatch(receiveStaffUpdateError(subreddit,err,500)) } )
 // }
 
-export const fetchStaffUpdate = (subreddit, id, role) => dispatch =>
-    dispatch(dynamicActionWrapper({
-        path: STAFF_CONSTANTS.STAFF_URL+"/staff/"+id+"/details?role="+role,
-        method: 'GET',
-        initCb: requestStaffUpdate,
-        successCb: receiveStaffUpdate,
-        failureCb: receiveStaffUpdateError,
-        subreddit,
-        wrapperActionType: 'FETCH_STAFF_UPDATE_WRAPPER',
-        redirect: 'follow'
-    }));
+// export const fetchStaffUpdate = (subreddit, id, role) => dispatch =>
+//     dispatch(dynamicActionWrapper({
+//         path: STAFF_CONSTANTS.STAFF_URL+"/staff/"+id+"/details?role="+role,
+//         method: 'POST',
+//         initCb: requestStaffUpdate,
+//         successCb: receiveStaffUpdate,
+//         failureCb: receiveStaffUpdateError,
+//         subreddit,
+//         wrapperActionType: 'FETCH_STAFF_UPDATE_WRAPPER',
+//         redirect: 'follow'
+//     }));

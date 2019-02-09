@@ -176,6 +176,7 @@ class AddEditStoreContainer extends React.Component {
     }
 
     render() {
+        debugger;
         if (this.redirectToSearch) {
             return (
                 <Redirect push to="/stores" />

@@ -9,14 +9,16 @@ import _get from 'lodash/get';
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
+import {fetchStore} from '../../actions/store';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { fetchStaffList, fetchStaffUpdate } from '../../actions/staff';
+import { fetchStaffList, requestStaffUpdate } from '../../actions/staff';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
 import { fetchProductLookupData } from '../../actions/products';
 import Alert from 'react-s-alert';
 import _pull from 'lodash/pull';
+import AutoComplete from '../../components/Elements/AutoComplete';
 
 
 const options = {
@@ -37,19 +39,20 @@ class StaffListContainer extends React.Component {
     constructor(props) {
         super(props);        
         this.selectRowProp = {
-            mode: 'checkbox',
+            mode: 'radio',
             clickToSelect: false,
             onSelect: this.onRowSelect,
             onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
-            // selected : this.selectedIds,
+            selected : this.selectedIds,
         }       
         this.selectedIds = [];
         this.selectedInfo = {};
         this.selectedInventory = {};
-        this.storeList = [];
         this.products = [];
         this.staffList = [];
+        this.storeList = [];
+        this.selectedStore = {};
         this.selectedStatus = 'Enable';
         this.open = false;
         this.isUpdate = false;
@@ -87,32 +90,58 @@ class StaffListContainer extends React.Component {
                 this.staffListData = props.staffListData;
                 this.staffList = [];
                 props.staffListData.map(staff  => {
+                    console.log(staff, 'staff data')
                     let tempStaff = {};
-                    tempStaff.name = staff.billingAddress.firstName + " " + staff.billingAddress.lastName;
-                    tempStaff.company = staff.billingAddress.company;
-                    tempStaff.phone = staff.billingAddress.phone;
-                    tempStaff.email = staff.userInfo.email;
-                    tempStaff.gender = staff.userInfo.gender;
-                    tempStaff.role = staff.userInfo.role;
+                    tempStaff.name = staff.person.firstName + " " + staff.person.lastName;
+                    tempStaff.firstName = staff.person.firstName
+                    tempStaff.middleName = staff.person.middleName
+                    tempStaff.lastName = staff.person.lastName
+                    tempStaff.phone = staff.phoneNumber.countryCode + staff.phoneNumber.phoneNumber;
+                    tempStaff.active = staff.active
+                    tempStaff.email = staff.email;
+                    tempStaff.role = staff.role;
                     tempStaff.id = staff.id;
-
+                    tempStaff.loginPin = staff.loginPin
+                    tempStaff.password = staff.password
+                    tempStaff.phoneNumber = staff.phoneNumber.phoneNumber
                     this.staffList.push(tempStaff);
+                    tempStaff.storeId = staff.storeId
                 });
             }
             this.forceUpdate();
         }
- 
-       
+        if (props.storeData) {
+            this.storeList = [];
+            props.storeData.map(store=>{
+                let tempStore = {};
+                tempStore.displayText = store.name;
+                tempStore.value = store.id;
+                this.storeList.push(tempStore);
+            })
+            // this.storeList = props.storeData.stores;
+            this.forceUpdate();
+        }
     }
-    componentDidMount(){
-        const { dispatch, staffsReducer } = this.props;
-        let data = {
-            role: localStorage.getItem('role'),
-        };
-        let url = "?role="+localStorage.getItem('role');
 
-        dispatch(fetchStaffList(staffsReducer, url));
+    componentDidMount(){
+        const { dispatch, storesReducer } = this.props;
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
+        }
+        let url = '/Store/ByRetailerId'
+        dispatch(fetchStore(storesReducer, url, reqBody));
+        this.selectedStore.stores= _get(this.props,'location.state.id', '')
+        if(this.selectedStore.stores) {
+            const { dispatch, staffsReducer } = this.props;
+            let reqBody = {
+                id: this.selectedStore.stores
+            }
+            let url = '/Operator/ByStoreId';
+            dispatch(fetchStaffList(staffsReducer, url, reqBody));
+        }
+
     }
+
     onRowSelect = (row, isSelected, e) => {
         isSelected ? this.selectedIds.push(row.id) : _pull(this.selectedIds, row.id);
         // this.handleAllChecks(); 
@@ -156,15 +185,11 @@ class StaffListContainer extends React.Component {
 
  
     onUpdate(){
-        if (this.selectedIds.length > 1) {
-            this.showAlert(true, 'Please Select only 1 Employee to update.');
-            this.forceUpdate();
-            return;
-        } else {
         const {dispatch, staffsReducer} = this.props;
-        dispatch(fetchStaffUpdate(staffsReducer, this.selectedStaff.id, _get(this.selectedStaff.userInfo,'role')));
+        let tempStore = _find(this.staffList,{'id': this.selectedStaff.id});
+        console.log(tempStore, 'tempStore')
+        dispatch(requestStaffUpdate(staffsReducer,tempStore,this.selectedStaff.id));
         this.redirectToAddEditPAge = true;
-        }
     }
     addNew() {
        this.redirectToAddEditPAge = true;
@@ -176,8 +201,15 @@ class StaffListContainer extends React.Component {
        
     }
 
-    handleSelectChange (id, name) {
-     
+    handleSelectChange = (id, name) => {
+        _set(this.selectedStore,name,id);
+        this.forceUpdate()
+        const { dispatch, staffsReducer } = this.props;
+        let reqBody = {
+            id: id
+        }
+        let url = '/Operator/ByStoreId';
+        dispatch(fetchStaffList(staffsReducer, url, reqBody));
     }
 
     handleInputChange (event) {
@@ -187,9 +219,13 @@ class StaffListContainer extends React.Component {
    
   
     render() {
+        
         if(this.redirectToAddEditPAge){
             return (
-                <Redirect push to="/staff" />
+                <Redirect push to={{
+                    pathname: '/staff',
+                    state: { id: this.selectedStore.stores },
+                  }} />
             )
         }
         if (_get(this, 'props.isFetching')) {
@@ -203,16 +239,26 @@ class StaffListContainer extends React.Component {
                 </div>
             </div>);
         }
-      
-
-
         return (
             <div className="">
                 <div>
                     <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} />
+                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} /> */}
                         <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate}/>
                         <SaveButton  Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
+                    </div>
+                    <div>
+                        <label>Select Store</label>
+                        {
+                            !_isEmpty(this.storeList) ? 
+                            <AutoComplete
+                                type="single"
+                                data={this.storeList}
+                                name="stores"
+                                value={_get(this.selectedStore,'stores','active')} 
+                                changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
+                            /> : null
+                        }
                     </div>
                     <div>
                         <BootstrapTable data={this.staffList} options={options}
@@ -223,7 +269,7 @@ class StaffListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='role' >Role</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
-                            <TableHeaderColumn width='50' dataField='status' >Status</TableHeaderColumn>
+                            {/* <TableHeaderColumn width='50' dataField='status' >Status</TableHeaderColumn> */}
                             <TableHeaderColumn width='100' dataField='phone' >Phone</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
@@ -238,11 +284,11 @@ class StaffListContainer extends React.Component {
 const mapStateToProps = state => {
 
     let { staffsReducer, userRolesReducer, storesReducer, productsReducer } = state
-
     let { status } = staffsReducer || '';
     let { isFetching } = staffsReducer || false;
     let { type, staffListData, staffSaveData } = staffsReducer || '';
-    // let { storeData } = storesReducer || {};
+    let { storeData } = storesReducer || {};
+    // let { storePostData } = storesReducer || {};
     // let { productData } = productsReducer || '';
 
     
@@ -258,7 +304,8 @@ const mapStateToProps = state => {
         type,
         staffListData,
         staffSaveData,       
-
+        // storePostData,
+        storeData
     }
 }
 

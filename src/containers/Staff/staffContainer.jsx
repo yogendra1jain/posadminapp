@@ -39,6 +39,9 @@ const options = {
 class AddEditStaffContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isUpdating: false
+        }
         this.open = false;
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -75,9 +78,14 @@ class AddEditStaffContainer extends React.Component {
             active: true
         };
         this.roles = [
-            { displayText: 'Retailer Admin', value: 'Admin' },
-            { displayText: 'Store Manager', value: 'Store Manager' },
-            { displayText: 'Sales Executive', value: 'Sales Executive' },
+            { displayText: 'Operator', value: 'Operator' },
+            { displayText: 'Cashier', value: 'Cashier' },
+            { displayText: 'Volunteer', value: 'Volunteer' },
+            { displayText: 'Manager', value: 'Manager' }
+        ]
+        this.status =  [
+            { displayText: 'Active', value: 'Active' },
+            { displayText: 'Inactive', value: 'Inactive' }
         ]
     }
     showAlert(error, msg) {
@@ -103,7 +111,7 @@ class AddEditStaffContainer extends React.Component {
     componentWillReceiveProps(props) {
         if (!_isEmpty(props.storeData)) {
             this.storeList = [];
-            props.storeData.stores.map((store, index) => {
+            _get(props.storeData,'stores', []).map((store, index) => {
                 this.storeList.push({ displayText: store.storeName, value: store.id });
             });
         }
@@ -130,6 +138,7 @@ class AddEditStaffContainer extends React.Component {
             this.getStaff = false;
             this.mode = 'EDIT';
             let staff = props.selectedStaff;
+            console.log(staff, 'gfyfiyfufufuyh')
             this.staffInfo.owner = localStorage.getItem('retailerID');
             this.staffInfo.store = staff.store;
             this.staffInfo.userId = staff.userId
@@ -163,10 +172,10 @@ class AddEditStaffContainer extends React.Component {
         }
         if (props.type === 'RECEIVED_STAFF') {
             if (!_isEmpty(props.staffSaveData)) {
-                if (props.staffSaveData.status !== 200 && props.staffSaveData.status !== '') {
+                if (props.status !== 200 && props.staffSaveData.status !== '') {
                     this.showAlert(true, props.staffSaveData.message);
-                } else if (props.staffSaveData.status === 200) {
-                    this.showAlert(false, props.staffSaveData.message);
+                } else if (props.status === 200) {
+                    this.showAlert(false, 'Staff Created Successfully!');
                     this.redirectToList = true;
                     // const { dispatch, storesReducer } = this.props;
                     // let retailerId = localStorage.getItem('retailerID');
@@ -178,8 +187,18 @@ class AddEditStaffContainer extends React.Component {
 
     }
     componentDidMount() {
-
-
+        console.log(this.props.selectedId, 'this.props.selectedStaff')
+        if(this.props.selectedId) {
+            this.setState({ isUpdating: true})
+            let selectedStaff = _find(this.props.staffListData,{'id': this.props.selectedId})
+            console.log(selectedStaff, 'selectedStaff')
+            this.staffInfo = selectedStaff
+            this.staffInfo.firstName = selectedStaff.person.firstName
+            this.staffInfo.middleName = selectedStaff.person.middleName
+            this.staffInfo.lastName = selectedStaff.person.lastName
+            this.staffInfo.phone = selectedStaff.phoneNumber.phoneNumber
+        }
+        this.forceUpdate()
     }
     onUpdate() {
         this.id = this.selectedStore.id;
@@ -226,16 +245,31 @@ class AddEditStaffContainer extends React.Component {
         const { dispatch, staffsReducer } = this.props;
         // let retailerId = localStorage.getItem('retailerID');
         let data = {};
-        data = this.staffInfo;
+        // data = this.staffInfo;
+        data.storeId = _get(this.props,'location.state.id', '');
+        data.person = {}
+        data.person.firstName = this.staffInfo.firstName;
+        data.person.middleName = this.staffInfo.middleName;
+        data.person.lastName = this.staffInfo.lastName;
+        data.phoneNumber = {}
+        data.phoneNumber.countryCode = 91;
+        data.phoneNumber.phoneNumber = parseInt(this.staffInfo.phone);
+        data.email = this.staffInfo.email
+        data.password = this.staffInfo.password
+        data.loginPin = this.staffInfo.loginPin
+        data.role = this.staffInfo.role
+        data.active = this.staffInfo.active == 'Active' ? true : false;
+        if(this.state.isUpdating) {
+            data.id = this.staffInfo.id
+        }
         let url = '';
-        if (this.isUpdate) {
-            url = '/staff/' + this.staffInfo.id;
+        if (this.state.isUpdating) {
+            url = '/Operator/Update';
         } else {
-            url = '/salesStaff'
+            url = '/Operator/Create'
         }
         // data.storeName = this.store;
         // data.retailer = localStorage.getItem('retailerID');
-        data.status = 'Active';
         dispatch(fetchSaveStaff(staffsReducer, data, this.method, url));
     }
 
@@ -251,25 +285,6 @@ class AddEditStaffContainer extends React.Component {
     }
     handleSelectChange = (id, name) => {
         _set(this.staffInfo, name, id);
-        if (name === 'role') {
-            if (id === 'Sales Executive') {
-                this.isSalesExecutive = true;
-                this.isStoreManager = false;
-                delete this.staffInfo['store'];
-            }
-            else if (id === 'Store Manager') {
-                this.isStoreManager = true;
-                const { dispatch, storesReducer } = this.props;
-
-                let retailerId = localStorage.getItem('retailerID');
-                dispatch(fetchStore(storesReducer, retailerId));
-                this.forceUpdate();
-            } else {
-                this.isSalesExecutive = false;
-                this.isStoreManager = false;
-                delete this.staffInfo['store'];
-            }
-        }
         this.forceUpdate();
     }
 
@@ -313,7 +328,10 @@ class AddEditStaffContainer extends React.Component {
     render() {
         if (this.redirectToList) {
             return (
-                <Redirect push to="/staffs" />
+                <Redirect push to={{
+                    pathname: '/staffs',
+                    state: { id: _get(this.props,'location.state.id', '')},
+                  }} />
             )
         }
         if (_get(this, 'props.isFetching')) {
@@ -356,7 +374,7 @@ class AddEditStaffContainer extends React.Component {
                         onChange={this.handleInputChange} errorCheck={false}
                         className="text-input error"
                     />
-                </div> */}<div className="col-sm-6 col-md-4 form-d">
+                </div> */}      <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Role</label>
                                     <AutoComplete
                                         type="single"
@@ -366,29 +384,19 @@ class AddEditStaffContainer extends React.Component {
                                         changeHandler={(id, name) => { this.handleSelectChange(id, "role") }}
                                     />
                                 </div>
-                                {
-                                    this.isStoreManager ?
-                                        <div className="col-sm-6 col-md-4 form-d">
-                                            <label className="control-label">Store</label>
-                                            <AutoComplete
-                                                type="single"
-                                                data={this.storeList ? this.storeList : []}
-                                                name="store"
-                                                value={_get(this.staffInfo, 'store', '')}
-                                                changeHandler={(id, name) => { this.handleSelectChange(id, "store") }}
-                                            />
-                                        </div> :
-                                        <div className="col-sm-6 col-md-4 form-d">
-
-                                        </div>
-                                }
+                                
                                 <div className="col-sm-6 col-md-4 form-d">
-
+                                    <label className="control-label">Active</label>
+                                    <AutoComplete
+                                        type="single"
+                                        data={this.status ? this.status : []}
+                                        name="active"
+                                        value={_get(this.staffInfo, 'active', '')}
+                                        changeHandler={(id, name) => { this.handleSelectChange(id, "active") }}
+                                    />
                                 </div>
 
-
-
-                                <div className="col-sm-6 col-md-4 form-d">
+                                {/* <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">User Name</label>
                                     <GenericInput
                                         htmlFor="userId" displayName="User ID" type="text"
@@ -396,98 +404,21 @@ class AddEditStaffContainer extends React.Component {
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         className="text-input error"
                                     />
-                                </div>
-                                {!this.isUpdate &&
-                                    <div className="col-sm-6 col-md-4 form-d">
-                                        <label className="control-label">Password</label>
-                                        <GenericInput
-                                            htmlFor="password" displayName="Password" type={this.passwordType}
-                                            inputName="password" defaultValue={_get(this.staffInfo, 'password', '')}
-                                            onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
-                                            onBlur={props.handleBlur} errorMessage={props.errors.password}
-                                            error={props.errors} errorValue={props.errors.password}
-                                            touched={props.touched} touchedValue={props.touched.password}
-                                            className="text-input error"
-                                        />
-                                        <span className={this.btnDisplayText==='Show Password'? 'show-password': 'hide-password'} onClick={this.showPassword}>{this.btnDisplayText}</span>
-                                    </div>
-
-                                }
-                                {!this.isUpdate &&
-                                    <div className="col-sm-6 col-md-4 form-d">
-                                        <label className="control-label">Confirm Password</label>
-                                        <GenericInput
-                                            htmlFor="password" displayName="Confirm Password" type={this.passwordType}
-                                            inputName="confirmPassword" defaultValue={_get(this.staffInfo, 'confirmPassword', '')}
-                                            onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
-                                            onBlur={props.handleBlur} errorMessage={props.errors.confirmPassword}
-                                            error={props.errors} errorValue={props.errors.confirmPassword}
-                                            touched={props.touched} touchedValue={props.touched.confirmPassword}
-                                            className="text-input error"
-                                        />
-                                    </div>
-                                }
-                                {this.isSalesExecutive && !this.isUpdate &&
-                                    <div className="col-sm-6 col-md-4 form-d">
-                                        <label className="control-label">Pin</label>
-                                        <GenericInput
-                                            htmlFor="pin" displayName="pin" type="number"
-                                            inputName="pin" defaultValue={_get(this.staffInfo, 'pin', '')}
-                                            onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                            className="text-input error"
-                                        />
-                                    </div>
-                                }
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Employee ID</label>
-                                    <GenericInput
-                                        htmlFor="email" displayName="Employee ID" type="text"
-                                        inputName="employeeId" defaultValue={_get(this.staffInfo, 'employeeId', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Email</label>
-                                    <GenericInput
-                                        htmlFor="email" displayName="Email" type="email"
-                                        inputName="email" defaultValue={_get(this.staffInfo, 'email', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Age</label>
-                                    <GenericInput
-                                        htmlFor="age" displayName="Age" type="number"
-                                        inputName="age" defaultValue={_get(this.staffInfo, 'age', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Contact Number</label>
-                                    <GenericInput
-                                        htmlFor="phone" displayName="Contact Number" type="text"
-                                        inputName="phone" defaultValue={_get(this.staffInfo, 'phone', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Alternative Contact Number</label>
-                                    <GenericInput
-                                        htmlFor="alternativeContactNo" displayName="Alternative Contact Number" type="text"
-                                        inputName="alternativeContactNo" defaultValue={_get(this.staffInfo, 'alternativeContactNo', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
+                                </div> */}
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">First Name</label>
                                     <GenericInput
                                         htmlFor="firstName" displayName="First Name" type="text"
                                         inputName="firstName" defaultValue={_get(this.staffInfo, 'firstName', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Middle Name</label>
+                                    <GenericInput
+                                        htmlFor="middleName" displayName="Middle Name" type="text"
+                                        inputName="middleName" defaultValue={_get(this.staffInfo, 'middleName', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
@@ -502,20 +433,98 @@ class AddEditStaffContainer extends React.Component {
                                     />
                                 </div>
                                 <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Company</label>
+                                    <label className="control-label">Email</label>
                                     <GenericInput
-                                        htmlFor="company" displayName="Company" type="text"
-                                        inputName="company" defaultValue={_get(this.staffInfo, 'company', '')}
+                                        htmlFor="email" displayName="Email" type="email"
+                                        inputName="email" defaultValue={_get(this.staffInfo, 'email', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
                                 <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Gender</label>
-                                    <label class="radio-inline"><input type="radio" defaultChecked={_get(this.staffInfo,'gender')==='male'} value="male" name="gender" onChange={(event) => this.handleInputChange(event, props)}/>Male</label>
-                                    <label class="radio-inline"><input type="radio" defaultChecked={_get(this.staffInfo,'gender')==='female'} value="female" name="gender" onChange={(event) => this.handleInputChange(event, props)} />Female</label>
-
+                                    <label className="control-label">Password</label>
+                                    <GenericInput
+                                        htmlFor="password" displayName="Password" type={this.passwordType}
+                                        inputName="password" defaultValue={_get(this.staffInfo, 'password', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
+                                        onBlur={props.handleBlur} errorMessage={props.errors.password}
+                                        error={props.errors} errorValue={props.errors.password}
+                                        touched={props.touched} touchedValue={props.touched.password}
+                                        className="text-input error"
+                                    />
+                                    <span className={this.btnDisplayText==='Show Password'? 'show-password': 'hide-password'} onClick={this.showPassword}>{this.btnDisplayText}</span>
                                 </div>
+                                {/* {!this.isUpdate &&
+                                    <div className="col-sm-6 col-md-4 form-d">
+                                        <label className="control-label">Confirm Password</label>
+                                        <GenericInput
+                                            htmlFor="password" displayName="Confirm Password" type={this.passwordType}
+                                            inputName="confirmPassword" defaultValue={_get(this.staffInfo, 'confirmPassword', '')}
+                                            onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
+                                            onBlur={props.handleBlur} errorMessage={props.errors.confirmPassword}
+                                            error={props.errors} errorValue={props.errors.confirmPassword}
+                                            touched={props.touched} touchedValue={props.touched.confirmPassword}
+                                            className="text-input error"
+                                        />
+                                    </div>
+                                } */}
+                                {/* {this.isSalesExecutive && !this.isUpdate &&
+                                    <div className="col-sm-6 col-md-4 form-d">
+                                        <label className="control-label">Pin</label>
+                                        <GenericInput
+                                            htmlFor="pin" displayName="pin" type="number"
+                                            inputName="pin" defaultValue={_get(this.staffInfo, 'pin', '')}
+                                            onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                            className="text-input error"
+                                        />
+                                    </div>
+                                } */}
+                                {/* <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Employee ID</label>
+                                    <GenericInput
+                                        htmlFor="email" displayName="Employee ID" type="text"
+                                        inputName="employeeId" defaultValue={_get(this.staffInfo, 'employeeId', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div> */}
+                                {/* <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Age</label>
+                                    <GenericInput
+                                        htmlFor="age" displayName="Age" type="number"
+                                        inputName="age" defaultValue={_get(this.staffInfo, 'age', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div> */}
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Contact Number</label>
+                                    <GenericInput
+                                        htmlFor="phone" displayName="Contact Number" type="text"
+                                        inputName="phone" defaultValue={_get(this.staffInfo, 'phone', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Login Pin</label>
+                                    <GenericInput
+                                        htmlFor="loginPin" displayName="Login Pin" type="text"
+                                        inputName="loginPin" defaultValue={_get(this.staffInfo, 'loginPin', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+                                {/* <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Alternative Contact Number</label>
+                                    <GenericInput
+                                        htmlFor="alternativeContactNo" displayName="Alternative Contact Number" type="text"
+                                        inputName="alternativeContactNo" defaultValue={_get(this.staffInfo, 'alternativeContactNo', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div> */}
+    
                                 {/* <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Gender</label>
                                     <GenericInput
@@ -617,7 +626,7 @@ class AddEditStaffContainer extends React.Component {
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        <SaveButton buttonDisplayText={'Save'} disabled={!props.isValid} Class_Name={"btn-info"} handlerSearch={this.saveHandler} />
+                                        <SaveButton buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.saveHandler} />
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
 
                                     </div>
@@ -656,7 +665,7 @@ const mapStateToProps = state => {
 
     let { status } = staffsReducer || '';
     let { isFetching } = staffsReducer || false;
-    let { staffListData, staffSaveData, type, selectedStaff } = staffsReducer || '';
+    let { staffListData, staffSaveData, type, selectedStaff, selectedId } = staffsReducer || '';
     let { storeData, addressData } = storesReducer || {};
 
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
@@ -673,8 +682,8 @@ const mapStateToProps = state => {
         storeData,
         staffListData,
         selectedStaff,
-        addressData
-
+        addressData,
+        selectedId
     }
 }
 
