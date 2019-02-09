@@ -22,7 +22,7 @@ import Alert from 'react-s-alert';
 import { Formik } from 'formik';
 import Yup from 'yup';
 
-import { submitVendorForm } from '../../actions/vendor';
+import { submitCustomerForm } from '../../actions/customer';
 
 const options = {
     paginationPosition: 'top',
@@ -38,7 +38,7 @@ const options = {
 
 
 };
-class AddEditVendorNew extends React.Component {
+class AddEditCustomerNew extends React.Component {
     constructor(props) {
         super(props);
         this.open = false;
@@ -163,8 +163,8 @@ class AddEditVendorNew extends React.Component {
             this.isUpdate = true;
             this.updatedStaffInfo = _cloneDeep(this.staffInfo);
         }
-        if (_get(props, 'vendorsReducer.type') === 'VENDOR_FORM_RECIEVE') {
-            if (_get(props, 'vendorsReducer.status')) {
+        if (_get(props, 'customersReducer.type') === 'CUSTOMER_FORM_RECIEVE') {
+            if (_get(props, 'customersReducer.status')) {
                 this.redirectToList = true;
             }
             this.forceUpdate();
@@ -222,13 +222,20 @@ class AddEditVendorNew extends React.Component {
         const { dispatch, staffsReducer } = this.props;
         let data = {};
         data = {
-            name: _get(this, 'staffInfo.name', ''),
-            contactPerson: {
+            customer: {
                 firstName: _get(this, 'staffInfo.firstName', ''),
                 middleName: _get(this, 'staffInfo.middleName', ''),
                 lastName: _get(this, 'staffInfo.lastName', ''),
             },
             email: _get(this, 'staffInfo.email', ''),
+            billingAddress: {
+                addressLine1: _get(this, 'staffInfo.address1', ''),
+                addressLine2: _get(this, 'staffInfo.address2', ''),
+                city: _get(this, 'staffInfo.city', ''),
+                state: _get(this, 'staffInfo.state', ''),
+                postalCode: _get(this, 'staffInfo.zipcode', ''),
+                country: _get(this, 'staffInfo.country', 'USA'),
+            },
             phoneNumber: {
                 countryCode: _get(this, 'staffInfo.countryCode', 91),
                 phoneNumber: parseInt(_get(this, 'staffInfo.phone', 0), 10),
@@ -237,11 +244,11 @@ class AddEditVendorNew extends React.Component {
         }
         let url = '';
         if (this.isUpdate) {
-            url = '/Vendor/Update'
+            url = '/Customer/Update'
         } else {
-            url = '/Vendor/Create'
+            url = '/Customer/Create'
         }
-        dispatch(submitVendorForm('', url, data))
+        dispatch(submitCustomerForm('', url, data))
     }
 
     handleInputChange(e, props) {
@@ -316,7 +323,7 @@ class AddEditVendorNew extends React.Component {
     render() {
         if (this.redirectToList) {
             return (
-                <Redirect push to="/vendors" />
+                <Redirect push to="/customers" />
             )
         }
         if (_get(this, 'props.isFetching')) {
@@ -348,17 +355,6 @@ class AddEditVendorNew extends React.Component {
 
                         <div className="strainBlock">
                             <Row className="d-flex">
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Name</label>
-                                    <GenericInput
-                                        htmlFor="name" displayName="Name" type="text"
-                                        inputName="name" defaultValue={_get(this.staffInfo, 'name', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d"></div>
-                                <div className="col-sm-6 col-md-4 form-d"></div>
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">First Name</label>
                                     <GenericInput
@@ -398,6 +394,54 @@ class AddEditVendorNew extends React.Component {
                                 </div>
 
                                 <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Address Line 1</label>
+                                    <GenericInput
+                                        htmlFor="address1" displayName="Address Line 1" type="text"
+                                        inputName="address1" defaultValue={_get(this.staffInfo, 'address1', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Address Line 2</label>
+                                    <GenericInput
+                                        htmlFor="address2" displayName="Address Line 2" type="text"
+                                        inputName="address2" defaultValue={_get(this.staffInfo, 'address2', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Zipcode</label>
+                                    <GenericInput
+                                        htmlFor="zipcode" displayName="Zipcode" type="text"
+                                        inputName="zipcode" defaultValue={_get(this.staffInfo, 'zipcode', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">City</label>
+                                    <GenericInput
+                                        htmlFor="city" displayName="City" type="text"
+                                        inputName="city" defaultValue={_get(this.staffInfo, 'city', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">State</label>
+                                    <GenericInput
+                                        htmlFor="state" displayName="State" type="text"
+                                        inputName="state" defaultValue={_get(this.staffInfo, 'state', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+
+                                <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Contact Number</label>
                                     <GenericInput
                                         htmlFor="phone" displayName="Contact Number" type="number"
@@ -412,6 +456,7 @@ class AddEditVendorNew extends React.Component {
                                     <div className="form-btn-group">
                                         <SaveButton buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.saveHandler} />
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
+
                                     </div>
                                 </div>
                             </Row>
@@ -435,11 +480,11 @@ const staffFormValidation = Yup.object().shape({
 
 const mapStateToProps = state => {
 
-    let { vendorsReducer } = state
+    let { customersReducer } = state
 
     return {
-        vendorsReducer
+        customersReducer
     }
 }
 
-export default connect(mapStateToProps)(AddEditVendorNew);
+export default connect(mapStateToProps)(AddEditCustomerNew);
