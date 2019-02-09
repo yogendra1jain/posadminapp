@@ -38,8 +38,11 @@ const staffsData = (state = {
     case RECEIVED_STAFF:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, status: action.status,
-        didInvalidate: false, staffListData: [],staffSaveData:action.data,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        staffListData: [],
+        staffSaveData:action.data,
         lastUpdated: action.receivedAt
       });
     case REQUEST_STAFF_LIST:

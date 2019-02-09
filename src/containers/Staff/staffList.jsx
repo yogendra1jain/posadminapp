@@ -12,7 +12,7 @@ import _find from 'lodash/find';
 import {fetchStore} from '../../actions/store';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { fetchStaffList, fetchStaffUpdate } from '../../actions/staff';
+import { fetchStaffList, requestStaffUpdate } from '../../actions/staff';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
 import { fetchProductLookupData } from '../../actions/products';
@@ -39,7 +39,7 @@ class StaffListContainer extends React.Component {
     constructor(props) {
         super(props);        
         this.selectRowProp = {
-            mode: 'checkbox',
+            mode: 'radio',
             clickToSelect: false,
             onSelect: this.onRowSelect,
             onSelectAll: this.onSelectAll,
@@ -116,12 +116,23 @@ class StaffListContainer extends React.Component {
     }
 
     componentDidMount(){
+        console.log(_get(this.props,'location.state.id', ''), 'this.props.location.state.id')
         const { dispatch, storesReducer } = this.props;
         let reqBody = {
             id: localStorage.getItem('retailerID')
         }
         let url = '/Store/ByRetailerId'
         dispatch(fetchStore(storesReducer, url, reqBody));
+        this.selectedStore.stores= _get(this.props,'location.state.id', '')
+        if(this.selectedStore.stores) {
+            const { dispatch, staffsReducer } = this.props;
+            let reqBody = {
+                id: this.selectedStore.stores
+            }
+            let url = '/Operator/ByStoreId';
+            dispatch(fetchStaffList(staffsReducer, url, reqBody));
+        }
+
     }
 
     onRowSelect = (row, isSelected, e) => {
@@ -167,15 +178,11 @@ class StaffListContainer extends React.Component {
 
  
     onUpdate(){
-        if (this.selectedIds.length > 1) {
-            this.showAlert(true, 'Please Select only 1 Employee to update.');
-            this.forceUpdate();
-            return;
-        } else {
         const {dispatch, staffsReducer} = this.props;
-        dispatch(fetchStaffUpdate(staffsReducer, this.selectedStaff.id, _get(this.selectedStaff.userInfo,'role')));
+        let tempStore = _find(this.staffList,{'id': this.selectedStaff.id});
+        console.log(tempStore, 'tempStore')
+        dispatch(requestStaffUpdate(staffsReducer, tempStore));
         this.redirectToAddEditPAge = true;
-        }
     }
     addNew() {
        this.redirectToAddEditPAge = true;
@@ -205,10 +212,13 @@ class StaffListContainer extends React.Component {
    
   
     render() {
-        console.log(this.props.staffListData, 'this.props.staffListData')
+        
         if(this.redirectToAddEditPAge){
             return (
-                <Redirect push to="/staff" />
+                <Redirect push to={{
+                    pathname: '/staff',
+                    state: { id: this.selectedStore.stores },
+                  }} />
             )
         }
         if (_get(this, 'props.isFetching')) {
@@ -222,7 +232,6 @@ class StaffListContainer extends React.Component {
                 </div>
             </div>);
         }
-      
         return (
             <div className="">
                 <div>
