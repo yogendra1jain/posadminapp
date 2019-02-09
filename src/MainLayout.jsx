@@ -17,9 +17,6 @@ class MainLayout extends Component {
         <div className="content">
           <div className="col-sm-3 col-md-2">
             <div className="row visible-xs">
-              {/* <div className="mobile-section"><img className="logoimg" src={logo} alt="AllOnBlock Logo" />
-                <SaveButton buttonDisplayText='' Class_Name="mobile-toggle" handlerSearch={this.handleShowMenu} />
-              </div> */}
             </div>
 
             <NavBar  />
