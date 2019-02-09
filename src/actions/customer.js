@@ -76,3 +76,9 @@ const customerFormRecieve = (subreddit, json, status) => ({
     status: status,
     receivedAt: Date.now()
 })
+
+export const requestCustomerUpdate = (subreddit, data) => ({
+    type: CUSTOMER_CONSTANTS.REQUEST_CUSTOMER_UPDATE,
+    subreddit,
+    data: data
+});

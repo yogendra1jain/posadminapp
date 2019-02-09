@@ -103,6 +103,7 @@ class AddEditVendorNew extends React.Component {
     }
 
     componentWillReceiveProps(props) {
+        debugger
         if (!_isEmpty(props.storeData)) {
             this.storeList = [];
             props.storeData.stores.map((store, index) => {
@@ -128,39 +129,7 @@ class AddEditVendorNew extends React.Component {
         //         this.forceUpdate();
         //     }
         // }
-        if (!_isEmpty(props.selectedStaff) && props.type === 'RECEIVED_STAFF_UPDATE' && this.getStaff) {
-            this.getStaff = false;
-            this.mode = 'EDIT';
-            let staff = props.selectedStaff;
-            this.staffInfo.owner = localStorage.getItem('retailerID');
-            this.staffInfo.store = staff.store;
-            this.staffInfo.userId = staff.userId
-            this.staffInfo.password = staff.password;
-            this.staffInfo.employeeId = staff.employeeId;
-            this.staffInfo.confirmPassword = _get(staff, 'password', '');
-            this.staffInfo.email = _get(staff.userInfo, 'email');
-            this.staffInfo.age = _get(staff.userInfo, 'age');
-            this.staffInfo.phone = _get(staff.billingAddress, 'phone');
-            this.staffInfo.alternativeContactNo = _get(staff.userInfo, 'alternativeContactNo');
-            this.staffInfo.firstName = _get(staff.billingAddress, 'firstName');
-            this.staffInfo.lastName = _get(staff.billingAddress, 'lastName');
-            this.staffInfo.company = _get(staff.billingAddress, 'company');
-            this.staffInfo.gender = _get(staff.userInfo, 'gender');
-            this.staffInfo.role = _get(staff.userInfo, 'role');
-            if (_get(staff.userInfo, 'role') === 'Sales Executive') {
-                this.isSalesExecutive = true;
-            }
-            this.staffInfo.pin = staff.pin;
-            this.staffInfo.streetAddress1 = _get(staff.billingAddress, 'streetAddress1');
-            this.staffInfo.streetAddress2 = _get(staff.billingAddress, 'streetAddress2');
-            this.staffInfo.city = _get(staff.billingAddress, 'city');
-            this.staffInfo.state = _get(staff.billingAddress, 'state');
-            this.staffInfo.country = _get(staff.billingAddress, 'country');
-            this.staffInfo.zipCode = _get(staff.billingAddress, 'zipCode');
-            this.staffInfo.id = staff.id;
-
-            this.method = 'PUT';
-            this.isUpdate = true;
+        if (!_isEmpty(props.selectedStaff) && props.type === 'REQUEST_VENDOR_UPDATE' && this.getStaff) {
             this.updatedStaffInfo = _cloneDeep(this.staffInfo);
         }
         if (_get(props, 'vendorsReducer.type') === 'VENDOR_FORM_RECIEVE') {
@@ -172,9 +141,22 @@ class AddEditVendorNew extends React.Component {
 
     }
     componentDidMount() {
-
-
+        if (!_isEmpty(this.props.selectedStore)) {
+            this.setState({ isUpdating: true })
+            this.storeInfo = this.props.selectedStore;
+            _set(this.storeInfo, 'retailerId', localStorage.getItem('retailerID'));
+            // if(!_isEmpty(this.storeInfo.storeAddress)){
+            //     _set(this.storeInfo,'storeAddress',{});
+            // }
+            delete this.storeInfo['displayAddress'];
+            this.updatedStoreInfo = _cloneDeep(this.storeInfo);
+            console.log(this.updatedStoreInfo, 'this.updatedStoreInfo')
+            // _set(this.storeInfo,'id', localStorage.getItem('retailerID'));
+            this.method = 'POST';
+            this.forceUpdate();
+        }
     }
+
     onUpdate() {
         this.id = this.selectedStore.id;
         this.store = this.selectedStore.storeName;
@@ -236,7 +218,8 @@ class AddEditVendorNew extends React.Component {
             retailerId: localStorage.getItem('retailerID'),
         }
         let url = '';
-        if (this.isUpdate) {
+        if (_get(this, 'staffInfo.id', false)) {
+            data.id = _get(this, 'staffInfo.id')
             url = '/Vendor/Update'
         } else {
             url = '/Vendor/Create'
@@ -330,11 +313,13 @@ class AddEditVendorNew extends React.Component {
                 </div>
             </div>);
         }
-
-
+        if(!_isEmpty(this.props.initialValues)){
+            this.staffInfo = this.props.initialValues
+            debugger
+        }
         return (
             <Formik
-                initialValues={this.updatedStaffInfo}
+                initialValues={this.props.initialValues}
                 // validate = {validate1}
                 validationSchema={staffFormValidation}
                 handleChange={this.props.handleChange}
@@ -436,9 +421,28 @@ const staffFormValidation = Yup.object().shape({
 const mapStateToProps = state => {
 
     let { vendorsReducer } = state
+    let { selectedStore } = vendorsReducer || {}
+    let initialValues = {}
+    if (!_isEmpty(selectedStore)) {
+        let temp = _find(vendorsReducer.vendorData, { 'id': selectedStore.id });
+        initialValues = {
+            name: _get(temp, 'name', ''),
+            firstName: _get(temp, 'contactPerson.firstName', ''),
+            middleName: _get(temp, 'contactPerson.middleName', ''),
+            lastName: _get(temp, 'contactPerson.lastName', ''),
+            email: _get(temp, 'email', ''),
+            countryCode: _get(temp, 'phoneNumber.countryCode', 91),
+            phone: _get(temp, 'phoneNumber.phoneNumber', ''),
+            id: _get(temp, 'id'),
+        }
+        debugger
+    }
+
 
     return {
-        vendorsReducer
+        vendorsReducer,
+        selectedStore,
+        initialValues
     }
 }
 
