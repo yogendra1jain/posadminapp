@@ -18,7 +18,6 @@ import AutoCompletePosition from '../../components/Elements/AutoCompletePosition
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
 import _cloneDeep from 'lodash/cloneDeep';
-
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
@@ -36,7 +35,7 @@ import Alert from 'react-s-alert';
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'number',
+    defaultSortName: 'name',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -53,28 +52,28 @@ const PosData = [
     {
         id: 1,
         posName: 'terminal1',
-        posId: 1,
+        posName: 1,
         storeName: 'store1',
         status: 'Enable',
     },
     {
         id: 2,
         posName: 'terminal2',
-        posId: 2,
+        posName: 2,
         storeName: 'store2',
         status: 'Enable',
     },
     {
         id: 3,
         posName: 'terminal3',
-        posId: 3,
+        posName: 3,
         storeName: 'store1',
         status: 'Enable',
     },
     {
         id: 4,
         posName: 'terminal4',
-        posId: 4,
+        posName: 4,
         storeName: 'store1',
         status: 'Disable',
     },
@@ -85,7 +84,7 @@ class PosList extends React.Component {
     constructor(props) {
         super(props);
         this.selectRowProp = {
-            mode: 'checkbox',
+            mode: 'radio',
             clickToSelect: false,
             onSelect: this.onRowSelect,
             onSelectAll: this.onSelectAll,
@@ -98,6 +97,7 @@ class PosList extends React.Component {
         this.storeList = [];
         this.fetchStatusFlag = false;
         this.selectedStatus = true
+        this.selectedStore = {}
         this.status = {
             data: [
                 {
@@ -116,7 +116,7 @@ class PosList extends React.Component {
         this.method = 'POST';
         this.open = false;
 
-        this.selectedIds = [];
+        this.selectedIds = '';
         this.submitted = false;
         this.selectedInfo = {};
         this.selectedPos = {};
@@ -149,10 +149,10 @@ class PosList extends React.Component {
     }
     componentWillReceiveProps(props) {
         this.isError = false;
-        if (!_isEmpty(props.storeData) && props.storeData.stores) {
+        if (!_isEmpty(props.storeData)) {
             this.storeList = [];
-            props.storeData.stores.map((store, index) => {
-                this.storeList.push({ displayText: store.storeName, value: store.id });
+            props.storeData.map((store, index) => {
+                this.storeList.push({ displayText: store.name, value: store.id });
             });
             // let tempStore = _find(this.storeList,{'value': this.retailerStore});
             // this.adminStore = this.storeList[0].storeName;
@@ -164,8 +164,16 @@ class PosList extends React.Component {
         }
         if ((props.posListData.length > 0) && this.fetchTerminalFlag) {
             this.fetchTerminalFlag = false;
-            this.posList = props.posListData;
-            this.adminStore = this.posList[0].storeName;
+            this.posList = [];
+            props.posListData.map(pos  => {
+                let tempPos = {};
+                    tempPos.id = pos.id;
+                    tempPos.name = pos.name;
+                    tempPos.storeId = pos.storeId
+                    // tempPos.status = pos.status
+                    this.posList.push(tempPos)
+            })
+            console.log(this.posList, 'this.posList')
             this.forceUpdate();
         }
         // if(!_isEmpty(props.posStatusData)){
@@ -211,31 +219,21 @@ class PosList extends React.Component {
 
     onSave() {
         const { dispatch, posTerminalReducer } = this.props;
-        let data = {};
-        this.submitted  = true;
-        _set(data, 'posId', this.posInfo.posId);
-        if(this.isStoreAdmin)
-        _set(data, 'salesAdmin', localStorage.getItem('storeManager'));
-        else
-        _set(data, 'salesAdmin', this.posInfo.store);
-        _set(data, 'isActive', _get(this.posInfo, 'isActive')===true ? true : false);
-
-        if(this.isUpdate){
-            delete data['salesAdmin'];
-            _set(data, 'id', this.posInfo.id);
-            _set(data, 'store', this.posInfo.store);
-        }
         this.open = false;
-        // data=_cloneDeep(this.posInfo);
-        // delete data['store'];
-        // _set(data,'salesAdmin', this.posInfo.store);
         let url = '';
+        let data = {}
+        console.log(this.posInfo, 'this.posInfo')
         if(this.isUpdate){
-            url = "/retailer/"+localStorage.getItem('retailerID')+"/terminal/"+this.posInfo.id+"/details"
+            url = "/Terminal/Update"
+            data = this.posInfo
         }else{
-            url = "/retailer/"+localStorage.getItem('retailerID')+"/createTerminal"
+            url = "/Terminal/Create"
+            data = {};
+            data.storeId = _get(this.selectedStore,'stores', '')
+            data.name = _get(this.posInfo,'posName', '')
+            data.active = this.posInfo.isActive ? true : false
         }
-        dispatch(fetchPosTerminalData(posTerminalReducer, data, this.method, url));
+        dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
         this.forceUpdate();
 
     }
@@ -248,7 +246,12 @@ class PosList extends React.Component {
         dispatch(fetchPosTerminalList(posTerminalReducer, url));
     }
     componentDidMount() {
-
+        const { dispatch, storesReducer } = this.props;
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
+        }
+        let url = '/Store/ByRetailerId'
+        dispatch(fetchStore(storesReducer, url, reqBody));
         if (localStorage.getItem('role') === 'Admin') {
             this.isStoreAdmin = false;
             this.fetchStores();
@@ -364,11 +367,17 @@ class PosList extends React.Component {
             return;
         } else {
             this.isUpdate = true;
-            this.method = 'PUT';
+            this.method = 'POST';
             const { dispatch, staffsReducer } = this.props;
             this.fetchStores();
             this.open = true;
         }
+        let tempStore = _find(this.posList,{'id': this.selectedInfo.id});
+        this.posInfo.posName = tempStore.name
+        this.posInfo.id = tempStore.id
+        this.posInfo.storeId = tempStore.storeId
+        this.posInfo.active = true
+        // this.posInfo.isActive = temp
         this.forceUpdate();
     }
     addNew() {
@@ -380,16 +389,16 @@ class PosList extends React.Component {
         this.open = true;
         this.forceUpdate();
     }
-    handleSelectStoreChange(value, name) {
-        _set(this, name, value);
-        this.fetchTerminals();
+    handleSelectStoreChange(id, name) {
+        _set(this.selectedStore, name, id);
         this.forceUpdate();
+        const { dispatch, posTerminalReducer } = this.props;
+        let reqBody = {
+            id: id
+        }
+        let url = '/Terminal/ByStoreId';
+        dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
     }
-
-
-
-
-
 
     render() {
         if (this.redirectToAddEditPage) {
@@ -417,19 +426,17 @@ class PosList extends React.Component {
 
                 <div>
                     <div className="form-btn-group">
-                        {localStorage.getItem('role') === 'Admin' &&
-                            <div style={{ marginTop: "-15px" }} className="col-sm-6 col-md-4 form-d text-left pad-none">
-                                <label className="control-label">Store</label>
-                                <AutoComplete
-                                    type="single"
-                                    data={this.storeList}
-                                    name="retailerStore"
-                                    value={_get(this, 'retailerStore', '')}
-                                    changeHandler={(id, name) => { this.handleSelectStoreChange(id, "retailerStore") }}
-                                />
-                            </div>
-                        }
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === true ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} />
+                        <div style={{ marginTop: "-15px" }} className="col-sm-6 col-md-4 form-d text-left pad-none">
+                            <label className="control-label"> Selected Store</label>
+                            <AutoComplete
+                                type="single"
+                                data={this.storeList}
+                                name="stores"
+                                value={_get(this.selectedStore,'stores','')}
+                                changeHandler={(id, name) => { this.handleSelectStoreChange(id, "stores") }}
+                            />
+                        </div>
+                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === true ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} /> */}
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
                         <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
                     </div>
@@ -439,10 +446,9 @@ class PosList extends React.Component {
                             selectRow={this.selectRowProp}
                             striped hover
                             pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='number' >Pos Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='storeName' >storeName</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='isActive' >Status</TableHeaderColumn>
+                            <TableHeaderColumn width='50' dataField='id' isKey={true}>ID</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='name' >Pos Name</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='status' >Pos Status</TableHeaderColumn>
                             {/* <TableHeaderColumn width='100' dataField='posId' >Pos Id</TableHeaderColumn> */}
 
                         </BootstrapTable>
@@ -463,39 +469,12 @@ class PosList extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Pos Name</label>
                                     <GenericInput
-                                        htmlFor="posId" displayName="Pos Name"
-                                        inputName="posId" defaultValue={_get(this.posInfo, 'posId', '')}
+                                        htmlFor="posName" displayName="Pos Name"
+                                        inputName="posName" defaultValue={_get(this.posInfo, 'posName', '')}
                                         onChange={this.handleInputChange} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
-                                {this.isStoreAdmin &&
-                                    <fieldset className="col-md-4 col-sm-6 form-d" disabled={true}>
-
-                                        <label class="control-label">Store</label>
-                                        <FormControl
-                                            type="text"
-                                            name="store"
-                                            value={this.adminStore}
-                                            placeholder="Store"
-                                        // onChange = {this.handleInputChange}
-                                        >
-                                        </FormControl>
-
-                                    </fieldset>
-                                }
-                                {!this.isStoreAdmin &&
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Store</label>
-                                    <AutoCompletePosition
-                                        type="single"
-                                        data={this.storeList}
-                                        name="store"
-                                        value={_get(this.posInfo, 'store', '')}
-                                        changeHandler={(id, name) => { this.handleSelectChange(id, "store") }}
-                                    />
-                                </div>
-                                }
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Status</label>
                                     <AutoCompletePosition

@@ -104,8 +104,8 @@ class StaffListContainer extends React.Component {
                     tempStaff.loginPin = staff.loginPin
                     tempStaff.password = staff.password
                     tempStaff.phoneNumber = staff.phoneNumber.phoneNumber
-                    this.staffList.push(tempStaff);
                     tempStaff.storeId = staff.storeId
+                    this.staffList.push(tempStaff);
                 });
             }
             this.forceUpdate();
@@ -255,7 +255,7 @@ class StaffListContainer extends React.Component {
                                 type="single"
                                 data={this.storeList}
                                 name="stores"
-                                value={_get(this.selectedStore,'stores','active')} 
+                                value={_get(this.selectedStore,'stores','')} 
                                 changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
                             /> : null
                         }

@@ -44,10 +44,11 @@ const receivePosTerminalList = (subreddit, json, status )=> ({
 //     .catch(err => { return dispatch(receivePosTerminalListError(subreddit,err,500)) } )
 // }
 
-export const fetchPosTerminalList = (subreddit, url) => dispatch =>
+export const fetchPosTerminalList = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: POS_TERMINAL.POS_TERMINAL_URL+url,
-        method: 'Get',
+        method: 'POST',
+        body: data,
         initCb: requestPosTerminalList,
         successCb: receivePosTerminalList,
         failureCb: receivePosTerminalListError,
@@ -95,10 +96,10 @@ const receivePosTerminalData = (subreddit, json, status )=> ({
 //     .catch(err => { return dispatch(receivePosTerminalDataError(subreddit,err,500)) } )
 // }
 
-export const fetchPosTerminalData = (subreddit, data, method, url) => dispatch =>
+export const fetchPosTerminalData = (subreddit, data, url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: POS_TERMINAL.POS_TERMINAL_URL+url,
-        method: method,
+        method: 'POST',
         body: data,
         initCb: requestPosTerminalData,
         successCb: receivePosTerminalData,
