@@ -84,19 +84,19 @@ class StoreListContainer extends React.Component {
         if (props.type === 'RECEIVED_STORE') {
             if (!_isEmpty(props.storeData)) {
                 this.storeList = [];
-                props.storeData.map(store=>{
+                props.storeData.map(store => {
                     let tempStore = {};
                     tempStore.storeName = store.name;
                     tempStore.id = store.id;
                     tempStore.retailerId = store.retailerId
-                    tempStore.displayAddress = _get(store.address,'city','')+", "+_get(store.address,'state','')+", "+_get(store.address,'country','')+", "
-                    +_get(store.address,'postalCode','')
-                    tempStore.addressLine1 = _get(store.address,'addressLine1','');
-                    tempStore.addressLine2 = _get(store.address,'addressLine2','');
-                    tempStore.city = _get(store.address,'city','');
-                    tempStore.state = _get(store.address,'state','');
-                    tempStore.postalCode = _get(store.address,'postalCode','');
-                    tempStore.country = _get(store.address,'country','');
+                    tempStore.displayAddress = _get(store.address, 'city', '') + ", " + _get(store.address, 'state', '') + ", " + _get(store.address, 'country', '') + ", "
+                        + _get(store.address, 'postalCode', '')
+                    tempStore.addressLine1 = _get(store.address, 'addressLine1', '');
+                    tempStore.addressLine2 = _get(store.address, 'addressLine2', '');
+                    tempStore.city = _get(store.address, 'city', '');
+                    tempStore.state = _get(store.address, 'state', '');
+                    tempStore.postalCode = _get(store.address, 'postalCode', '');
+                    tempStore.country = _get(store.address, 'country', '');
                     this.storeList.push(tempStore);
                 })
                 // this.storeList = props.storeData.stores;
@@ -113,7 +113,7 @@ class StoreListContainer extends React.Component {
                     let retailerId = localStorage.getItem('retailerID');
                     dispatch(fetchStore(storesReducer, retailerId));
                     this.isUpdate = false;
-                    this.open = false;                    
+                    this.open = false;
                 }
                 this.forceUpdate();
             }
@@ -129,7 +129,7 @@ class StoreListContainer extends React.Component {
         dispatch(fetchStore(storesReducer, url, reqBody));
     }
     onUpdate() {
-        let tempStore = _find(this.storeList,{'id': this.selectedStore.id});
+        let tempStore = _find(this.storeList, { 'id': this.selectedStore.id });
         // this.id = this.selectedStore.id;
         // this.store = tempStore.storeName;
         // this.storeInfo = {
@@ -137,7 +137,7 @@ class StoreListContainer extends React.Component {
         //     storeId: this.id,
         // }
         this.open = true;
-        const {dispatch,storesReducer} = this.props;
+        const { dispatch, storesReducer } = this.props;
         dispatch(requestStoreUpdate(storesReducer, tempStore));
         this.isUpdate = true;
         this.method = 'POST';
@@ -171,7 +171,7 @@ class StoreListContainer extends React.Component {
     addNewStore() {
         this.open = true;
         this.method = 'POST';
-        const {dispatch,storesReducer} = this.props;
+        const { dispatch, storesReducer } = this.props;
         dispatch(requestStoreUpdate(storesReducer, {}));
         this.forceUpdate();
     }
@@ -197,8 +197,8 @@ class StoreListContainer extends React.Component {
 
     }
     render() {
-        if(this.open){
-            return(
+        if (this.open) {
+            return (
                 <Redirect push to="/addEditStore" />
             )
         }
@@ -225,10 +225,15 @@ class StoreListContainer extends React.Component {
                     </div>
                     <div>
 
-                        <BootstrapTable data={this.storeList} options={options}
+                        <BootstrapTable
+                            data={this.storeList}
+                            options={options}
                             selectRow={this.selectRowProp}
                             striped hover
-                            pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
+                            pagination={true} 
+                            exportCSV={true} 
+                            search={true} 
+                            searchPlaceholder={'Search'}>
                             <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='storeName' dataSort >
                                 Store Name

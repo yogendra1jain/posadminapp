@@ -7,6 +7,7 @@ import {
   CUSTOMER_FORM_REQUEST,
   CUSTOMER_FORM_RECIEVE_ERROR,
   CUSTOMER_FORM_RECIEVE,
+  REQUEST_CUSTOMER_UPDATE,
 } from '../constants/customer';
 
 const customerReducer = (state = 'storeState', action) => {
@@ -68,6 +69,7 @@ const customerData = (state = {
         status: action.status,
         didInvalidate: false,
         customerFormData: action.data,
+        selectedStore: [],
         lastUpdated: action.receivedAt
       });
     case CUSTOMER_FORM_RECIEVE_ERROR:
@@ -77,6 +79,16 @@ const customerData = (state = {
         status: action.status,
         didInvalidate: false,
         addressData: action.error,
+        lastUpdated: action.receivedAt
+      });
+
+    case REQUEST_CUSTOMER_UPDATE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        selectedStore: action.data,
         lastUpdated: action.receivedAt
       });
 
