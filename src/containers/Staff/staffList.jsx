@@ -9,6 +9,7 @@ import _get from 'lodash/get';
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
+import {fetchStore} from '../../actions/store';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { GenericInput } from '../../components/common/TextValidation.jsx';
 import { fetchStaffList, fetchStaffUpdate } from '../../actions/staff';
@@ -17,6 +18,7 @@ import ReactDrawer from 'react-drawer';
 import { fetchProductLookupData } from '../../actions/products';
 import Alert from 'react-s-alert';
 import _pull from 'lodash/pull';
+import AutoComplete from '../../components/Elements/AutoComplete';
 
 
 const options = {
@@ -47,9 +49,10 @@ class StaffListContainer extends React.Component {
         this.selectedIds = [];
         this.selectedInfo = {};
         this.selectedInventory = {};
-        this.storeList = [];
         this.products = [];
         this.staffList = [];
+        this.storeList = [];
+        this.selectedStore = {};
         this.selectedStatus = 'Enable';
         this.open = false;
         this.isUpdate = false;
@@ -88,31 +91,39 @@ class StaffListContainer extends React.Component {
                 this.staffList = [];
                 props.staffListData.map(staff  => {
                     let tempStaff = {};
-                    tempStaff.name = staff.billingAddress.firstName + " " + staff.billingAddress.lastName;
-                    tempStaff.company = staff.billingAddress.company;
-                    tempStaff.phone = staff.billingAddress.phone;
-                    tempStaff.email = staff.userInfo.email;
-                    tempStaff.gender = staff.userInfo.gender;
-                    tempStaff.role = staff.userInfo.role;
+                    tempStaff.name = staff.person.firstName + " " + staff.person.lastName;
+                    tempStaff.phone = staff.phoneNumber.countryCode + staff.phoneNumber.phoneNumber;
+                    tempStaff.email = staff.email;
+                    tempStaff.role = staff.role;
                     tempStaff.id = staff.id;
-
+                    tempStaff.loginPin = staff.loginPin
                     this.staffList.push(tempStaff);
                 });
             }
             this.forceUpdate();
         }
- 
-       
+        if (props.storeData) {
+            this.storeList = [];
+            props.storeData.map(store=>{
+                let tempStore = {};
+                tempStore.displayText = store.name;
+                tempStore.value = store.id;
+                this.storeList.push(tempStore);
+            })
+            // this.storeList = props.storeData.stores;
+            this.forceUpdate();
+        }
     }
-    componentDidMount(){
-        const { dispatch, staffsReducer } = this.props;
-        let data = {
-            role: localStorage.getItem('role'),
-        };
-        let url = "?role="+localStorage.getItem('role');
 
-        dispatch(fetchStaffList(staffsReducer, url));
+    componentDidMount(){
+        const { dispatch, storesReducer } = this.props;
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
+        }
+        let url = '/Store/ByRetailerId'
+        dispatch(fetchStore(storesReducer, url, reqBody));
     }
+
     onRowSelect = (row, isSelected, e) => {
         isSelected ? this.selectedIds.push(row.id) : _pull(this.selectedIds, row.id);
         // this.handleAllChecks(); 
@@ -176,8 +187,15 @@ class StaffListContainer extends React.Component {
        
     }
 
-    handleSelectChange (id, name) {
-     
+    handleSelectChange = (id, name) => {
+        _set(this.selectedStore,name,id);
+        this.forceUpdate()
+        const { dispatch, staffsReducer } = this.props;
+        let reqBody = {
+            id: id
+        }
+        let url = '/Operator/ByStoreId';
+        dispatch(fetchStaffList(staffsReducer, url, reqBody));
     }
 
     handleInputChange (event) {
@@ -187,6 +205,7 @@ class StaffListContainer extends React.Component {
    
   
     render() {
+        console.log(this.props.staffListData, 'this.props.staffListData')
         if(this.redirectToAddEditPAge){
             return (
                 <Redirect push to="/staff" />
@@ -204,15 +223,26 @@ class StaffListContainer extends React.Component {
             </div>);
         }
       
-
-
         return (
             <div className="">
                 <div>
                     <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} />
+                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} /> */}
                         <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate}/>
                         <SaveButton  Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
+                    </div>
+                    <div>
+                        <label>Select Store</label>
+                        {
+                            !_isEmpty(this.storeList) ? 
+                            <AutoComplete
+                                type="single"
+                                data={this.storeList}
+                                name="stores"
+                                value={_get(this.selectedStore,'stores','')}
+                                changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
+                            /> : null
+                        }
                     </div>
                     <div>
                         <BootstrapTable data={this.staffList} options={options}
@@ -223,7 +253,7 @@ class StaffListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='role' >Role</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
-                            <TableHeaderColumn width='50' dataField='status' >Status</TableHeaderColumn>
+                            {/* <TableHeaderColumn width='50' dataField='status' >Status</TableHeaderColumn> */}
                             <TableHeaderColumn width='100' dataField='phone' >Phone</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
@@ -238,11 +268,11 @@ class StaffListContainer extends React.Component {
 const mapStateToProps = state => {
 
     let { staffsReducer, userRolesReducer, storesReducer, productsReducer } = state
-
     let { status } = staffsReducer || '';
     let { isFetching } = staffsReducer || false;
     let { type, staffListData, staffSaveData } = staffsReducer || '';
-    // let { storeData } = storesReducer || {};
+    let { storeData } = storesReducer || {};
+    // let { storePostData } = storesReducer || {};
     // let { productData } = productsReducer || '';
 
     
@@ -258,7 +288,8 @@ const mapStateToProps = state => {
         type,
         staffListData,
         staffSaveData,       
-
+        // storePostData,
+        storeData
     }
 }
 

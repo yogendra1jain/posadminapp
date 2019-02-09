@@ -96,10 +96,11 @@ const receiveStaffList = (subreddit, json, status )=> ({
 //     .catch(err => { return dispatch(receiveStaffListError(subreddit,err,500)) } )
 // }
 
-export const fetchStaffList = (subreddit, url) => dispatch =>
+export const fetchStaffList = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STAFF_CONSTANTS.STAFF_URL+"/staff/search"+url,
-        method: 'GET',
+        path: STAFF_CONSTANTS.STAFF_URL+url,
+        method: 'POST',
+        body: data,
         initCb: requestStaffList,
         successCb: receiveStaffList,
         failureCb: receiveStaffListError,
