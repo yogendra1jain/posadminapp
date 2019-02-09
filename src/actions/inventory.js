@@ -92,6 +92,36 @@ export const fetchInventoryLookupData = (subreddit, url, data) => dispatch =>
         redirect: 'follow'
     }));
 
+export const invetoryUpdate = (subreddit, url, data) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: INVENTORY_CONSTANT.INVENTORY_URL + url,
+        body: data,
+        method: 'POST',
+        initCb: requestInventoryUpdate,
+        successCb: receiveInventoryUpdate,
+        failureCb: receiveInventoryUpdateError,
+        subreddit,
+        wrapperActionType: 'INVENTORY_UPDATE',
+        redirect: 'follow'
+    }));
+const requestInventoryUpdate = (subreddit) => ({
+    type: INVENTORY_CONSTANT.REQUEST_INVENTORY_UPDATE,
+    subreddit
+});
+
+const receiveInventoryUpdate = (subreddit, data) => ({
+    type: INVENTORY_CONSTANT.RECEIVE_INVENTORY_UPDATE,
+    subreddit,
+    data,
+    receivedAt: Date.now()
+});
+const receiveInventoryUpdateError = (subreddit, error) => ({
+    type: INVENTORY_CONSTANT.RECEIVE_INVENTORY_UPDATE_ERROR,
+    subreddit,
+    error,
+    receivedAt: Date.now()
+})
+
 
 
 

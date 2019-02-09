@@ -1,11 +1,14 @@
 import { combineReducers } from 'redux';
 import _get from 'lodash/get';
 import {
-    REQUEST_INVENTORY_LOOKUP_DATA,
-    RECEIVE_INVENTORY_LOOKUP_DATA,
-    RECEIVE_INVENTORY_LOOKUP_DATA_ERROR,
-    REQUEST_INVENTORY_DATA,
-    RECEIVE_INVENTORY_DATA
+  REQUEST_INVENTORY_LOOKUP_DATA,
+  RECEIVE_INVENTORY_LOOKUP_DATA,
+  RECEIVE_INVENTORY_LOOKUP_DATA_ERROR,
+  REQUEST_INVENTORY_DATA,
+  RECEIVE_INVENTORY_DATA,
+  REQUEST_INVENTORY_UPDATE,
+  RECEIVE_INVENTORY_UPDATE,
+  RECEIVE_INVENTORY_UPDATE_ERROR
 } from '../constants/inventory';
 
 const inventoryReducer = (state = 'inventoryState', action) => {
@@ -27,38 +30,69 @@ const inventoryData = (state = {
 
 }, action) => {
   switch (action.type) {
-       
-      case REQUEST_INVENTORY_LOOKUP_DATA:
+
+    case REQUEST_INVENTORY_LOOKUP_DATA:
       return Object.assign({}, state, {
-        isFetching: true, type: action.type, status: '',inventorySaveData:[],
-        inventoryData:[],lastUpdated: action.receivedAt
+        isFetching: true, type: action.type, status: '', inventorySaveData: [],
+        inventoryData: [], lastUpdated: action.receivedAt
       });
 
     case RECEIVE_INVENTORY_LOOKUP_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, didInvalidate: false, status: action.status,inventorySaveData:[],
+        type: action.type, didInvalidate: false, status: action.status, inventorySaveData: [],
         inventoryData: action.data, lastUpdated: action.receivedAt
       });
     case RECEIVE_INVENTORY_LOOKUP_DATA_ERROR:
-    return Object.assign({}, state, {
-      isFetching: false,
-      type: action.type, didInvalidate: false, status: action.status,inventorySaveData:[],
-      inventoryData: action.error, lastUpdated: action.receivedAt
-    });  
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, didInvalidate: false, status: action.status, inventorySaveData: [],
+        inventoryData: action.error, lastUpdated: action.receivedAt
+      });
+
+      case REQUEST_INVENTORY_UPDATE:
+      return Object.assign({}, state, {
+        isFetching: true, 
+        type: action.type, 
+        status: '', 
+        inventorySaveData: [],
+        inventoryData: [], 
+        lastUpdated: action.receivedAt
+      });
+
+    case RECEIVE_INVENTORY_UPDATE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        didInvalidate: false, 
+        status: action.status, 
+        inventorySaveData: [],
+        inventoryData: [], 
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_INVENTORY_UPDATE_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        didInvalidate: false, 
+        status: action.status, 
+        inventorySaveData: [],
+        inventoryData: [], 
+        lastUpdated: action.receivedAt
+      });
 
     case REQUEST_INVENTORY_DATA:
-    return Object.assign({}, state, {
-      isFetching: true, type: action.type, status: '',
-      inventorySaveData:[],lastUpdated: action.receivedAt
-    });
+      return Object.assign({}, state, {
+        isFetching: true, type: action.type, status: '',
+        inventorySaveData: [], lastUpdated: action.receivedAt
+      });
 
-  case RECEIVE_INVENTORY_DATA:
-    return Object.assign({}, state, {
-      isFetching: false,
-      type: action.type, didInvalidate: false, status: action.status,
-      inventorySaveData: action.data, lastUpdated: action.receivedAt
-    }); 
+    case RECEIVE_INVENTORY_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, didInvalidate: false, status: action.status,
+        inventorySaveData: action.data, lastUpdated: action.receivedAt
+      });
 
     default:
       return state
@@ -67,7 +101,7 @@ const inventoryData = (state = {
 
 
 export {
-    inventoryData
+  inventoryData
 }
 
 export default inventoryReducer;

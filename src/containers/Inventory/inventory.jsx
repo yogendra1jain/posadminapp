@@ -10,7 +10,7 @@ import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import { fetchInventoryLookupData, InventoryDataSave } from '../../actions/inventory';
+import { fetchInventoryLookupData, invetoryUpdate } from '../../actions/inventory';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
 import { fetchProductLookupData } from '../../actions/products';
@@ -262,21 +262,23 @@ class InventoryListContainer extends React.Component {
         this.forceUpdate();
     }
     saveInventory(selectedInventory) {
-        let data = {};
+        let data = {
+            storeId: selectedInventory.storeId,
+            productId: selectedInventory.id,
+            deltaQuantity: parseInt(selectedInventory.delta, 10),
+            reason: selectedInventory.reason,
+        };
         
-        data.availableQuantity = selectedInventory.availableQuantity;
-        data.store = selectedInventory.store;
-        if (!this.isAdmin) {
-            data.store = localStorage.getItem('storeID');
-        }
-        data.id = selectedInventory.id;
-        if (selectedInventory.prodId)
-            data.product = selectedInventory.prodId;
-        else
-            data.product = selectedInventory.product;
         const { dispatch, inventoriesReducer } = this.props;
         this.saveInventoryFlag = true;
-        dispatch(InventoryDataSave(data,inventoriesReducer,'',this.method));
+        let url= '/Store/Inventory/Update'
+        dispatch(invetoryUpdate('', url, data));
+        this.handleClose()
+        let reqBody = {
+            id: selectedInventory.storeId
+        }
+        let url2 = '/Store/Inventory';
+        dispatch(fetchInventoryLookupData(inventoriesReducer, url2, reqBody));
     }
 
     handleSelectChange(id, name) {
