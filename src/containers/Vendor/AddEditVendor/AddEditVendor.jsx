@@ -15,9 +15,6 @@ class AddEditVendor extends Component {
             <div className="d-flex">
                 <form onSubmit={handleSubmit(this.handleAddCustomer)}>
                     <AddEditVendorComponent />
-                    <div className="form-btn-group">
-                        <SaveButton ButtonType='submit' Class_Name={"btn-info"} buttonDisplayText={'Save'}/>
-                    </div>
                 </form>
             </div>
         )

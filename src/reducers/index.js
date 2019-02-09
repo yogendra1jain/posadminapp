@@ -3,6 +3,8 @@ import _get from 'lodash/get';
 import { reducer as formReducer } from 'redux-form'
 import userRoleReducer, { userRolesData as userRolesReducer } from './userRoles';
 import storeReducer, { storesData as storesReducer } from './store';
+import customerReducer, { customerData as customersReducer } from './customer';
+import vendorReducer, { vendorData as vendorsReducer } from './vendor';
 import productReducer, { productData as productsReducer } from './products';
 import reportReducer, { reportsData as reportsReducer } from './reports';
 import inventoryReducer, {inventoryData as inventoriesReducer } from './inventory';
@@ -37,6 +39,10 @@ const rootReducer = combineReducers({
   productsReducer,
   storeReducer,
   storesReducer,
+  customerReducer,
+  customersReducer,
+  vendorReducer,
+  vendorsReducer,
   reportReducer,
   reportsReducer,
   inventoryReducer,
