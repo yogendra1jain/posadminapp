@@ -8,7 +8,7 @@ const paths = require('./paths');
 delete require.cache[require.resolve('./paths')];
 let configObject = {}
 if (process.env.NODE_ENV == "production") {
-  configObject.APPLICATION_BFF_URL = "http://pos.allonblock.com/pos-bff"
+  configObject.APPLICATION_BFF_URL = "##AOB_UI_BFF_URL##"
   configObject.MEDIA_SERVICE_ADDRESS = "##AOB_UI_MEDIA_SERVICE_URL##"
 }
 if (process.env.NODE_ENV == "development") {
