@@ -4,7 +4,14 @@ body{
     font-family: 'Roboto', sans-serif;
     background-color: #f3f9fe;
 }
-
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
+.flex-row{
+    display: flex;
+    flex-direction: row;
+}
 /* test css */
 
 /****** monikai ******/

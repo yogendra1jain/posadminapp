@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { reduxForm } from 'redux-form'
-import AddEditCustomerComponent from '../../../components/Customer/AddEditCustomer';
+import AddEditCustomerComponent from '../../../components/Customer/AddEditCustomerNew';
 import SaveButton from '../../../components/common/SaveButton';
 
 class AddEditCustomer extends Component {
@@ -15,9 +15,6 @@ class AddEditCustomer extends Component {
             <div className="d-flex">
                 <form onSubmit={handleSubmit(this.handleAddCustomer)}>
                     <AddEditCustomerComponent />
-                    <div className="form-btn-group">
-                        <SaveButton ButtonType='submit' Class_Name={"btn-info"} buttonDisplayText={'Save'}/>
-                    </div>
                 </form>
             </div>
         )
