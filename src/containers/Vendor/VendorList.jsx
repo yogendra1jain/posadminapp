@@ -16,7 +16,7 @@ import 'react-drawer/lib/react-drawer.css';
 import Alert from 'react-s-alert';
 
 import { fetchStore, fetchPostStore, requestStoreUpdate } from '../../actions/store';
-import { getVendorData } from '../../actions/vendor';
+import { getVendorData, requestVendorUpdate } from '../../actions/vendor';
 
 
 const options = {
@@ -82,10 +82,10 @@ class StoreListContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if (props.type === 'RECEIVED_STORE') {
-            if (!_isEmpty(_get(props, 'customersReducer.customerData', []))) {
+        if (props.type === 'VENDOR_RECIEVE') {
+            if (!_isEmpty(_get(props, 'vendorsReducer.vendorData', []))) {
                 this.storeList = [];
-                props.customersReducer.customerData.map(store => {
+                _get(props, 'vendorsReducer.vendorData', []).map(store => {
                     let tempStore = {};
                     tempStore.storeName = store.name;
                     tempStore.id = store.id;
@@ -134,7 +134,7 @@ class StoreListContainer extends React.Component {
         console.log(tempStore, 'tempStore data')
         this.open = true;
         const { dispatch, storesReducer } = this.props;
-        dispatch(requestStoreUpdate(storesReducer, tempStore));
+        dispatch(requestVendorUpdate(storesReducer, tempStore));
         this.isUpdate = true;
         this.method = 'POST';
         this.forceUpdate();
@@ -221,7 +221,7 @@ class StoreListContainer extends React.Component {
                         <BootstrapTable
                             data={vendorList}
                             options={options}
-                            // selectRow={this.selectRowProp}
+                            selectRow={this.selectRowProp}
                             striped hover
                             pagination={true}
                             exportCSV={true}
@@ -248,10 +248,9 @@ const mapStateToProps = state => {
 
     let { productsReducer, userRolesReducer, vendorsReducer, storesReducer } = state
 
-
+    let { type } = vendorsReducer || {};
     let vendorList = []
     let { vendorData } = vendorsReducer || []
-    debugger
     vendorData.map((data, index) => {
         let firstName =_get(data, 'contactPerson.firstName')
         let lastName = _get(data, 'contactPerson.lastName');
@@ -268,7 +267,9 @@ const mapStateToProps = state => {
 
     return {
         vendorList,
-        storesReducer
+        storesReducer,
+        vendorsReducer,
+        type
 
     }
 }

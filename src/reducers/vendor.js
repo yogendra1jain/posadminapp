@@ -7,6 +7,7 @@ import {
   VENDOR_FORM_REQUEST,
   VENDOR_FORM_RECIEVE_ERROR,
   VENDOR_FORM_RECIEVE,
+  REQUEST_VENDOR_UPDATE,
 } from '../constants/vendor';
 
 const vendorReducer = (state = 'storeState', action) => {
@@ -68,6 +69,7 @@ const vendorData = (state = {
         status: action.status,
         didInvalidate: false,
         vendorFormData: action.data,
+        selectedStore: [],
         lastUpdated: action.receivedAt
       });
     case VENDOR_FORM_RECIEVE_ERROR:
@@ -77,6 +79,16 @@ const vendorData = (state = {
         status: action.status,
         didInvalidate: false,
         addressData: action.error,
+        lastUpdated: action.receivedAt
+      });
+
+      case REQUEST_VENDOR_UPDATE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        selectedStore: action.data,
         lastUpdated: action.receivedAt
       });
     default:

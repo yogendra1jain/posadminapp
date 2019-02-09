@@ -16,7 +16,7 @@ import 'react-drawer/lib/react-drawer.css';
 import Alert from 'react-s-alert';
 
 import { fetchStore, fetchPostStore, requestStoreUpdate } from '../../actions/store';
-import { getCustomerData } from '../../actions/customer';
+import { getCustomerData, requestCustomerUpdate } from '../../actions/customer';
 
 
 const options = {
@@ -82,22 +82,13 @@ class StoreListContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if (props.type === 'RECEIVED_STORE') {
+        debugger
+        if (props.type === 'CUSTOMER_RECIEVE') {
             if (!_isEmpty(_get(props, 'customersReducer.customerData', []))) {
                 this.storeList = [];
-                props.customersReducer.customerData.map(store => {
+                _get(props, 'customersReducer.customerData', []).map(store => {
                     let tempStore = {};
-                    tempStore.storeName = store.name;
                     tempStore.id = store.id;
-                    tempStore.retailerId = store.retailerId
-                    tempStore.displayAddress = _get(store.address, 'city', '') + ", " + _get(store.address, 'state', '') + ", " + _get(store.address, 'country', '') + ", "
-                        + _get(store.address, 'postalCode', '')
-                    tempStore.addressLine1 = _get(store.address, 'addressLine1', '');
-                    tempStore.addressLine2 = _get(store.address, 'addressLine2', '');
-                    tempStore.city = _get(store.address, 'city', '');
-                    tempStore.state = _get(store.address, 'state', '');
-                    tempStore.postalCode = _get(store.address, 'postalCode', '');
-                    tempStore.country = _get(store.address, 'country', '');
                     this.storeList.push(tempStore);
                 })
                 // this.storeList = props.storeData.stores;
@@ -135,10 +126,10 @@ class StoreListContainer extends React.Component {
 
     onUpdate() {
         let tempStore = _find(this.storeList, { 'id': this.selectedStore.id });
-        console.log(tempStore, 'tempStore data')
+        debugger
         this.open = true;
-        const { dispatch, storesReducer } = this.props;
-        dispatch(requestStoreUpdate(storesReducer, tempStore));
+        const { dispatch, customersReducer } = this.props;
+        dispatch(requestCustomerUpdate(customersReducer, tempStore));
         this.isUpdate = true;
         this.method = 'POST';
         this.forceUpdate();
@@ -225,7 +216,7 @@ class StoreListContainer extends React.Component {
                         <BootstrapTable
                             data={customerList}
                             options={options}
-                            // selectRow={this.selectRowProp}
+                            selectRow={this.selectRowProp}
                             striped hover
                             pagination={true}
                             exportCSV={true}
@@ -251,7 +242,7 @@ class StoreListContainer extends React.Component {
 const mapStateToProps = state => {
 
     let { productsReducer, userRolesReducer, customersReducer, storesReducer } = state
-
+    let { type } = customersReducer || {};
 
     let customerList = []
     let { customerData } = customersReducer || []
@@ -268,8 +259,9 @@ const mapStateToProps = state => {
 
     return {
         customerList,
-        storesReducer
-
+        storesReducer,
+        customersReducer,
+        type
     }
 }
 

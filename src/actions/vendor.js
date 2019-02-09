@@ -76,3 +76,9 @@ const vendorFormRecieve = (subreddit, json, status) => ({
     status: status,
     receivedAt: Date.now()
 })
+
+export const requestVendorUpdate = (subreddit, data) => ({
+    type: VENDOR_CONSTANTS.REQUEST_VENDOR_UPDATE,
+    subreddit,
+    data: data
+});

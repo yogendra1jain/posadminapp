@@ -243,7 +243,8 @@ class AddEditCustomerNew extends React.Component {
             retailerId: localStorage.getItem('retailerID'),
         }
         let url = '';
-        if (this.isUpdate) {
+        if (_get(this, 'staffInfo.id', false)) {
+            data.id = _get(this, 'staffInfo.id')
             url = '/Customer/Update'
         } else {
             url = '/Customer/Create'
@@ -337,8 +338,10 @@ class AddEditCustomerNew extends React.Component {
                 </div>
             </div>);
         }
-
-
+        if (!_isEmpty(this.props.initialValues)) {
+            this.staffInfo = this.props.initialValues
+            debugger
+        }
         return (
             <Formik
                 initialValues={this.updatedStaffInfo}
@@ -481,9 +484,32 @@ const staffFormValidation = Yup.object().shape({
 const mapStateToProps = state => {
 
     let { customersReducer } = state
+    let { selectedStore } = customersReducer || {}
+    let initialValues = {}
+    if (!_isEmpty(selectedStore)) {
+        let temp = _find(customersReducer.customerData, { 'id': selectedStore.id });
+        initialValues = {
+            firstName: _get(temp, 'customer.firstName', ''),
+            middleName: _get(temp, 'customer.middleName', ''),
+            lastName: _get(temp, 'customer.lastName', ''),
+            email: _get(temp, 'email', ''),
+            address1: _get(temp, 'billingAddress.addressLine1', ''),
+            address2: _get(temp, 'billingAddress.addressLine1', ''),
+            city: _get(temp, 'billingAddress.city', ''),
+            state: _get(temp, 'billingAddress.state', ''),
+            zipcode: _get(temp, 'billingAddress.postalCode', ''),
+            country: _get(temp, 'billingAddress.country', 'USA'),
+            countryCode: _get(temp, 'phoneNumber.countryCode', 91),
+            phone: parseInt(_get(temp, 'phoneNumber.phone', 0), 10),
+            id: _get(temp, 'id'),
+        }
+        debugger
+    }
 
     return {
-        customersReducer
+        customersReducer,
+        initialValues,
+        selectedStore,
     }
 }
 
