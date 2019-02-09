@@ -44,7 +44,7 @@ class StaffListContainer extends React.Component {
             onSelect: this.onRowSelect,
             onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
-            // selected : this.selectedIds,
+            selected : this.selectedIds,
         }       
         this.selectedIds = [];
         this.selectedInfo = {};
@@ -124,7 +124,6 @@ class StaffListContainer extends React.Component {
     }
 
     componentDidMount(){
-        console.log(_get(this.props,'location.state.id', ''), 'this.props.location.state.id')
         const { dispatch, storesReducer } = this.props;
         let reqBody = {
             id: localStorage.getItem('retailerID')
@@ -256,7 +255,7 @@ class StaffListContainer extends React.Component {
                                 type="single"
                                 data={this.storeList}
                                 name="stores"
-                                value={_get(this.selectedStore,'stores','')}
+                                value={_get(this.selectedStore,'stores','active')} 
                                 changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
                             /> : null
                         }

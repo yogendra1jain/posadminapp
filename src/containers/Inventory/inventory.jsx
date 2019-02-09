@@ -17,6 +17,7 @@ import { fetchProductLookupData } from '../../actions/products';
 import Alert from 'react-s-alert';
 import AddEditInventory from './AddEditInventory.jsx';
 import _pull from 'lodash/pull';
+import AutoComplete from '../../components/Elements/AutoComplete';
 
 const ProsuctsData = [
     {
@@ -50,7 +51,7 @@ const ProsuctsData = [
 ]
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'storeName',
+    defaultSortName: 'id',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -90,6 +91,7 @@ class InventoryListContainer extends React.Component {
         this.onUpdate = this.onUpdate.bind(this);
         this.saveInventoryFlag = false;
         this.isAddnew = false;
+        this.selectedStore = {};
     }
     showAlert(error, msg) {
         if (error) {
@@ -112,16 +114,14 @@ class InventoryListContainer extends React.Component {
     }
     componentWillReceiveProps(props) {
         if (!_isEmpty(props.inventoryData)) {
+            console.log(props.inventoryData, 'props.inventoryData')
             this.inventoryList = [];
-            props.inventoryData.productInventory.map(inventory => {
+            _get(props,'inventoryData', []).map(inventory => {
+                console.log(inventory, 'inventory data')
                 let tempObj = {};
-                tempObj.id = inventory.id;
-                tempObj.store = inventory.store.id;
-                tempObj.storeName = inventory.store.storeName;
-                tempObj.product = inventory.product.name;
-                tempObj.prodId = inventory.product.id;
-                tempObj.availableQuantity = inventory.availableQuantity;
-
+                tempObj.id = inventory.productId
+                tempObj.storeId = inventory.storeId;
+                tempObj.quantity = inventory.quantity;
                 this.inventoryList.push(tempObj);
             })
             this.forceUpdate();
@@ -132,6 +132,18 @@ class InventoryListContainer extends React.Component {
                 this.storeList.push({ displayText: store.storeName, value: store.id });
             });
        }
+       if(props.storeData) {
+           console.log(props.storeData, 'props.storeData')
+            this.storeList = [];
+            props.storeData.map(store=>{
+                let tempStore = {};
+                tempStore.displayText = store.name;
+                tempStore.value = store.id;
+                this.storeList.push(tempStore);
+            })
+            // this.storeList = props.storeData.stores;
+            this.forceUpdate();
+        }
     //    if(!_isEmpty(props.productData)){
     //         this.products = [];
     //         props.productData.map(product=>{
@@ -164,15 +176,31 @@ class InventoryListContainer extends React.Component {
         }
 
     }
-    componentDidMount() {
+
+    handleSelectChange = (id, name) => {
+        _set(this.selectedStore,name,id);
+        this.forceUpdate()
         const { dispatch, inventoriesReducer } = this.props;
-        let url = '';
-        if (this.isAdmin) {
-            url = '/productinventories/' + localStorage.getItem('retailerID');
-        } else if (localStorage.getItem('role') === 'Store Manager') {
-            url = '/retailer/' + localStorage.getItem('retailerID') + '/store/' + localStorage.getItem('storeID') + '/products';
+        let reqBody = {
+            id: id
         }
-        dispatch(fetchInventoryLookupData(inventoriesReducer, url));
+        let url = '/Store/Inventory';
+        dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
+    }
+
+    componentDidMount() {
+        const { dispatch, inventoriesReducer, storesReducer } = this.props;
+        let url = '/Store/ByRetailerId';
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
+        }
+        dispatch(fetchStore(storesReducer, url, reqBody));
+        // if (this.isAdmin) {
+        //     url = '/productinventories/' + localStorage.getItem('retailerID');
+        // } else if (localStorage.getItem('role') === 'Store Manager') {
+        //     url = '/retailer/' + localStorage.getItem('retailerID') + '/store/' + localStorage.getItem('storeID') + '/products';
+        // }
+        // dispatch(fetchInventoryLookupData(inventoriesReducer, url));
     }
     onRowSelect = (row, isSelected, e) => {
         if (!this.isAddnew) {
@@ -287,7 +315,6 @@ class InventoryListContainer extends React.Component {
         }
 
 
-
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
@@ -295,20 +322,32 @@ class InventoryListContainer extends React.Component {
                 <div>
                     <div className="form-btn-group">
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
+                        {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
                     </div>
                     <div>
-
+                        <label>Select Store</label>
+                        {/* {
+                            !_isEmpty(this.storeList) ?  */}
+                            <AutoComplete
+                                type="single"
+                                data={this.storeList}
+                                name="stores"
+                                value={_get(this.selectedStore,'stores','')}
+                                changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
+                            /> 
+                        {/* } */}
+                    </div>
+                    <div>
                         <BootstrapTable data={this.inventoryList} options={options}
                             selectRow={this.selectRowProp}
                             striped hover
                             pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
                             <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='storeName' >Store</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='product' >
-                                Product
-                        </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='availableQuantity' >Quantity</TableHeaderColumn>
+                            
+                            <TableHeaderColumn width='100' dataSort dataField='id'>Product
+                            </TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='quantity'>Quantity
+                            </TableHeaderColumn>
 
                         </BootstrapTable>
 
