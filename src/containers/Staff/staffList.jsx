@@ -90,14 +90,22 @@ class StaffListContainer extends React.Component {
                 this.staffListData = props.staffListData;
                 this.staffList = [];
                 props.staffListData.map(staff  => {
+                    console.log(staff, 'staff data')
                     let tempStaff = {};
                     tempStaff.name = staff.person.firstName + " " + staff.person.lastName;
+                    tempStaff.firstName = staff.person.firstName
+                    tempStaff.middleName = staff.person.middleName
+                    tempStaff.lastName = staff.person.lastName
                     tempStaff.phone = staff.phoneNumber.countryCode + staff.phoneNumber.phoneNumber;
+                    tempStaff.active = staff.active
                     tempStaff.email = staff.email;
                     tempStaff.role = staff.role;
                     tempStaff.id = staff.id;
                     tempStaff.loginPin = staff.loginPin
+                    tempStaff.password = staff.password
+                    tempStaff.phoneNumber = staff.phoneNumber.phoneNumber
                     this.staffList.push(tempStaff);
+                    tempStaff.storeId = staff.storeId
                 });
             }
             this.forceUpdate();
@@ -181,7 +189,7 @@ class StaffListContainer extends React.Component {
         const {dispatch, staffsReducer} = this.props;
         let tempStore = _find(this.staffList,{'id': this.selectedStaff.id});
         console.log(tempStore, 'tempStore')
-        dispatch(requestStaffUpdate(staffsReducer, tempStore));
+        dispatch(requestStaffUpdate(staffsReducer,tempStore,this.selectedStaff.id));
         this.redirectToAddEditPAge = true;
     }
     addNew() {

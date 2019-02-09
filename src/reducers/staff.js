@@ -63,9 +63,14 @@ const staffsData = (state = {
       });
     case REQUEST_STAFF_UPDATE:
     return Object.assign({}, state, {
-      isFetching: true,
-      type: action.type, didInvalidate: false, status: action.status,
-      selectedStaff: [], lastUpdated: action.receivedAt
+      isFetching: false,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        selectedStaff: action.data,
+        staffSaveData:[],
+        selectedId: action.id,
+        lastUpdated: action.receivedAt
     });
     case RECEIVED_STAFF_UPDATE:
       return Object.assign({}, state, {

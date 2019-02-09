@@ -39,6 +39,9 @@ const options = {
 class AddEditStaffContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isUpdating: false
+        }
         this.open = false;
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -135,6 +138,7 @@ class AddEditStaffContainer extends React.Component {
             this.getStaff = false;
             this.mode = 'EDIT';
             let staff = props.selectedStaff;
+            console.log(staff, 'gfyfiyfufufuyh')
             this.staffInfo.owner = localStorage.getItem('retailerID');
             this.staffInfo.store = staff.store;
             this.staffInfo.userId = staff.userId
@@ -183,7 +187,18 @@ class AddEditStaffContainer extends React.Component {
 
     }
     componentDidMount() {
-
+        console.log(this.props.selectedId, 'this.props.selectedStaff')
+        if(this.props.selectedId) {
+            this.setState({ isUpdating: true})
+            let selectedStaff = _find(this.props.staffListData,{'id': this.props.selectedId})
+            console.log(selectedStaff, 'selectedStaff')
+            this.staffInfo = selectedStaff
+            this.staffInfo.firstName = selectedStaff.person.firstName
+            this.staffInfo.middleName = selectedStaff.person.middleName
+            this.staffInfo.lastName = selectedStaff.person.lastName
+            this.staffInfo.phone = selectedStaff.phoneNumber.phoneNumber
+        }
+        this.forceUpdate()
     }
     onUpdate() {
         this.id = this.selectedStore.id;
@@ -244,11 +259,12 @@ class AddEditStaffContainer extends React.Component {
         data.loginPin = this.staffInfo.loginPin
         data.role = this.staffInfo.role
         data.active = this.staffInfo.active == 'Active' ? true : false;
-        console.log(this.staffInfo, 'this.staffInfo')
-        console.log(data, 'post data')
+        if(this.state.isUpdating) {
+            data.id = this.staffInfo.id
+        }
         let url = '';
-        if (this.isUpdate) {
-            url = '/staff/' + this.staffInfo.id;
+        if (this.state.isUpdating) {
+            url = '/Operator/Update';
         } else {
             url = '/Operator/Create'
         }
@@ -649,7 +665,7 @@ const mapStateToProps = state => {
 
     let { status } = staffsReducer || '';
     let { isFetching } = staffsReducer || false;
-    let { staffListData, staffSaveData, type, selectedStaff } = staffsReducer || '';
+    let { staffListData, staffSaveData, type, selectedStaff, selectedId } = staffsReducer || '';
     let { storeData, addressData } = storesReducer || {};
 
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
@@ -666,8 +682,8 @@ const mapStateToProps = state => {
         storeData,
         staffListData,
         selectedStaff,
-        addressData
-
+        addressData,
+        selectedId
     }
 }
 

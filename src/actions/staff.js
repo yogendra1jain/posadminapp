@@ -111,9 +111,10 @@ export const fetchStaffList = (subreddit, url, data) => dispatch =>
 
 
 
-export const requestStaffUpdate = (subreddit, staff) => ({
+export const requestStaffUpdate = (subreddit, staff, id) => ({
     type: STAFF_CONSTANTS.REQUEST_STAFF_UPDATE,
     subreddit,
+    id: id,
     data:staff
 });
 
