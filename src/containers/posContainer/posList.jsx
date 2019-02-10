@@ -51,31 +51,31 @@ const options = {
 const PosData = [
     {
         id: 1,
-        posName: 'terminal1',
-        posName: 1,
+        name: 'terminal1',
+        name: 1,
         storeName: 'store1',
         status: 'Enable',
     },
     {
         id: 2,
-        posName: 'terminal2',
-        posName: 2,
+        name: 'terminal2',
+        name: 2,
         storeName: 'store2',
         status: 'Enable',
     },
     {
         id: 3,
-        posName: 'terminal3',
-        posName: 3,
+        name: 'terminal3',
+        name: 3,
         storeName: 'store1',
         status: 'Enable',
     },
     {
         id: 4,
-        posName: 'terminal4',
-        posName: 4,
+        name: 'terminal4',
+        name: 4,
         storeName: 'store1',
-        status: 'Disable',
+        status: 'Disable'
     },
 
 ]
@@ -101,11 +101,11 @@ class PosList extends React.Component {
         this.status = {
             data: [
                 {
-                    displayText: 'Enable',
+                    displayText: 'Active',
                     value: true
                 },
                 {
-                    displayText: 'Disable',
+                    displayText: 'Inactive',
                     value: false
                 }
             ]
@@ -170,7 +170,7 @@ class PosList extends React.Component {
                     tempPos.id = pos.id;
                     tempPos.name = pos.name;
                     tempPos.storeId = pos.storeId
-                    // tempPos.status = pos.status
+                    tempPos.active = pos.active ? 'Active' : 'Inactive'
                     this.posList.push(tempPos)
             })
             console.log(this.posList, 'this.posList')
@@ -222,7 +222,6 @@ class PosList extends React.Component {
         this.open = false;
         let url = '';
         let data = {}
-        console.log(this.posInfo, 'this.posInfo')
         if(this.isUpdate){
             url = "/Terminal/Update"
             data = this.posInfo
@@ -230,12 +229,16 @@ class PosList extends React.Component {
             url = "/Terminal/Create"
             data = {};
             data.storeId = _get(this.selectedStore,'stores', '')
-            data.name = _get(this.posInfo,'posName', '')
-            data.active = this.posInfo.isActive ? true : false
+            data.name = _get(this.posInfo,'name', '')
+            data.active = this.posInfo.active ? true : false
         }
         dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
         this.forceUpdate();
-
+        let reqBody = {
+            id: this.selectedStore.stores
+        }
+        let listurl = '/Terminal/ByStoreId';
+        dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
     }
     fetchTerminals() {
         this.selectedIds = [];
@@ -373,7 +376,7 @@ class PosList extends React.Component {
             this.open = true;
         }
         let tempStore = _find(this.posList,{'id': this.selectedInfo.id});
-        this.posInfo.posName = tempStore.name
+        this.posInfo.name = tempStore.name
         this.posInfo.id = tempStore.id
         this.posInfo.storeId = tempStore.storeId
         this.posInfo.active = true
@@ -443,9 +446,9 @@ class PosList extends React.Component {
                             selectRow={this.selectRowProp}
                             striped hover
                             pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='50' dataField='id' isKey={true}>ID</TableHeaderColumn>
+                            <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}>ID</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='name' >Pos Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='status' >Pos Status</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='active'>Pos Status</TableHeaderColumn>
                             {/* <TableHeaderColumn width='100' dataField='posId' >Pos Id</TableHeaderColumn> */}
 
                         </BootstrapTable>
@@ -466,8 +469,8 @@ class PosList extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Pos Name</label>
                                     <GenericInput
-                                        htmlFor="posName" displayName="Pos Name"
-                                        inputName="posName" defaultValue={_get(this.posInfo, 'posName', '')}
+                                        htmlFor="name" displayName="Pos Name"
+                                        inputName="name" defaultValue={_get(this.posInfo, 'name', '')}
                                         onChange={this.handleInputChange} errorCheck={false}
                                         className="text-input error"
                                     />
@@ -478,8 +481,8 @@ class PosList extends React.Component {
                                         type="single"
                                         data={_get(this.status, 'data', [])}
                                         name="store"
-                                        value={_get(this.posInfo, 'isActive', '')}
-                                        changeHandler={(id, name) => { this.handleSelectChange(id, "isActive") }}
+                                        value={_get(this.posInfo, 'active', '')}
+                                        changeHandler={(id, name) => { this.handleSelectChange(id, "active") }}
                                     />
                                 </div>
 
