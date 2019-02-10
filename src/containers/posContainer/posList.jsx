@@ -266,37 +266,19 @@ class PosList extends React.Component {
         }
         this.forceUpdate();
     }
-    onRowSelect = (row, isSelected, e) => {
-        isSelected ? this.selectedIds.push(row.id) : _pull(this.selectedIds, row.id);
-        // this.handleAllChecks(); 
-        this.selectedInfo = row;
-        _set(this.posInfo, 'posId', row.number);
-        _set(this.posInfo,'id', row.id);
-        // let tempStore = _find(this.storeList,{'value': this.retailerStore});
-        // this.adminStore = tempStore.displayText;
-        _set(this.posInfo, 'isActive', row.isActive);
-        _set(this.posInfo, 'store', row.store);
-        
-        if (isSelected == false) {
 
+    onRowSelect = (row, isSelected, e) => {
+        isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
+        // this.handleAllChecks();        
+        this.selectedPos = row;
+        if (isSelected == false) {
             this.selectedInfo = {};
             this.selectedPos = {};
         }
-        this.selectedStatus = this.selectedIds.length > 0 && _find(this.posList, { 'id': this.selectedIds[0] }).isActive;
-        if (this.selectedIds.length > 1) {
-            if(this.open){
-                _pull(this.selectedIds, row.id);
-                this.showAlert(true, 'you can update only one terminal at a time.');
-            }
-            let tempObj = _find(this.posList, { 'id': this.selectedIds[0] });
-            if (tempObj.isActive !== row.isActive) {
-                _pull(this.selectedIds, row.id);
-            }
-        }
-
         this.selectRowProp.selected = this.selectedIds;
         this.forceUpdate();
     }
+
     onSelectAll = (isSelected, rows) => {
         if (isSelected) {
             for (let i = 0; i < rows.length; i++) {
