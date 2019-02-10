@@ -176,7 +176,6 @@ class AddEditStoreContainer extends React.Component {
     }
 
     render() {
-        debugger;
         if (this.redirectToSearch) {
             return (
                 <Redirect push to="/stores" />
@@ -212,7 +211,7 @@ class AddEditStoreContainer extends React.Component {
                             {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                             <Row className="d-flex">
-                                <div className="col-sm-6 col-md-4 form-d">
+                                {/* <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Retailer Id</label>
                                     <GenericInput
                                         htmlFor="retailerId" displayName="Retailer Id" disabled={true}
@@ -220,7 +219,7 @@ class AddEditStoreContainer extends React.Component {
                                         onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
-                                </div>
+                                </div> */}
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Store Name</label>
                                     <GenericInput
@@ -233,9 +232,7 @@ class AddEditStoreContainer extends React.Component {
                                         className="text-input error"
                                     />
                                 </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-
-                                </div>
+                                
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Street Address1</label>
                                     <GenericInput
