@@ -53,7 +53,6 @@ class ProductListContainer extends React.Component {
         this.isAdmin =  localStorage.getItem('role')==='Admin';
     }
     componentWillReceiveProps(props) {
-        console.log(props.productData, 'props.productData')
         if(!_isEmpty(props.productData) && !props.productData.message){
             this.productList = [];
             props.productData.map(product=>{
@@ -72,6 +71,7 @@ class ProductListContainer extends React.Component {
         }
         
     }
+
     componentDidMount(){
         const { dispatch, productsReducer } = this.props;
         let url = '/Product/ByRetailerId';
@@ -109,14 +109,9 @@ class ProductListContainer extends React.Component {
         //         this.selectedIds.push(rows[i].sku)
         //     }
         // } else {
-
             this.selectedIds = [];
-
-
         // }
         this.selectRowProp.selected = this.selectedIds;
-
-
         this.forceUpdate();
     }
     addNewProduct() {
@@ -124,8 +119,6 @@ class ProductListContainer extends React.Component {
         this.forceUpdate();
     }
 
-   
-  
     handleInputChange() {
 
     }
@@ -193,7 +186,6 @@ const mapStateToProps = state => {
     let { type, productData } = productsReducer || [];
     
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
-
     return {
         status,
         isFetching,

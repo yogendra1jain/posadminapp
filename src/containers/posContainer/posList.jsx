@@ -417,9 +417,6 @@ class PosList extends React.Component {
                 </div>
             </div>);
         }
-
-
-
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}

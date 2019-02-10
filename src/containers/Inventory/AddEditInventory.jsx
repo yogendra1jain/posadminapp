@@ -98,7 +98,6 @@ class AddEditInventoryContainer extends React.Component {
         // }
         return (
             <div className="inventory-drawer">
-
                 <Row className="d-flex">
                     {
                         this.props.isAdmin ?
@@ -178,7 +177,7 @@ class AddEditInventoryContainer extends React.Component {
                         </FormControl>
                     </div>
 
-                    <div className="col-sm-6 col-md-4 form-d">
+                    {/* <div className="col-sm-6 col-md-4 form-d">
                         <label class="control-label">Reason</label>
                         <FormControl
                             type="text"
@@ -188,7 +187,7 @@ class AddEditInventoryContainer extends React.Component {
                             onChange={this.handleInputChange}
                         >
                         </FormControl>
-                    </div>
+                    </div> */}
 
 
 
