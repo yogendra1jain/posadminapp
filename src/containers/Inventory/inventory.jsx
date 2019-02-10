@@ -144,7 +144,7 @@ class InventoryListContainer extends React.Component {
        if(props.storeData) {
            console.log(props.storeData, 'props.storeData')
             this.storeList = [];
-            props.storeData.map(store=>{
+            _get(props,'storeData', []).map(store=>{
                 let tempStore = {};
                 tempStore.displayText = store.name;
                 tempStore.value = store.id;

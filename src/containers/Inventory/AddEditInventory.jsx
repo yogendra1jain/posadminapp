@@ -135,7 +135,7 @@ class AddEditInventoryContainer extends React.Component {
                             ''
                     }
 
-                    {!this.props.isUpdate ?
+                    {/* {!this.props.isUpdate ?
                         <div className="col-sm-6 col-md-4 form-d">
                             <label class="control-label">Product</label>
                             <AutoCompletePosition
@@ -164,9 +164,9 @@ class AddEditInventoryContainer extends React.Component {
                             </FormControl>
 
                         </fieldset>
-                    }
+                    } */}
                     <div className="col-sm-6 col-md-4 form-d">
-                        <label class="control-label">Quantity</label>
+                        <label class="control-label">Enter Quantity</label>
                         <FormControl
                             type="number"
                             name="delta"

@@ -167,16 +167,14 @@ class PosList extends React.Component {
             this.posList = [];
             props.posListData.map(pos  => {
                 let tempPos = {};
-                    tempPos.id = pos.id;
-                    tempPos.name = pos.name;
-                    tempPos.storeId = pos.storeId
-                    tempPos.active = pos.active ? 'Active' : 'Inactive'
-                    this.posList.push(tempPos)
+                tempPos.id = pos.id;
+                tempPos.name = pos.name;
+                tempPos.storeId = pos.storeId
+                tempPos.active = pos.active ? 'Active' : 'Inactive'
+                this.posList.push(tempPos)
             })
-            console.log(this.posList, 'this.posList')
             this.forceUpdate();
         }
-        // if(!_isEmpty(props.posStatusData)){
 
         // }
         if (!_isEmpty(props.posStatusData) && this.fetchStatusFlag) {
@@ -204,10 +202,8 @@ class PosList extends React.Component {
                 this.showAlert(true,props.posSaveData.message);            
                 this.forceUpdate();
             }
-            
         }
-
-
+        // if(props.type == '')
     }
     componentDidUpdate(){
         if(this.isError){
@@ -234,11 +230,16 @@ class PosList extends React.Component {
         }
         dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
         this.forceUpdate();
-        let reqBody = {
-            id: this.selectedStore.stores
+        
+        if(this.props.status == 200) {
+            console.log(this.selectedStore.stores, 'this.selectedStore.stores')
+            let reqBody = {
+                id: this.selectedStore.stores
+            }
+            let listurl = '/Terminal/ByStoreId';
+            dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
         }
-        let listurl = '/Terminal/ByStoreId';
-        dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
+        
     }
     fetchTerminals() {
         this.selectedIds = [];
@@ -357,10 +358,10 @@ class PosList extends React.Component {
             this.fetchStores();
             this.open = true;
         }
-        let tempStore = _find(this.posList,{'id': this.selectedInfo.id});
-        this.posInfo.name = tempStore.name
-        this.posInfo.id = tempStore.id
-        this.posInfo.storeId = tempStore.storeId
+        let tempStore = _find(this.posList,{'id': this.selectedPos.id});
+        this.posInfo.name = _get(tempStore,'name', '')
+        this.posInfo.id = _get(tempStore,'id', '')
+        this.posInfo.storeId = _get(tempStore,'storeId', '')
         this.posInfo.active = true
         // this.posInfo.isActive = temp
         this.forceUpdate();
@@ -408,8 +409,12 @@ class PosList extends React.Component {
 
                 <div>
                     <div className="form-btn-group">
-                        <div style={{ marginTop: "-15px" }} className="col-sm-6 col-md-4 form-d text-left pad-none">
-                            <label className="control-label"> Selected Store</label>
+                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === true ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} /> */}
+                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
+                        <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
+                    </div>
+                    <div>
+                            <label className="control-label"> Select Store</label>
                             <AutoComplete
                                 type="single"
                                 data={this.storeList}
@@ -418,10 +423,6 @@ class PosList extends React.Component {
                                 changeHandler={(id, name) => { this.handleSelectStoreChange(id, "stores") }}
                             />
                         </div>
-                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === true ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} /> */}
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
-                    </div>
                     <div>
 
                         <BootstrapTable data={this.posList} options={options}
