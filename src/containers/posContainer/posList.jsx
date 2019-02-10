@@ -75,7 +75,7 @@ const PosData = [
         name: 'terminal4',
         name: 4,
         storeName: 'store1',
-        status: 'Disable',
+        status: 'Disable'
     },
 
 ]
