@@ -117,12 +117,22 @@ class InventoryListContainer extends React.Component {
             console.log(props.inventoryData, 'props.inventoryData')
             this.inventoryList = [];
             _get(props,'inventoryData', []).map(inventory => {
-                console.log(inventory, 'inventory data')
-                let tempObj = {};
-                tempObj.id = inventory.productId
-                tempObj.storeId = inventory.storeId;
-                tempObj.quantity = inventory.quantity;
-                this.inventoryList.push(tempObj);
+                let tempPos = {};
+                tempPos.id = inventory.Product.id;
+                tempPos.name = inventory.Product.name;
+                tempPos.active = inventory.Product.active;
+                tempPos.category1 = inventory.Product.category1;
+                tempPos.category2 = inventory.Product.category2;
+                tempPos.category3 = inventory.Product.category3;
+                tempPos.image = inventory.Product.image;
+                tempPos.retailerId = inventory.Product.retailerId;
+                tempPos.salePrice = {}
+                tempPos.salePrice.currencyCode = inventory.Product.salePrice.currencyCode;
+                tempPos.salePrice.price = inventory.Product.salePrice.price;
+                tempPos.sku = inventory.Product.sku;
+                tempPos.unitOfMeasure = inventory.Product.unitOfMeasure;
+                tempPos.quantity = inventory.Quantity;
+                this.inventoryList.push(tempPos);
             })
             this.forceUpdate();
         }
@@ -179,28 +189,23 @@ class InventoryListContainer extends React.Component {
 
     handleSelectChange = (id, name) => {
         _set(this.selectedStore,name,id);
-        this.forceUpdate()
         const { dispatch, inventoriesReducer } = this.props;
         let reqBody = {
             id: id
         }
         let url = '/Store/Inventory';
         dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
+        this.forceUpdate()
     }
 
     componentDidMount() {
-        const { dispatch, inventoriesReducer, storesReducer } = this.props;
+        this.inventoryList = []
+        const { dispatch, storesReducer } = this.props;
         let url = '/Store/ByRetailerId';
         let reqBody = {
             id: localStorage.getItem('retailerID')
         }
         dispatch(fetchStore(storesReducer, url, reqBody));
-        // if (this.isAdmin) {
-        //     url = '/productinventories/' + localStorage.getItem('retailerID');
-        // } else if (localStorage.getItem('role') === 'Store Manager') {
-        //     url = '/retailer/' + localStorage.getItem('retailerID') + '/store/' + localStorage.getItem('storeID') + '/products';
-        // }
-        // dispatch(fetchInventoryLookupData(inventoriesReducer, url));
     }
     onRowSelect = (row, isSelected, e) => {
         if (!this.isAddnew) {
@@ -244,7 +249,7 @@ class InventoryListContainer extends React.Component {
         this.open = true;
         this.isUpdate = true;
         this.isAddnew = false;
-        this.method = 'PUT';
+        this.method = 'POST';
         this.forceUpdate();
     }
     addNew() {
@@ -263,32 +268,32 @@ class InventoryListContainer extends React.Component {
     }
     saveInventory(selectedInventory) {
         let data = {
-            storeId: selectedInventory.storeId,
+            storeId: this.selectedStore.stores,
             productId: selectedInventory.id,
-            deltaQuantity: parseInt(selectedInventory.delta, 10),
-            reason: selectedInventory.reason,
+            deltaQuantity: parseInt(selectedInventory.delta, 10)
+            // reason: selectedInventory.reason,
         };
-        
         const { dispatch, inventoriesReducer } = this.props;
         this.saveInventoryFlag = true;
         let url= '/Store/Inventory/Update'
         dispatch(invetoryUpdate('', url, data));
         this.handleClose()
         let reqBody = {
-            id: selectedInventory.storeId
+            id: this.selectedStore.stores
         }
         let url2 = '/Store/Inventory';
         dispatch(fetchInventoryLookupData(inventoriesReducer, url2, reqBody));
     }
 
-    handleSelectChange(id, name) {
-        _set(this.selectedInventory, name, id);
-        if (name === 'store') {
-            const { dispatch, productsReducer } = this.props;
-            dispatch(fetchProductLookupData(productsReducer));
-        }
-        this.forceUpdate();
-    }
+    // handleSelectChange(id, name) {
+    //     _set(this.selectedStore, name, id);
+    //     if (name === 'store') {
+    //         const { dispatch, productsReducer } = this.props;
+    //         dispatch(fetchProductLookupData(productsReducer));
+    //     }
+    //     this.forceUpdate();
+    //     console.log(this.selectedStore.stores, 'this.selectedStore.stores')
+    // }
 
     handleInputChange(event) {
         _set(this.selectedInventory, event.target.name, event.target.value);
@@ -345,12 +350,10 @@ class InventoryListContainer extends React.Component {
                             striped hover
                             pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
                             <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
-                            
-                            <TableHeaderColumn width='100' dataSort dataField='id'>Product
+                            <TableHeaderColumn width='100' dataSort dataField='name'>Product
                             </TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='quantity'>Quantity
                             </TableHeaderColumn>
-
                         </BootstrapTable>
 
                     </div>
@@ -372,8 +375,6 @@ class InventoryListContainer extends React.Component {
                                 onClose={() => this.handleClose()}
                                 saveInventory={(selectedInventory) => this.saveInventory(selectedInventory)}
                             />
-
-
                         </div>
                     </ReactDrawer>
                 </div>
