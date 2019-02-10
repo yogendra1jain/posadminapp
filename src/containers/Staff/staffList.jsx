@@ -23,7 +23,7 @@ import AutoComplete from '../../components/Elements/AutoComplete';
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'name',
+    defaultSortName: 'id',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -42,9 +42,9 @@ class StaffListContainer extends React.Component {
             mode: 'radio',
             clickToSelect: false,
             onSelect: this.onRowSelect,
-            onSelectAll: this.onSelectAll,
+            // onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
-            selected : this.selectedIds,
+            // selected : this.selectedIds,
         }       
         this.selectedIds = [];
         this.selectedInfo = {};
@@ -143,25 +143,19 @@ class StaffListContainer extends React.Component {
     }
 
     onRowSelect = (row, isSelected, e) => {
-        isSelected ? this.selectedIds.push(row.id) : _pull(this.selectedIds, row.id);
-        // this.handleAllChecks(); 
-
-        this.selectedStaff = _find(this.staffListData,{'id':row.id});
-        this.selectedStatus = this.selectedIds.length>0 && _find(this.staffListData, { 'id': this.selectedIds[0] }).status;
-        if (this.selectedIds.length > 1) {
-            let tempObj = _find(this.staffListData, { 'id': this.selectedIds[0] });
-            if (tempObj.status !== row.status) {
-                _pull(this.selectedIds, row.id);
-            }
+        isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
+        console.log(this.selectedIds, 'this.selectedIds')
+        // this.handleAllChecks();        
+        this.selectedStaff = row;
+        if (isSelected == false) {
+            this.selectedInfo = {};
+            this.selectedStaff = {};
         }
-        // if (isSelected == false) {
-
-        //     this.selectedInfo = {};
-        //     this.selectedStaff = {};
-        // }
         this.selectRowProp.selected = this.selectedIds;
         this.forceUpdate();
     }
+
+
     onSelectAll = (isSelected, rows) => {
         if (isSelected) {
             for (let i = 0; i < rows.length; i++) {
@@ -239,6 +233,7 @@ class StaffListContainer extends React.Component {
                 </div>
             </div>);
         }
+        console.log(this.staffList, 'this.staffList')
         return (
             <div className="">
                 <div>

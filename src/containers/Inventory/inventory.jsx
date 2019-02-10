@@ -60,9 +60,8 @@ const options = {
     }, {
         text: '10', value: 10
     }],
-
-
 };
+
 class InventoryListContainer extends React.Component {
     constructor(props) {
         super(props);
