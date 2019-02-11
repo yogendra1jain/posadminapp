@@ -74,8 +74,8 @@ ReactDom.render(
         <RouteWithLayout layout={EmptyLayout} exact path="/" component={LoginContainer}/>
         {/* <RouteWithLayout layout={EmptyLayout} exact path="/store" component={StoreContainer}/> */}
         <RouteWithLayout layout={MainLayout} exact path="/products" component={ProductListContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/productReports" component={ChartsContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/customerReport" component={customerChartsContainer}/>
+        {/* <RouteWithLayout layout={MainLayout} exact path="/productReports" component={ChartsContainer}/> */}
+        {/* <RouteWithLayout layout={MainLayout} exact path="/customerReport" component={customerChartsContainer}/> */}
         <RouteWithLayout layout={MainLayout} exact path="/product" component={ProductContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/inventories" component={InventoryListContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/stores" component={StoreListContainer}/>
@@ -84,9 +84,9 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/staffs" component={StaffListContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/posList" component={PosList}/>
         <RouteWithLayout layout={MainLayout} exact path="/addEditPos" component={AddEditPosContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer}/>
+        {/* <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/> */}
+        {/* <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/> */}
+        {/* <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer}/> */}
         <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer}/>
 

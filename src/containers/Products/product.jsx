@@ -235,7 +235,7 @@ class ProductContainer extends React.Component {
                             className="text-input error"
                         />
                     </div>
-                    <div className="col-sm-6 col-md-4 form-d">
+                    {/* <div className="col-sm-6 col-md-4 form-d">
                         <label className="control-label">Categories</label>
                         <AutoComplete
                             type="multi"
@@ -244,7 +244,7 @@ class ProductContainer extends React.Component {
                             value={_get(this.productInfo,'categories','')}
                             changeHandler={(id, name) => { this.handleSelectChange(id, "categories") }}
                         />
-                    </div>
+                    </div> */}
                 
                       
                         <div className="col-sm-6 col-md-4 form-d">

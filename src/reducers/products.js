@@ -34,8 +34,8 @@ const productData = (state = {
   productData: [],
   getSaleTransaction: [],
   getCustomerRegistration: [],
-  customerSearchData: []
-
+  customerSearchData: [],
+  productSaveData: {}
 }, action) => {
   switch (action.type) {
     case UPLOAD_DOCUMENT:
@@ -81,7 +81,7 @@ const productData = (state = {
         didInvalidate: false, 
         status: action.status,
         selectedProduct:{},
-        productData: action.data, 
+        productSaveData: action.data, 
         lastUpdated: action.receivedAt
       });
 
