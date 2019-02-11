@@ -86,7 +86,7 @@ class StaffListContainer extends React.Component {
     }
     componentWillReceiveProps(props) {
         if(props.type === 'RECEIVED_STAFF_LIST'){
-            if((props.staffListData.length>0)){
+            if((props.staffListData != null)){
                 this.staffListData = props.staffListData;
                 this.staffList = [];
                 props.staffListData.map(staff  => {

@@ -158,22 +158,24 @@ class PosList extends React.Component {
             // this.adminStore = this.storeList[0].storeName;
             this.forceUpdate();
         }
-        if (props.posListData.message && this.fetchTerminalFlag) {
-            this.fetchTerminalFlag = false;
-            this.showAlert(true, props.posListData.message);
-        }
-        if ((props.posListData.length > 0) && this.fetchTerminalFlag) {
-            this.fetchTerminalFlag = false;
-            this.posList = [];
-            props.posListData.map(pos  => {
-                let tempPos = {};
-                tempPos.id = pos.id;
-                tempPos.name = pos.name;
-                tempPos.storeId = pos.storeId
-                tempPos.active = pos.active ? 'Active' : 'Inactive'
-                this.posList.push(tempPos)
-            })
-            this.forceUpdate();
+        if (props.posListData != null) {
+            if (props.posListData.message && this.fetchTerminalFlag) {
+                this.fetchTerminalFlag = false;
+                this.showAlert(true, props.posListData.message);
+            }
+            if ((props.posListData.length > 0) && this.fetchTerminalFlag) {
+                this.fetchTerminalFlag = false;
+                this.posList = [];
+                props.posListData.map(pos  => {
+                    let tempPos = {};
+                    tempPos.id = pos.id;
+                    tempPos.name = pos.name;
+                    tempPos.storeId = pos.storeId
+                    tempPos.active = pos.active ? 'Active' : 'Inactive'
+                    this.posList.push(tempPos)
+                })
+                this.forceUpdate();
+            }
         }
 
         // }

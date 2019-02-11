@@ -126,12 +126,18 @@ class NavBarComponent extends React.Component {
                             <div key={10}>
                                 <Panel.Title className={(this.activePath === '/products' ? 'active' : 'inactive')} >
 
-                                    <Link onClick={() => this.changeCurrentPath('/products')} style={{ textDecoration: "none", color: '#FFF' }} to={"/products"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Products </Link>
+                                    <Link onClick={() => this.changeCurrentPath('/products')} style={{ textDecoration: "none", color: '#FFF' }} to={"/products"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Product Master </Link>
                                 </Panel.Title>
-                                <Panel.Title className={(this.activePath === '/inventories' ? 'active' : 'inactive')} >
+                               
+                                <Panel.Title className={(this.activePath === '/customers' ? 'active' : 'inactive')} >
 
-                                    <Link onClick={() => this.changeCurrentPath('/inventories')} style={{ textDecoration: "none", color: '#FFF' }} to={"/inventories"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Inventory </Link>
-                                </Panel.Title>
+<Link onClick={() => this.changeCurrentPath('/customers')} style={{ textDecoration: "none", color: '#FFF' }} to={"/customers"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Customers</Link>
+</Panel.Title>
+<Panel.Title className={(this.activePath === '/vendors' ? 'active' : 'inactive')} >
+
+<Link onClick={() => this.changeCurrentPath('/vendors')} style={{ textDecoration: "none", color: '#FFF' }} to={"/vendors"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Vendors </Link>
+</Panel.Title>
+
                                 {localStorage.getItem('role') !== 'Store Manager' &&
                                     <Panel.Title className={(this.activePath === '/stores' ? 'active' : 'inactive')} >
 
@@ -140,22 +146,20 @@ class NavBarComponent extends React.Component {
                                 }
                                 <Panel.Title className={(this.activePath === '/staffs' ? 'active' : 'inactive')} >
 
-                                    <Link onClick={() => this.changeCurrentPath('/staffs')} style={{ textDecoration: "none", color: '#FFF' }} to={"/staffs"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Staff </Link>
+                                    <Link onClick={() => this.changeCurrentPath('/staffs')} style={{ textDecoration: "none", color: '#FFF' }} to={"/staffs"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Staff Operators</Link>
                                 </Panel.Title>
 
-                                <Panel.Title className={(this.activePath === '/customers' ? 'active' : 'inactive')} >
 
-                                    <Link onClick={() => this.changeCurrentPath('/customers')} style={{ textDecoration: "none", color: '#FFF' }} to={"/customers"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Customer</Link>
-                                </Panel.Title>
-                                <Panel.Title className={(this.activePath === '/vendors' ? 'active' : 'inactive')} >
+                                
+                                <Panel.Title className={(this.activePath === '/inventories' ? 'active' : 'inactive')} >
 
-                                    <Link onClick={() => this.changeCurrentPath('/vendors')} style={{ textDecoration: "none", color: '#FFF' }} to={"/vendors"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Vendors </Link>
-                                </Panel.Title>
+<Link onClick={() => this.changeCurrentPath('/inventories')} style={{ textDecoration: "none", color: '#FFF' }} to={"/inventories"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Product Inventory </Link>
+</Panel.Title>
                                 <Panel.Title className={(this.activePath === '/posList' ? 'active' : 'inactive')} >
 
-                                    <Link onClick={() => this.changeCurrentPath('/posList')} style={{ textDecoration: "none", color: '#FFF' }} to={"/posList"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Pos List </Link>
+                                    <Link onClick={() => this.changeCurrentPath('/posList')} style={{ textDecoration: "none", color: '#FFF' }} to={"/posList"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>POS Terminals </Link>
                                 </Panel.Title>
-                                <Panel.Title className={(this.activePath === '/productReports' ? 'active' : 'inactive')}  >
+                                {/* <Panel.Title className={(this.activePath === '/productReports' ? 'active' : 'inactive')}  >
 
                                     <Link onClick={() => this.changeCurrentPath('/productReports')} style={{ textDecoration: "none", color: '#FFF' }} to={"/productReports"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Product Reports </Link>
                                 </Panel.Title>
@@ -176,7 +180,7 @@ class NavBarComponent extends React.Component {
                                 <Panel.Title className={(this.activePath === '/session' ? 'active' : 'inactive')} >
 
                                     <Link onClick={() => this.changeCurrentPath('/session')} style={{ textDecoration: "none", color: '#FFF' }} to={"/session"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Session </Link>
-                                </Panel.Title>
+                                </Panel.Title> */}
 
                             </div>
                         </Panel.Heading>
