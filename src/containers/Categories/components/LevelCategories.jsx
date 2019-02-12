@@ -17,16 +17,25 @@ const styles = theme => ({
 
 function LevelCategories(props) {
   const { classes } = props;
-  return (
-    <div className={classes.root}>
+  let pannels = []
+
+  props.categoriesTree.map((data, index)=>{
+    pannels.push(
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          Expansion Panel 1
+          {data.name}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-            <SubCategories />
+            <SubCategories children={data.children}/>
         </ExpansionPanelDetails>
       </ExpansionPanel>
+    )
+  })
+
+  
+  return (
+    <div className={classes.root}>
+      {pannels}
     </div>
   );
 }

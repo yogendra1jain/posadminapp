@@ -82,7 +82,6 @@ class StoreListContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        debugger
         if (props.type === 'CUSTOMER_RECIEVE') {
             if (!_isEmpty(_get(props, 'customersReducer.customerData', []))) {
                 this.storeList = [];

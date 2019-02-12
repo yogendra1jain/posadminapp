@@ -60,26 +60,52 @@ class SubCategories extends React.Component {
     });
   };
 
+  populateSubCategories = () => {
+    let pannel = []
+    
+    this.props.children.map((data, index) => {
+      pannel.push(
+        <ExpansionPanel
+          square
+          expanded={this.state.expanded === `panel${data.id}`}
+          onChange={this.handleChange(`panel${data.id}`)}
+          style={{ width: '100%' }}
+        >
+          <ExpansionPanelSummary>
+            {data.name}
+          </ExpansionPanelSummary>
+            {data.children ? this.populateChips(data.children) : null}
+        </ExpansionPanel>
+      )
+    })
+
+    return(
+      <React.Fragment>
+        {pannel}
+      </React.Fragment>
+      
+    )
+  }
+
+  populateChips = (children) => {
+    let chips = []
+    children.map((data, index)=>{
+      chips.push(
+        <Chip label={data.name} style={{ margin: '10px', fontSize: '0.85em' }} />
+      )
+    })
+    return(
+      <ExpansionPanelDetails>
+        {chips}
+      </ExpansionPanelDetails>
+    )
+  }
+
   render() {
     const { expanded } = this.state;
     return (
-      <div style={{width: '100%'}}>
-        <ExpansionPanel
-          square
-          expanded={expanded === 'panel1'}
-          onChange={this.handleChange('panel1')}
-          style={{width: '100%'}}
-        >
-          <ExpansionPanelSummary>
-            Collapsible Group Item #1
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Chip label="Basic Chip" style={{margin: '10px', fontSize: '0.85em'}}/>
-            <Chip label="Basic Chip" style={{margin: '10px', fontSize: '0.85em'}}/>
-            <Chip label="Basic Chip" style={{margin: '10px', fontSize: '0.85em'}}/>
-            <Chip label="Basic Chip" style={{margin: '10px', fontSize: '0.85em'}}/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+      <div style={{ width: '100%' }}>
+        {this.populateSubCategories()}
       </div>
     );
   }

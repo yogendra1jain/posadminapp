@@ -5,6 +5,7 @@ import { onLogout } from '../actions/userRoles';
 
 // pure function
 const addOptionalOptions = (config, options) => {
+    debugger
     let newOptions = { ...options };
     // if (!_isEmpty(config.body)) {
         if (config.isFormData && _isEmpty(config.body)) {
@@ -28,7 +29,6 @@ const fetchMiddleware = store => next => action => {
     if (!action || !action.fetchConfig) {
         return next(action)
     }
-
     let dispatch = store.dispatch;
     let config = action.fetchConfig;
     const subreddit = action.subreddit;

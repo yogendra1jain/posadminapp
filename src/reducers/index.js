@@ -12,6 +12,7 @@ import staffReducer, { staffsData as staffsReducer } from './staff';
 import ruleReducer, { rulesData as rulesReducer } from './rules';
 import posReducer, { posTerminalData as posTerminalReducer } from './posTerminal';
 import sessionReducer, { sessionsData as sessionsReducer } from './session';
+import { categoriesData as categoriesReducer } from './categories'
 
 const commonReducer = (state = 'initialState', action) => {
   switch (action.type) {
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   posTerminalReducer,
   sessionReducer,
   sessionsReducer,
+  categoriesReducer,
   form: formReducer
 })
 
