@@ -42,6 +42,8 @@ import AddCustomerContainer from './containers/Customer/AddEditCustomer/AddEditC
 import VendorListContainer from './containers/Vendor/VendorList';
 import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor'
 
+import CategoriesContainer from './containers/Categories/CategoriesContainer'
+
 const middleware = [ thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
   console.log('ENV URL', process.env.REACT_APP_API_HOST);
@@ -92,6 +94,7 @@ ReactDom.render(
 
         <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/categories" component={CategoriesContainer}/>
       </Switch>    
                    
      
