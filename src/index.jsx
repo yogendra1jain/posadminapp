@@ -42,6 +42,7 @@ import AddCustomerContainer from './containers/Customer/AddEditCustomer/AddEditC
 import VendorListContainer from './containers/Vendor/VendorList';
 import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor';
 import VendorProductsContainer from './containers/VendorProducts/VendorProducts.jsx';
+import AddEditVendorProduct from './containers/VendorProducts/AddEditVendorProduct/AddEditVendorProduct.jsx';
 
 const middleware = [ thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
@@ -94,6 +95,7 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/vendorproducts" component={VendorProductsContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/vendorproducts/add" component={AddEditVendorProduct}/>
       </Switch>    
                    
      
