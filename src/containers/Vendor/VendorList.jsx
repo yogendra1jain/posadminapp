@@ -168,6 +168,8 @@ class StoreListContainer extends React.Component {
     }
     addNewStore() {
         this.open = true;
+        const { dispatch, storesReducer } = this.props;
+        dispatch(requestVendorUpdate(storesReducer, {}));
         this.forceUpdate();
     }
     saveHandler() {
@@ -231,7 +233,7 @@ class StoreListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='id' isKey={true} >ID</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='name'>Name</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='email' dataSort>Email</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='vendorName' dataSort>Vendor Name</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='phoneNumber' dataSort>Phone Number</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
                 </div>
@@ -252,14 +254,13 @@ const mapStateToProps = state => {
     let vendorList = []
     let { vendorData } = vendorsReducer || []
     vendorData.map((data, index) => {
-        let firstName =_get(data, 'contactPerson.firstName')
-        let lastName = _get(data, 'contactPerson.lastName');
+        let phoneNumber = _get(data, 'phoneNumber.phoneNumber', 0);
 
         vendorList.push(
             {
                 id: data.id,
                 name: data.name,
-                vendorName: firstName + ' ' + lastName,
+                phoneNumber: phoneNumber,
                 email: data.email
             }
         )
