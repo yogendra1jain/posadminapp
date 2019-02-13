@@ -26,7 +26,8 @@ const inventoryData = (state = {
   productData: [],
   getSaleTransaction: [],
   getCustomerRegistration: [],
-  customerSearchData: []
+  customerSearchData: [],
+  inventoryData: []
 
 }, action) => {
   switch (action.type) {
