@@ -30,6 +30,8 @@ const fetchMiddleware = store => next => action => {
     }
     let dispatch = store.dispatch;
     let config = action.fetchConfig;
+    let resolve = config.resolve;
+    const reject = config.reject;
     const subreddit = action.subreddit;
     let status = '';
     const id = action.id;
@@ -96,8 +98,8 @@ const fetchMiddleware = store => next => action => {
                     return Promise.resolve({});
                 })
         })
-        .then(json => dispatch(successHandler(subreddit, json, status, id, action.successCbPassOnParams)))
-        .catch(error => dispatch(failureHandler(subreddit, error, 500)))
+        .then(json => dispatch(successHandler(subreddit, json, id, resolve, action.successCbPassOnParams)))
+        .catch(error => dispatch(failureHandler(subreddit, error, 500, reject)))
 }
 
 export default fetchMiddleware;

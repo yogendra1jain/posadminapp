@@ -20,7 +20,7 @@ class CategoriesContainer extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    debugger
+    
   }
 
   componentDidMount() {

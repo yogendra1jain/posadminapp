@@ -40,7 +40,8 @@ import sessionManageContainer from './containers/SessionContainer/sessionManagem
 import CustomerListContainer from './containers/Customer/CustomerList';
 import AddCustomerContainer from './containers/Customer/AddEditCustomer/AddEditCustomer';
 import VendorListContainer from './containers/Vendor/VendorList';
-import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor'
+import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor';
+import VendorProductsContainer from './containers/VendorProducts/VendorProducts.jsx';
 
 import CategoriesContainer from './containers/Categories/CategoriesContainer'
 import AddNewCategoryContainer from './containers/Categories/AddNewCategoryContainer'
@@ -97,6 +98,7 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/categories" component={CategoriesContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/categories/add" component={AddNewCategoryContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/vendorproducts" component={VendorProductsContainer}/>
       </Switch>    
                    
      

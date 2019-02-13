@@ -1,4 +1,6 @@
-import { combineReducers } from 'redux';
+import {
+  combineReducers
+} from 'redux';
 import _get from 'lodash/get';
 import {
   REQUEST_PRODUCT_DATA,
@@ -15,7 +17,10 @@ import {
   REQUEST_PRODUCT_UPDATE,
   UPLOAD_DOCUMENT,
   RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE,
-  RECEIVED_DOCUMENT_UPLOAD_ERROR
+  RECEIVED_DOCUMENT_UPLOAD_ERROR,
+  REQUEST_VENDOR_PRODUCTS,
+  RECEIVE_VENDOR_PRODUCTS,
+  RECEIVE_VENDOR_PRODUCTS_ERROR,
 
 } from '../constants/products';
 
@@ -35,6 +40,7 @@ const productData = (state = {
   getSaleTransaction: [],
   getCustomerRegistration: [],
   customerSearchData: [],
+  vendorProductsData: [],
   productSaveData: {}
 }, action) => {
   switch (action.type) {
@@ -48,109 +54,164 @@ const productData = (state = {
         fileUrl: undefined,
         requestWithDataBody: action.data // use for printing data to be sent to server
       });
-      case RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE:
+    case RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE:
 
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, error: undefined,
+        type: action.type,
+        error: undefined,
         didInvalidate: false,
         // @todo remove and make specific data at root level
         fileData: action.data,
         lastUpdated: action.receivedAt
-      }
-      );
+      });
 
     case RECEIVED_DOCUMENT_UPLOAD_ERROR:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, error: undefined,
-        didInvalidate: false, fileData: [],
+        type: action.type,
+        error: undefined,
+        didInvalidate: false,
+        fileData: [],
         lastUpdated: action.receivedAt
-      }
-      );
+      });
     case REQUEST_PRODUCT_DATA:
       return Object.assign({}, state, {
-        isFetching: true, type: action.type, status: '',selectedProduct:{},
+        isFetching: true,
+        type: action.type,
+        status: '',
+        selectedProduct: {},
         lastUpdated: action.receivedAt
       });
 
     case RECEIVE_PRODUCT_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, 
-        didInvalidate: false, 
+        type: action.type,
+        didInvalidate: false,
         status: action.status,
-        selectedProduct:{},
-        productSaveData: action.data, 
+        selectedProduct: {},
+        productSaveData: action.data,
         lastUpdated: action.receivedAt
       });
 
-      case REQUEST_PRODUCT_LOOKUP_DATA:
+    case REQUEST_PRODUCT_LOOKUP_DATA:
       return Object.assign({}, state, {
-        isFetching: true, type: action.type, status: '',selectedProduct:{},
+        isFetching: true,
+        type: action.type,
+        status: '',
+        selectedProduct: {},
         lastUpdated: action.receivedAt
       });
 
     case RECEIVE_PRODUCT_LOOKUP_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, didInvalidate: false, status: action.status,selectedProduct:{},
-        productData: action.data, lastUpdated: action.receivedAt
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        selectedProduct: {},
+        productData: action.data,
+        lastUpdated: action.receivedAt
       });
     case RECEIVE_PRODUCT_LOOKUP_DATA_ERROR:
-    return Object.assign({}, state, {
-      isFetching: false,
-      type: action.type, didInvalidate: false, status: action.status,
-      productData: '', lastUpdated: action.receivedAt
-    });
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        productData: '',
+        lastUpdated: action.receivedAt
+      });
+    case REQUEST_VENDOR_PRODUCTS:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        status: '',
+      });
+
+    case RECEIVE_VENDOR_PRODUCTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        vendorProductsData: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_VENDOR_PRODUCTS_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        lastUpdated: action.receivedAt
+      });
 
     case REQUEST_PRODUCT_UPDATE:
-    return Object.assign({}, state, {
-      isFetching: false,
-      type: action.type, 
-      didInvalidate: false, 
-      status: action.status,
-      selectedProduct: action.data, 
-      lastUpdated: action.receivedAt
-    });
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        selectedProduct: action.data,
+        lastUpdated: action.receivedAt
+      });
 
     case REQUEST_SALE_TRANSACTION_DATA:
       return Object.assign({}, state, {
-        isFetching: true, type: action.type,status: '',
-        getSaleTransaction:[], lastUpdated: action.receivedAt
+        isFetching: true,
+        type: action.type,
+        status: '',
+        getSaleTransaction: [],
+        lastUpdated: action.receivedAt
       });
 
     case RECEIVE_SALE_TRANSACTION_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, didInvalidate: false, status: action.status,
-        getSaleTransaction: action.data, lastUpdated: action.receivedAt
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        getSaleTransaction: action.data,
+        lastUpdated: action.receivedAt
       });
 
     case REQUEST_CUSTOMER_REGISTRATION_DATA:
       return Object.assign({}, state, {
-        isFetching: true, type: action.type, status: '',
+        isFetching: true,
+        type: action.type,
+        status: '',
         lastUpdated: action.receivedAt
       });
 
     case RECEIVE_CUSTOMER_REGISTRATION_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, didInvalidate: false, status: action.status,
-        getCustomerRegistration: action.data, lastUpdated: action.receivedAt
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        getCustomerRegistration: action.data,
+        lastUpdated: action.receivedAt
       });
 
     case REQUEST_CUSTOMER_SEARCH_DATA:
       return Object.assign({}, state, {
-        isFetching: true, type: action.type, status: '', customerSearchData: [],
+        isFetching: true,
+        type: action.type,
+        status: '',
+        customerSearchData: [],
         lastUpdated: action.receivedAt
       });
 
     case RECEIVE_CUSTOMER_SEARCH_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, didInvalidate: false, status: action.status,
-        customerSearchData: action.data, lastUpdated: action.receivedAt
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        customerSearchData: action.data,
+        lastUpdated: action.receivedAt
       });
 
 
