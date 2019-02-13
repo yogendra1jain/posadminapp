@@ -1,29 +1,31 @@
 import * as PRODUCT_CONSTANT from '../constants/products';
 import dynamicActionWrapper from '../helpers/actionHelper';
-import { debug } from 'util';
+import {
+    debug
+} from 'util';
 
 let status = '';
 //upload document
 export const uploadDocumentAction = (subreddit) => ({
     type: "UPLOAD_DOCUMENT",
     subreddit
-  });
-  
-  export const receivedDocumentUploadResponse = (subreddit, data) => ({
+});
+
+export const receivedDocumentUploadResponse = (subreddit, data) => ({
     type: "RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE",
     subreddit,
     data,
     receivedAt: Date.now()
-  });
-  
-  export const receivedDocumentUploadError = (subreddit, error) => ({
+});
+
+export const receivedDocumentUploadError = (subreddit, error) => ({
     type: "RECEIVED_DOCUMENT_UPLOAD_ERROR",
     subreddit,
     error,
     receivedAt: Date.now()
-  });
-  
-  export const uploadDocument = (file, url, subreddit) => (dispatch) => {
+});
+
+export const uploadDocument = (file, url, subreddit) => (dispatch) => {
     const formData = new FormData();
     formData.append('file', file);
     // formData.append('folderName', file.folderName);
@@ -35,13 +37,13 @@ export const uploadDocumentAction = (subreddit) => ({
         .then(response => response.json())
         .then(json => dispatch(receivedDocumentUploadResponse(subreddit, json)))
         .catch(e => dispatch(receivedDocumentUploadError(subreddit, e)))
-  }
+}
 
 
 export const requestProductData = subreddit => ({
     type: PRODUCT_CONSTANT.REQUEST_PRODUCT_DATA,
     subreddit
-  })
+})
 
 export const receiveProductData = (subreddit, json, status) => ({
     type: PRODUCT_CONSTANT.RECEIVE_PRODUCT_DATA,
@@ -62,13 +64,13 @@ export const receiveProductData = (subreddit, json, status) => ({
 //     })
 //     .then(response => {
 //         status = response.status;
-         
+
 //         return response.json() } 
 //     )
 //     .then(json => dispatch(receiveProductData(subreddit, json, status)))
 // }
 
-export const ProductDataSave = (data,subreddit,saveProductURL, method) => dispatch =>
+export const ProductDataSave = (data, subreddit, saveProductURL, method) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: saveProductURL,
         method: 'POST',
@@ -115,7 +117,7 @@ const receiveProductLookupDataError = (subreddit, error) => ({
 
 export const fetchProductLookupData = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
+        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
         method: 'POST',
         body: data,
         initCb: requestProductLookupData,
@@ -131,6 +133,49 @@ export const fetchProductLookupData = (subreddit, url, data) => dispatch =>
 export const requestProductUpdate = (subreddit, product) => ({
     type: PRODUCT_CONSTANT.REQUEST_PRODUCT_UPDATE,
     subreddit,
-    data:product
+    data: product
 });
 
+
+
+const requestVendorProducts = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_VENDOR_PRODUCTS,
+    subreddit
+});
+
+const receiveVendorProducts = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_VENDOR_PRODUCTS,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveVendorProductsError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_VENDOR_PRODUCTS_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const fetchVendorProducts = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestVendorProducts,
+            successCb: receiveVendorProducts,
+            failureCb: receiveVendorProductsError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}

@@ -14,6 +14,8 @@ const dynamicActionWrapper = ({
     mode,
     redirect,
     credentials,
+    resolve,
+    reject,
     cache,
     referrer,
     referrerPolicy,
@@ -36,6 +38,8 @@ const dynamicActionWrapper = ({
           initHandler: initCb,
           success: successCb,
           failure: failureCb,
+          resolve,
+          reject,
           passOnParams: {
             mode,
             redirect,
