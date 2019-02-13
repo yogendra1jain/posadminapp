@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+/* Lodash Imports */
+import _get from 'lodash/get';
 /* Material Imports */
 import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -18,8 +20,9 @@ const styles = theme => ({
 function LevelCategories(props) {
   const { classes } = props;
   let pannels = []
-
-  props.categoriesTree.map((data, index)=>{
+  debugger
+  _get(props, 'categoriesTree', []).map((data, index)=>{
+    debugger
     pannels.push(
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>

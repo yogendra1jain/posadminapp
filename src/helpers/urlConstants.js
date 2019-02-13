@@ -1,5 +1,4 @@
 let APPLICATION_BFF_URL
-debugger
 if (process.env.NODE_ENV !== 'production') {
     APPLICATION_BFF_URL = process.env.APPLICATION_BFF_URL;
 }

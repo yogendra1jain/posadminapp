@@ -5,7 +5,6 @@ import { onLogout } from '../actions/userRoles';
 
 // pure function
 const addOptionalOptions = (config, options) => {
-    debugger
     let newOptions = { ...options };
     // if (!_isEmpty(config.body)) {
         if (config.isFormData && _isEmpty(config.body)) {

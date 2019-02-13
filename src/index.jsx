@@ -43,6 +43,7 @@ import VendorListContainer from './containers/Vendor/VendorList';
 import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor'
 
 import CategoriesContainer from './containers/Categories/CategoriesContainer'
+import AddNewCategoryContainer from './containers/Categories/AddNewCategoryContainer'
 
 const middleware = [ thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
@@ -95,6 +96,7 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/categories" component={CategoriesContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/categories/add" component={AddNewCategoryContainer}/>
       </Switch>    
                    
      

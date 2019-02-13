@@ -12,6 +12,15 @@ body{
     display: flex;
     flex-direction: row;
 }
+.justify-center{
+    justify-content: center;
+}
+.align-center{
+    align-items: center;
+}
+.ml-50{
+    margin-left: 50px; 
+}
 /* test css */
 
 /****** monikai ******/
