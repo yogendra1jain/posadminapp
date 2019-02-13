@@ -204,11 +204,6 @@ class AddEditVendorNew extends React.Component {
         let data = {};
         data = {
             name: _get(this, 'staffInfo.name', ''),
-            contactPerson: {
-                firstName: _get(this, 'staffInfo.firstName', ''),
-                middleName: _get(this, 'staffInfo.middleName', ''),
-                lastName: _get(this, 'staffInfo.lastName', ''),
-            },
             email: _get(this, 'staffInfo.email', ''),
             phoneNumber: {
                 countryCode: _get(this, 'staffInfo.countryCode', 91),
@@ -343,34 +338,6 @@ class AddEditVendorNew extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d"></div>
                                 <div className="col-sm-6 col-md-4 form-d"></div>
                                 <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">First Name</label>
-                                    <GenericInput
-                                        htmlFor="firstName" displayName="First Name" type="text"
-                                        inputName="firstName" defaultValue={_get(this.staffInfo, 'firstName', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Middle Name</label>
-                                    <GenericInput
-                                        htmlFor="middleName" displayName="Middle Name" type="text"
-                                        inputName="middleName" defaultValue={_get(this.staffInfo, 'middleName', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Last Name</label>
-                                    <GenericInput
-                                        htmlFor="lastName" displayName="Last Name" type="text"
-                                        inputName="lastName" defaultValue={_get(this.staffInfo, 'lastName', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
-                                        className="text-input error"
-                                    />
-                                </div>
-
-                                <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Email</label>
                                     <GenericInput
                                         htmlFor="email" displayName="Email" type="email"
@@ -425,9 +392,9 @@ const mapStateToProps = state => {
         let temp = _find(vendorsReducer.vendorData, { 'id': selectedStore.id });
         initialValues = {
             name: _get(temp, 'name', ''),
-            firstName: _get(temp, 'contactPerson.firstName', ''),
-            middleName: _get(temp, 'contactPerson.middleName', ''),
-            lastName: _get(temp, 'contactPerson.lastName', ''),
+            // firstName: _get(temp, 'contactPerson.firstName', ''),
+            // middleName: _get(temp, 'contactPerson.middleName', ''),
+            // lastName: _get(temp, 'contactPerson.lastName', ''),
             email: _get(temp, 'email', ''),
             countryCode: _get(temp, 'phoneNumber.countryCode', 91),
             phone: _get(temp, 'phoneNumber.phoneNumber', ''),
