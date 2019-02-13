@@ -6,6 +6,8 @@ import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+/* Lodash Imports */
+import _get from 'lodash/get';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -63,7 +65,7 @@ class SubCategories extends React.Component {
   populateSubCategories = () => {
     let pannel = []
     
-    this.props.children.map((data, index) => {
+    _get(this, 'props.children', []).map((data, index) => {
       pannel.push(
         <ExpansionPanel
           square

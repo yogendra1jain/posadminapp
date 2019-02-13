@@ -45,7 +45,7 @@ const renderHobbies = ({ fields, meta: { error } }) => {
             name={`${data}.name`}
             type="text"
             component={renderField}
-            label='Name'
+            label='Leaf Category'
           />
         </li>
       ))}
@@ -90,7 +90,7 @@ const renderMembers = ({ fields, meta: { error, submitFailed } }) => {
             name={`${member}.name`}
             type="text"
             component={renderField}
-            label="Name"
+            label="Sub Category"
           />
           <FieldArray name={`${member}.children`} component={renderHobbies} />
         </li>
@@ -109,13 +109,12 @@ const AddNewCategoryContainer = props => {
   const { handleSubmit, pristine, reset, submitting, submitForm } = props
   return (
     <form onSubmit={(handleSubmit(submitForm))}>
-      <h2>Add New Category</h2>
       <div>
         <Field
           name="name"
           type="text"
           component={renderField}
-          label="Category"
+          label="Root Category"
         />
       </div>
       <FieldArray name="children" component={renderMembers} />
