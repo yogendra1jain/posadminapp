@@ -125,7 +125,6 @@ class StoreListContainer extends React.Component {
 
     onUpdate() {
         let tempStore = _find(this.storeList, { 'id': this.selectedStore.id });
-        debugger
         this.open = true;
         const { dispatch, customersReducer } = this.props;
         dispatch(requestCustomerUpdate(customersReducer, tempStore));

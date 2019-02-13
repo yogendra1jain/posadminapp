@@ -39,8 +39,10 @@ const posTerminalData = (state = {
     case RECEIVED_POS_TERMINAL_LIST:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, status: action.status,
-        didInvalidate: false, posListData: action.data,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        posListData: action.data,
         lastUpdated: action.receivedAt
       });
     case REQUEST_POS_TERMINAL_DATA:
@@ -51,7 +53,9 @@ const posTerminalData = (state = {
     case RECEIVED_POS_TERMINAL_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, status: action.status,posSaveData:action.data,
+        type: action.type, 
+        status: action.status,
+        posSaveData:action.data,
         didInvalidate: false,
         lastUpdated: action.receivedAt
       });
@@ -67,7 +71,7 @@ const posTerminalData = (state = {
       return Object.assign({}, state, {
         isFetching: false,
         type: action.type, status: action.status,
-        didInvalidate: false, posListData:action.error,
+        didInvalidate: false,
         lastUpdated: action.receivedAt
     });
     case REQUEST_POS_TERMINAL_STATUS:
