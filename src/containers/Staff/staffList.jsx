@@ -87,8 +87,8 @@ class StaffListContainer extends React.Component {
     componentWillReceiveProps(props) {
         if(props.type === 'RECEIVED_STAFF_LIST'){
             if((props.staffListData != null)){
-                this.staffListData = props.staffListData;
-                this.staffList = [];
+                this.staffList = props.staffListData;
+                // this.staffList = [];
                 props.staffListData.map(staff  => {
                     console.log(staff, 'staff data')
                     let tempStaff = {};
@@ -107,6 +107,8 @@ class StaffListContainer extends React.Component {
                     tempStaff.storeId = staff.storeId
                     this.staffList.push(tempStaff);
                 });
+            } else {
+                this.staffList = []
             }
             this.forceUpdate();
         }
@@ -233,6 +235,7 @@ class StaffListContainer extends React.Component {
                 </div>
             </div>);
         }
+        console.log(this.props.staffListData, 'this.props.staffListData')
         console.log(this.staffList, 'this.staffList')
         return (
             <div className="">

@@ -24,8 +24,11 @@ export const uploadDocumentAction = (subreddit) => ({
   });
   
   export const uploadDocument = (file, url, subreddit) => (dispatch) => {
+      console.log(file, 'gffhiy')
     const formData = new FormData();
-    formData.append('file', file);
+    // formData.append('file', file);
+    formData.append('userpic', file, 'chris.jpg');
+    console.log(formData, 'formData')
     // formData.append('folderName', file.folderName);
     dispatch(uploadDocumentAction(subreddit));
     fetch(url, {
@@ -133,4 +136,40 @@ export const requestProductUpdate = (subreddit, product) => ({
     subreddit,
     data:product
 });
+
+// Fetch Category Reducer
+
+const requestCategory = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_CATEGORY_DATA,
+    subreddit
+});
+
+const receiveCategory = (subreddit, data) => ({
+    type: PRODUCT_CONSTANT.RECEIVE_CATEGORY_DATA,
+    subreddit,
+    data,
+    receivedAt: Date.now()
+});
+
+const receiveCategoryError = (subreddit, error) => ({
+    type: PRODUCT_CONSTANT.RECEIVE_CATEGORY_DATA_ERROR,
+    subreddit,
+    error,
+    receivedAt: Date.now()
+})
+
+export const fetchCategory = (subreddit, url, data) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
+        method: 'POST',
+        body: data,
+        initCb: requestCategory,
+        successCb: receiveCategory,
+        failureCb: receiveCategoryError,
+        resolve: '',
+        reject: '',
+        subreddit,
+        wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
+        redirect: 'follow'
+    }));
 

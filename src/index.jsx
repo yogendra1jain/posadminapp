@@ -41,6 +41,7 @@ import CustomerListContainer from './containers/Customer/CustomerList';
 import AddCustomerContainer from './containers/Customer/AddEditCustomer/AddEditCustomer';
 import VendorListContainer from './containers/Vendor/VendorList';
 import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor'
+import TestingFileUpload from './containers/Products/testingFileUpload';
 
 const middleware = [ thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
@@ -92,6 +93,7 @@ ReactDom.render(
 
         <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer}/>
+        {/* <RouteWithLayout layout={MainLayout} exact path="/fileUpload" component={TestingFileUpload}/> */}
       </Switch>    
                    
      

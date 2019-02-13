@@ -11,7 +11,7 @@ import { GenericInput } from '../../components/common/TextValidation.jsx';
 import { uploadDocument,ProductDataSave } from '../../actions/products';
 import Alert from 'react-s-alert';
 import {RECEIVE_PRODUCT_DATA, RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE} from '../../constants/products';
-
+import AutoCompletePosition from '../../components/Elements/AutoCompletePosition';
 
 
 class ProductContainer extends React.Component {
@@ -67,28 +67,29 @@ class ProductContainer extends React.Component {
         _set(this.productInfo,name,id);
         this.forceUpdate();
     }
+    
     handleFileChange(event) {  
-        // event.preventDefault();
-
-        // let reader = new FileReader();
+        event.preventDefault();
+        console.log(event.target.files[0], 'vfyufyfyfy')
+        let reader = new FileReader();
         let file = event.target.files[0];
         this.fileNames = (<li> {file.name} </li>)
-        // reader.onloadend = () => {
-        //   this.fileData = {
-        //     file: file,
-        //     imagePreviewUrl: reader.result
-        //   };  
-        //   this.imagePreviewUrl ='data:image/jpeg;base64,' + this.hexToBase64(this.fileData.imagePreviewUrl);
-        // }
-        // reader.readAsDataURL(file)    
-        // this.files = event.target.files;
-        // let fileNames = [];
-        // this.fileNames = [];
-        // Array.prototype.forEach.call(this.files, function(file, index) { fileNames.push(<li key={index}>{file.name}</li>) });
-        // this.fileNames = fileNames;
+        reader.onloadend = () => {
+          this.fileData = {
+            file: file,
+            imagePreviewUrl: reader.result
+          };  
+          this.imagePreviewUrl ='data:image/jpeg;base64,' + this.hexToBase64(this.fileData.imagePreviewUrl);
+        }
+        reader.readAsDataURL(file)    
+        this.files = event.target.files;
+        let fileNames = [];
+        this.fileNames = [];
+        Array.prototype.forEach.call(this.files, function(file, index) { fileNames.push(<li key={index}>{file.name}</li>) });
+        this.fileNames = fileNames;
 
         const { dispatch, productsReducer } = this.props;
-        let fileUrl = 'http://13.127.202.129:3005/media-service/pos/media'
+        let fileUrl = `${process.env.MEDIA_SERVICE_ADDRESS}`
         dispatch(uploadDocument(file, fileUrl, productsReducer));
         this.forceUpdate();
     }
@@ -181,7 +182,6 @@ class ProductContainer extends React.Component {
                 </div>
             </div>);
         }
-        console.log(this.categories, 'this.categories')
         return (
             <div className="strainBlock">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
@@ -235,18 +235,36 @@ class ProductContainer extends React.Component {
                             className="text-input error"
                         />
                     </div>
-                    {/* <div className="col-sm-6 col-md-4 form-d">
-                        <label className="control-label">Categories</label>
-                        <AutoComplete
-                            type="multi"
-                            data={_get(this.categories,'data',[])}
-                            name="categories"
-                            value={_get(this.productInfo,'categories','')}
-                            changeHandler={(id, name) => { this.handleSelectChange(id, "categories") }}
+                    <div className="col-sm-4 col-md-3 form-d">
+                        <label className="control-label">Select Main Cateogry</label>
+                        <AutoCompletePosition
+                            type="single"
+                            data={_get(this.status, 'data', [])}
+                            name="level1Cat"
+                            value={_get(this.posInfo, 'active', '')}
+                            changeHandler={(id, name) => { this.handleSelectChange(id, 'level1') }}
+                        />
+                    </div>
+                    {/* <div className="col-sm-4 col-md-3 form-d">
+                        <label className="control-label">Select 2nd Level Cateogry</label>
+                        <AutoCompletePosition
+                            type="single"
+                            data={_get(this.status, 'data', [])}
+                            name="level2Cat"
+                            value={_get(this.posInfo, 'active', '')}
+                            changeHandler={(id, name) => { this.handleSelectChange(id, 'level2') }}
                         />
                     </div> */}
-                
-                      
+                    {/* <div className="col-sm-4 col-md-3 form-d">
+                        <label className="control-label">Select 3rd Level Cateogry</label>
+                        <AutoCompletePosition
+                            type="single"
+                            data={_get(this.status, 'data', [])}
+                            name="level3Cat"
+                            value={_get(this.posInfo, 'active', '')}
+                            changeHandler={(id, name) => { this.handleSelectChange(id, 'level3') }}
+                        />
+                    </div> */}
                         <div className="col-sm-6 col-md-4 form-d">
                             <div className="row">
                                 <div className="col-sm-12">

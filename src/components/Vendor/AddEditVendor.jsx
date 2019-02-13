@@ -103,7 +103,6 @@ class AddEditVendorNew extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        debugger
         if (!_isEmpty(props.storeData)) {
             this.storeList = [];
             props.storeData.stores.map((store, index) => {
@@ -315,7 +314,6 @@ class AddEditVendorNew extends React.Component {
         }
         if(!_isEmpty(this.props.initialValues)){
             this.staffInfo = this.props.initialValues
-            debugger
         }
         return (
             <Formik
@@ -435,7 +433,6 @@ const mapStateToProps = state => {
             phone: _get(temp, 'phoneNumber.phoneNumber', ''),
             id: _get(temp, 'id'),
         }
-        debugger
     }
 
 

@@ -340,7 +340,6 @@ class AddEditCustomerNew extends React.Component {
         }
         if (!_isEmpty(this.props.initialValues)) {
             this.staffInfo = this.props.initialValues
-            debugger
         }
         return (
             <Formik
@@ -503,7 +502,6 @@ const mapStateToProps = state => {
             phone: parseInt(_get(temp, 'phoneNumber.phone', 0), 10),
             id: _get(temp, 'id'),
         }
-        debugger
     }
 
     return {
