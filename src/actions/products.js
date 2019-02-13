@@ -179,3 +179,196 @@ export const fetchVendorProducts = (subreddit, url, data) => dispatch => {
         }));
     })
 }
+
+
+export const updateVendorProductsList = (subreddit, data) => ({
+    type: PRODUCT_CONSTANT.UPDATE_VENDOR_PRODUCTS_LIST,
+    subreddit,
+    data: data
+});
+
+
+export const updateVendorsList = (subreddit, data) => ({
+    type: PRODUCT_CONSTANT.UPDATE_VENDOR_LIST_FOR_PRODUCTS,
+    subreddit,
+    data: data
+});
+
+const requestRetailerProducts = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_REATILER_PRODUCTS,
+    subreddit
+});
+
+const receiveRetailerProducts = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_REATILER_PRODUCTS,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveRetailerProductsError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_REATILER_PRODUCTS_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const fetchRetailerProducts = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestRetailerProducts,
+            successCb: receiveRetailerProducts,
+            failureCb: receiveRetailerProductsError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
+
+
+const requestExistingPOSProductsForVendor = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_EXISTING_POS_PRODUCTS_FOR_VENDOR,
+    subreddit
+});
+
+const receiveExistingPOSProductsForVendor = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_EXISTING_POS_PRODUCTS_FOR_VENDOR,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveExistingPOSProductsForVendorError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_EXISTING_POS_PRODUCTS_FOR_VENDOR_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const fetchExistingPOSProductsForVendor = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestExistingPOSProductsForVendor,
+            successCb: receiveExistingPOSProductsForVendor,
+            failureCb: receiveExistingPOSProductsForVendorError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
+
+
+const requestVendorProductSave = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_VENDOR_PRODUCT_SAVE,
+    subreddit
+});
+
+const receiveVendorProductSave = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_VENDOR_PRODUCT_SAVE,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveVendorProductSaveError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_VENDOR_PRODUCT_SAVE_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const vendorProductSave = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestVendorProductSave,
+            successCb: receiveVendorProductSave,
+            failureCb: receiveVendorProductSaveError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
+
+
+export const requestVendorProductUpdate = (subreddit, data) => ({
+    type: PRODUCT_CONSTANT.REQUEST_VENDOR_PRODUCT_UPDATE,
+    subreddit,
+    data: data
+});
+
+
+const requestProductsFromCache = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_PRODUCTS_FROM_CACHE,
+    subreddit
+});
+
+const receiveProductsFromCache = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_PRODUCTS_FROM_CACHE,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveProductsFromCacheError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: PRODUCT_CONSTANT.RECEIVE_PRODUCTS_FROM_CACHE_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const fetchProductsFromCache = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestProductsFromCache,
+            successCb: receiveProductsFromCache,
+            failureCb: receiveProductsFromCacheError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
+
