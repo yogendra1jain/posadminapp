@@ -23,7 +23,6 @@ class AddEditInventoryContainer extends React.Component {
         this.products = [];
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.saveInventory = this.saveInventory.bind(this);
 
         if (!this.props.isAdmin) {
             let url = '';
@@ -43,8 +42,8 @@ class AddEditInventoryContainer extends React.Component {
             return true;
         }
     }
-    saveInventory() {
-        this.props.saveInventory(this.selectedInventory);
+    adjustInventory() {
+        this.props.adjustInventory(this.selectedInventory);
     }
     handleSelectChange(id, name) {
         _set(this.selectedInventory, name, id);
@@ -63,7 +62,12 @@ class AddEditInventoryContainer extends React.Component {
 
 
     handleInputChange(event) {
-        _set(this.selectedInventory, event.target.name, event.target.value);
+        if (event.target.value == "-1") {
+            _set(this.selectedInventory, event.target.name, 0);
+        }
+        else {
+            _set(this.selectedInventory, event.target.name, event.target.value);
+        }
         this.forceUpdate();
     }
 
@@ -135,12 +139,24 @@ class AddEditInventoryContainer extends React.Component {
                             ''
                     }
                     <div className="col-sm-6 col-md-4 form-d">
-                        <label class="control-label">Enter Quantity</label>
+                        <label class="control-label">Enter Min Quanity</label>
                         <FormControl
                             type="number"
-                            name="delta"
-                            value={this.selectedInventory && this.selectedInventory.delta ? this.selectedInventory.delta : 0}
-                            placeholder="Quantity"
+                            name="minQuantity"
+                            value={this.selectedInventory && this.selectedInventory.minQuantity ? this.selectedInventory.minQuantity : 0}
+                            placeholder="Min Quantity"
+                            onChange={this.handleInputChange}
+                        >
+                        </FormControl>
+                    </div>
+
+                    <div className="col-sm-6 col-md-4 form-d">
+                        <label class="control-label">Enter Max Quanity</label>
+                        <FormControl
+                            type="number"
+                            name="maxQuantity"
+                            value={this.selectedInventory && this.selectedInventory.maxQuantity ? this.selectedInventory.maxQuantity : 0}
+                            placeholder="Max Quantity"
                             onChange={this.handleInputChange}
                         >
                         </FormControl>
@@ -161,7 +177,7 @@ class AddEditInventoryContainer extends React.Component {
 
 
                     <div className="col-sm-6 col-md-4 form-btn-group-left" style={{ paddingTop: "22px" }} >
-                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Save'} handlerSearch={this.saveInventory} />
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Save'} handlerSearch={() => this.adjustInventory()} />
                         <SaveButton buttonDisplayText={'Cancel'} handlerSearch={this.handleCancel} />
                     </div>
                 </Row>

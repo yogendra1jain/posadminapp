@@ -143,7 +143,6 @@ class LoginContainer extends React.Component {
             </div>);
         }
 
-
         if (this.state.redirectToSearch) {
             return (<Redirect push to={'/products'} />)
         }
