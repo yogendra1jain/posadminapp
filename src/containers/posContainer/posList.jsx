@@ -165,7 +165,7 @@ class PosList extends React.Component {
             }
             if ((props.posListData.length > 0) && this.fetchTerminalFlag) {
                 this.fetchTerminalFlag = false;
-                this.posList = [];
+                this.posList = props.posListData;
                 props.posListData.map(pos  => {
                     let tempPos = {};
                     tempPos.id = pos.id;
@@ -176,8 +176,26 @@ class PosList extends React.Component {
                 })
                 this.forceUpdate();
             }
+        } else {
+            this.posList = []
         }
 
+        // if(props.type === 'RECEIVED_POS_TERMINAL_LIST'){
+        //     debugger
+        //     if((props.posListData != null)){
+        //         this.posList = props.posListData
+        //         props.posListData.map(pos  => {
+        //             let tempPos = {};
+        //             tempPos.id = pos.id;
+        //             tempPos.name = pos.name;
+        //             tempPos.storeId = pos.storeId
+        //             tempPos.active = pos.active ? 'Active' : 'Inactive'
+        //             this.posList.push(tempPos)
+        //         });
+        //     } else {
+        //         this.staffList = []
+        //     }
+        //     this.forceUpdate();
         // }
         if (!_isEmpty(props.posStatusData) && this.fetchStatusFlag) {
             this.fetchStatusFlag = false;
@@ -379,13 +397,13 @@ class PosList extends React.Component {
     }
     handleSelectStoreChange(id, name) {
         _set(this.selectedStore, name, id);
-        this.forceUpdate();
         const { dispatch, posTerminalReducer } = this.props;
         let reqBody = {
             id: id
         }
         let url = '/Terminal/ByStoreId';
         dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
+        this.forceUpdate();
     }
 
     render() {
@@ -487,12 +505,9 @@ class PosList extends React.Component {
                         </div>
                     </ReactDrawer>
                 </div>
-
             </div>
         )
-
     }
-
 }
 
 const mapStateToProps = state => {
