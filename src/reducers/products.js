@@ -15,8 +15,16 @@ import {
   REQUEST_PRODUCT_UPDATE,
   UPLOAD_DOCUMENT,
   RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE,
-  RECEIVED_DOCUMENT_UPLOAD_ERROR
-
+  RECEIVED_DOCUMENT_UPLOAD_ERROR,
+  REQUEST_LEVEL1_CATEGORY_DATA,
+  REQUEST_LEVEL2_CATEGORY_DATA,
+  REQUEST_LEVEL3_CATEGORY_DATA,
+  RECEIVE_LEVEL1_CATEGORY_DATA,
+  RECEIVE_LEVEL2_CATEGORY_DATA,
+  RECEIVE_LEVEL3_CATEGORY_DATA,
+  RECEIVE_LEVEL1_CATEGORY_DATA_ERROR,
+  RECEIVE_LEVEL2_CATEGORY_DATA_ERROR,
+  RECEIVE_LEVEL3_CATEGORY_DATA_ERROR
 } from '../constants/products';
 
 const productReducer = (state = 'productState', action) => {
@@ -35,7 +43,10 @@ const productData = (state = {
   getSaleTransaction: [],
   getCustomerRegistration: [],
   customerSearchData: [],
-  productSaveData: {}
+  productSaveData: {},
+  level1CategoryData: [],
+  level2CategoryData: [],
+  level3CategoryData: []
 }, action) => {
   switch (action.type) {
     case UPLOAD_DOCUMENT:
@@ -153,6 +164,92 @@ const productData = (state = {
         customerSearchData: action.data, lastUpdated: action.receivedAt
       });
 
+    case REQUEST_LEVEL1_CATEGORY_DATA:
+    return Object.assign({}, state, {
+      isFetching: true, 
+      type: action.type,
+      status: '',
+      level1CategoryData: [],
+      lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL1_CATEGORY_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        level1CategoryData: action.data,
+        lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL1_CATEGORY_DATA_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      didInvalidate: false, 
+      status: action.status,
+      lastUpdated: action.receivedAt,
+      error: action.error
+    });
+
+    case REQUEST_LEVEL2_CATEGORY_DATA:
+    return Object.assign({}, state, {
+      isFetching: true, 
+      type: action.type,
+      status: '',
+      level2CategoryData: [],
+      lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL2_CATEGORY_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        level2CategoryData: action.data,
+        lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL2_CATEGORY_DATA_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      didInvalidate: false, 
+      status: action.status,
+      lastUpdated: action.receivedAt,
+      error: action.error
+    });
+
+    case REQUEST_LEVEL3_CATEGORY_DATA:
+    return Object.assign({}, state, {
+      isFetching: true, 
+      type: action.type,
+      status: '',
+      level3CategoryData: [],
+      lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL3_CATEGORY_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        level3CategoryData: action.data,
+        lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL3_CATEGORY_DATA_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      didInvalidate: false, 
+      status: action.status,
+      lastUpdated: action.receivedAt,
+      error: action.error
+    });
 
     default:
       return state

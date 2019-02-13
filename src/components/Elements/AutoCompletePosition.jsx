@@ -223,6 +223,14 @@ class IntegrationReactSelectUp extends React.Component {
     }    
   }
 
+  handleRemove = single => {
+    this.setState({
+      single,
+    }, () => {
+        this.props.onRemove(single);
+    });
+  }
+
   render() {
     const { classes, 
             noResultFoundText = 'No Results' , 

@@ -8,9 +8,17 @@ import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import Row from "react-bootstrap/lib/Row";
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { uploadDocument,ProductDataSave } from '../../actions/products';
+import { uploadDocument,
+         ProductDataSave,
+         fetchLevel1Category, 
+         fetchLevel2Category, 
+         fetchLevel3Category } from '../../actions/products';
 import Alert from 'react-s-alert';
-import {RECEIVE_PRODUCT_DATA, RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE} from '../../constants/products';
+import { RECEIVE_PRODUCT_DATA, 
+         RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE,
+         RECEIVE_LEVEL1_CATEGORY_DATA,
+         RECEIVE_LEVEL2_CATEGORY_DATA,
+         RECEIVE_LEVEL3_CATEGORY_DATA } from '../../constants/products';
 import AutoCompletePosition from '../../components/Elements/AutoCompletePosition';
 
 
@@ -18,7 +26,11 @@ class ProductContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isUpdating: false
+            isUpdating: false,
+            level1Category: [],
+            level2Category: [],
+            level3Category: [],
+            selectedCategory: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -51,6 +63,11 @@ class ProductContainer extends React.Component {
             this.method = 'POST';
             this.imagePreviewUrl = this.productInfo.image;
         }
+        let url = '/Category/Level1ByRetailerId'
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
+        }
+        this.props.dispatch(fetchLevel1Category('', url, reqBody))
         this.forceUpdate();
     }
     hexToBase64(str) {
@@ -63,8 +80,34 @@ class ProductContainer extends React.Component {
         _set(this.productInfo,name,value);
         this.forceUpdate();
     }
+
     handleSelectChange = (id, name) => {
         _set(this.productInfo,name,id);
+        this.forceUpdate();
+    }
+
+    handleLevel1Category = (id, name) => {
+        _set(this.productInfo,name,id);
+        this.setState({ level3Category: []})
+        let url = '/Category/GetChildren'
+        let reqBody = {
+            id
+        }
+        if(id !== null) {
+            this.props.dispatch(fetchLevel2Category('', url, reqBody))
+        }
+        this.forceUpdate();
+    }
+
+    handleLevel2Category = (id, name) => {
+        _set(this.productInfo,name,id);
+        let url = '/Category/GetChildren'
+        let reqBody = {
+            id
+        }
+        if(id !== null) {
+            this.props.dispatch(fetchLevel3Category('', url, reqBody))
+        }
         this.forceUpdate();
     }
     
@@ -158,8 +201,46 @@ class ProductContainer extends React.Component {
                 this.redirectToSearch = false
             }
         }
-        this.forceUpdate();
-               
+
+        if(nextProps.type === RECEIVE_LEVEL1_CATEGORY_DATA) {
+            if(!_isEmpty(nextProps.level1CategoryData)) {
+                let categoryList = [];
+                _get(nextProps,'level1CategoryData', []).map((category, index) => {
+                    categoryList.push({ 
+                        displayText: category.name, 
+                        value: category.id 
+                    });
+                });
+                this.setState({ level1Category: categoryList })
+            }
+        }
+
+        if(nextProps.type === RECEIVE_LEVEL2_CATEGORY_DATA) {
+            if(!_isEmpty(nextProps.level2CategoryData)) {
+                let categoryList = [];
+                _get(nextProps,'level2CategoryData', []).map((category, index) => {
+                    categoryList.push({ 
+                        displayText: category.name, 
+                        value: category.id 
+                    });
+                });
+                this.setState({ level2Category: categoryList })
+            }
+        }
+
+        if(nextProps.type === RECEIVE_LEVEL3_CATEGORY_DATA) {
+            if(!_isEmpty(nextProps.level3CategoryData)) {
+                let categoryList = [];
+                _get(nextProps,'level3CategoryData', []).map((category, index) => {
+                    categoryList.push({ 
+                        displayText: category.name, 
+                        value: category.id 
+                    });
+                });
+                this.setState({ level3Category: categoryList })
+            }
+        }
+        this.forceUpdate();  
     }
     handleCancel = () => {
         this.redirectToSearch = true;
@@ -236,35 +317,35 @@ class ProductContainer extends React.Component {
                         />
                     </div>
                     <div className="col-sm-4 col-md-3 form-d">
-                        <label className="control-label">Select Main Cateogry</label>
+                        <label className="control-label">Select Root Cateogry</label>
                         <AutoCompletePosition
                             type="single"
-                            data={_get(this.status, 'data', [])}
+                            data={_get(this.state, 'level1Category', [])}
                             name="level1Cat"
-                            value={_get(this.posInfo, 'active', '')}
-                            changeHandler={(id, name) => { this.handleSelectChange(id, 'level1') }}
+                            value={_get(this.productInfo, 'level1', '')}
+                            changeHandler={(id, name) => { this.handleLevel1Category(id, 'level1') }}
                         />
                     </div>
-                    {/* <div className="col-sm-4 col-md-3 form-d">
-                        <label className="control-label">Select 2nd Level Cateogry</label>
+                    <div className="col-sm-4 col-md-3 form-d">
+                        <label className="control-label">Select Sub Cateogry</label>
                         <AutoCompletePosition
                             type="single"
-                            data={_get(this.status, 'data', [])}
+                            data={_get(this.state, 'level2Category', [])}
                             name="level2Cat"
-                            value={_get(this.posInfo, 'active', '')}
-                            changeHandler={(id, name) => { this.handleSelectChange(id, 'level2') }}
+                            value={_get(this.productInfo, 'level2', '')}
+                            changeHandler={(id, name) => { this.handleLevel2Category(id, 'level2') }}
                         />
-                    </div> */}
-                    {/* <div className="col-sm-4 col-md-3 form-d">
-                        <label className="control-label">Select 3rd Level Cateogry</label>
+                    </div>
+                    <div className="col-sm-4 col-md-3 form-d">
+                        <label className="control-label">Select Leaf Cateogry</label>
                         <AutoCompletePosition
                             type="single"
-                            data={_get(this.status, 'data', [])}
+                            data={_get(this.state, 'level3Category', [])}
                             name="level3Cat"
-                            value={_get(this.posInfo, 'active', '')}
+                            value={_get(this.productInfo, 'level3', '')}
                             changeHandler={(id, name) => { this.handleSelectChange(id, 'level3') }}
                         />
-                    </div> */}
+                    </div>
                         <div className="col-sm-6 col-md-4 form-d">
                             <div className="row">
                                 <div className="col-sm-12">
@@ -320,7 +401,7 @@ const mapStateToProps = state => {
 
     let { status } = productsReducer || '';
     let { isFetching } = productsReducer || false;
-    let { type, productData, selectedProduct, fileData } = productsReducer || '';
+    let { type, productData, selectedProduct, fileData, level1CategoryData, level2CategoryData, level3CategoryData } = productsReducer || '';
     
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
 
@@ -334,8 +415,10 @@ const mapStateToProps = state => {
         type,
         productData,
         selectedProduct,
-        fileData
-
+        fileData,
+        level1CategoryData,
+        level2CategoryData,
+        level3CategoryData
     }
 }
 

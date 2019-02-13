@@ -137,39 +137,111 @@ export const requestProductUpdate = (subreddit, product) => ({
     data:product
 });
 
-// Fetch Category Reducer
+// Fetch Level1 Category Reducer
 
-const requestCategory = (subreddit) => ({
-    type: PRODUCT_CONSTANT.REQUEST_CATEGORY_DATA,
+const requestLevel1Category = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_LEVEL1_CATEGORY_DATA,
     subreddit
 });
 
-const receiveCategory = (subreddit, data) => ({
-    type: PRODUCT_CONSTANT.RECEIVE_CATEGORY_DATA,
+const receiveLevel1Category = (subreddit, data) => ({
+    type: PRODUCT_CONSTANT.RECEIVE_LEVEL1_CATEGORY_DATA,
     subreddit,
     data,
     receivedAt: Date.now()
 });
 
-const receiveCategoryError = (subreddit, error) => ({
-    type: PRODUCT_CONSTANT.RECEIVE_CATEGORY_DATA_ERROR,
+const receiveLeve1CategoryError = (subreddit, error) => ({
+    type: PRODUCT_CONSTANT.RECEIVE_LEVEL1_CATEGORY_DATA_ERROR,
     subreddit,
     error,
     receivedAt: Date.now()
 })
 
-export const fetchCategory = (subreddit, url, data) => dispatch =>
+export const fetchLevel1Category = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
         method: 'POST',
         body: data,
-        initCb: requestCategory,
-        successCb: receiveCategory,
-        failureCb: receiveCategoryError,
+        initCb: requestLevel1Category,
+        successCb: receiveLevel1Category,
+        failureCb: receiveLeve1CategoryError,
         resolve: '',
         reject: '',
         subreddit,
-        wrapperActionType: 'FETCH_PRODUCT_LOOKUP_DATA_WRAPPER',
+        wrapperActionType: 'FETCH_LEVEL1_CATEGORY_DATA',
+        redirect: 'follow'
+    }));
+
+// Fetch Level2 Category Reducer
+
+const requestLevel2Category = (subreddit) => ({
+type: PRODUCT_CONSTANT.REQUEST_LEVEL2_CATEGORY_DATA,
+subreddit
+});
+
+const receiveLevel2Category = (subreddit, data) => ({
+type: PRODUCT_CONSTANT.RECEIVE_LEVEL2_CATEGORY_DATA,
+subreddit,
+data,
+receivedAt: Date.now()
+});
+
+const receiveLeve2CategoryError = (subreddit, error) => ({
+type: PRODUCT_CONSTANT.RECEIVE_LEVEL2_CATEGORY_DATA_ERROR,
+subreddit,
+error,
+receivedAt: Date.now()
+})
+
+export const fetchLevel2Category = (subreddit, url, data) => dispatch =>
+dispatch(dynamicActionWrapper({
+    path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
+    method: 'POST',
+    body: data,
+    initCb: requestLevel2Category,
+    successCb: receiveLevel2Category,
+    failureCb: receiveLeve2CategoryError,
+    resolve: '',
+    reject: '',
+    subreddit,
+    wrapperActionType: 'FETCH_LEVEL2_CATEGORY_DATA',
+    redirect: 'follow'
+}));
+
+// Fetch Level3 Category Reducer
+
+const requestLevel3Category = (subreddit) => ({
+    type: PRODUCT_CONSTANT.REQUEST_LEVEL3_CATEGORY_DATA,
+    subreddit
+});
+
+const receiveLevel3Category = (subreddit, data) => ({
+    type: PRODUCT_CONSTANT.RECEIVE_LEVEL3_CATEGORY_DATA,
+    subreddit,
+    data,
+    receivedAt: Date.now()
+});
+
+const receiveLeve3CategoryError = (subreddit, error) => ({
+    type: PRODUCT_CONSTANT.RECEIVE_LEVEL3_CATEGORY_DATA_ERROR,
+    subreddit,
+    error,
+    receivedAt: Date.now()
+})
+
+export const fetchLevel3Category = (subreddit, url, data) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
+        method: 'POST',
+        body: data,
+        initCb: requestLevel3Category,
+        successCb: receiveLevel3Category,
+        failureCb: receiveLeve3CategoryError,
+        resolve: '',
+        reject: '',
+        subreddit,
+        wrapperActionType: 'FETCH_LEVEL3_CATEGORY_DATA',
         redirect: 'follow'
     }));
 
