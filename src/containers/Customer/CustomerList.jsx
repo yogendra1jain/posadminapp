@@ -82,7 +82,6 @@ class StoreListContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        debugger
         if (props.type === 'CUSTOMER_RECIEVE') {
             if (!_isEmpty(_get(props, 'customersReducer.customerData', []))) {
                 this.storeList = [];
@@ -126,7 +125,6 @@ class StoreListContainer extends React.Component {
 
     onUpdate() {
         let tempStore = _find(this.storeList, { 'id': this.selectedStore.id });
-        debugger
         this.open = true;
         const { dispatch, customersReducer } = this.props;
         dispatch(requestCustomerUpdate(customersReducer, tempStore));

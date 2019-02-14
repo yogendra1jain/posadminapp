@@ -2,6 +2,9 @@ import {
   combineReducers
 } from 'redux';
 import _get from 'lodash/get';
+import _cloneDeep from 'lodash/cloneDeep';
+import _isArray from 'lodash/isArray';
+import _findIndex from 'lodash/findIndex';
 import {
   REQUEST_PRODUCT_DATA,
   RECEIVE_PRODUCT_DATA,
@@ -18,9 +21,33 @@ import {
   UPLOAD_DOCUMENT,
   RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE,
   RECEIVED_DOCUMENT_UPLOAD_ERROR,
+  REQUEST_LEVEL1_CATEGORY_DATA,
+  REQUEST_LEVEL2_CATEGORY_DATA,
+  REQUEST_LEVEL3_CATEGORY_DATA,
+  RECEIVE_LEVEL1_CATEGORY_DATA,
+  RECEIVE_LEVEL2_CATEGORY_DATA,
+  RECEIVE_LEVEL3_CATEGORY_DATA,
+  RECEIVE_LEVEL1_CATEGORY_DATA_ERROR,
+  RECEIVE_LEVEL2_CATEGORY_DATA_ERROR,
+  RECEIVE_LEVEL3_CATEGORY_DATA_ERROR,
   REQUEST_VENDOR_PRODUCTS,
   RECEIVE_VENDOR_PRODUCTS,
   RECEIVE_VENDOR_PRODUCTS_ERROR,
+  REQUEST_REATILER_PRODUCTS,
+  RECEIVE_REATILER_PRODUCTS,
+  RECEIVE_REATILER_PRODUCTS_ERROR,
+  REQUEST_EXISTING_POS_PRODUCTS_FOR_VENDOR,
+  RECEIVE_EXISTING_POS_PRODUCTS_FOR_VENDOR,
+  RECEIVE_EXISTING_POS_PRODUCTS_FOR_VENDOR_ERROR,
+  REQUEST_VENDOR_PRODUCT_SAVE,
+  RECEIVE_VENDOR_PRODUCT_SAVE,
+  RECEIVE_VENDOR_PRODUCT_SAVE_ERROR,
+  REQUEST_VENDOR_PRODUCT_UPDATE,
+  REQUEST_PRODUCTS_FROM_CACHE,
+  RECEIVE_PRODUCTS_FROM_CACHE,
+  RECEIVE_PRODUCTS_FROM_CACHE_ERROR,
+  UPDATE_VENDOR_PRODUCTS_LIST,
+  UPDATE_VENDOR_LIST_FOR_PRODUCTS,
 
 } from '../constants/products';
 
@@ -40,7 +67,15 @@ const productData = (state = {
   getSaleTransaction: [],
   getCustomerRegistration: [],
   customerSearchData: [],
+  productSaveData: {},
+  level1CategoryData: [],
+  level2CategoryData: [],
+  level3CategoryData: [],
   vendorProductsData: [],
+  existingPOSProductForVendor: {},
+  retailerProductsData: [],
+  vendorProductSaveData: {},
+  productsFromCache: [],
   productSaveData: {}
 }, action) => {
   switch (action.type) {
@@ -147,6 +182,154 @@ const productData = (state = {
         status: action.status,
         lastUpdated: action.receivedAt
       });
+    case UPDATE_VENDOR_PRODUCTS_LIST:
+      let tempProdList = _cloneDeep(_get(state, 'vendorProductsData', []));
+      let cachedProducts = _cloneDeep(action.data) || [];
+      console.log('product data', tempProdList);
+      _isArray(tempProdList) && tempProdList.map((prod, index) => {
+        let pIndex = _findIndex(cachedProducts, {
+          'id': prod.posProductId
+        });
+        if (pIndex !== -1) {
+          tempProdList[index].productName = cachedProducts[pIndex].name;
+        }
+      })
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        vendorProductsData: tempProdList,
+        lastUpdated: action.receivedAt
+      });
+    case UPDATE_VENDOR_LIST_FOR_PRODUCTS:
+      tempProdList = _cloneDeep(_get(state, 'vendorProductsData', []));
+      cachedProducts = _cloneDeep(action.data) || [];
+      _isArray(tempProdList) && tempProdList.map((prod, index) => {
+        let pIndex = _findIndex(cachedProducts, {
+          'id': prod.vendorId
+        });
+        if (pIndex !== -1) {
+          tempProdList[index].vendorName = cachedProducts[pIndex].name;
+        }
+      })
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        vendorProductsData: tempProdList,
+        lastUpdated: action.receivedAt
+      });
+    case REQUEST_REATILER_PRODUCTS:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        status: '',
+      });
+
+    case RECEIVE_REATILER_PRODUCTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        retailerProductsData: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_REATILER_PRODUCTS_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        lastUpdated: action.receivedAt
+      });
+    case REQUEST_VENDOR_PRODUCT_SAVE:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        status: '',
+      });
+
+    case RECEIVE_VENDOR_PRODUCT_SAVE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        vendorProductSaveData: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_VENDOR_PRODUCT_SAVE_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        lastUpdated: action.receivedAt
+      });
+
+    case REQUEST_EXISTING_POS_PRODUCTS_FOR_VENDOR:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        status: '',
+      });
+
+    case RECEIVE_EXISTING_POS_PRODUCTS_FOR_VENDOR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        existingPOSProductForVendor: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_EXISTING_POS_PRODUCTS_FOR_VENDOR_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        existingPOSProductForVendor: action.error,
+        lastUpdated: action.receivedAt
+      });
+
+    case REQUEST_VENDOR_PRODUCT_UPDATE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        selectedVendorProduct: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case REQUEST_PRODUCTS_FROM_CACHE:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        status: '',
+      });
+
+    case RECEIVE_PRODUCTS_FROM_CACHE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        productsFromCache: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_PRODUCTS_FROM_CACHE_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        lastUpdated: action.receivedAt
+      });
+
 
     case REQUEST_PRODUCT_UPDATE:
       return Object.assign({}, state, {
@@ -214,6 +397,92 @@ const productData = (state = {
         lastUpdated: action.receivedAt
       });
 
+    case REQUEST_LEVEL1_CATEGORY_DATA:
+    return Object.assign({}, state, {
+      isFetching: true, 
+      type: action.type,
+      status: '',
+      level1CategoryData: [],
+      lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL1_CATEGORY_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        level1CategoryData: action.data,
+        lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL1_CATEGORY_DATA_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      didInvalidate: false, 
+      status: action.status,
+      lastUpdated: action.receivedAt,
+      error: action.error
+    });
+
+    case REQUEST_LEVEL2_CATEGORY_DATA:
+    return Object.assign({}, state, {
+      isFetching: true, 
+      type: action.type,
+      status: '',
+      level2CategoryData: [],
+      lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL2_CATEGORY_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        level2CategoryData: action.data,
+        lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL2_CATEGORY_DATA_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      didInvalidate: false, 
+      status: action.status,
+      lastUpdated: action.receivedAt,
+      error: action.error
+    });
+
+    case REQUEST_LEVEL3_CATEGORY_DATA:
+    return Object.assign({}, state, {
+      isFetching: true, 
+      type: action.type,
+      status: '',
+      level3CategoryData: [],
+      lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL3_CATEGORY_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        level3CategoryData: action.data,
+        lastUpdated: action.receivedAt
+    });
+
+    case RECEIVE_LEVEL3_CATEGORY_DATA_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      didInvalidate: false, 
+      status: action.status,
+      lastUpdated: action.receivedAt,
+      error: action.error
+    });
 
     default:
       return state

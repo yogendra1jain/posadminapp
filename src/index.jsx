@@ -46,6 +46,8 @@ import EmployeePayrollDeductDetails from './containers/Reports/EmployeePayrollDe
 import EmployeePayrollDeductSummary from './containers/Reports/EmployeePayrollDeductSummary.jsx';
 import EmployeeDiscountReport from './containers/Reports/EmployeeDiscountReport.jsx';
 import EmployeeDetailsReport from './containers/Reports/EmployeeDetailsList.jsx';
+import AddEditVendorProduct from './containers/VendorProducts/AddEditVendorProduct/AddEditVendorProduct.jsx';
+import RequisitionContainer from './containers/RequisitionContainer/RequisitionContainer.jsx';
 
 const middleware = [thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
@@ -91,10 +93,12 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/addEditPos" component={AddEditPosContainer} />
         {/* <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/> */}
         {/* <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/> */}
-        {/* <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer}/> */}
-        <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer}/>
 
+        <RouteWithLayout layout={MainLayout} exact path="/vendorproducts/add" component={AddEditVendorProduct}/>
+        <RouteWithLayout layout={MainLayout} exact path="/requisitions" component={RequisitionContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/vendorproducts" component={VendorProductsContainer} />

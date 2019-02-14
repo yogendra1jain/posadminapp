@@ -4,9 +4,13 @@ import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
 import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
 import "bootstrap/dist/css/bootstrap.css";
 import SaveButton from '../../components/common/SaveButton.jsx'
+import Button from '@material-ui/core/Button';
+
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
+import _isArray from 'lodash/isArray';
+import _uniq from 'lodash/uniq';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import _pull from 'lodash/pull';
@@ -15,14 +19,15 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 import 'react-drawer/lib/react-drawer.css';
 import Alert from 'react-s-alert';
 
-import { fetchVendorProducts } from '../../actions/products';
+import { fetchVendorProducts, requestVendorProductUpdate, fetchProductsFromCache, updateVendorProductsList, updateVendorsList } from '../../actions/products';
 import { getVendorData } from '../../actions/vendor';
-import vendorReducer from '../../reducers/vendor.js';
+import { showMessage } from '../../actions/common';
+import Select from 'react-select'
 
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'name',
+    defaultSortName: 'productName',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -37,6 +42,9 @@ const options = {
 class VendorProductsContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedValue: '',
+        };
         this.selectRowProp = {
             mode: 'radio',
             clickToSelect: false,
@@ -74,12 +82,52 @@ class VendorProductsContainer extends React.Component {
         let url = `/Vendor/ByRetailerId`;
         let vendorProdUrl = `/VendorProduct/GetByRetailerId`;
         this.props.dispatch(getVendorData('', url, reqObj))
+        this.fetchVendorProducts(vendorProdUrl, reqObj);
+
+    }
+    fetchVendorProducts = (vendorProdUrl, reqObj) => {
         this.props.dispatch(fetchVendorProducts('', vendorProdUrl, reqObj))
-        .then((data) => {
-            console.log('came in then of vendorproduct service call.');
-        }, (err) => {
-            console.log('err', err);
-        })
+            .then((data) => {
+                console.log('came in then of vendorproduct service call.');
+                let productIds = [];
+                let vendorIds = [];
+                !_isEmpty(data) && _isArray(data) && data.map((value) => {
+                    productIds.push(value.posProductId);
+                    vendorIds.push(value.vendorId);
+                })
+                this.getProductsFromCache(_uniq(productIds), _uniq(vendorIds));
+            }, (err) => {
+                console.log('err', err);
+                this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
+                setTimeout(() => {
+                    this.props.dispatch(showMessage({}));
+                }, 1000);
+            })
+    }
+
+    getProductsFromCache = (prodIds, vendorIds) => {
+        let productsUrl = `/Product/GetByIds`;
+        let data = {
+            ids: prodIds,
+        };
+        this.props.dispatch(fetchProductsFromCache('', productsUrl, data))
+            .then((data) => {
+                console.log('data from cache', data);
+                this.props.dispatch(updateVendorProductsList('', data));
+                let vendorsUrl = `/Vendor/GetByIds`;
+                let req = {
+                    ids: vendorIds,
+                };
+                this.props.dispatch(fetchProductsFromCache('', vendorsUrl, req))
+                    .then((data) => {
+                        console.log('data from cache', data);
+                        this.props.dispatch(updateVendorsList('', data));
+                    }, (err) => {
+                        console.log('err while fetching products from cache', err);
+                    })
+            }, (err) => {
+                console.log('err while fetching products from cache', err);
+            })
     }
 
     onRowSelect = (row, isSelected, e) => {
@@ -98,6 +146,31 @@ class VendorProductsContainer extends React.Component {
     handleSelectChange = (id, name) => {
 
     }
+    addNewVendorProduct = () => {
+        this.props.history.push('/vendorproducts/add');
+    }
+    updateVendorProduct = () => {
+        if (this.selectedIds.length > 0) {
+            let prodId = this.selectedIds[0];
+            let tempProd = _find(this.props.vendorProductsList, { 'id': prodId });
+            const { dispatch } = this.props;
+            dispatch(requestVendorProductUpdate('', tempProd));
+            this.props.history.push('/vendorproducts/add');
+        }
+
+    }
+
+    handleVendorChange = (e) => {
+        let value = _get(e, 'value', '');
+        this.setState({
+            selectedValue: value,
+        });
+        let vendorProdUrl = `/VendorProduct/GetByVendorId`;
+        let reqObj = {
+            id: value,
+        }
+        this.fetchVendorProducts(vendorProdUrl, reqObj);
+    }
     render() {
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
@@ -111,12 +184,17 @@ class VendorProductsContainer extends React.Component {
             </div>);
         }
 
-        let { vendorProductsList } = this.props
+        let { vendorProductsList, vendorList } = this.props;
+        let { selectedValue } = this.state;
         return (
             <div className="">
                 <div>
+                    <div className="" style={{ marginBottom: '10px' }}>
+                        <Select name='vendor' options={vendorList} value={selectedValue} onChange={this.handleVendorChange} />
+                    </div>
                     <div className="form-btn-group">
-                        <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewVendorProduct} />
+                        <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.updateVendorProduct()}>Update</Button>
+                        <Button type="button" variant="raised" onClick={() => this.addNewVendorProduct()}>Add New</Button>
                     </div>
                     <div>
                         <BootstrapTable
@@ -129,10 +207,13 @@ class VendorProductsContainer extends React.Component {
                             search={true}
                             searchPlaceholder={'Search Vendor Products'}>
 
-                            <TableHeaderColumn width='100' dataField='id' isKey={true} >ID</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='name'>Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='email' dataSort>Email</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='phoneNumber' dataSort>Phone Number</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='vendorName' >Vendor Name</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='productName'>POS Product</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='sku' dataSort>SKU</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='combinedPrice' dataSort>Price</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='defaultOrderQty' dataSort>Default Order Quantity</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='conversionFactor' dataSort>Conversion Factor</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
                 </div>
@@ -155,29 +236,30 @@ const mapStateToProps = state => {
     let vendorList = []
     let vendorProductsList = [];
     let { vendorData } = vendorsReducer || [];
-    !_isEmpty(vendorData) && _get(vendorReducer, 'vendorData', []).map((data, index) => {
+    !_isEmpty(vendorData) && _get(vendorsReducer, 'vendorData', []).map((data, index) => {
         let phoneNumber = _get(data, 'phoneNumber.phoneNumber', 0);
 
         vendorList.push(
             {
-                id: data.id,
-                name: data.name,
-                phoneNumber: phoneNumber,
-                email: data.email
+                value: data.id,
+                label: data.name,
             }
         )
     })
-    !_isEmpty(vendorProductsData) && _get(productsReducer, 'vendorProductsData', []).map((data, index) => {
+    !_isEmpty(vendorProductsData) && _isArray(vendorProductsData) && vendorProductsData.map((data, index) => {
         let price = `${_get(data, 'price.currencyCode', '')} ${_get(data, 'price.price', 0)}`;
 
         vendorProductsList.push(
             {
                 id: data.id,
                 vendorId: data.vendorId,
+                vendorName: data.vendorName,
                 posProductId: data.posProductId,
+                productName: data.productName,
                 retailerId: data.retailerId,
                 sku: data.sku,
-                price: price,
+                combinedPrice: price,
+                price: data.price,
                 defaultOrderQty: data.defaultOrderQty,
                 conversionFactor: data.conversionFactor,
 
