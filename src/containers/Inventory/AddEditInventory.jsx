@@ -63,18 +63,16 @@ class AddEditInventoryContainer extends React.Component {
 
 
     handleInputChange(event) {
-        _set(this.selectedInventory, event.target.name, event.target.value);
+        if (event.target.value == "-1") {
+            _set(this.selectedInventory, event.target.name, 0);
+        }
+        else {
+            _set(this.selectedInventory, event.target.name, event.target.value);
+        }
         this.forceUpdate();
     }
 
     componentWillReceiveProps(props) {
-
-        // if(!_isEmpty(props.storeData)){
-        //     this.storeList = [];
-        //      props.storeData.stores.map((store, index)=>{
-        //          this.storeList.push({displayText: store.storeName, value: store.id});
-        //      });
-        // }
 
         if (!_isEmpty(props.productData)) {
             this.products = [];
