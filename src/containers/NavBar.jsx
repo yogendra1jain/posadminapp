@@ -124,9 +124,57 @@ class NavBarComponent extends React.Component {
                     <Panel key={10} eventKey={10} >
                         <Panel.Heading>
                             <div key={10}>
+
+                                <Panel key={4} eventKey={4}>
+                                    <Panel.Heading>
+                                        <Panel.Title toggle>{"Reports"}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
+                                    </Panel.Heading>
+
+                                    <div>
+                                        <div onClick={() => this.changeCurrentPath(4, 1)} key={1}>
+                                            <Panel.Body style={{}} className={this.state.activeMenuIndex === 1 && this.state.activeSubMenuIndex === 1 ? 'active' : 'inActive'}
+                                                collapsible={this.state.clickedSubIndex !== 1}>
+
+                                                {/* <a href={"/#"+subMenu.link}>{subMenu.displayText}</a> */}
+                                                <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')} style={{ textDecoration: "none", color: '#FFF' }} to={"/employee_payroll_deduct_details"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Employee Payroll Deduct Details </Link>
+                                            </Panel.Body>
+                                        </div>
+                                        <div onClick={() => this.changeCurrentPath(4, 2)} key={2}>
+                                            <Panel.Body style={{}} className={this.state.activeMenuIndex === 2 && this.state.activeSubMenuIndex === 2 ? 'active' : 'inActive'}
+                                                collapsible={this.state.clickedSubIndex !== 2}>
+
+                                                {/* <a href={"/#"+subMenu.link}>{subMenu.displayText}</a> */}
+                                                <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_summary')} style={{ textDecoration: "none", color: '#FFF' }} to={"/employee_payroll_deduct_summary"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Employee Payroll Deduct Summary </Link>
+                                            </Panel.Body>
+                                        </div>
+                                        <div onClick={() => this.changeCurrentPath(4, 3)} key={3}>
+                                            <Panel.Body style={{}} className={this.state.activeMenuIndex === 3 && this.state.activeSubMenuIndex === 3 ? 'active' : 'inActive'}
+                                                collapsible={this.state.clickedSubIndex !== 3}>
+
+                                                {/* <a href={"/#"+subMenu.link}>{subMenu.displayText}</a> */}
+                                                <Link onClick={() => this.changeCurrentPath('/employee_discount_report')} style={{ textDecoration: "none", color: '#FFF' }} to={"/employee_discount_report"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Employee Discount Report </Link>
+                                            </Panel.Body>
+                                        </div>
+                                        <div onClick={() => this.changeCurrentPath(4, 4)} key={4}>
+                                            <Panel.Body style={{}} className={this.state.activeMenuIndex === 4 && this.state.activeSubMenuIndex === 4 ? 'active' : 'inActive'}
+                                                collapsible={this.state.clickedSubIndex !== 4}>
+
+                                                {/* <a href={"/#"+subMenu.link}>{subMenu.displayText}</a> */}
+                                                <Link onClick={() => this.changeCurrentPath('/employee_details_report')} style={{ textDecoration: "none", color: '#FFF' }} to={"/employee_details_report"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Employee Details Report </Link>
+                                            </Panel.Body>
+                                        </div>
+
+                                    </div>
+
+
+                                </Panel>
                                 <Panel.Title className={(this.activePath === '/products' ? 'active' : 'inactive')} >
 
                                     <Link onClick={() => this.changeCurrentPath('/products')} style={{ textDecoration: "none", color: '#FFF' }} to={"/products"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Product Master </Link>
+                                </Panel.Title>
+                                <Panel.Title className={(this.activePath === '/purchaseorders' ? 'active' : 'inactive')} >
+
+                                    <Link onClick={() => this.changeCurrentPath('/purchaseorders')} style={{ textDecoration: "none", color: '#FFF' }} to={"/purchaseorders"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Purchase Orders </Link>
                                 </Panel.Title>
 
                                 <Panel.Title className={(this.activePath === '/customers' ? 'active' : 'inactive')} >
@@ -162,6 +210,10 @@ class NavBarComponent extends React.Component {
                                 <Panel.Title className={(this.activePath === '/vendorproducts' ? 'active' : 'inactive')} >
 
                                     <Link onClick={() => this.changeCurrentPath('/vendorproducts')} style={{ textDecoration: "none", color: '#FFF' }} to={"/vendorproducts"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Vendor Products </Link>
+                                </Panel.Title>
+                                <Panel.Title className={(this.activePath === '/requisitions' ? 'active' : 'inactive')} >
+
+                                    <Link onClick={() => this.changeCurrentPath('/requisitions')} style={{ textDecoration: "none", color: '#FFF' }} to={"/requisitions"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Requisitions </Link>
                                 </Panel.Title>
 
                             </div>

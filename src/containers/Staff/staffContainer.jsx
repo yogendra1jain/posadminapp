@@ -243,9 +243,7 @@ class AddEditStaffContainer extends React.Component {
     }
     saveHandler() {
         const { dispatch, staffsReducer } = this.props;
-        // let retailerId = localStorage.getItem('retailerID');
         let data = {};
-        // data = this.staffInfo;
         data.storeId = _get(this.props,'location.state.id', '');
         data.person = {}
         data.person.firstName = this.staffInfo.firstName;
@@ -279,7 +277,6 @@ class AddEditStaffContainer extends React.Component {
         _set(this.staffInfo, e.target.name, e.target.value);
         if (props){
             props.handleChange(e)
-
         }
         this.forceUpdate();
     }

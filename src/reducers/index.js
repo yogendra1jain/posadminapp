@@ -13,6 +13,9 @@ import ruleReducer, { rulesData as rulesReducer } from './rules';
 import posReducer, { posTerminalData as posTerminalReducer } from './posTerminal';
 import sessionReducer, { sessionsData as sessionsReducer } from './session';
 import { categoriesData as categoriesReducer } from './categories'
+import purchaseOrderReducer, { purchaseOrderData as purchaseOrdersReducer } from './purchaseOrder';
+import commonData from './common';
+
 
 const commonReducer = (state = 'initialState', action) => {
   switch (action.type) {
@@ -40,6 +43,7 @@ const rootReducer = combineReducers({
   productsReducer,
   storeReducer,
   storesReducer,
+  commonData,
   customerReducer,
   customersReducer,
   vendorReducer,
@@ -57,7 +61,9 @@ const rootReducer = combineReducers({
   sessionReducer,
   sessionsReducer,
   categoriesReducer,
-  form: formReducer
+  form: formReducer,
+  purchaseOrderReducer,
+  purchaseOrdersReducer,
 })
 
 export default rootReducer;

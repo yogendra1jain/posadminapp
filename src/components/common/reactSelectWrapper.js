@@ -24,7 +24,7 @@ export default function RFReactSelect({ input,meta:{touched,error,pristine},disa
       fontWeight: '000',
       color: 'rgba(0, 0, 0, 0.38)'}}>{hideLabel?'': placeholder}</label>,
     <Select
-      isDisabled={disabled}
+      disabled={disabled}
       key={`${input.id}select`}
       valueKey="value"
       name={name}

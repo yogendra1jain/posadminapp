@@ -5,19 +5,19 @@ import dynamicActionWrapper from '../helpers/actionHelper';
 
 let status = '';
 
-const requestPostStore = (subreddit)=> ({
+const requestPostStore = (subreddit) => ({
     type: STORE_CONSTANTS.REQUEST_STORE_POST,
     subreddit
 });
 
-const receivePostStoreError = (subreddit,err,errCode) => ({
+const receivePostStoreError = (subreddit, err, errCode) => ({
     type: STORE_CONSTANTS.RECEIVED_STORE_POST_ERROR,
     subreddit,
     error: err,
     errorCode: errCode
 })
 
-const receivePostStore = (subreddit, json, status )=> ({
+const receivePostStore = (subreddit, json, status) => ({
     type: STORE_CONSTANTS.RECEIVED_STORE_POST,
     subreddit,
     data: json,
@@ -26,9 +26,9 @@ const receivePostStore = (subreddit, json, status )=> ({
 })
 
 // export const fetchPostStore = (subreddit, data,method) => dispatch => {
-    
+
 //     dispatch(requestPostStore(subreddit));
-    
+
 //     fetch(STORE_CONSTANTS.STORE_URL+"/stores", { method: method,
 //     headers: {
 //         "Content-type": "application/json"
@@ -37,7 +37,7 @@ const receivePostStore = (subreddit, json, status )=> ({
 //     })
 //     .then(response => {
 //         status = response.status;
-         
+
 //         return response.json() } 
 //     )
 //     .then(json => { return dispatch(receivePostStore(subreddit, json, status )) } )
@@ -46,7 +46,7 @@ const receivePostStore = (subreddit, json, status )=> ({
 
 export const fetchPostStore = (subreddit, data, url) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STORE_CONSTANTS.STORE_URL+url,
+        path: STORE_CONSTANTS.STORE_URL + url,
         method: 'POST',
         body: data,
         initCb: requestPostStore,
@@ -57,19 +57,19 @@ export const fetchPostStore = (subreddit, data, url) => dispatch =>
         redirect: 'follow'
     }));
 
-const requestStore = (subreddit)=> ({
+const requestStore = (subreddit) => ({
     type: STORE_CONSTANTS.REQUEST_STORE,
     subreddit
 });
 
-const receiveStoreError = (subreddit,err,errCode) => ({
+const receiveStoreError = (subreddit, err, errCode) => ({
     type: STORE_CONSTANTS.RECEIVED_STORE_ERROR,
     subreddit,
     error: err,
     errorCode: errCode
 })
 
-const receiveStore = (subreddit, json, status )=> ({
+const receiveStore = (subreddit, json, status) => ({
     type: STORE_CONSTANTS.RECEIVED_STORE,
     subreddit,
     data: json,
@@ -78,9 +78,9 @@ const receiveStore = (subreddit, json, status )=> ({
 })
 
 // export const fetchStore = (subreddit, data) => dispatch => {
-    
+
 //     dispatch(requestStore(subreddit));
-    
+
 //     fetch(STORE_CONSTANTS.STORE_URL+"/stores/"+data, { method: 'GET',
 //     headers: {
 //         "Content-type": "application/json"
@@ -89,7 +89,7 @@ const receiveStore = (subreddit, json, status )=> ({
 //     })
 //     .then(response => {
 //         status = response.status;
-         
+
 //         return response.json() } 
 //     )
 //     .then(json => { return dispatch(receiveStore(subreddit, json, status )) } )
@@ -98,7 +98,7 @@ const receiveStore = (subreddit, json, status )=> ({
 
 export const fetchStore = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STORE_CONSTANTS.STORE_URL+url,
+        path: STORE_CONSTANTS.STORE_URL + url,
         method: 'POST',
         body: data,
         initCb: requestStore,
@@ -114,22 +114,22 @@ export const fetchStore = (subreddit, url, data) => dispatch =>
 export const requestStoreUpdate = (subreddit, store) => ({
     type: STORE_CONSTANTS.REQUEST_STORE_UPDATE,
     subreddit,
-    data:store
+    data: store
 });
 
-const requestAddressFromZip = (subreddit)=> ({
+const requestAddressFromZip = (subreddit) => ({
     type: STORE_CONSTANTS.REQUEST_ADDRESS_FROM_ZIP,
     subreddit
 });
 
-const receiveAddressFromZipError = (subreddit,err,errCode) => ({
+const receiveAddressFromZipError = (subreddit, err, errCode) => ({
     type: STORE_CONSTANTS.RECEIVED_ADDRESS_FROM_ZIP_ERROR,
     subreddit,
     error: err,
     errorCode: errCode
 })
 
-const receiveAddressFromZip = (subreddit, json, status )=> ({
+const receiveAddressFromZip = (subreddit, json, status) => ({
     type: STORE_CONSTANTS.RECEIVED_ADDRESS_FROM_ZIP,
     subreddit,
     data: json,
@@ -138,9 +138,9 @@ const receiveAddressFromZip = (subreddit, json, status )=> ({
 })
 
 // export const fetchAddressFromZip = (subreddit, zipCode) => dispatch => {
-    
+
 //     dispatch(requestAddressFromZip(subreddit));
-    
+
 //     fetch(STORE_CONSTANTS.STORE_URL+"/zipCodes/"+zipCode+"/details", { method: 'GET',
 //     headers: {
 //         "Content-type": "application/json"
@@ -149,7 +149,7 @@ const receiveAddressFromZip = (subreddit, json, status )=> ({
 //     })
 //     .then(response => {
 //         status = response.status;
-         
+
 //         return response.json() } 
 //     )
 //     .then(json => { return dispatch(receiveAddressFromZip(subreddit, json, status )) } )
@@ -158,7 +158,7 @@ const receiveAddressFromZip = (subreddit, json, status )=> ({
 
 export const fetchAddressFromZip = (subreddit, zipCode) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STORE_CONSTANTS.STORE_URL+"/zipCodes/"+zipCode+"/details",
+        path: STORE_CONSTANTS.STORE_URL + "/zipCodes/" + zipCode + "/details",
         method: 'GET',
         initCb: requestAddressFromZip,
         successCb: receiveAddressFromZip,
@@ -167,3 +167,45 @@ export const fetchAddressFromZip = (subreddit, zipCode) => dispatch =>
         wrapperActionType: 'FETCH_ADDRESS_FROM_ZIP_WRAPPER',
         redirect: 'follow'
     }));
+
+const requestStoreList = (subreddit) => ({
+    type: STORE_CONSTANTS.REQUEST_STORE,
+    subreddit
+});
+
+const receiveStoreList = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: STORE_CONSTANTS.RECEIVED_STORE,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveStoreListError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: STORE_CONSTANTS.RECEIVED_STORE_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+}
+
+export const fetchStoreList = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: STORE_CONSTANTS.STORE_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestStoreList,
+            successCb: receiveStoreList,
+            failureCb: receiveStoreListError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_STORE_LIST_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
