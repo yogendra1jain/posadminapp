@@ -3243,3 +3243,7 @@ input.login-number.form-control {
     flex-direction: column;
     align-items: flex-end;
 }
+
+.selected {
+    background: #005383;
+}

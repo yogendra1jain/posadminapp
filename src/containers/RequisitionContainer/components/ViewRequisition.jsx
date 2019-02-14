@@ -96,7 +96,11 @@ class ViewRequisition extends React.Component {
                         <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
                         <span className='box-conversion-title'>Status</span>
                     </div>
-                    <span className={this.props.classes.icon} onClick={() => this.editRequisition(index)}> Edit</span>
+                    <div>
+                        {/* <Button color="primary" className={classes.button} onClick={() => this.toggleEditState()}>Cancel</Button> */}
+                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={() => this.editRequisition(index)}>Edit</Button>
+                    </div>
+                    {/* <span className={this.props.classes.icon} onClick={() => this.editRequisition(index)}> Edit</span> */}
                 </div>
             )
         })
@@ -105,15 +109,19 @@ class ViewRequisition extends React.Component {
     }
     editRequisition = (index) => {
         let reqObj = _get(this.props, `requisitionList[${index}]`)
-
+         reqObj.productName = this.mapProductName(reqObj.posProductId);
+         reqObj.vendorName = this.mapVendorName(reqObj.vendorId);
+        //  reqObj.defaultOrderQty = reqObj.quantity;
         let initialValues = { ...reqObj }
+        let selProd = _find(this.props.vendorProductsData, { 'id': reqObj.vendorProductId });
         this.setState({
             showDialog: true,
             selectedIndex: index,
             initialValues: initialValues,
+            selProd: selProd,
         });
         this.props.toggleDialog();
-        
+
 
     }
 
@@ -124,7 +132,6 @@ class ViewRequisition extends React.Component {
     }
 
     render() {
-        console.log('requisition list ', this.props.requisitionList);
         const { classes } = this.props;
         const { showDialog, initialValues } = this.state;
         // if (_get(this, 'props.isFetching')) {
@@ -151,6 +158,7 @@ class ViewRequisition extends React.Component {
                             storeList={this.props.storeList}
                             handleSubmitHandler={this.props.handleSubmitHandler}
                             classes={classes}
+                            selProd={this.state.selProd || {}}
                             initialValues={this.props.addNew ? {} : this.state.initialValues}
                         />
                     }

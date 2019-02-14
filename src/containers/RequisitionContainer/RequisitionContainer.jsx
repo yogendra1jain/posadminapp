@@ -108,7 +108,7 @@ class RequisitionContainer extends PureComponent {
             })
     }
     fetchBasicDetails = () => {
-        let requisitionUrl = `/Requisition/GetByRetailerIdAndStatus`;
+        let requisitionUrl = `/Requisition/GetByCriteria`;
         let reqObj = {
             statuses: [0],
             id: localStorage.getItem('retailerID'),
@@ -205,18 +205,19 @@ class RequisitionContainer extends PureComponent {
                         //         fetchBasicDetails={this.fetchBasicDetails}
                         //     />
                         //     :
-                            <ViewRequisition
-                                isFetching={this.props.isFetching}
-                                cachedVendors={cachedVendors}
-                                handleSubmitHandler={this.handleSubmitHandler}
-                                productsFromCache={cachedProducts}
-                                vendorProductsList={vendorProductsList}
-                                toggleDialog={this.toggleDialog}
-                                storeList={storeList}
-                                addNew={this.state.addNew}
-                                showDialog={this.state.showDialog}
-                                requisitionList={_get(this.props, 'requisitionListData', [])}
-                            />
+                        <ViewRequisition
+                            isFetching={this.props.isFetching}
+                            cachedVendors={cachedVendors}
+                            handleSubmitHandler={this.handleSubmitHandler}
+                            productsFromCache={cachedProducts}
+                            vendorProductsList={vendorProductsList}
+                            toggleDialog={this.toggleDialog}
+                            storeList={storeList}
+                            vendorProductsData={this.props.vendorProductsData}
+                            addNew={this.state.addNew}
+                            showDialog={this.state.showDialog}
+                            requisitionList={_get(this.props, 'requisitionListData', [])}
+                        />
                     }
 
                 </div>
@@ -230,6 +231,15 @@ const getRequisitionStatus = (status) => {
     switch (status) {
         case 0:
             statusValue = 'SCRATCH';
+            break
+        case 1:
+            statusValue = 'CAPTURED';
+            break
+        case 2:
+            statusValue = 'REJECTED';
+            break
+        case 3:
+            statusValue = 'COMPLETE';
             break
         default:
             statusValue = 'SCRATCH';
@@ -308,6 +318,7 @@ const mapStateToProps = state => {
         productsFromCache,
         vendorProductsList,
         storeList,
+        vendorProductsData,
     }
 }
 
