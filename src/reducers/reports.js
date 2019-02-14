@@ -248,7 +248,6 @@ const reportsData = (state = {
     case REQUEST_EMP_PAYROLL_DEDUCT_DETAILS:
       return Object.assign({}, state, {
         isFetching: true,
-        empPayrollDeductDetailsData: [],
         type: action.type,
         lastUpdated: action.receivedAt
       });
