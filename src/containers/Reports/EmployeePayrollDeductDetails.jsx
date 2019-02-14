@@ -19,11 +19,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
 import AutoComplete from '../../components/Elements/AutoComplete';
 import { fetchStoreList } from '../../actions/store';
-import { fetchEmpDetailsData } from '../../actions/reports';
+import { fetchEmpPayrollDeductDetails } from '../../actions/reports';
+import { toTimestamp } from '../../helpers/helpers';
+import { EmpPayrollDeductDetailsSel } from '../../selectors/EmpPayrollDeductDetailsSelector.jsx'
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'name',
+    // defaultSortName: 'name',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -42,35 +44,15 @@ class EmployeePayrollDeductDetails extends React.Component {
             startDate: moment(),
             endDate: moment().add(1, 'days'),
             storeId: '',
-            storeList: []
+            storeList: [],
         }
-    }
-
-    showAlert(error, msg) {
-        if (error) {
-            Alert.error(msg || '', {
-                position: 'bottom-right',
-                effect: 'slide',
-                timeout: 5000,
-                html: true
-            });
-            this.forceUpdate();
-        } else {
-            Alert.success(msg || 'successfully saved.', {
-                position: 'bottom-right',
-                effect: 'slide',
-                timeout: 3000,
-                html: true
-            });
-        }
-
-    }
-
-    componentWillReceiveProps(props) {
-
     }
 
     componentDidMount() {
+        this.fetchStores();
+    }
+
+    fetchStores = () => {
         let reqBody = {
             id: localStorage.getItem('retailerID')
         }
@@ -87,27 +69,6 @@ class EmployeePayrollDeductDetails extends React.Component {
             }, (err) => {
                 console.log('err', err);
             })
-
-        this.fetchEmpPayrollDeductDetailsData();
-    }
-
-    fetchEmpPayrollDeductDetailsData = () => {
-        // let reqBody = {
-        //     id: localStorage.getItem('retailerID')
-        // }
-        // let url = `/Store/ByRetailerId`;
-        // this.props.dispatch(fetchStoreList('', url, reqBody))
-        //     .then((data) => {
-        //         !_isEmpty(data) && _isArray(data) && data.map((values, index) => {
-        //             let obj = {}
-        //             obj = { value: values.id, displayText: values.name }
-        //             this.setState({
-        //                 storeList: [...this.state.storeList, obj]
-        //             })
-        //         })
-        //     }, (err) => {
-        //         console.log('err', err);
-        //     })
     }
 
     handleChangeStartDate = (date, event) => {
@@ -130,8 +91,15 @@ class EmployeePayrollDeductDetails extends React.Component {
     }
 
     handleSubmitReportData = () => {
-        let finalObj = { fromDate: this.state.startDate, endDate: this.state.endDate, id: this.state.storeId }
-        console.log('dataaaaaaaaaaaaaaaaaaaaaaa', finalObj)
+        let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
+        let endDate = toTimestamp(_get(this, 'state.endDate', 0))
+        let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate/1000 }, toTimestamp: { seconds: endDate/1000 } }
+        let url = `/Reports/EmployeePayrollDeduct/ByStore`;
+        this.props.dispatch(fetchEmpPayrollDeductDetails('', url, reqBody))
+            .then((data) => {
+            }, (err) => {
+                console.log('err', err);
+            })
     }
 
     render() {
@@ -216,7 +184,7 @@ class EmployeePayrollDeductDetails extends React.Component {
                         <TableHeaderColumn width='100' dataField='employeeId' isKey={true} >Employee Id</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='employeeName'>Employee Name</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='orderId' dataSort>Order Id</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='totalSales' dataSort>Total Sales</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='totalSales' dataSort>Total Sales Amount</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='totalRefund' dataSort>Total Refund</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='orderDate' dataSort>Order Date</TableHeaderColumn>
                     </BootstrapTable>
@@ -233,10 +201,12 @@ class EmployeePayrollDeductDetails extends React.Component {
 const mapStateToProps = state => {
 
     let { reportsReducer } = state
-    let { empPayrollDeductDetailsData } = reportsReducer || []
+    let empPayrollDeductDetailsData = EmpPayrollDeductDetailsSel(state);
+    let {isFetching} = reportsReducer || false;
 
     return {
-        empPayrollDeductDetailsData
+        empPayrollDeductDetailsData,
+        isFetching
     }
 }
 

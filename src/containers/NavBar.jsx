@@ -246,29 +246,10 @@ class NavBarComponent extends React.Component {
                     </li>
                     <li><a ><img src={listicon} alt="User Icon" /></a> </li>
                 </ul>
-
-
             </div>
-
-
-
-            // this.props.menu ?  
-            // <Navbar.Collapse>
-            // <Nav>
-            //     {listItems}
-            //     </Nav>
-            //             </Navbar.Collapse>:<div>Loading...</div>
         );
-
-
-
-
-
     }
 }
-
-
-
 
 const mapStateToProps = state => {
 
