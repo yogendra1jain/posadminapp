@@ -39,7 +39,7 @@ class MainLayout extends Component {
             <div className="row visible-xs">
             </div>
 
-            <NavBar  />
+            <NavBar />
 
           </div>
           <div className="col-sm-9 col-md-10 right-content" >
