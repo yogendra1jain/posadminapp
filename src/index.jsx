@@ -44,6 +44,9 @@ import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor'
 import VendorProductsContainer from './containers/VendorProducts/VendorProducts.jsx';
 import AddEditVendorProduct from './containers/VendorProducts/AddEditVendorProduct/AddEditVendorProduct.jsx';
 import RequisitionContainer from './containers/RequisitionContainer/RequisitionContainer.jsx';
+import PurchaseOrderContainer from './containers/PurchaseOrders/PurchaseOrderContainer.jsx';
+import AddEditPurchaseOrder from './containers/PurchaseOrders/AddEditPurchaseOrder/AddEdit.jsx';
+import ReviewPurchaseOrderContainer from './containers/PurchaseOrders/AddEditPurchaseOrder/ReviewPurchaseOrder.jsx';
 
 const middleware = [ thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
@@ -98,6 +101,10 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/vendorproducts" component={VendorProductsContainer}/>
         <RouteWithLayout layout={MainLayout} exact path="/vendorproducts/add" component={AddEditVendorProduct}/>
         <RouteWithLayout layout={MainLayout} exact path="/requisitions" component={RequisitionContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders" component={PurchaseOrderContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/add" component={AddEditPurchaseOrder}/>
+        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/review/:id" component={ReviewPurchaseOrderContainer}/>
+
       </Switch>    
                    
      
