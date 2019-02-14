@@ -24,7 +24,7 @@ class AddRequisitionForm extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            selProd: {},
+            selProd: this.props.selProd,
         }
     }
     componentDidMount() {
@@ -101,7 +101,6 @@ class AddRequisitionForm extends React.PureComponent {
 
     render() {
         const { handleSubmit, classes, initialValues } = this.props;
-        console.log('initial values', initialValues);
         const { selProd } = this.state;
 
         return (
@@ -124,7 +123,7 @@ class AddRequisitionForm extends React.PureComponent {
                                     <span className='box-conversion-title'>Vendor Product</span>
                                 </div>
                                 <div className='box-conversion-item'>
-                                    <span className='box-conversion-data' style={{ width: '250px' }}>
+                                    <span className='box-conversion-data' style={{ width: '100px' }}>
                                         <Field
                                             name={`storeId`}
                                             options={_get(this.props, 'storeList', [])}

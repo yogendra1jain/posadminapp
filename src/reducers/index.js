@@ -12,6 +12,7 @@ import staffReducer, { staffsData as staffsReducer } from './staff';
 import ruleReducer, { rulesData as rulesReducer } from './rules';
 import posReducer, { posTerminalData as posTerminalReducer } from './posTerminal';
 import sessionReducer, { sessionsData as sessionsReducer } from './session';
+import purchaseOrderReducer, { purchaseOrderData as purchaseOrdersReducer } from './purchaseOrder';
 import commonData from './common';
 
 
@@ -58,7 +59,9 @@ const rootReducer = combineReducers({
   posTerminalReducer,
   sessionReducer,
   sessionsReducer,
-  form: formReducer
+  form: formReducer,
+  purchaseOrderReducer,
+  purchaseOrdersReducer,
 })
 
 export default rootReducer;
