@@ -105,20 +105,20 @@ class AddEditVendorProductComp extends React.Component {
                 </div>
                 <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '10px' }}>
                     <div className="col-sm-12">
-                        <Field name={`defaultOrderQty`} type="number" placeholder="Default Order Qty" id={`defaultOrderQty`} hideLabel={true} label={'defaultOrderQty *'} component={TextFieldInput} />
+                        <Field name={`defaultOrderQty`} type="number" parse={value => parseInt(value, 10)} placeholder="Default Order Qty" id={`defaultOrderQty`} hideLabel={true} label={'defaultOrderQty *'} component={TextFieldInput} />
                     </div>
                     <div className="col-sm-12">
-                        <Field name={`conversionFactor`} type="number" placeholder="Conversion Factor" id={`conversionFactor`} hideLabel={true} label={'conversionFactor *'} component={TextFieldInput} />
+                        <Field name={`conversionFactor`} type="number" parse={value => parseInt(value, 10)} placeholder="Conversion Factor" id={`conversionFactor`} hideLabel={true} label={'conversionFactor *'} component={TextFieldInput} />
                     </div>
                 </div>
                 <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '10px' }}>
                     <FormSection name={`price`}>
                         <div className="row" style={{ marginLeft: 0 }}>
                             <div className="col-sm-6" style={{ marginTop: '-25px' }}>
-                                <Field name={`currencyCode`} id={`currencyCode`} placeholder="Currency" hideLabel={true} label='Currency *' options={CurrencyData} component={ReactSelectWrapper} />
+                                <Field name={`currencyCode`} id={`currencyCode`}  placeholder="Currency" hideLabel={true} label='Currency *' options={CurrencyData} component={ReactSelectWrapper} />
                             </div>
                             <div className="col-sm-6">
-                                <Field name={`price`} id={`price`} type={"number"} placeholder="Amount" hideLabel={true} label='Amount *' component={TextFieldInput} />
+                                <Field name={`price`} id={`price`} type={"number"} parse={value => parseInt(value, 10)} placeholder="Amount" hideLabel={true} label='Amount *' component={TextFieldInput} />
                             </div>
                         </div>
                     </FormSection>

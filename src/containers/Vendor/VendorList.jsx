@@ -8,6 +8,7 @@ import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
+import _isArray from 'lodash/isArray';
 import _find from 'lodash/find';
 import _pull from 'lodash/pull';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
@@ -253,7 +254,7 @@ const mapStateToProps = state => {
     let { type } = vendorsReducer || {};
     let vendorList = []
     let { vendorData } = vendorsReducer || []
-    vendorData.map((data, index) => {
+    _isArray(vendorData) && vendorData.map((data, index) => {
         let phoneNumber = _get(data, 'phoneNumber.phoneNumber', 0);
 
         vendorList.push(
