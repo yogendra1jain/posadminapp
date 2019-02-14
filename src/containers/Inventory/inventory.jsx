@@ -112,7 +112,6 @@ class InventoryListContainer extends React.Component {
                 html: true
             });
         }
-
     }
     componentWillReceiveProps(props) {
         const { dispatch, inventoriesReducer } = this.props;
@@ -121,20 +120,22 @@ class InventoryListContainer extends React.Component {
             this.inventoryList = [];
             _get(props, 'inventoryData', []).map(inventory => {
                 let tempPos = {};
-                tempPos.id = inventory.product.id;
-                tempPos.name = inventory.product.name;
-                tempPos.active = inventory.product.active;
-                tempPos.category1 = inventory.product.category1;
-                tempPos.category2 = inventory.product.category2;
-                tempPos.category3 = inventory.product.category3;
-                tempPos.image = inventory.product.image;
-                tempPos.retailerId = inventory.product.retailerId;
+                tempPos.id = _get(inventory, 'product.id', '');
+                tempPos.name = _get(inventory, 'product.name', '');
+                tempPos.active = _get(inventory, 'product.active', '');
+                tempPos.category1 = _get(inventory, 'product.category1', '');
+                tempPos.category2 = _get(inventory, 'product.category2', '');
+                tempPos.category3 = _get(inventory, 'product.category3', '');
+                tempPos.image = _get(inventory, 'product.image', '');
+                tempPos.retailerId = _get(inventory, 'product.retailerId', '');
                 tempPos.salePrice = {}
-                tempPos.salePrice.currencyCode = inventory.product.salePrice.currencyCode;
-                tempPos.salePrice.price = inventory.product.salePrice.price;
-                tempPos.sku = inventory.product.sku;
-                tempPos.unitOfMeasure = inventory.product.unitOfMeasure;
+                tempPos.salePrice.currencyCode = _get(inventory, 'product.salePrice.currencyCode', '');
+                tempPos.salePrice.price = _get(inventory, 'product.salePrice.price', '');
+                tempPos.sku = _get(inventory, 'product.sku', '');
+                tempPos.unitOfMeasure = _get(inventory, 'product.unitOfMeasure', '');
                 tempPos.quantity = _get(inventory, 'inventory.quantity', 0);
+                tempPos.minQuantity = _get(inventory, 'inventory.minQuantity', '')
+                tempPos.maxQuantity = _get(inventory, 'inventory.maxQuantity', '')
                 this.inventoryList.push(tempPos);
             })
             this.forceUpdate();
@@ -161,7 +162,6 @@ class InventoryListContainer extends React.Component {
         //         this.products = [];
         //         props.productData.map(product=>{
         //         this.products.push({displayText:product.name , value: product.id})                       
-
         //     });
         //    }
         if (!_isEmpty(props.inventorySaveData) && this.saveInventoryFlag) {
@@ -197,7 +197,6 @@ class InventoryListContainer extends React.Component {
             dispatch(fetchInventoryLookupData(inventoriesReducer, url2, reqBody));
             this.forceUpdate();
         }
-
     }
 
     handleSelectChange = (id, name) => {
@@ -208,7 +207,7 @@ class InventoryListContainer extends React.Component {
         }
         let url = '/Inventory/ByStoreId';
         dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
-        this.forceUpdate()
+        this.forceUpdate();
     }
 
     componentDidMount() {
@@ -246,16 +245,12 @@ class InventoryListContainer extends React.Component {
                 this.selectedIds.push(rows[i].sku)
             }
         } else {
-
             this.selectedIds = [];
-
-
         }
         this.selectRowProp.selected = this.selectedIds;
-
-
         this.forceUpdate();
     }
+
     onUpdate() {
         let tempInv = _find(this.inventoryList, { 'id': this.selectedInventory.id });
         this.selectedInventory = tempInv;
@@ -266,6 +261,7 @@ class InventoryListContainer extends React.Component {
         this.method = 'POST';
         this.forceUpdate();
     }
+
     addNew() {
         this.openUpdateInventory = true;
         this.isUpdate = false;
@@ -280,6 +276,7 @@ class InventoryListContainer extends React.Component {
             _set(this.selectedInventory, 'store', localStorage.getItem('storeID'));
         this.forceUpdate();
     }
+
     saveInventory(selectedInventory) {
         let data = {
             storeId: this.selectedStore.stores,
@@ -294,6 +291,7 @@ class InventoryListContainer extends React.Component {
         this.handleClose()
 
     }
+
     adjustInventory(selectedInventory) {
 
         let data = {
@@ -331,6 +329,7 @@ class InventoryListContainer extends React.Component {
         _set(this.selectedInventory, event.target.name, event.target.value);
         this.forceUpdate();
     }
+
     handleClose = () => {
         this.openUpdateInventory = false;
         this.openAdjustQuantity = false;
@@ -455,9 +454,7 @@ class InventoryListContainer extends React.Component {
                 </div>
             </div>
         )
-
     }
-
 }
 
 const mapStateToProps = state => {
