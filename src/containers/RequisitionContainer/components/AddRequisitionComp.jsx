@@ -8,6 +8,7 @@ import _isArray from 'lodash/isArray';
 import _uniq from 'lodash/uniq';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
+import _set from 'lodash/set';
 // import LoginView from './Login';
 // import asyncValidate from './validate.js';
 import { connect } from 'react-redux';
@@ -19,12 +20,11 @@ import { fetchVendorProducts, fetchProductsFromCache, updateVendorProductsList, 
 import { getVendorData } from '../../../actions/vendor';
 import { showMessage } from '../../../actions/common';
 
-
 class AddRequisitionForm extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            selProd: this.props.selProd,
+            selProd: {},
         }
     }
     componentDidMount() {
@@ -96,7 +96,14 @@ class AddRequisitionForm extends React.PureComponent {
         this.props.autofill('quantity', selProduct.defaultOrderQty);
     }
     submitRequisition = (values) => {
-        this.props.handleSubmitHandler(values, this.state.selProd);
+        const { selProd } = this.state;
+        let data = { ...values };
+        data.posProductId = selProd.posProductId;
+        data.vendorId = selProd.vendorId;
+        data.retailerId = selProd.retailerId;
+        _set(data, 'createdTime.seconds', new Date().getTime());
+        let url = `/Requisition/Save`;
+        this.props.handleSubmitHandler(data, url);
     }
 
     render() {
@@ -196,6 +203,8 @@ function mapStateToProps(state) {
 
     let { vendorProductsData } = productsReducer || [];
     let vendorProductsList = [];
+    let { storeData } = storesReducer || [];
+    let storeList = [];
 
     !_isEmpty(vendorProductsData) && _isArray(vendorProductsData) && vendorProductsData.map((data, index) => {
         vendorProductsList.push(
@@ -205,10 +214,19 @@ function mapStateToProps(state) {
             }
         )
     })
+    !_isEmpty(storeData) && _isArray(storeData) && storeData.map((data, index) => {
+        storeList.push(
+            {
+                value: data.id,
+                label: data.name,
+            }
+        )
+    })
 
     return {
         vendorProductsList,
         vendorProductsData,
+        storeList
     }
 }
 
