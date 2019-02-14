@@ -96,21 +96,22 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/addEditPos" component={AddEditPosContainer} />
         {/* <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/> */}
         {/* <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/> */}
-        <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer} />
 
-        <RouteWithLayout layout={MainLayout} exact path="/vendorproducts/add" component={AddEditVendorProduct}/>
-        <RouteWithLayout layout={MainLayout} exact path="/requisitions" component={RequisitionContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders" component={PurchaseOrderContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/add" component={AddEditPurchaseOrder}/>
-        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/review/:id" component={ReviewPurchaseOrderContainer}/>
+        <RouteWithLayout layout={MainLayout} exact path="/vendorproducts/add" component={AddEditVendorProduct} />
+        <RouteWithLayout layout={MainLayout} exact path="/requisitions" component={RequisitionContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders" component={PurchaseOrderContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/add" component={AddEditPurchaseOrder} />
+        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/review/:id" component={ReviewPurchaseOrderContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_details" component={EmployeePayrollDeductDetails} />
         <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_summary" component={EmployeePayrollDeductSummary} />
         <RouteWithLayout layout={MainLayout} exact path="/employee_discount_report" component={EmployeeDiscountReport} />
         <RouteWithLayout layout={MainLayout} exact path="/employee_details_report" component={EmployeeDetailsReport} />
+      </Switch>
     </Router>
   </Provider>,
   //   </div>,
