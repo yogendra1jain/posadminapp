@@ -57,19 +57,6 @@ class NavBarChild extends React.Component {
                                             </Panel.Body>
                                         </div>
                                     </Panel>
-                                    <Panel  >
-                                        <Panel.Heading>
-                                            <Panel.Title toggle>{'Category 2'}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
-                                        </Panel.Heading>
-                                        <div>
-                                            <Panel.Body key={0} collapsible>
-                                                {'Test 3'}
-                                            </Panel.Body>
-                                            <Panel.Body key={1} collapsible>
-                                                {'Test 4'}
-                                            </Panel.Body>
-                                        </div>
-                                    </Panel>
                                     {/* :
                                             <Panel>
                                                 <div>
@@ -83,19 +70,6 @@ class NavBarChild extends React.Component {
                                 <PanelGroup key={0} accordion id={"subcategory-sub-bar" + 0} defaultActiveKey="0">
 
                                     {/* {subcategory1.categories && subcategory1.categories.length > 0 ? */}
-                                    <Panel  >
-                                        <Panel.Heading>
-                                            <Panel.Title toggle>{'Category 1'}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
-                                        </Panel.Heading>
-                                        <div>
-                                            <Panel.Body key={0} collapsible>
-                                                {'Test 1'}
-                                            </Panel.Body>
-                                            <Panel.Body key={1} collapsible>
-                                                {'Test 2'}
-                                            </Panel.Body>
-                                        </div>
-                                    </Panel>
                                     <Panel  >
                                         <Panel.Heading>
                                             <Panel.Title toggle>{'Category 2'}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
