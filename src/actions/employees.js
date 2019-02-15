@@ -74,7 +74,8 @@ export const uploadEmployeesCSV = (subreddit, url, data) => dispatch => {
         dispatch(dynamicActionWrapper({
             path: EMPLOYEES_CONSTANT.EMPLOYEES_URL + url,
             method: 'POST',
-            body: data,
+            formData: data,
+            isFormData: true,
             initCb: requestEmployeesCSVUpload,
             successCb: receiveEmployeesCSVUpload,
             failureCb: receiveEmployeesCSVUploadError,
@@ -86,3 +87,53 @@ export const uploadEmployeesCSV = (subreddit, url, data) => dispatch => {
         }));
     })
 }
+
+
+const requestNewEmployee = (subreddit) => ({
+    type: EMPLOYEES_CONSTANT.REQUEST_NEW_EMPLOYEE,
+    subreddit
+});
+
+const receiveNewEmployee = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: EMPLOYEES_CONSTANT.RECEIVE_NEW_EMPLOYEE,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveNewEmployeeError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: EMPLOYEES_CONSTANT.RECEIVE_NEW_EMPLOYEE_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const saveNewEmployee = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: EMPLOYEES_CONSTANT.EMPLOYEES_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestNewEmployee,
+            successCb: receiveNewEmployee,
+            failureCb: receiveNewEmployeeError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_EMPLOYEE_LIST_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
+
+
+export const requestEmployeesUpdate = (subreddit, data) => ({
+    type: EMPLOYEES_CONSTANT.REQUEST_EMPLOYEE_UPDATE,
+    subreddit,
+    data: data,
+});

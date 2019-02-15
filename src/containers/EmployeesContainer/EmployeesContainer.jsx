@@ -20,8 +20,11 @@ import 'react-drawer/lib/react-drawer.css';
 import { showMessage } from '../../actions/common';
 import { fetchEmployeesList } from '../../actions/employees';
 import { fetchStore } from '../../actions/store';
-import Select from 'react-select'
+import Select from 'react-select';
+import FormDialog from '../../components/common/CommonDialog/index';
 
+import { uploadEmployeesCSV, requestEmployeesUpdate } from '../../actions/employees';
+import Dropzone from 'react-dropzone';
 
 const options = {
     paginationPosition: 'top',
@@ -56,6 +59,8 @@ class EmployeesContainer extends React.Component {
             selectedValue: '',
             selectedStore: '',
             isActive: true,
+            openDialog: false,
+            file: {},
         };
         this.selectRowProp = {
             mode: 'radio',
@@ -135,18 +140,69 @@ class EmployeesContainer extends React.Component {
     handleSelectChange = (id, name) => {
 
     }
+    handleChangeStore = (e) => {
+        this.setState({
+            selectedStoreForAdd: e.value,
+        })
+    }
     addNewEmployee = () => {
         this.props.history.push('/employees/add');
     }
-    updatePO = () => {
+    updateEmployee = () => {
         if (this.selectedIds.length > 0) {
-            let prodId = this.selectedIds[0];
-            let tempProd = _find(this.props.vendorProductsList, { 'id': prodId });
+            let id = this.selectedIds[0];
+            let tempProd = _find(this.props.employeesList, { 'id': id });
             const { dispatch } = this.props;
-            // dispatch(requestVendorProductUpdate('', tempProd));
-            this.props.history.push('/purchaseorders/add');
+            dispatch(requestEmployeesUpdate('', tempProd));
+            this.props.history.push('/employees/add');
         }
 
+    }
+    toggleDialog = () => {
+        this.setState({
+            openDialog: !this.state.openDialog,
+        });
+    }
+    onDrop(files) {
+        // this.setState({ files });
+
+        let formData;
+        let url = '/Employee/ByStore';
+        if (files.length > 0) {
+            this.setState({ file: files[0] })
+            formData = new FormData();
+            formData.append('file', files[0])
+            // formData.append('mediaType', 'customer')
+            formData.append('storeId', this.state.selectedStoreForAdd);
+            this.props.dispatch(uploadEmployeesCSV('', url, formData))
+            .then((data) => {
+                console.log('csv data saved successfully.', data);
+                this.toggleDialog();
+            }, (err) => {
+                console.log('err while saving csv data', err);
+                
+            })
+        }
+    }
+
+    onCancel() {
+        this.setState({
+            file: {}
+        });
+    }
+    getYesNoValue = (value) => {
+        if(value) {
+            return 'Yes';
+        } else {
+            return 'No';
+        }
+    }
+    showActiveValue = (cell, row) => {
+        return (
+            <div>
+                <span>{this.getYesNoValue(cell)}</span>
+            </div>
+        )
     }
 
     render() {
@@ -163,30 +219,76 @@ class EmployeesContainer extends React.Component {
         }
 
         let { customerList } = this.props;
-        let { selectedValue } = this.state;
+        let { selectedValue, file } = this.state;
         return (
             <div className="">
+                <FormDialog
+                    open={this.state.openDialog}
+                    handleClose={this.toggleDialog}
+                    title={'Upload CSV'}
+                    fullScreen={false}
+                    fullWidth={true}
+                    dialogContent={
+                        <div>
+                            <div className='panel-container'>
+                                <span className='panel-heading'>Create Employees In Bulk </span>
+                            </div>
+                            <div>
+                                <div className="row" style={{ marginBottom: '10px' }}>
+                                    <div className="col-sm-6">
+                                        <Select placeholder="Select Store" name='store' options={this.props.storeList} value={this.state.selectedStoreForAdd} onChange={(e) => this.handleChangeStore(e)} />
+                                    </div>
+                                </div>
+                                <div className='box-conversion-container'>
+                                    <section >
+                                        <Dropzone
+                                            onDrop={this.onDrop.bind(this)}
+                                            onFileDialogCancel={this.onCancel.bind(this)}
+                                        >
+                                            {({ getRootProps, getInputProps }) => (
+                                                <div {...getRootProps()}>
+                                                    <input {...getInputProps()} />
+                                                    <span className="dropzone">Drop files here, or click to select files</span>
+                                                </div>
+                                            )}
+                                        </Dropzone>
+                                    </section>
+                                    <aside>
+                                        <h4>Files</h4>
+                                        <ul>
+                                            <li key={file.name}>
+                                                {file.name} - {file.size} bytes
+                                    </li>
+                                        </ul>
+                                    </aside>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                />
                 <div className='panel-container'>
                     <span className='panel-heading'>Purchase Orders </span>
                 </div>
                 <div>
                     <div className="row" style={{ marginBottom: '10px' }}>
-                        <div className="col-sm-6"> 
+                        <div className="col-sm-6">
                             <Select placeholder="Select Store" name='store' options={this.props.storeList} value={this.state.selectedStore} onChange={(e) => this.handleChange(e, 'store')} />
                         </div>
-                        <div className="col-sm-6"> 
+                        <div className="col-sm-6">
                             <Select placeholder="Select Active" name='activeFlag' options={ActiveList} value={this.state.isActive} onChange={(e) => this.handleActiveChange(e, 'store')} />
                         </div>
                     </div>
                     <div className="form-btn-group">
-                        {/* <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.updatePO()}>Update</Button> */}
-                        <Button type="button" variant="raised" onClick={() => this.addNewEmployee()}>+ Add New</Button>
+                        <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.addNewEmployee()}>+ Add New</Button>
+                        <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.updateEmployee()}>Update</Button>
+                        <Button type="button" variant="raised" onClick={() => this.toggleDialog()}>+ Bulk Upload</Button>
                     </div>
                     <div>
                         <BootstrapTable
                             data={customerList}
                             options={options}
-                            // selectRow={this.selectRowProp}
+                            selectRow={this.selectRowProp}
                             striped hover
                             pagination={true}
                             exportCSV={true}
@@ -197,7 +299,11 @@ class EmployeesContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='name'>Name</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='phone' dataSort>Phone Number</TableHeaderColumn>
-                            {/* <TableHeaderColumn width='100' dataField='' dataFormat={this.actionColumn} dataSort>Actions</TableHeaderColumn> */}
+
+                            <TableHeaderColumn width='100' dataField='employeeId' dataSort>Employee Id</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='isEmpPayEnabled' dataFormat={this.showActiveValue} dataSort>Employee Pay Enabled</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='active' dataFormat={this.showActiveValue} dataSort>Active</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='employeeDiscount' dataSort>Discount</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
                 </div>
@@ -214,6 +320,8 @@ const mapStateToProps = state => {
     let { storesReducer, employeesReducer } = state
     let { storeData } = storesReducer || [];
     let { employeesList } = employeesReducer || [];
+    let { employeeCsvData } = employeesReducer || [];
+
     let storeList = [];
     let customerList = [];
     // let cusotmers = _get(employeesList, 'customers', []);
@@ -237,6 +345,7 @@ const mapStateToProps = state => {
         storeList,
         employeesList,
         customerList,
+        employeeCsvData,
     }
 }
 
