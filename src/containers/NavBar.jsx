@@ -19,6 +19,8 @@ import settingicon from './../assets/images/setting.png';
 import listicon from './../assets/images/list.png';
 import logouticon from './../assets/images/logout.png';
 import Overlay from 'react-bootstrap/lib/Overlay';
+
+import NavBarChild from './NavBarChild.jsx';
 //import findDOMNode from 'react-dom/function name(params) {
 
 import { findDOMNode } from "react-dom";
@@ -121,6 +123,7 @@ class NavBarComponent extends React.Component {
                     <img className="logoimg" src={logo} alt="AllOnBlock Logo" />
                 </Link>
                 <PanelGroup accordion id="menu-bar" defaultActiveKey="0">
+                    <NavBarChild />
                     <Panel key={10} eventKey={10} >
                         <Panel.Heading>
                             <div key={10}>
@@ -184,6 +187,10 @@ class NavBarComponent extends React.Component {
 
                                     <Link onClick={() => this.changeCurrentPath('/purchaseorders')} style={{ textDecoration: "none", color: '#FFF' }} to={"/purchaseorders"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Purchase Orders </Link>
                                 </Panel.Title>
+                                <Panel.Title className={(this.activePath === '/requisitions' ? 'active' : 'inactive')} >
+
+                                    <Link onClick={() => this.changeCurrentPath('/requisitions')} style={{ textDecoration: "none", color: '#FFF' }} to={"/requisitions"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Requisitions </Link>
+                                </Panel.Title>
 
                                 <Panel.Title className={(this.activePath === '/customers' ? 'active' : 'inactive')} >
 
@@ -219,10 +226,7 @@ class NavBarComponent extends React.Component {
 
                                     <Link onClick={() => this.changeCurrentPath('/vendorproducts')} style={{ textDecoration: "none", color: '#FFF' }} to={"/vendorproducts"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Vendor Products </Link>
                                 </Panel.Title>
-                                <Panel.Title className={(this.activePath === '/requisitions' ? 'active' : 'inactive')} >
-
-                                    <Link onClick={() => this.changeCurrentPath('/requisitions')} style={{ textDecoration: "none", color: '#FFF' }} to={"/requisitions"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Requisitions </Link>
-                                </Panel.Title>
+                                
 
                             </div>
                         </Panel.Heading>
