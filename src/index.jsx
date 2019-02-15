@@ -53,6 +53,8 @@ import AddEditPurchaseOrder from './containers/PurchaseOrders/AddEditPurchaseOrd
 import ReviewPurchaseOrderContainer from './containers/PurchaseOrders/AddEditPurchaseOrder/ReviewPurchaseOrder.jsx';
 import RecieptAddEdit from './containers/PurchaseOrders/RecieptAddEdit.jsx';
 import ZReportContainer from './containers/Reports/ZReport.jsx';
+import EmployeesContainer from './containers/EmployeesContainer/EmployeesContainer.jsx';
+import AddEditEmployee from './containers/EmployeesContainer/AddEditEmployee.jsx';
 
 const middleware = [thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
@@ -116,6 +118,8 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/employee_discount_report" component={EmployeeDiscountReport} />
         <RouteWithLayout layout={MainLayout} exact path="/employee_details_report" component={EmployeeDetailsReport} />
         <RouteWithLayout layout={MainLayout} exact path="/z_report" component={ZReportContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/employees" component={EmployeesContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/employees/add" component={AddEditEmployee} />
         
       </Switch>
     </Router>
