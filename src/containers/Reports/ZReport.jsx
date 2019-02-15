@@ -22,6 +22,12 @@ import { fetchStoreList } from '../../actions/store';
 import { fetchZReportData } from '../../actions/reports';
 import { toTimestamp } from '../../helpers/helpers';
 import { ZReportDetailsSel } from '../../selectors/ZReportSelector.jsx'
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import Button from '@material-ui/core/Button';
+import ReactToPrint from "react-to-print";
+import ZReportPrintData from './ZReportPrintData.jsx';
+import EditorFormatColorReset from 'material-ui/SvgIcon';
 
 const options = {
     paginationPosition: 'top',
@@ -45,7 +51,9 @@ class ZReportContainer extends React.Component {
             endDate: moment().add(1, 'days'),
             storeId: '',
             storeList: [],
+            printClicked: false
         }
+        this.row = '';
     }
 
     componentDidMount() {
@@ -93,13 +101,35 @@ class ZReportContainer extends React.Component {
     handleSubmitReportData = () => {
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
         let endDate = toTimestamp(_get(this, 'state.endDate', 0))
-        let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate/1000 }, toTimestamp: { seconds: endDate/1000 } }
+        let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate / 1000 }, toTimestamp: { seconds: endDate / 1000 } }
         let url = `/Reports/ZReport/ByStore`;
         this.props.dispatch(fetchZReportData('', url, reqBody))
             .then((data) => {
             }, (err) => {
                 console.log('err', err);
             })
+    }
+
+    handleClose = () => {
+        this.forceUpdate();
+    }
+
+    handlePrint = (row) => {
+        this.row = row;
+        this.setState({ printClicked: true })
+    }
+
+    closeModal = () => {
+        this.setState({ printClicked: false })
+    }
+
+    actionColumn = (cell, row) => {
+       
+        return (
+            <div>
+                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handlePrint(row, false)}>Print</Button>
+            </div>
+        )
     }
 
     render() {
@@ -117,6 +147,7 @@ class ZReportContainer extends React.Component {
         }
 
         let { zReportDetailsData } = this.props;
+
         return (
             <div>
                 <div className="row">
@@ -126,6 +157,7 @@ class ZReportContainer extends React.Component {
                         </ul>
                     </div>
                 </div>
+
                 <div className="col-sm-12">
                     <div className="date-range">
                         <div class="head-title">Date Range: </div>
@@ -171,6 +203,13 @@ class ZReportContainer extends React.Component {
                         </div>
                     </div>
                 </div>
+
+                <ZReportPrintData
+                    closeModal={() => this.closeModal()}
+                    open={this.state.printClicked}
+                    data={this.row}
+                />
+
                 <div>
                     <BootstrapTable
                         data={zReportDetailsData}
@@ -188,12 +227,14 @@ class ZReportContainer extends React.Component {
                         <TableHeaderColumn width='100' dataField='closedAt' dataSort>Closed At</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='openingAmount' dataSort>Opening Amount</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='cashSales' >Cash Sales</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='cardSales' >Card Sales</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='cashAdded'>Cash Added</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='cashRemoved' dataSort>Cash Removed</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='realClosingBalance' dataSort>Real Closing Balance</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='theoreticalClosingBalance' dataSort>Theoretical Closing Balance</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='difference' dataSort>Difference</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='totalSales' dataSort>Total Sales</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='' dataFormat={this.actionColumn} dataSort>Actions</TableHeaderColumn>
                     </BootstrapTable>
                 </div>
                 <div>
@@ -209,7 +250,7 @@ const mapStateToProps = state => {
 
     let { reportsReducer } = state
     let zReportDetailsData = ZReportDetailsSel(state);
-    let {isFetching} = reportsReducer || false;
+    let { isFetching } = reportsReducer || false;
 
     return {
         zReportDetailsData,
