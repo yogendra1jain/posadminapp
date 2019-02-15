@@ -83,41 +83,15 @@ class NavBarChild extends React.Component {
                                             </Panel.Body>
                                         </div>
                                     </Panel>
-                                    {/* :
-    <Panel>
-        <div>
-            <Panel.Heading>
-                <Panel.Title toggle>{subcategory1.categoryName}<i ></i></Panel.Title>
-            </Panel.Heading></div></Panel>
-} */}
-
+                            
                                 </PanelGroup>
 
                             </Panel.Body>
                         </div>
-                        // ))
                     }
 
                 </Panel>
             )
-        // }
-
-        // else {
-        //     return (
-
-        //         <Panel key={this.props.categoryIndex} eventKey={this.props.categoryIndex} >
-        //             <Panel.Heading>
-        //                 <div onClick={() => this.onCategoryChange(this.props.category)} key={`${this.props.categoryIndex}`}>
-        //                     <Panel.Title toggle >
-        //                         <span >{this.props.category.categoryName}</span>
-        //                     </Panel.Title>
-        //                 </div>
-        //             </Panel.Heading>
-
-
-        //         </Panel>
-        //     )
-        // }
     }
 
 }

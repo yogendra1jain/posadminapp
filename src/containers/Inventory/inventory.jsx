@@ -311,6 +311,7 @@ class InventoryListContainer extends React.Component {
             this.saveInventoryFlag = true;
             let url = '/Inventory/SetMinMax'
             dispatch(invetoryUpdate('', url, data));
+            this.selectRowProp.selected = '';
             this.handleClose()
         }
     }
@@ -372,11 +373,11 @@ class InventoryListContainer extends React.Component {
                 <div>
                     <div classNam="col-sm-12">
                         <div className="col-sm-10 form-btn-group">
-                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Adjust Quantity'} handlerSearch={() => this.adjustQuantity()} />
+                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
                             {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
                         </div>
                         <div className="col-sm-2 form-btn-group">
-                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
+                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
                             {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
                         </div>
                     </div>
