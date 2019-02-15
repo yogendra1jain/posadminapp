@@ -114,7 +114,8 @@ class ZReportContainer extends React.Component {
         this.forceUpdate();
     }
 
-    handlePrint = () => {
+    handlePrint = (row) => {
+        this.row = row;
         this.setState({ printClicked: true })
     }
 
@@ -123,7 +124,7 @@ class ZReportContainer extends React.Component {
     }
 
     actionColumn = (cell, row) => {
-        this.row = row;
+       
         return (
             <div>
                 <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handlePrint(row, false)}>Print</Button>

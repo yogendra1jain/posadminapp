@@ -15,15 +15,15 @@ const mapData = data => ({
     openingAmount: get(data, 'shift.openingBalance.currencyCode', '') + ' ' + get(data, 'shift.openingBalance.amount', '').toFixed(2),
     staff: get(data, 'staff.person.firstName', '') + ' ' + get(data, 'staff.person.lastName', ''),
     pos: get(data, 'terminal.name', ''),
-    openFrom: moment.utc(get(data, 'shift.openingTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY HH:MM:SS"),
-    closedAt: moment.utc(get(data, 'shift.closingTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY HH:MM:SS"),
+    openFrom: moment.utc(get(data, 'shift.openingTimeStamp.seconds', 0)* 1000) != 0 ? moment.utc(get(data, 'shift.openingTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY HH:MM:SS") : '',
+    closedAt: moment.utc(get(data, 'shift.closingTimeStamp.seconds', 0)* 1000) != 0 ? moment.utc(get(data, 'shift.closingTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY HH:MM:SS") : '',
     cashSales: get(data, 'shift.cashSalesAmount', ''),
     cardSales: get(data, 'shift.cardSalesAmount', ''),
     cashAdded: get(data, 'shift.cashAdded', ''),
     cashRemoved: get(data, 'shift.cashRemoved', ''),
     realClosingBalance: get(data, 'shift.closingBalance.currencyCode', '') + ' ' + get(data, 'shift.closingBalance.amount', ''),
     theoreticalClosingBalance: get(data, 'shift.theoreticalClosingBalance', ''),
-    difference: get(data, 'shift.difference', ''),
+    difference: get(data, 'shift.closingDifference', ''),
     totalSales: get(data, 'shift.totalSales', '')
 })
 
