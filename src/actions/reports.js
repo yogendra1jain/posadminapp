@@ -669,3 +669,45 @@ export const fetchEmpDetailsData = (subreddit, url, data) => dispatch => {
         }));
     })
 }
+
+const requestZReportData = (subreddit) => ({
+    type: REPORT_CONSTANTS.REQUEST_Z_REPORT_DATA,
+    subreddit
+});
+
+const receiveZReportData = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_Z_REPORT_DATA,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveZReportDataError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_Z_REPORT_DATA_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const fetchZReportData = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REPORT_CONSTANTS.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestZReportData,
+            successCb: receiveZReportData,
+            failureCb: receiveZReportDataError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_Z_REPORT_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
