@@ -19,9 +19,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
 import AutoComplete from '../../components/Elements/AutoComplete';
 import { fetchStoreList } from '../../actions/store';
-// import { fetchEmpPayrollDeductDetails } from '../../actions/reports';
+import { fetchZReportData } from '../../actions/reports';
 import { toTimestamp } from '../../helpers/helpers';
-// import { EmpPayrollDeductDetailsSel } from '../../selectors/EmpPayrollDeductDetailsSelector.jsx'
+import { ZReportDetailsSel } from '../../selectors/ZReportSelector.jsx'
 
 const options = {
     paginationPosition: 'top',
@@ -94,12 +94,12 @@ class ZReportContainer extends React.Component {
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
         let endDate = toTimestamp(_get(this, 'state.endDate', 0))
         let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate/1000 }, toTimestamp: { seconds: endDate/1000 } }
-        let url = `/Reports/EmployeePayrollDeduct/ByStore`;
-        // this.props.dispatch(fetchEmpPayrollDeductDetails('', url, reqBody))
-        //     .then((data) => {
-        //     }, (err) => {
-        //         console.log('err', err);
-        //     })
+        let url = `/Reports/ZReport/ByStore`;
+        this.props.dispatch(fetchZReportData('', url, reqBody))
+            .then((data) => {
+            }, (err) => {
+                console.log('err', err);
+            })
     }
 
     render() {
@@ -116,7 +116,7 @@ class ZReportContainer extends React.Component {
             </div>);
         }
 
-        let { empPayrollDeductDetailsData } = this.props;
+        let { zReportDetailsData } = this.props;
         return (
             <div>
                 <div className="row">
@@ -173,7 +173,7 @@ class ZReportContainer extends React.Component {
                 </div>
                 <div>
                     <BootstrapTable
-                        data={[]}
+                        data={zReportDetailsData}
                         options={options}
                         striped hover
                         pagination={true}
@@ -208,11 +208,11 @@ class ZReportContainer extends React.Component {
 const mapStateToProps = state => {
 
     let { reportsReducer } = state
-    // let empPayrollDeductDetailsData = EmpPayrollDeductDetailsSel(state);
+    let zReportDetailsData = ZReportDetailsSel(state);
     let {isFetching} = reportsReducer || false;
 
     return {
-        // empPayrollDeductDetailsData,
+        zReportDetailsData,
         isFetching
     }
 }
