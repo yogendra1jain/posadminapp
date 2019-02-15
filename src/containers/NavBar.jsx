@@ -123,7 +123,7 @@ class NavBarComponent extends React.Component {
                     <img className="logoimg" src={logo} alt="AllOnBlock Logo" />
                 </Link>
                 <PanelGroup accordion id="menu-bar" defaultActiveKey="0">
-                    <NavBarChild />
+                    {/* <NavBarChild /> */}
                     <Panel key={10} eventKey={10} >
                         <Panel.Heading>
                             <div key={10}>

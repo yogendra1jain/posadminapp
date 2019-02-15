@@ -9,14 +9,12 @@ import _isEmpty from 'lodash/isEmpty';
 import { withStyles } from '@material-ui/core/styles';
 
 // import Category from './category';
-import { showMessage } from '../../../actions/common';
-import FormDialog from '../../../components/common/CommonDialog/index';
-import EditRequisition from '../../RequisitionContainer/components/EditRequisition.jsx';
+import { showMessage } from '../../actions/common';
+import FormDialog from '../../components/common/CommonDialog/index';
+import EditRequisition from '../RequisitionContainer/components/EditRequisition.jsx';
 
-import { saveRequisitionForm } from '../../../actions/vendor';
-import { fetchPurchaseOrderById, requestPORequisitionUpdate, purchaseOrderSave } from '../../../actions/purchaseOrder';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { saveRequisitionForm } from '../../actions/vendor';
+import { fetchPurchaseOrderById, requestPORecieptRequisitionUpdate, purchaseOrderSave } from '../../actions/purchaseOrder';
 
 
 
@@ -29,7 +27,7 @@ const styles = theme => ({
     },
 });
 
-class ReviewPurchaseOrderContainer extends React.Component {
+class RecieptAddEdit extends React.Component {
     constructor(props) {
         super(props);
         let { params } = this.props.match;
@@ -37,7 +35,6 @@ class ReviewPurchaseOrderContainer extends React.Component {
             selectedValue: '',
             params: params,
         };
-        console.log('params:', params);
     }
 
 
@@ -92,23 +89,25 @@ class ReviewPurchaseOrderContainer extends React.Component {
     }
     handleChangeInput = (e, index, proposedQuantity) => {
         let value = _get(e, 'target.value', '');
-        this.props.dispatch(requestPORequisitionUpdate('', value, index, proposedQuantity));
+        this.props.dispatch(requestPORecieptRequisitionUpdate('', value, index, proposedQuantity));
     }
 
-    handleSubmitHandler = (index) => {
-        let values = _get(this, `props.purchaseOrderById.requisitions[${index}]`, {})
-        let data = { ...values };
-        data.quantity = Number(data.quantity);
-        delete data.proposedQuantity;
+    handleSave = () => {
+        let values = _get(this, `props.purchaseOrderById.requisitions`, [])
+        let data = {}
+        data.purchaseOrderId = _get(this, `props.purchaseOrderById.order.id`, '');
+        data.requisitions = values;
+        
         console.log('data to be saved', data);
-        let url = `/Requisition/Save`
+        let url = `/PurchaseOrder/Receipt`
         this.props.dispatch(saveRequisitionForm('', url, data))
             .then((data) => {
-                console.log('requisition is saved successfully.');
-                this.props.dispatch(showMessage({ text: `Requisition updated.`, isSuccess: true }));
+                console.log('reciept is saved successfully.');
+                this.props.dispatch(showMessage({ text: `Receipt Created.`, isSuccess: true }));
                 setTimeout(() => {
                     this.props.dispatch(showMessage({}));
                 }, 5000);
+                this.props.history.push('/purchaseorders');
                 // this.props.toggleEditState();
             }, (err) => {
                 console.log('err while saving requisition form', err);
@@ -118,48 +117,15 @@ class ReviewPurchaseOrderContainer extends React.Component {
                 }, 5000);
             })
     }
+    handleCancel = () => {
+        this.props.history.push('/purchaseorders');
+    }
 
     toggleDialog = () => {
         this.setState({
             openDialog: !this.state.openDialog,
         });
     }
-
-    printPDF = () => {
-        this.setState({ applyPdfClass: true }, () => {
-            const input = document.getElementById('divToPrint');
-
-            html2canvas(input).then(canvas => {
-                // Few necessary setting options
-
-                const contentDataURL = canvas.toDataURL('image/png')
-                var imgWidth = 200;
-                var pageHeight = 295;
-                var imgHeight = canvas.height * imgWidth / canvas.width;
-                var heightLeft = imgHeight;
-
-                var doc = new jsPDF('p', 'mm');
-                var position = 0;
-
-                doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-
-                heightLeft -= pageHeight;
-
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    doc.addPage();
-                    doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-                doc.save('PO.pdf');
-
-            });
-            setTimeout(() => {
-                this.setState({ applyPdfClass: false });
-            }, 10);
-        })
-    }
-
     render() {
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
@@ -176,7 +142,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
         return (
             <div className="">
                 <div className='panel-container'>
-                    <span className='panel-heading'>Purchase Order </span>
+                    <span className='panel-heading'>Receipt Details </span>
                 </div>
                 <FormDialog
                     open={this.state.openDialog}
@@ -196,16 +162,11 @@ class ReviewPurchaseOrderContainer extends React.Component {
                 />
                 <div>
                     {
-                        !this.props.isPOViewFlag ?
-                            <div className="form-btn-group">
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
-                                <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
-                            </div>
-                            :
-                            <div className="form-btn-group">
-                                <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
-                            </div>
+                        <div className="form-btn-group">
+                            <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleSave()}>Save</Button>
+                            <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleCancel()}>Cancel</Button>
+                            {/* <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button> */}
+                        </div>
                     }
                     <div id="divToPrint">
                         <div className="row" style={{ marginTop: '25px' }}>
@@ -248,6 +209,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
                                 handleChangeInput={this.handleChangeInput}
                                 handleSubmitHandler={this.handleSubmitHandler}
                                 selectRowProp={{}}
+                                showReceievedQuantity={true}
                                 // handleCancel={}
                                 isPOViewFlag={isPOViewFlag}
                                 requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
@@ -267,41 +229,20 @@ class ReviewPurchaseOrderContainer extends React.Component {
 }
 const mapStateToProps = state => {
 
-    let { purchaseOrdersReducer, vendorsReducer, storesReducer } = state
+    let { purchaseOrdersReducer, vendorsReducer } = state
     let { requisitionListData } = vendorsReducer || [];
 
     let { type } = purchaseOrdersReducer || {};
     let { purchaseOrderById } = purchaseOrdersReducer || [];
     let { isFetching, isPOViewFlag } = purchaseOrdersReducer || false;
-    let { storeData } = storesReducer || [];
-    let storeList = [];
-    let { vendorData } = vendorsReducer || [];
-    let vendorList = [];
-    _isArray(storeData) && !_isEmpty(storeData) && storeData.map((data, index) => {
-        storeList.push(
-            {
-                value: data.id,
-                label: data.name,
-            }
-        )
-    })
-    !_isEmpty(vendorData) && _get(vendorsReducer, 'vendorData', []).map((data, index) => {
-        vendorList.push(
-            {
-                value: data.id,
-                label: data.name,
-            }
-        )
-    })
+
     return {
         purchaseOrderById,
         isFetching,
         type,
         requisitionListData,
-        storeList,
-        vendorList,
         isPOViewFlag
     }
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(ReviewPurchaseOrderContainer));
+export default connect(mapStateToProps)(withStyles(styles)(RecieptAddEdit));
