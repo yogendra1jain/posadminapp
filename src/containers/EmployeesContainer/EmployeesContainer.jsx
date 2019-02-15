@@ -81,7 +81,7 @@ class EmployeesContainer extends React.Component {
         let value = _get(e, 'value', '');
         let employeeUrl = `/Employee/ByStore`;
         let reqData = {
-            id: value,
+            storeId: value,
             active: this.state.isActive,
         };
         this.setState({
@@ -93,7 +93,7 @@ class EmployeesContainer extends React.Component {
         let value = _get(e, 'value', '');
         let employeeUrl = `/Employee/ByStore`;
         let reqData = {
-            id: this.state.selectedStore,
+            storeId: this.state.selectedStore,
             active: value,
         };
         this.setState({
@@ -216,7 +216,7 @@ const mapStateToProps = state => {
     let { employeesList } = employeesReducer || [];
     let storeList = [];
     let customerList = [];
-    let cusotmers = _get(employeesList, 'customers', []);
+    // let cusotmers = _get(employeesList, 'customers', []);
     _isArray(storeData) && !_isEmpty(storeData) && storeData.map((data, index) => {
         storeList.push(
             {
@@ -225,7 +225,7 @@ const mapStateToProps = state => {
             }
         )
     })
-    _isArray(cusotmers) && !_isEmpty(cusotmers) && cusotmers.map((data, index) => {
+    _isArray(employeesList) && !_isEmpty(employeesList) && employeesList.map((data, index) => {
         let tempObj = data;
         tempObj.name = `${_get(data, 'customer.firstName', '')} ${_get(data, 'customer.lastName', '')}`;
         tempObj.phone = `${_get(data, 'phoneNumber.countryCode', '')}+ ${_get(data, 'phoneNumber.phoneNumber', '')}`;

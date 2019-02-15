@@ -11,12 +11,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { showMessage } from '../../actions/common';
-
+import { uploadEmployeesCSV } from '../../actions/employees';
 import Dropzone from 'react-dropzone'
-import _cloneDeep from 'lodash/cloneDeep';
-import _concat from 'lodash/concat';
-// import DropzoneArea from '../../components/common/dropzone/dropzoneArea';
-// import dropzoneHandler from '../../components/common/dropzone/onDropDecorater';
+
 /* Component Imports */
 
 const styles = theme => ({
@@ -36,7 +33,7 @@ class AddEditEmployee extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            files: [],
+            file: {}
         }
     }
     saveEmployee = (values) => {
@@ -65,37 +62,42 @@ class AddEditEmployee extends React.Component {
 
     }
     onDrop(files) {
-        let filesArr = _cloneDeep(this.state.files);
-        let tempFile = _cloneDeep(files);
-        filesArr = _concat(filesArr, tempFile)
-        this.setState({ files: filesArr }, () => { console.log('objjjjj', this.state.files) });
-        // this.props.dispatch(fetchAwsUrlFromImage(files))
-        //     .then((data) => {
-        //         this.props.dispatch(showMessage({ text: 'Image Uploaded Successfully.', isSuccess: true }));
-        //         setTimeout(() => {
-        //             this.props.dispatch(showMessage({}));
-        //         }, 1000);
-        //     }, (err) => {
-        //         console.log('err', err);
-        //     })
+        // this.setState({ files });
+
+        let formData;
+        let url = '/Employee/ByStore';
+        if (files.length > 0) {
+            this.setState({ file: files[0] })
+            formData = new FormData();
+            formData.append('file', files[0])
+            formData.append('mediaType', 'customer')
+            formData.append('mediaTypeId', '1234567');
+            this.props.dispatch(uploadEmployeesCSV('', url, formData))
+            .then((data) => {
+                console.log('csv data saved successfully.', data);
+            }, (err) => {
+                console.log('err while saving csv data', err);
+            })
+        }
     }
+
     onCancel() {
         this.setState({
-            files: []
+            file: {}
         });
     }
+
     render() {
         const { handleSubmit, initialValues } = this.props;
-        const files = this.state.files.map(file => (
-            <li key={file.name}>
-                {file.name} - {file.size} bytes
-                <img src={file.preview} alt={'preview'} />
-            </li>
-
-        ))
+        const { file } = this.state;
+        // const files = this.state.files.map(file => (
+        //     <li key={file.name}>
+        //         {file.name} - {file.size} bytes
+        //     </li>
+        // ))
         return (
 
-            <div className="d-flex">
+            <div className="">
                 <div className='panel-container'>
                     <span className='panel-heading'>{initialValues.id ? 'Update' : 'New'} Employee </span>
                 </div>
@@ -105,26 +107,29 @@ class AddEditEmployee extends React.Component {
                         <div className="row" style={{ marginTop: '10px', marginLeft: '10px' }}>
                             <Button type="submit" variant="raised">SAVE</Button>
                         </div>
-                        <div className="col-sm-4">
-                            <section>
-                                <div>
-                                    <Dropzone
-                                        onDrop={this.onDrop.bind(this)}
-                                        onFileDialogCancel={this.onCancel.bind(this)}
-                                    >
-                                        {({ getRootProps, getInputProps }) => (
-                                            <div>
-
-                                                <p>Drop files here, or click to select files</p>
-                                            </div>
-                                        )}
-                                    </Dropzone>
-                                </div>
-                                <aside>
-                                    <h4>Files</h4>
-                                    <ul>{files}</ul>
-                                </aside>
+                        <div className='box-conversion-container'>
+                            <section >
+                                <Dropzone
+                                    onDrop={this.onDrop.bind(this)}
+                                    onFileDialogCancel={this.onCancel.bind(this)}
+                                >
+                                    {({ getRootProps, getInputProps }) => (
+                                        <div {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <span className="dropzone">Drop files here, or click to select files</span>
+                                        </div>
+                                    )}
+                                </Dropzone>
                             </section>
+                            <aside>
+                                <h4>Files</h4>
+                                <ul>
+                                    <li key={file.name}>
+                                        {file.name} - {file.size} bytes
+                                    </li>
+                                </ul>
+                            </aside>
+
                         </div>
                     </form>
                 </div>
@@ -141,16 +146,14 @@ AddEditEmployee = reduxForm({
 })(AddEditEmployee)
 
 const mapStateToProps = state => {
-    let { productsReducer } = state;
-    let { selectedVendorProduct } = productsReducer || [];
+    let { employeesReducer } = state;
+    let { employeeCsvData } = employeesReducer || [];
 
-    let initialValues = {}
-    if (!_isEmpty(selectedVendorProduct)) {
-        initialValues = { ...selectedVendorProduct }
-    }
+    let initialValues = {};
 
     return {
         initialValues,
+        employeeCsvData
     }
 }
 

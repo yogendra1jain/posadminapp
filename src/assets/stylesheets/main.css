@@ -3250,3 +3250,9 @@ input.login-number.form-control {
 .selected {
     background: #005383;
 }
+
+.dropzone {
+    height: 200px;
+    width: 300px;
+    border: dashed;
+}

@@ -43,3 +43,46 @@ export const fetchEmployeesList = (subreddit, url, data) => dispatch => {
         }));
     })
 }
+
+
+const requestEmployeesCSVUpload = (subreddit) => ({
+    type: EMPLOYEES_CONSTANT.REQUEST_EMPLOYEES_LIST_CSV_UPLOAD,
+    subreddit
+});
+
+const receiveEmployeesCSVUpload = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: EMPLOYEES_CONSTANT.RECEIVE_EMPLOYEES_LIST_CSV_UPLOAD,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveEmployeesCSVUploadError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: EMPLOYEES_CONSTANT.RECEIVE_EMPLOYEES_LIST_CSV_UPLOAD_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const uploadEmployeesCSV = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: EMPLOYEES_CONSTANT.EMPLOYEES_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestEmployeesCSVUpload,
+            successCb: receiveEmployeesCSVUpload,
+            failureCb: receiveEmployeesCSVUploadError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_EMPLOYEE_LIST_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
