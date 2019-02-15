@@ -145,3 +145,53 @@ export const setPOViewFlag = (subreddit, isView) => ({
     subreddit,
     isView: isView,
 });
+
+
+const requestPurchaseOrderRecieptById = (subreddit) => ({
+    type: PURCHASE_ORDER_CONSTANT.REQUEST_PURCHASE_ORDER_RECIEPT_BY_ID,
+    subreddit
+});
+
+const receivePurchaseOrderRecieptById = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: PURCHASE_ORDER_CONSTANT.RECEIVE_PURCHASE_ORDER_RECIEPT_BY_ID,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receivePurchaseOrderRecieptByIdError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: PURCHASE_ORDER_CONSTANT.RECEIVE_PURCHASE_ORDER_RECIEPT_BY_ID_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const fetchPurchaseOrderRecieptById = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: PURCHASE_ORDER_CONSTANT.PURCHASE_ORDERS_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestPurchaseOrderRecieptById,
+            successCb: receivePurchaseOrderRecieptById,
+            failureCb: receivePurchaseOrderRecieptByIdError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_PURCHASE_ORDERS_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
+
+export const requestPORecieptRequisitionUpdate = (subreddit, quantity, index) => ({
+    type: PURCHASE_ORDER_CONSTANT.REQUEST_PO_RECIEPT_REQUISITION_UPDATE,
+    subreddit,
+    quantity: quantity,
+    index: index,
+});

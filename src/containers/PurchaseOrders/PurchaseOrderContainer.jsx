@@ -121,8 +121,9 @@ class PurchaseOrderContainer extends React.Component {
         this.props.history.push(`/purchaseorders/review/${row.id}`);
         this.props.dispatch(setPOViewFlag('', isView))
     }
-    onReject = (row) => {
-
+    handleReciept = (row, isView) => {
+        this.props.history.push(`/purchaseorders/reciept/${row.id}`);
+        this.props.dispatch(setPOViewFlag('', isView));
     }
     actionColumn = (cell, row) => {
         if (row.status === 'PENDING APPROVAL') {
@@ -131,10 +132,18 @@ class PurchaseOrderContainer extends React.Component {
                     <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, false)}>Review</Button>
                 </div>
             )
-        } else {
+        } else if (row.status === 'APPROVED') {
+            return (
+                <div>
+                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReciept(row, false)}>Receipt</Button>
+                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, true)}>View</Button>
+                </div>
+            )
+        } else if (row.status === 'RECEIVED') {
             return (
                 <div>
                     <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, true)}>View</Button>
+                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReciept(row, true)}>View Receipt</Button>
                 </div>
             )
         }
@@ -158,6 +167,9 @@ class PurchaseOrderContainer extends React.Component {
         let { selectedValue } = this.state;
         return (
             <div className="">
+                <div className='panel-container'>
+                    <span className='panel-heading'>Purchase Orders </span>
+                </div>
                 <div>
                     <div className="form-btn-group">
                         {/* <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.updatePO()}>Update</Button> */}
@@ -197,11 +209,14 @@ const
             case 0:
                 statusValue = 'PENDING APPROVAL';
                 break
-            case 2:
+            case 1:
                 statusValue = 'APPROVED';
                 break
-            case 3:
+            case 2:
                 statusValue = 'REJECTED';
+                break
+            case 3:
+                statusValue = 'RECEIVED';
                 break
             default:
                 statusValue = 'PENDING APPROVAL';
