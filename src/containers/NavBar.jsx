@@ -19,6 +19,8 @@ import settingicon from './../assets/images/setting.png';
 import listicon from './../assets/images/list.png';
 import logouticon from './../assets/images/logout.png';
 import Overlay from 'react-bootstrap/lib/Overlay';
+
+import NavBarChild from './NavBarChild.jsx';
 //import findDOMNode from 'react-dom/function name(params) {
 
 import { findDOMNode } from "react-dom";
@@ -121,6 +123,7 @@ class NavBarComponent extends React.Component {
                     <img className="logoimg" src={logo} alt="AllOnBlock Logo" />
                 </Link>
                 <PanelGroup accordion id="menu-bar" defaultActiveKey="0">
+                    <NavBarChild />
                     <Panel key={10} eventKey={10} >
                         <Panel.Heading>
                             <div key={10}>
