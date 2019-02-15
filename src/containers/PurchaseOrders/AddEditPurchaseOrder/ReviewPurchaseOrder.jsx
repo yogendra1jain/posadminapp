@@ -15,6 +15,8 @@ import EditRequisition from '../../RequisitionContainer/components/EditRequisiti
 
 import { saveRequisitionForm } from '../../../actions/vendor';
 import { fetchPurchaseOrderById, requestPORequisitionUpdate, purchaseOrderSave } from '../../../actions/purchaseOrder';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf'; 
 
 
 
@@ -123,6 +125,41 @@ class ReviewPurchaseOrderContainer extends React.Component {
         });
     }
 
+    printPDF = () => {
+        this.setState({ applyPdfClass: true }, () => {
+            const input = document.getElementById('divToPrint');
+
+            html2canvas(input).then(canvas => {
+                // Few necessary setting options
+
+                const contentDataURL = canvas.toDataURL('image/png')
+                var imgWidth = 200;
+                var pageHeight = 295;
+                var imgHeight = canvas.height * imgWidth / canvas.width;
+                var heightLeft = imgHeight;
+
+                var doc = new jsPDF('p', 'mm');
+                var position = 0;
+
+                doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                doc.save('PO.pdf');
+
+            });
+            setTimeout(() => {
+                this.setState({ applyPdfClass: false });
+            }, 10);
+        })
+    }
+
     render() {
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
@@ -156,13 +193,18 @@ class ReviewPurchaseOrderContainer extends React.Component {
                 />
                 <div>
                     {
-                        !this.props.isPOViewFlag &&
-                        <div className="form-btn-group">
-                            <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
-                            <Button type="button" variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
-                        </div>
+                        !this.props.isPOViewFlag ?
+                            <div className="form-btn-group">
+                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
+                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
+                                <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                            </div>
+                            :
+                            <div className="form-btn-group">
+                                <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                            </div>
                     }
-                    <div>
+                    <div id="divToPrint">
                         <div className="row" style={{ marginTop: '25px' }}>
                             <div className="col-sm-6" style={{ border: 'solid 1px #ddd' }}>
                                 <div className='box-conversion-container'>
@@ -197,7 +239,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
+                        <div className="row" style={{ paddingLeft: '15px', paddingRight: '15px'}}>
                             <EditRequisition
                                 forEdit={true}
                                 handleChangeInput={this.handleChangeInput}
