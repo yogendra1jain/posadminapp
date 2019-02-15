@@ -238,7 +238,7 @@ class EditRequisition extends React.Component {
                     {
                         !this.props.isPOViewFlag &&
                         <div>
-                            <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={() => this.props.handleSubmitHandler(index)}>Edit</Button>
+                            <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={() => this.props.handleSubmitHandler(index)}>Save</Button>
                         </div>
                     }
                 </div>
@@ -264,7 +264,7 @@ class EditRequisition extends React.Component {
                     {
                         this.props.handleCancel &&
                         <div className="form-btn-group">
-                            <Button variant="outlined" color="primary" className={classes.button} onClick={() => this.props.handleSubmitHandler('', true)}>Edit All</Button>
+                            <Button variant="outlined" color="primary" className={classes.button} onClick={() => this.props.handleSubmitHandler('', true)}>Save All</Button>
                             <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.props.handleCancel()}>Cancel</Button>
                         </div>
                     }
