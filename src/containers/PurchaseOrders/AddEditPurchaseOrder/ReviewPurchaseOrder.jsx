@@ -174,7 +174,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
         }
         const { purchaseOrderById, isPOViewFlag } = this.props;
         return (
-            <div className="">
+            <div className="" id="divToPrint">
                 <div className='panel-container'>
                     <span className='panel-heading'>Purchase Order </span>
                 </div>
@@ -207,7 +207,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
                                 <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
                             </div>
                     }
-                    <div id="divToPrint">
+                    <div >
                         <div className="row" style={{ marginTop: '25px' }}>
                             <div className="col-sm-6" style={{ border: 'solid 1px #ddd' }}>
                                 <div className='box-conversion-container'>

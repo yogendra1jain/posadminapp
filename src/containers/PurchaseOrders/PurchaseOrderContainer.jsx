@@ -146,6 +146,12 @@ class PurchaseOrderContainer extends React.Component {
                     <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReciept(row, true)}>View Receipt</Button>
                 </div>
             )
+        } else {
+            return (
+                <div>
+                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, true)}>View</Button>
+                </div>
+            )
         }
 
     }
