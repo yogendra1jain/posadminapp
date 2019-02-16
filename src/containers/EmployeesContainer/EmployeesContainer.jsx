@@ -167,13 +167,15 @@ class EmployeesContainer extends React.Component {
         // this.setState({ files });
 
         let formData;
-        let url = '/Employee/ByStore';
+        let url = '/Upload/Employee';
         if (files.length > 0) {
             this.setState({ file: files[0] })
             formData = new FormData();
             formData.append('file', files[0])
             // formData.append('mediaType', 'customer')
-            formData.append('storeId', this.state.selectedStoreForAdd);
+            formData.append('mediaType', 'customer');
+            formData.append('mediaTypeId', '123');
+            formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
             this.props.dispatch(uploadEmployeesCSV('', url, formData))
             .then((data) => {
                 console.log('csv data saved successfully.', data);

@@ -38,7 +38,10 @@ class AddEditEmployee extends React.Component {
         }
     }
     saveEmployee = (values) => {
-        let saveUrl = `/Employee/Add`;
+        let saveUrl = `/Customer/Create`;
+        if (values.id) {
+            saveUrl = `/Customer/Update`;
+        }
         let data = { ...values };
         _set(data, 'retailerId', localStorage.getItem('retailerID'));
         let store = _find(_get(this.props, 'storeList', []), {'value': data.employeeStoreId});
