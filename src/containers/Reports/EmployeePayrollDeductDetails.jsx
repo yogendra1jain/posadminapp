@@ -93,7 +93,7 @@ class EmployeePayrollDeductDetails extends React.Component {
     handleSubmitReportData = () => {
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
         let endDate = toTimestamp(_get(this, 'state.endDate', 0))
-        let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate/1000 }, toTimestamp: { seconds: endDate/1000 } }
+        let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate / 1000 }, toTimestamp: { seconds: endDate / 1000 } }
         let url = `/Reports/EmployeePayrollDeduct/ByStore`;
         this.props.dispatch(fetchEmpPayrollDeductDetails('', url, reqBody))
             .then((data) => {
@@ -173,6 +173,7 @@ class EmployeePayrollDeductDetails extends React.Component {
                 </div>
                 <div>
                     <BootstrapTable
+                        height='515'
                         data={empPayrollDeductDetailsData}
                         options={options}
                         striped hover
@@ -202,7 +203,7 @@ const mapStateToProps = state => {
 
     let { reportsReducer } = state
     let empPayrollDeductDetailsData = EmpPayrollDeductDetailsSel(state);
-    let {isFetching} = reportsReducer || false;
+    let { isFetching } = reportsReducer || false;
 
     return {
         empPayrollDeductDetailsData,
