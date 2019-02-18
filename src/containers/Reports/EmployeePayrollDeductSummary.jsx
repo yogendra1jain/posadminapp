@@ -209,6 +209,7 @@ class EmployeePayrollDeductSummary extends React.Component {
                 </div>
                 <div>
                     <BootstrapTable
+                        height='515'
                         data={empPayrollDeductSummaryData}
                         options={options}
                         striped hover

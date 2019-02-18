@@ -205,6 +205,7 @@ class EmployeeDiscountReport extends React.Component {
                 </div>
                 <div>
                     <BootstrapTable
+                        height='515'
                         data={empDiscountData}
                         options={options}
                         striped hover

@@ -124,7 +124,7 @@ class ZReportContainer extends React.Component {
     }
 
     actionColumn = (cell, row) => {
-       
+
         return (
             <div>
                 <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handlePrint(row, false)}>Print</Button>
@@ -212,6 +212,7 @@ class ZReportContainer extends React.Component {
 
                 <div>
                     <BootstrapTable
+                        height='450'
                         data={zReportDetailsData}
                         options={options}
                         striped hover
@@ -220,7 +221,7 @@ class ZReportContainer extends React.Component {
                         search={true}
                         searchPlaceholder={'Search'}>
 
-                        <TableHeaderColumn width='100' dataField='shiftId' isKey={true} >Shift Id</TableHeaderColumn>
+                        <TableHeaderColumn width='140' dataField='shiftId' isKey={true} >Shift Id</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='staff'>Staff</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='pos' dataSort>POS</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='openFrom' dataSort>Open From</TableHeaderColumn>
