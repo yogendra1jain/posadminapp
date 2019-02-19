@@ -76,6 +76,7 @@ export const uploadEmployeesCSV = (subreddit, url, data) => dispatch => {
             method: 'POST',
             formData: data,
             isFormData: true,
+            // contentType: 'multipart/form-data',
             initCb: requestEmployeesCSVUpload,
             successCb: receiveEmployeesCSVUpload,
             failureCb: receiveEmployeesCSVUploadError,

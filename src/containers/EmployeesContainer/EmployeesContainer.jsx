@@ -25,6 +25,7 @@ import FormDialog from '../../components/common/CommonDialog/index';
 
 import { uploadEmployeesCSV, requestEmployeesUpdate } from '../../actions/employees';
 import Dropzone from 'react-dropzone';
+import FileUploadComp from './components/FileUploadComp.jsx';
 
 const options = {
     paginationPosition: 'top',
@@ -163,7 +164,7 @@ class EmployeesContainer extends React.Component {
             openDialog: !this.state.openDialog,
         });
     }
-    onDrop(files) {
+    onDrop = (files) => {
         // this.setState({ files });
 
         let formData;
@@ -173,27 +174,42 @@ class EmployeesContainer extends React.Component {
             formData = new FormData();
             formData.append('file', files[0])
             // formData.append('mediaType', 'customer')
-            formData.append('mediaType', 'customer');
-            formData.append('mediaTypeId', '123');
-            formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
+            // formData.append('mediaType', 'customer');
+            // formData.append('mediaTypeId', '123');
+            // formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
+            formData.append('storeId', `${this.state.selectedStore}`);
             this.props.dispatch(uploadEmployeesCSV('', url, formData))
-            .then((data) => {
-                console.log('csv data saved successfully.', data);
-                this.toggleDialog();
-            }, (err) => {
-                console.log('err while saving csv data', err);
-                
-            })
+                .then((data) => {
+                    console.log('csv data saved successfully.', data);
+                    let employeeUrl = `/Employee/ByStore`;
+                    let reqData = {
+                        storeId: this.state.selectedStore,
+                        active: this.state.isActive,
+                    };
+                    this.getEmployees(employeeUrl, reqData);
+                    this.toggleDialog();
+                    this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
+                    setTimeout(() => {
+                        this.props.dispatch(showMessage({}));
+                    }, 3000);
+                }, (err) => {
+                    console.log('err while saving csv data', err);
+                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
+                    setTimeout(() => {
+                        this.props.dispatch(showMessage({}));
+                    }, 5000);
+
+                })
         }
     }
 
-    onCancel() {
+    onCancel = () => {
         this.setState({
             file: {}
         });
     }
     getYesNoValue = (value) => {
-        if(value) {
+        if (value) {
             return 'Yes';
         } else {
             return 'No';
@@ -231,46 +247,18 @@ class EmployeesContainer extends React.Component {
                     fullScreen={false}
                     fullWidth={true}
                     dialogContent={
-                        <div>
-                            <div className='panel-container'>
-                                <span className='panel-heading'>Create Employees In Bulk </span>
-                            </div>
-                            <div>
-                                <div className="row" style={{ marginBottom: '10px' }}>
-                                    <div className="col-sm-6">
-                                        <Select placeholder="Select Store" name='store' options={this.props.storeList} value={this.state.selectedStoreForAdd} onChange={(e) => this.handleChangeStore(e)} />
-                                    </div>
-                                </div>
-                                <div className='box-conversion-container'>
-                                    <section >
-                                        <Dropzone
-                                            onDrop={this.onDrop.bind(this)}
-                                            onFileDialogCancel={this.onCancel.bind(this)}
-                                        >
-                                            {({ getRootProps, getInputProps }) => (
-                                                <div {...getRootProps()}>
-                                                    <input {...getInputProps()} />
-                                                    <span className="dropzone">Drop files here, or click to select files</span>
-                                                </div>
-                                            )}
-                                        </Dropzone>
-                                    </section>
-                                    <aside>
-                                        <h4>Files</h4>
-                                        <ul>
-                                            <li key={file.name}>
-                                                {file.name} - {file.size} bytes
-                                    </li>
-                                        </ul>
-                                    </aside>
-
-                                </div>
-                            </div>
-                        </div>
+                        <FileUploadComp
+                            storeList={this.props.storeList}
+                            selectedStoreForAdd={this.state.selectedStoreForAdd}
+                            handleChangeStore={this.handleChangeStore}
+                            onDrop={this.onDrop}
+                            onCancel={this.onCancel}
+                            file={this.state.file}
+                        />
                     }
                 />
                 <div className='panel-container'>
-                    <span className='panel-heading'>Purchase Orders </span>
+                    <span className='panel-heading'>Employees </span>
                 </div>
                 <div>
                     <div className="row" style={{ marginBottom: '10px' }}>

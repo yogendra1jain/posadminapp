@@ -1,5 +1,6 @@
 import _isEmpty from 'lodash/isEmpty';
 import _pickBy from 'lodash/pickBy';
+import _set from 'lodash/set';
 import { generateV1uuid } from '../helpers/helpers.js';
 import { onLogout } from '../actions/userRoles';
 
@@ -8,6 +9,9 @@ const addOptionalOptions = (config, options) => {
     let newOptions = { ...options };
     // if (!_isEmpty(config.body)) {
         if (config.isFormData && _isEmpty(config.body)) {
+            // var boundary = Math.random().toString().substr(2);
+            delete newOptions.headers['Content-Type'];
+            // _set(newOptions, `headers.Content-Type`, `multipart/form-data; boundary=------------------------${boundary}`);
             newOptions.body = config.formData;
         } else {
             newOptions.body = JSON.stringify(config.body);
