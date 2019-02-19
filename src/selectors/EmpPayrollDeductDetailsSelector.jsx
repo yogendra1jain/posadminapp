@@ -19,7 +19,6 @@ const mapData = data => ({
     orderDate: moment.utc(get(data, 'saleTransactions.saleTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY")
 })
 
-
 const EmpPayrollDeductDetailsSel = createSelector(
     empPayrollDeductDetails,
     mapEmpPayrollDeductDetails
