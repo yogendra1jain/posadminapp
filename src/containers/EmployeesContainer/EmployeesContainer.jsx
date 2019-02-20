@@ -150,7 +150,7 @@ class EmployeesContainer extends React.Component {
         this.props.history.push('/employees/add');
     }
     updateEmployee = () => {
-        if (this.selectedIds.length > 0) {
+        if (_get(this, 'selectedIds.length', 0) > 0) {
             let id = this.selectedIds[0];
             let tempProd = _find(this.props.employeesList, { 'id': id });
             const { dispatch } = this.props;
