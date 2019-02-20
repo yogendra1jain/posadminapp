@@ -159,13 +159,15 @@ class PosList extends React.Component {
             this.forceUpdate();
         }
         if (props.posListData != null) {
+            
             if (props.posListData.message && this.fetchTerminalFlag) {
                 this.fetchTerminalFlag = false;
                 this.showAlert(true, props.posListData.message);
             }
             if ((props.posListData.length > 0) && this.fetchTerminalFlag) {
                 this.fetchTerminalFlag = false;
-                this.posList = props.posListData;
+                // this.posList = props.posListData;
+                this.posList = []
                 props.posListData.map(pos  => {
                     let tempPos = {};
                     tempPos.id = pos.id;

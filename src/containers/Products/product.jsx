@@ -349,7 +349,7 @@ class ProductContainer extends React.Component {
                         <div className="col-sm-6 col-md-4 form-d">
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <label className="control-label">Upload Images</label>
+                                    <label className="control-label">Upload Image</label>
                                     <div className="" style={{marginTop: "5px", float:"left", marginRight: "15px"}}>
                                     {/* <input type="file" id="files" className="hidden"/> */}
                                         <label className="btn btn-default" for="files">Select file</label>
@@ -360,7 +360,7 @@ class ProductContainer extends React.Component {
                                     </div>
                                 </div>    
                             </div>
-                            {this.imagePreviewUrl!=='' &&
+                            {this.imagePreviewUrl != '' &&
                             <div className="row" style={{marginTop: "10px"}}>
                                 <div className="col-sm-12">
                                     <img style={{width:'100%', maxWidth:"500px", height:'350px'}} src={this.imagePreviewUrl} />
