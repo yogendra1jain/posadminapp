@@ -63,7 +63,7 @@ class ProductListContainer extends React.Component {
                 prod.id = product.id;
                 prod.sellingPrice = _get(product,'salePrice.price','');
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
-                prod.image = product.imageLink;
+                prod.image = product.image;
                 
                 this.productList.push(prod);
             });
