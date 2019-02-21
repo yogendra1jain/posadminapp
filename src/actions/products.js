@@ -28,7 +28,11 @@ export const receivedDocumentUploadError = (subreddit, error) => ({
 export const uploadDocument = (file, url, subreddit) => (dispatch) => {
     const formData = new FormData();
     // formData.append('file', file);
-    formData.append('userpic', file, 'chris.jpg');
+    formData.append('file', file);
+    formData.append('mediaType', 'customer')
+    formData.append('mediaType', 'customer');
+    formData.append('mediaTypeId', '123');
+    formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
     console.log(formData, 'formData')
     // formData.append('folderName', file.folderName);
     dispatch(uploadDocumentAction(subreddit));
@@ -40,6 +44,26 @@ export const uploadDocument = (file, url, subreddit) => (dispatch) => {
         .then(json => dispatch(receivedDocumentUploadResponse(subreddit, json)))
         .catch(e => dispatch(receivedDocumentUploadError(subreddit, e)))
 }
+
+// export const uploadDocument = (subreddit, url, data) => dispatch => {
+//     return new Promise((resolve, reject) => {
+//         dispatch(dynamicActionWrapper({
+//             path: PRODUCT_CONSTANT.PRODUCT_MEDIA_URL,
+//             method: 'POST',
+//             formData: data,
+//             isFormData: true,
+//             // contentType: 'multipart/form-data',
+//             initCb: uploadDocumentAction,
+//             successCb: receivedDocumentUploadResponse,
+//             failureCb: receivedDocumentUploadError,
+//             resolve: resolve,
+//             reject: reject,
+//             subreddit,
+//             wrapperActionType: 'FETCH_DOCUMENT_UPLOAD_WRAPPER',
+//             redirect: 'follow'
+//         }));
+//     })
+// }
 
 
 export const requestProductData = subreddit => ({
@@ -161,7 +185,7 @@ const receiveLeve1CategoryError = (subreddit, error) => ({
 
 export const fetchLevel1Category = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
+        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
         method: 'POST',
         body: data,
         initCb: requestLevel1Category,
@@ -177,38 +201,38 @@ export const fetchLevel1Category = (subreddit, url, data) => dispatch =>
 // Fetch Level2 Category Reducer
 
 const requestLevel2Category = (subreddit) => ({
-type: PRODUCT_CONSTANT.REQUEST_LEVEL2_CATEGORY_DATA,
-subreddit
+    type: PRODUCT_CONSTANT.REQUEST_LEVEL2_CATEGORY_DATA,
+    subreddit
 });
 
 const receiveLevel2Category = (subreddit, data) => ({
-type: PRODUCT_CONSTANT.RECEIVE_LEVEL2_CATEGORY_DATA,
-subreddit,
-data,
-receivedAt: Date.now()
+    type: PRODUCT_CONSTANT.RECEIVE_LEVEL2_CATEGORY_DATA,
+    subreddit,
+    data,
+    receivedAt: Date.now()
 });
 
 const receiveLeve2CategoryError = (subreddit, error) => ({
-type: PRODUCT_CONSTANT.RECEIVE_LEVEL2_CATEGORY_DATA_ERROR,
-subreddit,
-error,
-receivedAt: Date.now()
+    type: PRODUCT_CONSTANT.RECEIVE_LEVEL2_CATEGORY_DATA_ERROR,
+    subreddit,
+    error,
+    receivedAt: Date.now()
 })
 
 export const fetchLevel2Category = (subreddit, url, data) => dispatch =>
-dispatch(dynamicActionWrapper({
-    path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
-    method: 'POST',
-    body: data,
-    initCb: requestLevel2Category,
-    successCb: receiveLevel2Category,
-    failureCb: receiveLeve2CategoryError,
-    resolve: '',
-    reject: '',
-    subreddit,
-    wrapperActionType: 'FETCH_LEVEL2_CATEGORY_DATA',
-    redirect: 'follow'
-}));
+    dispatch(dynamicActionWrapper({
+        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
+        method: 'POST',
+        body: data,
+        initCb: requestLevel2Category,
+        successCb: receiveLevel2Category,
+        failureCb: receiveLeve2CategoryError,
+        resolve: '',
+        reject: '',
+        subreddit,
+        wrapperActionType: 'FETCH_LEVEL2_CATEGORY_DATA',
+        redirect: 'follow'
+    }));
 
 // Fetch Level3 Category Reducer
 
@@ -233,7 +257,7 @@ const receiveLeve3CategoryError = (subreddit, error) => ({
 
 export const fetchLevel3Category = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL+url,
+        path: PRODUCT_CONSTANT.PRODUCT_LOOKUP_URL + url,
         method: 'POST',
         body: data,
         initCb: requestLevel3Category,
@@ -270,7 +294,7 @@ const receiveVendorProductsError = (subreddit, error, status, reject) => {
         error,
         receivedAt: Date.now()
     })
-} 
+}
 
 export const fetchVendorProducts = (subreddit, url, data) => dispatch => {
     return new Promise((resolve, reject) => {
@@ -326,7 +350,7 @@ const receiveRetailerProductsError = (subreddit, error, status, reject) => {
         error,
         receivedAt: Date.now()
     })
-} 
+}
 
 export const fetchRetailerProducts = (subreddit, url, data) => dispatch => {
     return new Promise((resolve, reject) => {
@@ -369,7 +393,7 @@ const receiveExistingPOSProductsForVendorError = (subreddit, error, status, reje
         error,
         receivedAt: Date.now()
     })
-} 
+}
 
 export const fetchExistingPOSProductsForVendor = (subreddit, url, data) => dispatch => {
     return new Promise((resolve, reject) => {
@@ -412,7 +436,7 @@ const receiveVendorProductSaveError = (subreddit, error, status, reject) => {
         error,
         receivedAt: Date.now()
     })
-} 
+}
 
 export const vendorProductSave = (subreddit, url, data) => dispatch => {
     return new Promise((resolve, reject) => {
@@ -462,7 +486,7 @@ const receiveProductsFromCacheError = (subreddit, error, status, reject) => {
         error,
         receivedAt: Date.now()
     })
-} 
+}
 
 export const fetchProductsFromCache = (subreddit, url, data) => dispatch => {
     return new Promise((resolve, reject) => {
@@ -481,4 +505,3 @@ export const fetchProductsFromCache = (subreddit, url, data) => dispatch => {
         }));
     })
 }
-
