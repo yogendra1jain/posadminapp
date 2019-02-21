@@ -97,7 +97,7 @@ class RecieptAddEdit extends React.Component {
         let data = {}
         data.purchaseOrderId = _get(this, `props.purchaseOrderById.order.id`, '');
         data.requisitions = values;
-        
+
         console.log('data to be saved', data);
         let url = `/PurchaseOrder/Receipt`
         this.props.dispatch(saveRequisitionForm('', url, data))
@@ -163,7 +163,10 @@ class RecieptAddEdit extends React.Component {
                 <div>
                     {
                         <div className="form-btn-group">
-                            <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleSave()}>Save</Button>
+                            {
+                                !isPOViewFlag &&
+                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleSave()}>Save</Button>
+                            }
                             <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleCancel()}>Cancel</Button>
                             {/* <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button> */}
                         </div>
