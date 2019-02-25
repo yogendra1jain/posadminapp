@@ -158,20 +158,15 @@ class AddEditStoreContainer extends React.Component {
             }
         }
         else if (props.type === 'RECEIVED_STORE_POST') {
-            // if (!_isEmpty(props.storePostData)) {
-            // if (props.status !== 200 && props.status !== '') {
-            //     this.showAlert(true, 'Some Error Occured!');
-            // } else if (props.status === 200) {
-            this.showAlert(false, 'Store Created Successfully!');
-            this.redirectToSearch = true;
-            // const { dispatch, storesReducer } = this.props;
-            // let retailerId = localStorage.getItem('retailerID');
-            // dispatch(fetchStore(storesReducer, retailerId));
-            // this.isUpdate = false;
-            // this.open = false;                    
-            // }
-            this.forceUpdate();
-            // }
+            if(props.status == 200) {
+                this.showAlert(false, 'Store Created Successfully!')
+                this.redirectToSearch = true
+                this.forceUpdate()
+            } else if(props.status !== 200 && props.status !== '') {
+                this.showAlert('Some Error Occured!')
+                this.redirectToSearch = false
+                this.forceUpdate()
+            }
         }
     }
 

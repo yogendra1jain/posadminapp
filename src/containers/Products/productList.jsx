@@ -13,8 +13,6 @@ import _pull from 'lodash/pull';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
 
-
-
 const options = {
     paginationPosition: 'top',
     defaultSortName: 'sku',
@@ -25,9 +23,7 @@ const options = {
         text: '5', value: 5
     }, {
         text: '10', value: 10
-    }],
-
-
+    }]
 };
 
 class ProductListContainer extends React.Component {
@@ -57,14 +53,9 @@ class ProductListContainer extends React.Component {
             this.productList = [];
             props.productData.map(product=>{
                 let prod = {};
-                prod.name = product.name;
-                prod.sku = product.sku;
-                prod.description = product.description;
-                prod.id = product.id;
+                prod = product
                 prod.sellingPrice = _get(product,'salePrice.price','');
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
-                prod.image = product.image;
-                
                 this.productList.push(prod);
             });
             this.forceUpdate();
@@ -87,6 +78,7 @@ class ProductListContainer extends React.Component {
     }
     onUpdate(){
         const {dispatch, productsReducer} = this.props;
+        console.log(this.selectedProduct, 'this.selectedProduct')
         dispatch(requestProductUpdate(productsReducer, this.selectedProduct));
         this.redirectToNewProduct = true;
     }
@@ -126,6 +118,7 @@ class ProductListContainer extends React.Component {
 
     }
     render() {
+        console.log(this.productList, 'this.productList')
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
@@ -167,24 +160,18 @@ class ProductListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
                             <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>
                         </BootstrapTable>
-
                     </div>
                 </div>
             </div>
         )
-
     }
-
 }
 
 const mapStateToProps = state => {
-
     let { productsReducer, userRolesReducer } = state
-
     let { status } = productsReducer || '';
     let { isFetching } = productsReducer || false;
     let { type, productData } = productsReducer || [];
-    
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
     return {
         status,

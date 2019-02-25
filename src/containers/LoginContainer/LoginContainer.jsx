@@ -97,6 +97,7 @@ class LoginContainer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (!this.state.redirectToSearch && nextProps.status === 200) {
+            // this.showAlert(false, 'User Authenticated.');
             this.setState({
                 redirectToSearch: true,
             });
@@ -113,8 +114,6 @@ class LoginContainer extends React.Component {
             //     localStorage.setItem('storeManager', nextProps.user.id)
             // }
             localStorage.setItem('storeID', _get(decodeToken, 'Store.id', ''));
-            this.showAlert(false, 'User Authenticated.');
-
         } else {
             if (nextProps.status !== 200 && nextProps.status !== '' && nextProps.status !== undefined)
                 this.showAlert(true, 'Login Failed.');
