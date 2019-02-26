@@ -1,9 +1,23 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900');
+@import url('https://fonts.googleapis.com/css?family=Karla:400,700');
 @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-body{
-    font-family: 'Roboto', sans-serif;
-    background-color: #f3f9fe;
+
+html{
+    font-size: 62.5%;
 }
+body{
+    font-family: 'Karla', sans-serif!important;
+    font-size: 1rem;
+    background-color: #e8eef1;
+}
+
+.react-bs-table-bordered{
+    font-size: 1.4rem;
+}
+
+.no-gutters {
+    padding-right: 0;
+    padding-left: 0;
+  }
 
 /* test css */
 
@@ -45,7 +59,7 @@ label.control-label{
     margin: 5px 0;
 }
 .react-bs-table-container {
-    padding: 20px 30px;
+    padding: 20px 20px;
     background: #FFF;
     margin-top: 20px;
 }
@@ -62,9 +76,8 @@ label.control-label{
         display: none;
     }
 
-    .logoimg{
-        height: 30px;
-        width: 100px;
+    .logoimg{        
+        width: 65%;
     }
     
 }
@@ -74,8 +87,7 @@ label.control-label{
     {
         display: none;
     }
-    .logoimg{
-        height: 60px;
+    .logoimg{       
         /* width: 180px; */
         padding-top: 10%;
         padding-left: 10%;
@@ -289,6 +301,17 @@ label.control-label{
     float: right;
 }
 
+.main-container {
+    height: 100vh;
+    width: 100%;       
+}
+
+.main-container:after{
+    content: "";
+    display: block;
+    clear: both;
+}
+
 
 @media all and (min-width: 799px) and (max-width: 1180px) {
     /**divya***/
@@ -310,18 +333,12 @@ label.control-label{
         display:none;
     }
     
-    .logoimg{
-        height: 60px;
-        /* width: 180px; */
+    .logoimg{      
         padding-top: 10%;
         padding-left: 40%;
         /* background-color: #fff */
     }
-    .main-container {
-        height: auto;
-        width: 100%;
-        position: absolute;
-    }
+    
 
     .container {
         /* width: 1170px; */
@@ -503,18 +520,12 @@ label.control-label{
         display:none;
     }
     
-    .logoimg{
-        height: 60px;
-        /* width: 180px; */
+    .logoimg{      
         padding-top: 10%;
         margin-left: 50%;
         /* background-color: #fff */
     }
-    .main-container {
-        height: auto;
-        width: 100%;
-        position: absolute;
-    }
+   
 
     .container {
         /* width: 1170px; */
@@ -719,7 +730,7 @@ label.control-label{
     margin-top: 0;
     position: fixed;
     z-index: 88;
-    background-color: #0085a1;
+    background-color: #1e3d58;
     height: 100%;
     bottom: 0;
     top: 0;
@@ -770,7 +781,7 @@ label.control-label{
     -o-transform: rotate(0deg);
 }
 .navbar-collapse.collapse .panel-title > a.collapsed, .navbar-collapse.collapse .panel-title.inActive > a {
-    background: #0085a1;
+    background: #1e3d58;
     color: #FFF;
 }
 .navbar-collapse.collapse .panel-title > a {
@@ -779,7 +790,7 @@ label.control-label{
     padding: 0 15px;
     display: block;
     width: 100%;
-    background: #0085a1;
+    background: #1e3d58;
     color: #FFF;
     transition: ease-in-out all 0.3s;
     -webkit-transition: ease-in-out all 0.3s;
@@ -827,7 +838,7 @@ label.control-label{
 }
 .logoimg {
 	height: auto;
-	width: 120px;
+	width: 85%;
 	padding-top: 0;
     padding-left: 0;
     display: inline-block;
@@ -951,7 +962,7 @@ nav.navbar {
     box-shadow: none;
     /* border-bottom: solid 1px #0595b3; */
     border-bottom:transparent;
-    border-left: none;
+    border: none;
 }
 /* .navbar-collapse .panel.panel-default {
     box-shadow: 0 1px 0 #04728a;
@@ -990,17 +1001,17 @@ a:focus {
 	z-index: 99;
 	line-height: 50px;
 }
-.main-container {
-    height: auto;
-    width: 100%;
-    position: absolute;
-    padding: 0;
-}
+
 .strainBlock {
     background: #FFF;
-    padding: 20px 30px;
+    padding: 20px;
     width: 100%;
     margin-top: 10px;
+}
+.strainBlock:after{
+    content: "";
+    display: block;
+    clear: both;
 }
 .strainTitle {
     font-size: 18px;
@@ -1308,7 +1319,7 @@ textarea.form-control {
     color: #000;
 }
 .right-content {
-    padding: 30px;
+    padding: 20px;
 }
 .btn {
 	padding: 7px 10px;
@@ -1340,7 +1351,7 @@ textarea.form-control {
 }
 .btn-info {
 	color: #fff !important;
-	background-color: #004771 !important;
+	background-color: #1d4c96 !important;
 	border: none;
 	min-width: 90px;
 }
@@ -1645,11 +1656,14 @@ button.btn.btn-info.btn-sm {
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
 	white-space: normal;
 }
-
+.mt-21{
+    margin-top: 21px;
+}
 
 /*=================================== Login Container CSS================================== */ 
-.login-container {
-	position: absolute;
+.login-container {	
+    
+    position: absolute;
 	left: 0;
 	right: 0;
 	top: 0;
@@ -1657,20 +1671,21 @@ button.btn.btn-info.btn-sm {
 	margin: auto;
 	width: 100%;
 	min-height: 100%;
-	background: #FFF url(/src/assets/images/home-screen-bg.jpg) no-repeat;
-	background-size: 100% 100%;
+    background: #c8e8f9   url(../images/home-screen-bg.png) no-repeat;
+    background-blend-mode: darken;
+	background-size: contain;
+    background-position: bottom;
 }
 .login-container .jumbotron {
 	padding: 0;
 	margin: 0;
 }
 .login {
-	width: 380px;
+	width: 400px;
 	margin: auto;
 	max-width: 100%;
-	max-height: 100%;
-	overflow: hidden;
-	height: 380px;
+	max-height: 100%;	
+	height: auto;
 	padding: 0;
 	border: none;
 	border-radius: 0;
@@ -1678,17 +1693,24 @@ button.btn.btn-info.btn-sm {
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 0;
-	bottom: 0;
+	top: 40%;
+	transform: translateY(-50%);
+}
+.login-block {
+    padding:40px 30px 30px;
+    background: rgba(255, 255, 255, .6);
+    -webkit-box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.08);
+-moz-box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.08);
+box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.08);
 }
 .login-logo {
-	margin-bottom: 60px;
+	margin-bottom: 40px;
 	padding: 0 10px;
 }
 .login-logo img {
 	width: auto;
     max-width: 100%;
-    width: 48%;
+    width: 40%;
 }
 .form-group-lg .form-control {
 	padding: 15px 0;
@@ -1733,7 +1755,7 @@ a.nav-link {
     display: block;
     text-align: center;
     background: #FFF;
-    padding: 12px 10px 20px;
+    padding: 12px 10px ;
 }
 
 /* ===== New User Profile ====== */
@@ -1753,9 +1775,9 @@ ul.h-profile {
     display: inline-flex;
     height: 55px;
     width: 100%;
-    background: #004451;
-    border-right: solid 1px #0084a3;
-    border-top: solid 1px #0084a3;
+    background: #184d7b;
+    border-right: solid 1px #256f7d;
+    border-top: solid 1px #256f7d;
     transition: ease all 0.3s;
     -webkit-transition: ease all 0.3s;
     -moz-transition: ease all 0.3s;
@@ -1792,13 +1814,9 @@ ul.h-profile {
     line-height: 26px;
 }
 .profile-dropup a:hover, .profile-dropup a:focus {
-    background: #fff;
-    font-weight: bold;
+    background: #184d7b;    
 }
-.profile-dropup a:first-child {
-    text-transform: uppercase;
-    font-weight: bold;
-}
+
 span.iicon {
     display: inline-block;
     position: relative;
@@ -2037,7 +2055,7 @@ input.form-control.input-cust:focus::placeholder {
     border-right: solid 1px #eee;
 }
 .panel-title {
-    border-bottom: solid 1px #0595b3;
+    border-bottom: solid 1px #285963;
 }
 .date-parent input.form-control {
     width: 100%;
@@ -2446,6 +2464,7 @@ input[type="radio"], input[type="checkbox"]{vertical-align: sub}
 .table-custom td{padding: 4px 12px 15px 12px!important;}
 .custom-input{position:relative;}
 .custom-input .text-input.error{position:absolute; bottom:-14px;left:0; height:auto;}
+.login-block .custom-input .text-input.error{position:absolute; bottom:-35px;left:0; height:auto;}
 .wrap-block{overflow-x: auto; background-color:#fff;}
 .bottom-space{margin-bottom:150px;}
 .lotdetails-bs {margin-bottom: 200px;}
@@ -2522,7 +2541,7 @@ div[class^="EnhancedTable"] {overflow-x: unset!important;}
 }
 @media(min-width:992px){
     .right-content {
-        padding: 20px 30px;
+        padding: 20px;
     }
     .d-flex .col-md-4.form-d {
         max-width: 33.33%;
@@ -2595,10 +2614,7 @@ div[class^="EnhancedTable"] {overflow-x: unset!important;}
     .footer {
         position: relative;
     }
-    .main-container {
-        padding: 0;
-        position: relative;
-    }
+   
     .btn {
         padding: 8px 4px;
         font-size: 12px;

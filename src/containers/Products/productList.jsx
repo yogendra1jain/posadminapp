@@ -150,7 +150,7 @@ class ProductListContainer extends React.Component {
             )
         }
         return (
-            <div className="">
+            <React.Fragment>
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div>
@@ -177,7 +177,7 @@ class ProductListContainer extends React.Component {
 
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
         )
 
     }
