@@ -80,6 +80,7 @@
     "react-iframe-resizer-super": "^0.2.0",
     "react-json-pretty": "^1.7.6",
     "react-json-view": "^1.16.1",
+    "react-jss": "^8.6.1",
     "react-linechart": "^1.1.12",
     "react-menu": "0.0.10",
     "react-moment": "^0.7.0",

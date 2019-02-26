@@ -244,7 +244,7 @@ class StaffListContainer extends React.Component {
                     <div className="form-btn-group">
                         {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} /> */}
                         <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate}/>
-                        <SaveButton  Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
+                        <SaveButton disabled={this.selectedIds.length===0} Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
                     </div>
                     <div>
                         <label>Select Store</label>
