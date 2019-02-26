@@ -42,9 +42,10 @@ class MainLayout extends Component {
             <NavBar />
 
           </div>
-          <div className="col-sm-9 col-md-10 right-content" >
-
-            {this.props.children}
+          <div className="col-sm-9 col-md-10 no-gutters " >
+          <div className="right-content" >
+              {this.props.children}
+          </div>
           </div>
           <div>
             {this.props.message.text && <Snackbar

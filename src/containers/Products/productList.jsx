@@ -10,6 +10,7 @@ import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import _pull from 'lodash/pull';
+import _filter from 'lodash/filter'
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
 
@@ -48,6 +49,7 @@ class ProductListContainer extends React.Component {
         this.selectedProduct = {};
         this.isAdmin =  localStorage.getItem('role')==='Admin';
     }
+
     componentWillReceiveProps(props) {
         if(!_isEmpty(props.productData) && !props.productData.message){
             this.productList = [];
@@ -78,10 +80,14 @@ class ProductListContainer extends React.Component {
     }
     onUpdate(){
         const {dispatch, productsReducer} = this.props;
-        console.log(this.selectedProduct, 'this.selectedProduct')
-        dispatch(requestProductUpdate(productsReducer, this.selectedProduct));
+        console.log(this.productList, 'this.productList')
+        let selectedProduct = _filter(this.productList, product => {
+            return product.id == this.selectedProduct.id
+        })
+        dispatch(requestProductUpdate(productsReducer, selectedProduct[0]));
         this.redirectToNewProduct = true;
     }
+
     onRowSelect = (row, isSelected, e) => {
         isSelected ? this.selectedIds = [(row.sku)] : _pull(this.selectedIds, row.sku);
         // this.handleAllChecks();        
@@ -118,7 +124,6 @@ class ProductListContainer extends React.Component {
 
     }
     render() {
-        console.log(this.productList, 'this.productList')
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
@@ -136,7 +141,7 @@ class ProductListContainer extends React.Component {
             )
         }
         return (
-            <div className="">
+            <React.Fragment>
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div>
@@ -147,7 +152,6 @@ class ProductListContainer extends React.Component {
                     </div>
                     {/* } */}
                     <div>
-
                         <BootstrapTable height='515' data={this.productList} options={options}
                             selectRow={this.selectRowProp}
                             striped hover
@@ -162,7 +166,7 @@ class ProductListContainer extends React.Component {
                         </BootstrapTable>
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
         )
     }
 }

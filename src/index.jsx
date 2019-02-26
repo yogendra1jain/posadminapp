@@ -9,7 +9,7 @@ import applyMiddleware from 'redux/lib/applyMiddleware';
 import Router from 'react-router-dom/HashRouter';
 import Route from 'react-router-dom/Route';
 import Link from 'react-router-dom/Link';
-
+import JssProvider from 'react-jss/lib/JssProvider';
 import reducer from './reducers';
 
 import MainLayout from './MainLayout.jsx'
@@ -32,7 +32,7 @@ import fetchMiddleware from './middlewares/fetchMiddleware.jsx';
 import Favicon from 'react-favicon';
 
 // import StoreContainer from './containers/StoreContainer.jsx';
-
+import { createGenerateClassName } from '@material-ui/core/styles';
 import "./assets/stylesheets/main.css";
 import customerChartsContainer from "./containers/Products/CustomerReports.jsx";
 import inventoryChartsContainer from './containers/Products/InventoryReports.jsx';
@@ -59,6 +59,11 @@ import SaleDataReport from './containers/Reports/SaleDataReport.jsx';
 import RetailerContainer from './containers/Retailer/RetailerContainer.jsx';
 import AddEditRetailerContainer from './containers/Retailer/AddEditRetailer/AddEditRetailerContainer.jsx'
 
+const generateClassName = createGenerateClassName({
+  dangerouslyUseGlobalCSS: true,
+  productionPrefix: 'c',
+});
+
 const middleware = [thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
   console.log('ENV URL', process.env.REACT_APP_API_HOST);
@@ -82,7 +87,7 @@ function RouteWithLayout({ layout, component, ...rest }) {
 ReactDom.render(
   //   <div>
   //     <Favicon url="/src/assets/images/favicon.ico" />
-
+<JssProvider generateClassName={generateClassName}>
   <Provider store={store}>
     <Router>
       <Switch>
@@ -128,7 +133,8 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
       </Switch>
     </Router>
-  </Provider>,
+  </Provider>
+  </JssProvider>,
   //   </div>,
   document.getElementById('root')
 )

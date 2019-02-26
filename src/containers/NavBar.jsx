@@ -12,7 +12,7 @@ import { withRouter } from 'react-router-dom';
 import './../assets/stylesheets/navbar.css';
 import './../assets/stylesheets/style.css';
 import Link from 'react-router-dom/Link';
-import logo from './../assets/images/aobLogo.png';
+import logo from './../assets/images/aob-logo.png';
 import usericon from './../assets/images/usericon.png';
 import bellicon from './../assets/images/bell.png';
 import settingicon from './../assets/images/setting.png';

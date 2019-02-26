@@ -272,13 +272,13 @@ class customerChartsContainer extends React.Component {
                         />
                     </div>
 
-                    <div className="mt-25">
+                    <div className="mt-21">
                             <SaveButton buttonDisplayText={'Get Top Products'} Class_Name={"btn-info"} handlerSearch={this.getTopProducts} />
                     </div>
 
 
                 </div>
-                <div className="row c-reports">
+                <div className="strainBlock c-reports">
                     <div className="col-sm-1">
                         <div style={style} className='v-slider'>
                             <label className="control-label">Filter by Spendings </label>
@@ -369,6 +369,7 @@ class customerChartsContainer extends React.Component {
 
                         </div>
                     </div>
+                   
                 </div>
             </div>
         )
