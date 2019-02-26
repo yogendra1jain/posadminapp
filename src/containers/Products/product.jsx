@@ -49,14 +49,6 @@ class ProductContainer extends React.Component {
         this.fileData = {};
         this.imagePreviewUrl = '';
         this.redirectToSearch = false;
-        this.categories = {
-            data: [
-                { displayText: 'Cat1', value: 1 },
-                { displayText: 'Cat2', value: 2 },
-                { displayText: 'Cat3', value: 3 },
-                { displayText: 'Cat4', value: 4 },
-            ]
-        };
         this.fileUrl = '';
         this.hexToBase64 = this.hexToBase64.bind(this);
         this.onSave = this.onSave.bind(this);
@@ -66,10 +58,15 @@ class ProductContainer extends React.Component {
 
     componentDidMount() {
         if (!_isEmpty(this.props.selectedProduct)) {
-            this.setState({ isUpdating: true })
+            this.setState({ isUpdating: true})
             this.productInfo = this.props.selectedProduct;
             this.method = 'POST';
             this.imagePreviewUrl = this.productInfo.image;
+            let category2ReqBody = {id: this.productInfo.category1}
+            let category3ReqBody = {id: this.productInfo.category2}
+            let url = '/Category/GetChildren'
+            this.props.dispatch(fetchLevel2Category('', url, category2ReqBody))
+            this.props.dispatch(fetchLevel3Category('', url, category3ReqBody))
         }
         let url = '/Category/Level1ByRetailerId'
         let reqBody = {
@@ -123,33 +120,6 @@ class ProductContainer extends React.Component {
         }
         this.forceUpdate();
     }
-
-    // handleFileChange = (files) => {
-    //     // this.setState({ files });
-
-    //     let formData;
-    //     let url = '/Upload/Employee';
-    //     if (files.length > 0) {
-    //         this.setState({ file: files[0] })
-    //         formData = new FormData();
-    //         formData.append('file', files[0])
-    //         this.props.dispatch(uploadDocument('', url, formData))
-    //             .then((data) => {
-    //                 console.log('csv data saved successfully.', data);
-    //                 // this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
-    //                 // setTimeout(() => {
-    //                 //     this.props.dispatch(showMessage({}));
-    //                 // }, 3000);
-    //             }, (err) => {
-    //                 console.log('err while saving csv data', err);
-    //                 // this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
-    //                 // setTimeout(() => {
-    //                 //     this.props.dispatch(showMessage({}));
-    //                 // }, 5000);
-
-    //             })
-    //     }
-    // }
 
     handleFileChange(event) {
         event.preventDefault();
@@ -229,7 +199,6 @@ class ProductContainer extends React.Component {
         _set(data, 'upcCode', Number(_get(data, 'upcCode', '0')))
         console.log(data, 'data is here')
         let price = parseFloat(this.productInfo.sellingPrice)
-        data.category = []
         data.salePrice = {}
         data.salePrice.currencyCode = '$'
         data.salePrice.price = price
@@ -238,7 +207,6 @@ class ProductContainer extends React.Component {
         if (this.state.isUpdating) {
             data.id = this.productInfo.id
         }
-        delete data['categories']
         delete data['price']
         dispatch(ProductDataSave(data, productsReducer, url));
     }
@@ -279,6 +247,7 @@ class ProductContainer extends React.Component {
 
         if (nextProps.type === RECEIVE_LEVEL2_CATEGORY_DATA) {
             if (!_isEmpty(nextProps.level2CategoryData)) {
+                debugger
                 let categoryList = [];
                 _get(nextProps, 'level2CategoryData', []).map((category, index) => {
                     categoryList.push({
@@ -292,6 +261,7 @@ class ProductContainer extends React.Component {
 
         if (nextProps.type === RECEIVE_LEVEL3_CATEGORY_DATA) {
             if (!_isEmpty(nextProps.level3CategoryData)) {
+                debugger
                 let categoryList = [];
                 _get(nextProps, 'level3CategoryData', []).map((category, index) => {
                     categoryList.push({
@@ -390,9 +360,9 @@ class ProductContainer extends React.Component {
                         <AutoCompletePosition
                             type="single"
                             data={_get(this.state, 'level1Category', [])}
-                            name="level1Cat"
-                            value={_get(this.productInfo, 'level1', '')}
-                            changeHandler={(id, name) => { this.handleLevel1Category(id, 'level1') }}
+                            name="category1"
+                            value={_get(this.productInfo, 'category1', '')}
+                            changeHandler={(id, name) => { this.handleLevel1Category(id, 'category1') }}
                         />
                     </div>
                     <div className="col-sm-4 col-md-3 form-d">
@@ -400,9 +370,9 @@ class ProductContainer extends React.Component {
                         <AutoCompletePosition
                             type="single"
                             data={_get(this.state, 'level2Category', [])}
-                            name="level2Cat"
-                            value={_get(this.productInfo, 'level2', '')}
-                            changeHandler={(id, name) => { this.handleLevel2Category(id, 'level2') }}
+                            name="category2"
+                            value={_get(this.productInfo, 'category2', '')}
+                            changeHandler={(id, name) => { this.handleLevel2Category(id, 'category2') }}
                         />
                     </div>
                     <div className="col-sm-4 col-md-3 form-d">
@@ -410,9 +380,9 @@ class ProductContainer extends React.Component {
                         <AutoCompletePosition
                             type="single"
                             data={_get(this.state, 'level3Category', [])}
-                            name="level3Cat"
-                            value={_get(this.productInfo, 'level3', '')}
-                            changeHandler={(id, name) => { this.handleSelectChange(id, 'level3') }}
+                            name="category3"
+                            value={_get(this.productInfo, 'category3', '')}
+                            changeHandler={(id, name) => { this.handleSelectChange(id, 'category3') }}
                         />
                     </div>
                     <div className="col-sm-6 col-md-4 form-d">
