@@ -39,7 +39,10 @@ import {
   RECEIVE_EMP_DETAILS_LIST_ERROR,
   REQUEST_Z_REPORT_DATA,
   RECEIVE_Z_REPORT_DATA,
-  RECEIVE_Z_REPORT_DATA_ERROR
+  RECEIVE_Z_REPORT_DATA_ERROR,
+  REQUEST_SALE_REPORT_DATA,
+  RECEIVE_SALE_REPORT_DATA,
+  RECEIVE_SALE_REPORT_DATA_ERROR
 } from '../constants/reports';
 
 const reportReducer = (state = 'reportState', action) => {
@@ -70,9 +73,34 @@ const reportsData = (state = {
   empPayrollDeductSummaryData: [],
   empDiscountReportData: [],
   empDetailsList: [],
-  zReportData: []
+  zReportData: [],
+  saleReportData: []
 }, action) => {
   switch (action.type) {
+    case REQUEST_SALE_REPORT_DATA:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_SALE_REPORT_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        saleReportData: action.data,
+        lastUpdated: action.receivedAt
+      });
+
+    case RECEIVE_SALE_REPORT_DATA_ERROR:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        saleReportData: action.error,
+        lastUpdated: action.receivedAt
+      });
+
     case REQUEST_Z_REPORT_DATA:
       return Object.assign({}, state, {
         isFetching: true,
