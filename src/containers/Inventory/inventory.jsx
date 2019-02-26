@@ -10,13 +10,15 @@ import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import { fetchInventoryLookupData, InventoryDataSave } from '../../actions/inventory';
+import { fetchInventoryLookupData, invetoryUpdate } from '../../actions/inventory';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
 import { fetchProductLookupData } from '../../actions/products';
 import Alert from 'react-s-alert';
 import AddEditInventory from './AddEditInventory.jsx';
+import AdjustInventoryQuantity from './AdjustInventoryQuantity.jsx';
 import _pull from 'lodash/pull';
+import AutoComplete from '../../components/Elements/AutoComplete';
 
 const ProsuctsData = [
     {
@@ -50,7 +52,7 @@ const ProsuctsData = [
 ]
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'storeName',
+    defaultSortName: 'id',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -59,9 +61,8 @@ const options = {
     }, {
         text: '10', value: 10
     }],
-
-
 };
+
 class InventoryListContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -79,8 +80,10 @@ class InventoryListContainer extends React.Component {
         this.storeList = [];
         this.products = [];
         this.productList = ProsuctsData;
-        this.open = false;
+        this.openUpdateInventory = false;
+        this.openAdjustQuantity = false;
         this.isUpdate = false;
+        this.isAdjust = false;
         this.method = 'POST';
         this.addNew = this.addNew.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -90,6 +93,7 @@ class InventoryListContainer extends React.Component {
         this.onUpdate = this.onUpdate.bind(this);
         this.saveInventoryFlag = false;
         this.isAddnew = false;
+        this.selectedStore = {};
     }
     showAlert(error, msg) {
         if (error) {
@@ -108,21 +112,31 @@ class InventoryListContainer extends React.Component {
                 html: true
             });
         }
-
     }
     componentWillReceiveProps(props) {
+        const { dispatch, inventoriesReducer } = this.props;
         if (!_isEmpty(props.inventoryData)) {
+            console.log(props.inventoryData, 'props.inventoryData')
             this.inventoryList = [];
-            props.inventoryData.productInventory.map(inventory => {
-                let tempObj = {};
-                tempObj.id = inventory.id;
-                tempObj.store = inventory.store.id;
-                tempObj.storeName = inventory.store.storeName;
-                tempObj.product = inventory.product.name;
-                tempObj.prodId = inventory.product.id;
-                tempObj.availableQuantity = inventory.availableQuantity;
-
-                this.inventoryList.push(tempObj);
+            _get(props, 'inventoryData', []).map(inventory => {
+                let tempPos = {};
+                tempPos.id = _get(inventory, 'product.id', '');
+                tempPos.name = _get(inventory, 'product.name', '');
+                tempPos.active = _get(inventory, 'product.active', '');
+                tempPos.category1 = _get(inventory, 'product.category1', '');
+                tempPos.category2 = _get(inventory, 'product.category2', '');
+                tempPos.category3 = _get(inventory, 'product.category3', '');
+                tempPos.image = _get(inventory, 'product.image', '');
+                tempPos.retailerId = _get(inventory, 'product.retailerId', '');
+                tempPos.salePrice = {}
+                tempPos.salePrice.currencyCode = _get(inventory, 'product.salePrice.currencyCode', '');
+                tempPos.salePrice.price = _get(inventory, 'product.salePrice.price', '');
+                tempPos.sku = _get(inventory, 'product.sku', '');
+                tempPos.unitOfMeasure = _get(inventory, 'product.unitOfMeasure', '');
+                tempPos.quantity = _get(inventory, 'inventory.quantity', 0);
+                tempPos.minQuantity = _get(inventory, 'inventory.minQuantity', '')
+                tempPos.maxQuantity = _get(inventory, 'inventory.maxQuantity', '')
+                this.inventoryList.push(tempPos);
             })
             this.forceUpdate();
         }
@@ -131,25 +145,36 @@ class InventoryListContainer extends React.Component {
             props.storeData.stores.map((store, index) => {
                 this.storeList.push({ displayText: store.storeName, value: store.id });
             });
-       }
-    //    if(!_isEmpty(props.productData)){
-    //         this.products = [];
-    //         props.productData.map(product=>{
-    //         this.products.push({displayText:product.name , value: product.id})                       
-                       
-    //     });
-    //    }
-       if(!_isEmpty(props.inventorySaveData) && this.saveInventoryFlag){
-           this.saveInventoryFlag = false;
-           if(props.status!==200 && props.status!==''){
-                
-               this.showAlert(true,'inventory creation failed.');
-               this.open = false;
-           }else if(props.status===200){
-                this.showAlert(false,'successfully saved.');
-                this.open = false;
-                const { dispatch, inventoriesReducer } = this.props;
+        }
+        if (props.storeData) {
+            console.log(props.storeData, 'props.storeData')
+            this.storeList = [];
+            _get(props, 'storeData', []).map(store => {
+                let tempStore = {};
+                tempStore.displayText = store.name;
+                tempStore.value = store.id;
+                this.storeList.push(tempStore);
+            })
+            // this.storeList = props.storeData.stores;
+            this.forceUpdate();
+        }
+        //    if(!_isEmpty(props.productData)){
+        //         this.products = [];
+        //         props.productData.map(product=>{
+        //         this.products.push({displayText:product.name , value: product.id})                       
+        //     });
+        //    }
+        if (!_isEmpty(props.inventorySaveData) && this.saveInventoryFlag) {
+            this.saveInventoryFlag = false;
+            if (props.status !== 200 && props.status !== '') {
 
+                this.showAlert(true, 'inventory creation failed.');
+                this.openUpdateInventory = false;
+                this.openAdjustQuantity = false;
+            } else if (props.status === 200) {
+                this.showAlert(false, 'successfully saved.');
+                this.openUpdateInventory = false;
+                this.openAdjustQuantity = false;
                 let url = '';
                 if (this.isAdmin) {
                     url = '/productinventories/' + localStorage.getItem('retailerID');
@@ -163,16 +188,36 @@ class InventoryListContainer extends React.Component {
             this.forceUpdate();
         }
 
-    }
-    componentDidMount() {
-        const { dispatch, inventoriesReducer } = this.props;
-        let url = '';
-        if (this.isAdmin) {
-            url = '/productinventories/' + localStorage.getItem('retailerID');
-        } else if (localStorage.getItem('role') === 'Store Manager') {
-            url = '/retailer/' + localStorage.getItem('retailerID') + '/store/' + localStorage.getItem('storeID') + '/products';
+        if (props.type == "RECEIVE_INVENTORY_UPDATE") {
+
+            let reqBody = {
+                id: this.selectedStore.stores
+            }
+            let url2 = '/Inventory/ByStoreId';
+            dispatch(fetchInventoryLookupData(inventoriesReducer, url2, reqBody));
+            this.forceUpdate();
         }
-        dispatch(fetchInventoryLookupData(inventoriesReducer, url));
+    }
+
+    handleSelectChange = (id, name) => {
+        _set(this.selectedStore, name, id);
+        const { dispatch, inventoriesReducer } = this.props;
+        let reqBody = {
+            id: id
+        }
+        let url = '/Inventory/ByStoreId';
+        dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
+        this.forceUpdate();
+    }
+
+    componentDidMount() {
+        this.inventoryList = []
+        const { dispatch, storesReducer } = this.props;
+        let url = '/Store/ByRetailerId';
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
+        }
+        dispatch(fetchStore(storesReducer, url, reqBody));
     }
     onRowSelect = (row, isSelected, e) => {
         if (!this.isAddnew) {
@@ -187,7 +232,7 @@ class InventoryListContainer extends React.Component {
             }
             this.selectRowProp.selected = this.selectedIds;
             this.forceUpdate();
-        }else{
+        } else {
             this.selectedIds = [];
             this.selectRowProp.selected = this.selectedIds;
             this.forceUpdate();
@@ -200,27 +245,25 @@ class InventoryListContainer extends React.Component {
                 this.selectedIds.push(rows[i].sku)
             }
         } else {
-
             this.selectedIds = [];
-
-
         }
         this.selectRowProp.selected = this.selectedIds;
-
-
         this.forceUpdate();
     }
+
     onUpdate() {
         let tempInv = _find(this.inventoryList, { 'id': this.selectedInventory.id });
         this.selectedInventory = tempInv;
-        this.open = true;
+        this.openUpdateInventory = true;
         this.isUpdate = true;
+        this.isAdjust = false;
         this.isAddnew = false;
-        this.method = 'PUT';
+        this.method = 'POST';
         this.forceUpdate();
     }
+
     addNew() {
-        this.open = true;
+        this.openUpdateInventory = true;
         this.isUpdate = false;
         this.isAddnew = true;
         this.method = 'POST';
@@ -233,41 +276,77 @@ class InventoryListContainer extends React.Component {
             _set(this.selectedInventory, 'store', localStorage.getItem('storeID'));
         this.forceUpdate();
     }
+
     saveInventory(selectedInventory) {
-        let data = {};
-        
-        data.availableQuantity = selectedInventory.availableQuantity;
-        data.store = selectedInventory.store;
-        if (!this.isAdmin) {
-            data.store = localStorage.getItem('storeID');
-        }
-        data.id = selectedInventory.id;
-        if (selectedInventory.prodId)
-            data.product = selectedInventory.prodId;
-        else
-            data.product = selectedInventory.product;
+        let data = {
+            storeId: this.selectedStore.stores,
+            productId: selectedInventory.id,
+            deltaQuantity: parseInt(selectedInventory.delta, 10)
+            // reason: selectedInventory.reason,
+        };
         const { dispatch, inventoriesReducer } = this.props;
         this.saveInventoryFlag = true;
-        dispatch(InventoryDataSave(data,inventoriesReducer,'',this.method));
+        let url = '/Store/Inventory/Update'
+        dispatch(invetoryUpdate('', url, data));
+        this.handleClose()
+
     }
 
-    handleSelectChange(id, name) {
-        _set(this.selectedInventory, name, id);
-        if (name === 'store') {
-            const { dispatch, productsReducer } = this.props;
-            dispatch(fetchProductLookupData(productsReducer));
+    adjustInventory(selectedInventory) {
+
+        let data = {
+            storeId: this.selectedStore.stores,
+            productId: selectedInventory.id,
+            minQuantity: parseInt(selectedInventory.minQuantity, 10),
+            maxQuantity: parseInt(selectedInventory.maxQuantity, 10)
+            // reason: selectedInventory.reason,
+        };
+        if (data.minQuantity > data.maxQuantity) {
+            this.showAlert(true, 'Min Quantity cannot be greater than Max Quantity');
+            selectedInventory.minQuantity = '';
+            selectedInventory.maxQuantity = '';
         }
-        this.forceUpdate();
+        else {
+            const { dispatch, inventoriesReducer } = this.props;
+            this.saveInventoryFlag = true;
+            let url = '/Inventory/SetMinMax'
+            dispatch(invetoryUpdate('', url, data));
+            this.selectRowProp.selected = '';
+            this.handleClose()
+        }
     }
+
+    // handleSelectChange(id, name) {
+    //     _set(this.selectedStore, name, id);
+    //     if (name === 'store') {
+    //         const { dispatch, productsReducer } = this.props;
+    //         dispatch(fetchProductLookupData(productsReducer));
+    //     }
+    //     this.forceUpdate();
+    //     console.log(this.selectedStore.stores, 'this.selectedStore.stores')
+    // }
 
     handleInputChange(event) {
         _set(this.selectedInventory, event.target.name, event.target.value);
         this.forceUpdate();
     }
+
     handleClose = () => {
-        this.open = false;
+        this.openUpdateInventory = false;
+        this.openAdjustQuantity = false;
         this.isAddnew = false;
         this.isUpdate = false;
+        this.forceUpdate();
+    }
+
+    adjustQuantity = () => {
+        let tempInv = _find(this.inventoryList, { 'id': this.selectedInventory.id });
+        this.selectedInventory = tempInv;
+        this.openAdjustQuantity = true;
+        this.isUpdate = false;
+        this.isAdjust = true;
+        this.isAddnew = false;
+        this.method = 'POST';
         this.forceUpdate();
     }
 
@@ -287,36 +366,55 @@ class InventoryListContainer extends React.Component {
         }
 
 
-
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div>
-                    <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
+                    <div classNam="col-sm-12">
+                        <div className="col-sm-10 form-btn-group">
+                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
+                            {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
+                        </div>
+                        <div className="col-sm-2 form-btn-group">
+                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
+                            {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
+                        </div>
                     </div>
                     <div>
-
+                        <label>Select Store</label>
+                        {/* {
+                            !_isEmpty(this.storeList) ?  */}
+                        <AutoComplete
+                            type="single"
+                            data={this.storeList}
+                            name="stores"
+                            value={_get(this.selectedStore, 'stores', '')}
+                            changeHandler={(id) => { this.handleSelectChange(id, 'stores') }}
+                        />
+                        {/* } */}
+                    </div>
+                    <div>
                         <BootstrapTable data={this.inventoryList} options={options}
                             selectRow={this.selectRowProp}
                             striped hover
                             pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
                             <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='storeName' >Store</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='product' >
-                                Product
-                        </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='availableQuantity' >Quantity</TableHeaderColumn>
-
+                            <TableHeaderColumn width='100' dataSort dataField='name'>Product
+                            </TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='quantity'>Quantity
+                            </TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='minQuantity'>Min Quantity
+                            </TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='maxQuantity'>Max Quantity
+                            </TableHeaderColumn>
                         </BootstrapTable>
 
                     </div>
                 </div>
                 <div>
                     <ReactDrawer
-                        open={this.open}
+                        open={this.openUpdateInventory}
                         position={'bottom'}
                         // onClose={this.onDrawerClose}
                         noOverlay={true}
@@ -327,20 +425,37 @@ class InventoryListContainer extends React.Component {
                                 selectedInventory={this.selectedInventory}
                                 isUpdate={this.isUpdate}
                                 isAdmin={this.isAdmin}
-                                open={this.open}
+                                open={this.openUpdateInventory}
                                 onClose={() => this.handleClose()}
                                 saveInventory={(selectedInventory) => this.saveInventory(selectedInventory)}
                             />
+                        </div>
+                    </ReactDrawer>
+                </div>
 
-
+                <div>
+                    <ReactDrawer
+                        open={this.openAdjustQuantity}
+                        position={'bottom'}
+                        // onClose={this.onDrawerClose}
+                        noOverlay={true}
+                    >
+                        <div className="slide-panel">
+                            <AdjustInventoryQuantity
+                                storeList={this.storeList}
+                                selectedInventory={this.selectedInventory}
+                                isUpdate={this.isUpdate}
+                                isAdmin={this.isAdmin}
+                                open={this.openAdjustQuantity}
+                                onClose={() => this.handleClose()}
+                                adjustInventory={(selectedInventory) => this.adjustInventory(selectedInventory)}
+                            />
                         </div>
                     </ReactDrawer>
                 </div>
             </div>
         )
-
     }
-
 }
 
 const mapStateToProps = state => {

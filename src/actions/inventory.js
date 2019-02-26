@@ -79,10 +79,11 @@ const receiveInventoryLookupDataError = (subreddit, error) => ({
 //                 status || 500)))
 // }
 
-export const fetchInventoryLookupData = (subreddit, url) => dispatch =>
+export const fetchInventoryLookupData = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: INVENTORY_CONSTANT.INVENTORY_URL + url,
-        method: 'Get',
+        body: data,
+        method: 'POST',
         initCb: requestInventoryLookupData,
         successCb: receiveInventoryLookupData,
         failureCb: receiveInventoryLookupDataError,
@@ -90,6 +91,36 @@ export const fetchInventoryLookupData = (subreddit, url) => dispatch =>
         wrapperActionType: 'FETCH_INVENTORY_LOOKUP_DATA_WRAPPER',
         redirect: 'follow'
     }));
+
+export const invetoryUpdate = (subreddit, url, data) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: INVENTORY_CONSTANT.INVENTORY_URL + url,
+        body: data,
+        method: 'POST',
+        initCb: requestInventoryUpdate,
+        successCb: receiveInventoryUpdate,
+        failureCb: receiveInventoryUpdateError,
+        subreddit,
+        wrapperActionType: 'INVENTORY_UPDATE',
+        redirect: 'follow'
+    }));
+const requestInventoryUpdate = (subreddit) => ({
+    type: INVENTORY_CONSTANT.REQUEST_INVENTORY_UPDATE,
+    subreddit
+});
+
+const receiveInventoryUpdate = (subreddit, data) => ({
+    type: INVENTORY_CONSTANT.RECEIVE_INVENTORY_UPDATE,
+    subreddit,
+    data,
+    receivedAt: Date.now()
+});
+const receiveInventoryUpdateError = (subreddit, error) => ({
+    type: INVENTORY_CONSTANT.RECEIVE_INVENTORY_UPDATE_ERROR,
+    subreddit,
+    error,
+    receivedAt: Date.now()
+})
 
 
 

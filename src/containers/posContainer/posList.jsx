@@ -1,13 +1,5 @@
 import React from 'react';
 import Redirect from "react-router/Redirect";
-import Jumbotron from 'react-bootstrap/lib/Jumbotron';
-import Button from "react-bootstrap/lib/Button";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import FormControl from "react-bootstrap/lib/FormControl";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-import Col from 'react-bootstrap/lib/Col';
 import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
 import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
 import "bootstrap/dist/css/bootstrap.css";
@@ -18,7 +10,6 @@ import AutoCompletePosition from '../../components/Elements/AutoCompletePosition
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
 import _cloneDeep from 'lodash/cloneDeep';
-
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
@@ -29,14 +20,13 @@ import { GenericInput } from '../../components/common/TextValidation.jsx';
 import { fetchPosTerminalList, fetchPosTerminalData, fetchPosTerminalStatus } from '../../actions/posTerminal';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
-import { fetchProductLookupData } from '../../actions/products';
 import Alert from 'react-s-alert';
 
 
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'number',
+    defaultSortName: 'name',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -45,52 +35,17 @@ const options = {
     }, {
         text: '10', value: 10
     }],
-
-
 };
-
-const PosData = [
-    {
-        id: 1,
-        posName: 'terminal1',
-        posId: 1,
-        storeName: 'store1',
-        status: 'Enable',
-    },
-    {
-        id: 2,
-        posName: 'terminal2',
-        posId: 2,
-        storeName: 'store2',
-        status: 'Enable',
-    },
-    {
-        id: 3,
-        posName: 'terminal3',
-        posId: 3,
-        storeName: 'store1',
-        status: 'Enable',
-    },
-    {
-        id: 4,
-        posName: 'terminal4',
-        posId: 4,
-        storeName: 'store1',
-        status: 'Disable',
-    },
-
-]
 
 class PosList extends React.Component {
     constructor(props) {
         super(props);
         this.selectRowProp = {
-            mode: 'checkbox',
+            mode: 'radio',
             clickToSelect: false,
             onSelect: this.onRowSelect,
             onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
-            // selected : this.selectedIds,
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -98,28 +53,28 @@ class PosList extends React.Component {
         this.storeList = [];
         this.fetchStatusFlag = false;
         this.selectedStatus = true
+        this.selectedStore = {}
         this.status = {
             data: [
                 {
-                    displayText: 'Enable',
+                    displayText: 'Active',
                     value: true
                 },
                 {
-                    displayText: 'Disable',
+                    displayText: 'Inactive',
                     value: false
                 }
             ]
         }
         this.redirectToSearch = false;
-
         this.onSave = this.onSave.bind(this);
         this.method = 'POST';
         this.open = false;
-
-        this.selectedIds = [];
+        this.selectedIds = '';
         this.submitted = false;
         this.selectedInfo = {};
         this.selectedPos = {};
+        this.posList = [];
         this.isUpdate = false;
         this.redirectToAddEditPage = false;
         this.addNew = this.addNew.bind(this);
@@ -128,6 +83,7 @@ class PosList extends React.Component {
         this.fetchTerminals = this.fetchTerminals.bind(this);
         this.isError = false;
     }
+
     showAlert(error, msg) {
         if (error) {
             Alert.error(msg || '', {
@@ -145,32 +101,58 @@ class PosList extends React.Component {
                 html: true
             });
         }
-
     }
+
     componentWillReceiveProps(props) {
         this.isError = false;
-        if (!_isEmpty(props.storeData) && props.storeData.stores) {
+        if (!_isEmpty(props.storeData)) {
             this.storeList = [];
-            props.storeData.stores.map((store, index) => {
-                this.storeList.push({ displayText: store.storeName, value: store.id });
+            props.storeData.map((store, index) => {
+                this.storeList.push({ displayText: store.name, value: store.id });
             });
-            // let tempStore = _find(this.storeList,{'value': this.retailerStore});
-            // this.adminStore = this.storeList[0].storeName;
             this.forceUpdate();
         }
-        if (props.posListData.message && this.fetchTerminalFlag) {
-            this.fetchTerminalFlag = false;
-            this.showAlert(true, props.posListData.message);
-        }
-        if ((props.posListData.length > 0) && this.fetchTerminalFlag) {
-            this.fetchTerminalFlag = false;
-            this.posList = props.posListData;
-            this.adminStore = this.posList[0].storeName;
-            this.forceUpdate();
-        }
-        // if(!_isEmpty(props.posStatusData)){
 
+        // if (props.posListData != null) {
+        //     if (props.posListData.message && this.fetchTerminalFlag) {
+        //         this.fetchTerminalFlag = false;
+        //         this.showAlert(true, props.posListData.message);
+        //     }
+        //     if ((props.posListData.length > 0)) {
+        //         this.fetchTerminalFlag = false;
+        //         this.posList = []
+        //         props.posListData.map(pos  => {
+        //             let tempPos = {};
+        //             tempPos.id = pos.id;
+        //             tempPos.name = pos.name;
+        //             tempPos.storeId = pos.storeId
+        //             tempPos.active = pos.active ? 'Active' : 'Inactive'
+        //             this.posList.push(tempPos)
+        //         })
+        //         this.forceUpdate();
+        //     }
+        // } else {
+        //     this.posList = []
         // }
+       
+        if(props.type == 'RECEIVED_POS_TERMINAL_LIST') {
+            debugger
+            if(!_isEmpty(props.posListData)) {
+                this.posList = []
+                props.posListData.map(pos => {
+                    let tempPos = {};
+                    tempPos.id = pos.id;
+                    tempPos.name = pos.name;
+                    tempPos.storeId = pos.storeId
+                    tempPos.active = pos.active ? 'Active' : 'Inactive'
+                    this.posList.push(tempPos)
+                })
+                this.forceUpdate();                
+            } else {
+                this.posList = []
+            }
+        }
+
         if (!_isEmpty(props.posStatusData) && this.fetchStatusFlag) {
             this.fetchStatusFlag = false;
             if( props.status===200 ){
@@ -191,16 +173,13 @@ class PosList extends React.Component {
                 this.fetchTerminals();
                 this.forceUpdate();
             }else if(props.status!==200 ){
-                
                 this.isError = true;
                 this.showAlert(true,props.posSaveData.message);            
                 this.forceUpdate();
             }
-            
         }
-
-
     }
+
     componentDidUpdate(){
         if(this.isError){
             this.isError = false;
@@ -211,33 +190,32 @@ class PosList extends React.Component {
 
     onSave() {
         const { dispatch, posTerminalReducer } = this.props;
-        let data = {};
-        this.submitted  = true;
-        _set(data, 'posId', this.posInfo.posId);
-        if(this.isStoreAdmin)
-        _set(data, 'salesAdmin', localStorage.getItem('storeManager'));
-        else
-        _set(data, 'salesAdmin', this.posInfo.store);
-        _set(data, 'isActive', _get(this.posInfo, 'isActive')===true ? true : false);
-
-        if(this.isUpdate){
-            delete data['salesAdmin'];
-            _set(data, 'id', this.posInfo.id);
-            _set(data, 'store', this.posInfo.store);
-        }
         this.open = false;
-        // data=_cloneDeep(this.posInfo);
-        // delete data['store'];
-        // _set(data,'salesAdmin', this.posInfo.store);
         let url = '';
+        let data = {}
         if(this.isUpdate){
-            url = "/retailer/"+localStorage.getItem('retailerID')+"/terminal/"+this.posInfo.id+"/details"
+            console.log(this.posInfo, 'this.posInfo')
+            url = "/Terminal/Update"
+            data = this.posInfo
         }else{
-            url = "/retailer/"+localStorage.getItem('retailerID')+"/createTerminal"
+            url = "/Terminal/Create"
+            data = {};
+            data.storeId = _get(this.selectedStore,'stores', '')
+            data.name = _get(this.posInfo,'name', '')
+            data.active = this.posInfo.active ? true : false
         }
-        dispatch(fetchPosTerminalData(posTerminalReducer, data, this.method, url));
+        dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
         this.forceUpdate();
-
+        
+        if(this.props.status == 200) {
+            console.log(this.selectedStore.stores, 'this.selectedStore.stores')
+            let reqBody = {
+                id: this.selectedStore.stores
+            }
+            let listurl = '/Terminal/ByStoreId';
+            dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
+        }
+        
     }
     fetchTerminals() {
         this.selectedIds = [];
@@ -248,49 +226,37 @@ class PosList extends React.Component {
         dispatch(fetchPosTerminalList(posTerminalReducer, url));
     }
     componentDidMount() {
-
-        if (localStorage.getItem('role') === 'Admin') {
-            this.isStoreAdmin = false;
-            this.fetchStores();
-        } else {
-            this.isStoreAdmin = true;
-            this.retailerStore = localStorage.getItem('storeID');
-            this.posInfo.store = this.retailerStore;
-            this.fetchTerminals();
+        this.posList = []
+        const { dispatch, storesReducer } = this.props;
+        let reqBody = {
+            id: localStorage.getItem('retailerID')
         }
+        let url = '/Store/ByRetailerId'
+        dispatch(fetchStore(storesReducer, url, reqBody));
+        // if (localStorage.getItem('role') === 'Admin') {
+        //     this.isStoreAdmin = false;
+        //     this.fetchStores();
+        // } else {
+        //     this.isStoreAdmin = true;
+        //     this.retailerStore = localStorage.getItem('storeID');
+        //     this.posInfo.store = this.retailerStore;
+        //     this.fetchTerminals();
+        // }
         this.forceUpdate();
     }
-    onRowSelect = (row, isSelected, e) => {
-        isSelected ? this.selectedIds.push(row.id) : _pull(this.selectedIds, row.id);
-        // this.handleAllChecks(); 
-        this.selectedInfo = row;
-        _set(this.posInfo, 'posId', row.number);
-        _set(this.posInfo,'id', row.id);
-        // let tempStore = _find(this.storeList,{'value': this.retailerStore});
-        // this.adminStore = tempStore.displayText;
-        _set(this.posInfo, 'isActive', row.isActive);
-        _set(this.posInfo, 'store', row.store);
-        
-        if (isSelected == false) {
 
+    onRowSelect = (row, isSelected, e) => {
+        isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
+        // this.handleAllChecks();        
+        this.selectedPos = row;
+        if (isSelected == false) {
             this.selectedInfo = {};
             this.selectedPos = {};
         }
-        this.selectedStatus = this.selectedIds.length > 0 && _find(this.posList, { 'id': this.selectedIds[0] }).isActive;
-        if (this.selectedIds.length > 1) {
-            if(this.open){
-                _pull(this.selectedIds, row.id);
-                this.showAlert(true, 'you can update only one terminal at a time.');
-            }
-            let tempObj = _find(this.posList, { 'id': this.selectedIds[0] });
-            if (tempObj.isActive !== row.isActive) {
-                _pull(this.selectedIds, row.id);
-            }
-        }
-
         this.selectRowProp.selected = this.selectedIds;
         this.forceUpdate();
     }
+
     onSelectAll = (isSelected, rows) => {
         if (isSelected) {
             for (let i = 0; i < rows.length; i++) {
@@ -364,10 +330,17 @@ class PosList extends React.Component {
             return;
         } else {
             this.isUpdate = true;
-            this.method = 'PUT';
+            this.method = 'POST';
             const { dispatch, staffsReducer } = this.props;
             this.fetchStores();
             this.open = true;
+        }
+        let tempStore = _find(this.posList,{'id': this.selectedPos.id});
+        this.posInfo.name = _get(tempStore,'name', '')
+        this.posInfo.id = _get(tempStore,'id', '')
+        this.posInfo.storeId = _get(tempStore,'storeId', '')
+        if(tempStore.active) {
+            this.posInfo.active = tempStore.active == 'Active' ? true : false
         }
         this.forceUpdate();
     }
@@ -380,16 +353,16 @@ class PosList extends React.Component {
         this.open = true;
         this.forceUpdate();
     }
-    handleSelectStoreChange(value, name) {
-        _set(this, name, value);
-        this.fetchTerminals();
+    handleSelectStoreChange(id, name) {
+        _set(this.selectedStore, name, id);
+        const { dispatch, posTerminalReducer } = this.props;
+        let reqBody = {
+            id: id
+        }
+        let url = '/Terminal/ByStoreId';
+        dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
         this.forceUpdate();
     }
-
-
-
-
-
 
     render() {
         if (this.redirectToAddEditPage) {
@@ -408,41 +381,34 @@ class PosList extends React.Component {
                 </div>
             </div>);
         }
-
-
-
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div>
                     <div className="form-btn-group">
-                        {localStorage.getItem('role') === 'Admin' &&
-                            <div style={{ marginTop: "-15px" }} className="col-sm-6 col-md-4 form-d text-left pad-none">
-                                <label className="control-label">Store</label>
-                                <AutoComplete
-                                    type="single"
-                                    data={this.storeList}
-                                    name="retailerStore"
-                                    value={_get(this, 'retailerStore', '')}
-                                    changeHandler={(id, name) => { this.handleSelectStoreChange(id, "retailerStore") }}
-                                />
-                            </div>
-                        }
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === true ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} />
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
+                        <SaveButton disabled={!this.selectedStore.stores} Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
                     </div>
+                    <div>
+                            <label className="control-label"> Select Store</label>
+                            <AutoComplete
+                                type="single"
+                                data={this.storeList}
+                                name="stores"
+                                value={_get(this.selectedStore,'stores','')}
+                                changeHandler={(id, name) => { this.handleSelectStoreChange(id, "stores") }}
+                            />
+                        </div>
                     <div>
 
                         <BootstrapTable data={this.posList} options={options}
                             selectRow={this.selectRowProp}
                             striped hover
                             pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='number' >Pos Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='storeName' >storeName</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='isActive' >Status</TableHeaderColumn>
+                            <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}>ID</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='name' >Pos Name</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='active'>Pos Status</TableHeaderColumn>
                             {/* <TableHeaderColumn width='100' dataField='posId' >Pos Id</TableHeaderColumn> */}
 
                         </BootstrapTable>
@@ -463,47 +429,20 @@ class PosList extends React.Component {
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Pos Name</label>
                                     <GenericInput
-                                        htmlFor="posId" displayName="Pos Name"
-                                        inputName="posId" defaultValue={_get(this.posInfo, 'posId', '')}
+                                        htmlFor="name" displayName="Pos Name"
+                                        inputName="name" defaultValue={_get(this.posInfo, 'name', '')}
                                         onChange={this.handleInputChange} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
-                                {this.isStoreAdmin &&
-                                    <fieldset className="col-md-4 col-sm-6 form-d" disabled={true}>
-
-                                        <label class="control-label">Store</label>
-                                        <FormControl
-                                            type="text"
-                                            name="store"
-                                            value={this.adminStore}
-                                            placeholder="Store"
-                                        // onChange = {this.handleInputChange}
-                                        >
-                                        </FormControl>
-
-                                    </fieldset>
-                                }
-                                {!this.isStoreAdmin &&
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Store</label>
-                                    <AutoCompletePosition
-                                        type="single"
-                                        data={this.storeList}
-                                        name="store"
-                                        value={_get(this.posInfo, 'store', '')}
-                                        changeHandler={(id, name) => { this.handleSelectChange(id, "store") }}
-                                    />
-                                </div>
-                                }
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Status</label>
                                     <AutoCompletePosition
                                         type="single"
                                         data={_get(this.status, 'data', [])}
                                         name="store"
-                                        value={_get(this.posInfo, 'isActive', '')}
-                                        changeHandler={(id, name) => { this.handleSelectChange(id, "isActive") }}
+                                        value={_get(this.posInfo, 'active', '')}
+                                        changeHandler={(id, name) => { this.handleSelectChange(id, "active") }}
                                     />
                                 </div>
 
@@ -523,28 +462,20 @@ class PosList extends React.Component {
                         </div>
                     </ReactDrawer>
                 </div>
-
             </div>
         )
-
     }
-
 }
 
 const mapStateToProps = state => {
 
     let { posTerminalReducer, userRolesReducer, storesReducer, productsReducer } = state
-
     let { status } = posTerminalReducer || '';
     let { isFetching } = posTerminalReducer || false;
     let { type, posListData, posSaveData, posStatusData } = posTerminalReducer || '';
     let { storeData } = storesReducer || {};
-    // let { posListData } = posTerminalReducer || [];
-
 
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
-
-
 
     return {
         status,
@@ -552,12 +483,10 @@ const mapStateToProps = state => {
         retailerId,
         userId,
         type,
-        // staffListData,
         posSaveData,
         storeData,
         posStatusData,
         posListData
-
     }
 }
 

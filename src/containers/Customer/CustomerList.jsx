@@ -9,14 +9,14 @@ import _get from 'lodash/get';
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
-import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { fetchStaffList, fetchStaffUpdate } from '../../actions/staff';
-import 'react-drawer/lib/react-drawer.css';
-import ReactDrawer from 'react-drawer';
-import { fetchProductLookupData } from '../../actions/products';
-import Alert from 'react-s-alert';
 import _pull from 'lodash/pull';
+import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+// import Category from './category';
+import 'react-drawer/lib/react-drawer.css';
+import Alert from 'react-s-alert';
+
+import { fetchStore, fetchPostStore, requestStoreUpdate } from '../../actions/store';
+import { getCustomerData, requestCustomerUpdate } from '../../actions/customer';
 
 
 const options = {
@@ -33,160 +33,159 @@ const options = {
 
 
 };
-class CustomerListContainer extends React.Component {
+class StoreListContainer extends React.Component {
     constructor(props) {
-        super(props);   
-        this.state = {
-            redirectToAddEditPage: false
-        }     
-        // this.selectRowProp = {
-        //     mode: 'checkbox',
-        //     clickToSelect: false,
-        //     onSelect: this.onRowSelect,
-        //     onSelectAll: this.onSelectAll,
-        //     bgColor: '#ffffff',
-        //     selected : this.selectedIds,
-        // }       
-        // this.selectedIds = [];
-        // this.selectedInfo = {};
-        // this.selectedInventory = {};
-        // this.storeList = [];
-        // this.products = [];
-        // this.staffList = [];
-        // this.selectedStatus = 'Enable';
-        // this.open = false;
-        // this.isUpdate = false;
-        // this.method = 'POST';
-        // this.addNew = this.addNew.bind(this);
-        // this.handleSelectChange = this.handleSelectChange.bind(this);
-        // this.handleInputChange = this.handleInputChange.bind(this);
-        // this.saveInventory = this.saveInventory.bind(this);
-        // this.showAlert = this.showAlert.bind(this);
-        // this.onUpdate = this.onUpdate.bind(this);
+        super(props);
+        this.open = false;
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+        this.selectRowProp = {
+            mode: 'radio',
+            clickToSelect: false,
+            onSelect: this.onRowSelect,
+            // onSelectAll: this.onSelectAll,
+            bgColor: '#ffffff',
+            // selected : this.selectedIds,
+        }
+        this.redirectToNewProduct = false;
+        this.addNewStore = this.addNewStore.bind(this);
+        this.saveHandler = this.saveHandler.bind(this);
+        this.productList = [];
+        this.storeList = [];
+        this.selectedIds = [];
+        this.selectedInfo = {};
+        this.selectedStore = {};
+        this.store = '';
+        this.method = 'POST';
+        this.id = '';
+        this.isUpdate = false;
     }
     showAlert(error, msg) {
-        // if (error) {
-        //     Alert.error(msg || '', {
-        //         position: 'bottom-right',
-        //         effect: 'slide',
-        //         timeout: 5000,
-        //         html: true
-        //     });
-        //     this.forceUpdate();
-        // } else {
-        //     Alert.success(msg||'successfully saved.', {
-        //         position: 'bottom-right',
-        //         effect: 'slide',
-        //         timeout: 3000,
-        //         html: true
-        //     });
-        // }
+        if (error) {
+            Alert.error(msg || '', {
+                position: 'bottom-right',
+                effect: 'slide',
+                timeout: 5000,
+                html: true
+            });
+            this.forceUpdate();
+        } else {
+            Alert.success(msg || 'successfully saved.', {
+                position: 'bottom-right',
+                effect: 'slide',
+                timeout: 3000,
+                html: true
+            });
+        }
+
     }
+
     componentWillReceiveProps(props) {
-        // if(props.type === 'RECEIVED_STAFF_LIST'){
-        //     if((props.staffListData.length>0)){
-        //         this.staffListData = props.staffListData;
-        //         this.staffList = [];
-        //         props.staffListData.map(staff  => {
-        //             let tempStaff = {};
-        //             tempStaff.name = staff.billingAddress.firstName + " " + staff.billingAddress.lastName;
-        //             tempStaff.company = staff.billingAddress.company;
-        //             tempStaff.phone = staff.billingAddress.phone;
-        //             tempStaff.email = staff.userInfo.email;
-        //             tempStaff.gender = staff.userInfo.gender;
-        //             tempStaff.role = staff.userInfo.role;
-        //             tempStaff.id = staff.id;
+        if (props.type === 'CUSTOMER_RECIEVE') {
+            if (!_isEmpty(_get(props, 'customersReducer.customerData', []))) {
+                this.storeList = [];
+                _get(props, 'customersReducer.customerData', []).map(store => {
+                    let tempStore = {};
+                    tempStore.id = store.id;
+                    this.storeList.push(tempStore);
+                })
+                // this.storeList = props.storeData.stores;
+                this.forceUpdate();
+            }
+        }
+        else if (props.type === 'RECEIVED_STORE_POST') {
+            if (!_isEmpty(props.storePostData)) {
+                if (props.storePostData.status !== 200 && props.storePostData.status !== '') {
+                    this.showAlert(true, props.storePostData.message);
+                } else if (props.storePostData.status === 200) {
+                    this.showAlert(false, props.storePostData.message);
+                    const { dispatch, storesReducer } = this.props;
+                    let retailerId = localStorage.getItem('retailerID');
+                    dispatch(fetchStore(storesReducer, retailerId));
+                    this.isUpdate = false;
+                    this.open = false;
+                }
+                this.forceUpdate();
+            }
+        }
 
-        //             this.staffList.push(tempStaff);
-        //         });
-        //     }
-        //     this.forceUpdate();
-        // }      
     }
-    componentDidMount(){
-        // const { dispatch, staffsReducer } = this.props;
-        // let data = {
-        //     role: localStorage.getItem('role'),
-        // };
-        // let url = "?role="+localStorage.getItem('role');
 
-        // dispatch(fetchStaffList(staffsReducer, url));
+    componentDidMount() {
+        let reqObj = {
+            id: localStorage.getItem('retailerID')
+        }
+        let url = `/Customer/All`;
+        this.props.dispatch(getCustomerData('', url, reqObj))
+    }
+    addNew = () => {
+        this.setState({ redirectToAddEditPage: true })
+    }
+
+    onUpdate() {
+        let tempStore = _find(this.storeList, { 'id': this.selectedStore.id });
+        this.open = true;
+        const { dispatch, customersReducer } = this.props;
+        dispatch(requestCustomerUpdate(customersReducer, tempStore));
+        this.isUpdate = true;
+        this.method = 'POST';
+        this.forceUpdate();
     }
     onRowSelect = (row, isSelected, e) => {
-        // isSelected ? this.selectedIds.push(row.id) : _pull(this.selectedIds, row.id);
-        // this.handleAllChecks(); 
+        isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
+        // this.handleAllChecks();        
+        this.selectedStore = row;
+        if (isSelected == false) {
 
-        // this.selectedStaff = _find(this.staffListData,{'id':row.id});
-        // this.selectedStatus = this.selectedIds.length>0 && _find(this.staffListData, { 'id': this.selectedIds[0] }).status;
-        // if (this.selectedIds.length > 1) {
-        //     let tempObj = _find(this.staffListData, { 'id': this.selectedIds[0] });
-        //     if (tempObj.status !== row.status) {
-        //         _pull(this.selectedIds, row.id);
-        //     }
-        // }
-        // if (isSelected == false) {
-
-        //     this.selectedInfo = {};
-        //     this.selectedStaff = {};
-        // }
-        // this.selectRowProp.selected = this.selectedIds;
-        // this.forceUpdate();
+            this.selectedInfo = {};
+            this.selectedStore = {};
+        }
+        this.selectRowProp.selected = this.selectedIds;
+        this.forceUpdate();
     }
+
     onSelectAll = (isSelected, rows) => {
         // if (isSelected) {
         //     for (let i = 0; i < rows.length; i++) {
-        //         this.selectedIds.push(rows[i].id);
-        //         this.selectedStaff = rows[i];
-        //         if (this.selectedIds.length > 1) {
-        //             let tempObj = _find(this.staffListData, { 'id': this.selectedIds[0] });
-        //             if (tempObj.status !== rows[i].status) {
-        //                 _pull(this.selectedIds, rows[i].id);
-        //             }
-        //         }
+        //         this.selectedIds.push(rows[i].sku)
         //     }
         // } else {
-        //     this.selectedIds = [];
-        //     this.selectedStaff = {};
+
+        this.selectedIds = [];
         // }
-        // this.selectedStatus = this.selectedIds.length>0 && _find(this.staffListData, { 'id': this.selectedIds[0] }).status;
-        // this.selectRowProp.selected = this.selectedIds;
-        // this.forceUpdate();
+        this.selectRowProp.selected = this.selectedIds;
+
+
+        this.forceUpdate();
+    }
+    addNewStore() {
+        this.open = true;
+        this.forceUpdate();
+    }
+    saveHandler() {
+        const { dispatch, storesReducer } = this.props;
+        let retailerId = localStorage.getItem('retailerID');
+        let data = {};
+        if (this.id !== '') {
+            data.id = this.id;
+        }
+        data.storeName = this.store;
+        data.retailer = localStorage.getItem('retailerID');
+        dispatch(fetchPostStore(storesReducer, data, this.method));
     }
 
- 
-    onUpdate(){
-        // if (this.selectedIds.length > 1) {
-        //     this.showAlert(true, 'Please Select only 1 Employee to update.');
-        //     this.forceUpdate();
-        //     return;
-        // } else {
-        // const {dispatch, staffsReducer} = this.props;
-        // dispatch(fetchStaffUpdate(staffsReducer, this.selectedStaff.id, _get(this.selectedStaff.userInfo,'role')));
-        // this.redirectToAddEditPAge = true;
-        // }
-    }
-    addNew = () => {
-    //    const {dispatch, staffsReducer} = this.props;
-    //    dispatch(requestStaffUpdate(staffsReducer, {}));
-    //    this.forceUpdate();
-        this.setState({ redirectToAddEditPage: true })
-    }
-    saveInventory (selectedInventory) {
-       
-    }
 
-    handleSelectChange (id, name) {
-     
-    }
 
-    handleInputChange (event) {
-       
+    handleInputChange(e) {
+        this.store = e.target.value;
+        this.forceUpdate();
     }
+    handleSelectChange = (id, name) => {
 
-   
-  
+    }
     render() {
-        if(this.state.redirectToAddEditPage){
+        if (this.open) {
             return (
                 <Redirect push to="/customers/add" />
             )
@@ -202,26 +201,34 @@ class CustomerListContainer extends React.Component {
                 </div>
             </div>);
         }
-      
+
+        let { customerList } = this.props
         return (
             <div className="">
                 <div>
                     <div className="form-btn-group">
-                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} />
-                        <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate}/> */}
-                        <SaveButton  Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
+                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
+                        <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
                     </div>
                     <div>
-                        <BootstrapTable data={this.staffList} options={options}
-                            // selectRow={this.selectRowProp}
+                        <BootstrapTable
+                            data={customerList}
+                            options={options}
+                            selectRow={this.selectRowProp}
                             striped hover
-                            pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search Customers'}>
+                            pagination={true}
+                            exportCSV={true}
+                            search={true}
+                            searchPlaceholder={'Search Customers'}>
+
                             <TableHeaderColumn width='100' dataField='id' isKey={true} >ID</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='phone' >Phone</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='name'>Name</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='email' dataSort>Email</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='phone' dataSort>Phone</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
+                </div>
+                <div>
                 </div>
             </div>
         )
@@ -232,28 +239,28 @@ class CustomerListContainer extends React.Component {
 
 const mapStateToProps = state => {
 
-    // let { staffsReducer, userRolesReducer, storesReducer, productsReducer } = state
+    let { productsReducer, userRolesReducer, customersReducer, storesReducer } = state
+    let { type } = customersReducer || {};
 
-    // let { status } = staffsReducer || '';
-    // let { isFetching } = staffsReducer || false;
-    // let { type, staffListData, staffSaveData } = staffsReducer || '';
-    // let { storeData } = storesReducer || {};
-    // let { productData } = productsReducer || '';
+    let customerList = []
+    let { customerData } = customersReducer || []
+    customerData.map((data, index) => {
+        customerList.push(
+            {
+                id: data.id,
+                name: data.customer.firstName + ' ' + data.customer.lastName,
+                email: data.email,
+                phone: data.phoneNumber.phoneNumber
+            }
+        )
+    })
 
-    
-    // let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
-
-
-
-    // return {
-    //     status,
-    //     isFetching,
-    //     retailerId,        
-    //     userId,
-    //     type,
-    //     staffListData,
-    //     staffSaveData,       
-
+    return {
+        customerList,
+        storesReducer,
+        customersReducer,
+        type
     }
+}
 
-export default connect(mapStateToProps)(CustomerListContainer);
+export default connect(mapStateToProps)(StoreListContainer);

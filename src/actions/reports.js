@@ -1,6 +1,8 @@
-import * as REPORT_CONSTANTS from '../constants/reports'
-import { debug } from 'util';
+import * as REPORT_CONSTANTS from '../constants/reports';
 import dynamicActionWrapper from '../helpers/actionHelper';
+import {
+    debug
+} from 'util';
 
 let status = '';
 
@@ -500,14 +502,212 @@ export const GetTopProducts = (subreddit, url, data) => dispatch =>
         redirect: 'follow'
     }));
 
+const requestEmpPayrollDeductDetails = (subreddit) => ({
+    type: REPORT_CONSTANTS.REQUEST_EMP_PAYROLL_DEDUCT_DETAILS,
+    subreddit
+});
 
+const receiveEmpPayrollDeductDetails = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_PAYROLL_DEDUCT_DETAILS,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveEmpPayrollDeductDetailsError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_PAYROLL_DEDUCT_DETAILS_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
 
+export const fetchEmpPayrollDeductDetails = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REPORT_CONSTANTS.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestEmpPayrollDeductDetails,
+            successCb: receiveEmpPayrollDeductDetails,
+            failureCb: receiveEmpPayrollDeductDetailsError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_EMP_PAYROLL_DEDUCT_DETAILS_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
 
+const requestEmpPayrollDeductSummary = (subreddit) => ({
+    type: REPORT_CONSTANTS.REQUEST_EMP_PAYROLL_DEDUCT_SUMMARY,
+    subreddit
+});
 
+const receiveEmpPayrollDeductSummary = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_PAYROLL_DEDUCT_SUMMARY,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveEmpPayrollDeductSummaryError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_PAYROLL_DEDUCT_SUMMARY_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
 
+export const fetchEmpPayrollDeductSummary = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REPORT_CONSTANTS.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestEmpPayrollDeductSummary,
+            successCb: receiveEmpPayrollDeductSummary,
+            failureCb: receiveEmpPayrollDeductSummaryError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_EMP_PAYROLL_DEDUCT_SUMMARY_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
 
+const requestEmpDiscountReport = (subreddit) => ({
+    type: REPORT_CONSTANTS.REQUEST_EMP_DISCOUNT_REPORT,
+    subreddit
+});
 
+const receiveEmpDiscountReport = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_DISCOUNT_REPORT,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveEmpDiscountReportError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_DISCOUNT_REPORT_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
 
+export const fetchEmpDiscountReportData = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REPORT_CONSTANTS.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestEmpDiscountReport,
+            successCb: receiveEmpDiscountReport,
+            failureCb: receiveEmpDiscountReportError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_EMP_DISCOUNT_REPORT_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
 
+const requestEmpDetailsList = (subreddit) => ({
+    type: REPORT_CONSTANTS.REQUEST_EMP_DETAILS_LIST,
+    subreddit
+});
 
+const receiveEmpDetailsList = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_DETAILS_LIST,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveEmpDetailsListError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_EMP_DETAILS_LIST_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
 
+export const fetchEmpDetailsData = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REPORT_CONSTANTS.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestEmpDetailsList,
+            successCb: receiveEmpDetailsList,
+            failureCb: receiveEmpDetailsListError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_EMP_DETAILS_LIST_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}
+
+const requestZReportData = (subreddit) => ({
+    type: REPORT_CONSTANTS.REQUEST_Z_REPORT_DATA,
+    subreddit
+});
+
+const receiveZReportData = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_Z_REPORT_DATA,
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+}
+const receiveZReportDataError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REPORT_CONSTANTS.RECEIVE_Z_REPORT_DATA_ERROR,
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    })
+} 
+
+export const fetchZReportData = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REPORT_CONSTANTS.PRODUCT_LOOKUP_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestZReportData,
+            successCb: receiveZReportData,
+            failureCb: receiveZReportDataError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'FETCH_Z_REPORT_DATA_WRAPPER',
+            redirect: 'follow'
+        }));
+    })
+}

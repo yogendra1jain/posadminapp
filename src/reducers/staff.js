@@ -38,8 +38,11 @@ const staffsData = (state = {
     case RECEIVED_STAFF:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, status: action.status,
-        didInvalidate: false, staffListData: [],staffSaveData:action.data,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        staffListData: [],
+        staffSaveData:action.data,
         lastUpdated: action.receivedAt
       });
     case REQUEST_STAFF_LIST:
@@ -50,15 +53,24 @@ const staffsData = (state = {
     case RECEIVED_STAFF_LIST:
       return Object.assign({}, state, {
         isFetching: false,
-        type: action.type, status: action.status,staffSaveData:[],
-        didInvalidate: false, staffListData: action.data,selectedStaff:[],
+        type: action.type, 
+        status: action.status,
+        staffSaveData:[],
+        didInvalidate: false, 
+        staffListData: action.data,
+        selectedStaff:[],
         lastUpdated: action.receivedAt
       });
     case REQUEST_STAFF_UPDATE:
     return Object.assign({}, state, {
-      isFetching: true,
-      type: action.type, didInvalidate: false, status: action.status,
-      selectedStaff: [], lastUpdated: action.receivedAt
+      isFetching: false,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        selectedStaff: action.data,
+        staffSaveData:[],
+        selectedId: action.id,
+        lastUpdated: action.receivedAt
     });
     case RECEIVED_STAFF_UPDATE:
       return Object.assign({}, state, {

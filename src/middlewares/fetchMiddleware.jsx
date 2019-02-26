@@ -1,5 +1,6 @@
 import _isEmpty from 'lodash/isEmpty';
 import _pickBy from 'lodash/pickBy';
+import _set from 'lodash/set';
 import { generateV1uuid } from '../helpers/helpers.js';
 import { onLogout } from '../actions/userRoles';
 
@@ -8,6 +9,9 @@ const addOptionalOptions = (config, options) => {
     let newOptions = { ...options };
     // if (!_isEmpty(config.body)) {
         if (config.isFormData && _isEmpty(config.body)) {
+            // var boundary = Math.random().toString().substr(2);
+            delete newOptions.headers['Content-Type'];
+            // _set(newOptions, `headers.Content-Type`, `multipart/form-data; boundary=------------------------${boundary}`);
             newOptions.body = config.formData;
         } else {
             newOptions.body = JSON.stringify(config.body);
@@ -31,6 +35,8 @@ const fetchMiddleware = store => next => action => {
 
     let dispatch = store.dispatch;
     let config = action.fetchConfig;
+    let resolve = config.resolve;
+    const reject = config.reject;
     const subreddit = action.subreddit;
     let status = '';
     const id = action.id;
@@ -97,8 +103,8 @@ const fetchMiddleware = store => next => action => {
                     return Promise.resolve({});
                 })
         })
-        .then(json => dispatch(successHandler(subreddit, json, status, id, action.successCbPassOnParams)))
-        .catch(error => dispatch(failureHandler(subreddit, error, 500)))
+        .then(json => dispatch(successHandler(subreddit, json, status, id, resolve, action.successCbPassOnParams)))
+        .catch(error => dispatch(failureHandler(subreddit, error, 500, reject)))
 }
 
 export default fetchMiddleware;
