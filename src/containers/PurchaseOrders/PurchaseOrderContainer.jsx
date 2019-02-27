@@ -175,12 +175,15 @@ class PurchaseOrderContainer extends React.Component {
             <div className="">
                 <div className='panel-container'>
                     <span className='panel-heading'>Purchase Orders </span>
-                </div>
-                <div>
+
                     <div className="form-btn-group">
                         {/* <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.updatePO()}>Update</Button> */}
-                        <Button type="button" variant="raised" onClick={() => this.addNewPO()}>Add New</Button>
+                        
+                        <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNewPO}/>
                     </div>
+                </div>
+               
+                  
                     <div>
                         <BootstrapTable
                             data={purchageOrders}
@@ -199,7 +202,7 @@ class PurchaseOrderContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='' dataFormat={this.actionColumn} dataSort>Actions</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
-                </div>
+                
                 <div>
                 </div>
             </div>

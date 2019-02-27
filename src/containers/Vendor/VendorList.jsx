@@ -215,6 +215,18 @@ class StoreListContainer extends React.Component {
         let { vendorList } = this.props
         return (
             <div className="">
+
+                
+<div className='panel-container'>
+                            <span className='panel-heading'>Inventory List</span>
+
+                            <div>
+                            <SaveButton disabled={this.selectedIds.length === 0} Class_Name="m-r-10" buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
+                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
+                            </div>
+                        </div>
+
+
                 <div>
                     <div className="form-btn-group">
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />

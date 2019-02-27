@@ -35,7 +35,7 @@ class MainLayout extends Component {
       <div className="main-container">
         {/* {/ <HeaderLayout /> /} */}
         <div className="content">
-          <div className="col-sm-3 col-md-2">
+          <div className="col-sm-3 col-md-2 no-gutters">
             <div className="row visible-xs">
             </div>
 
