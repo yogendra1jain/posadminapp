@@ -55,6 +55,9 @@ import RecieptAddEdit from './containers/PurchaseOrders/RecieptAddEdit.jsx';
 import ZReportContainer from './containers/Reports/ZReport.jsx';
 import EmployeesContainer from './containers/EmployeesContainer/EmployeesContainer.jsx';
 import AddEditEmployee from './containers/EmployeesContainer/AddEditEmployee.jsx';
+import SaleDataReport from './containers/Reports/SaleDataReport.jsx';
+import RetailerContainer from './containers/Retailer/RetailerContainer.jsx';
+import AddEditRetailerContainer from './containers/Retailer/AddEditRetailer/AddEditRetailerContainer.jsx'
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -125,7 +128,9 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/z_report" component={ZReportContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/employees" component={EmployeesContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/employees/add" component={AddEditEmployee} />
-        
+        <RouteWithLayout layout={MainLayout} exact path="/sale_report" component={SaleDataReport} />
+        <RouteWithLayout layout={MainLayout} exact path="/retailers" component={RetailerContainer} />
+        <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
       </Switch>
     </Router>
   </Provider>
