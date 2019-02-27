@@ -311,6 +311,7 @@ class InventoryListContainer extends React.Component {
             this.saveInventoryFlag = true;
             let url = '/Inventory/SetMinMax'
             dispatch(invetoryUpdate('', url, data));
+            this.selectRowProp.selected = '';
             this.handleClose()
         }
     }
@@ -369,18 +370,20 @@ class InventoryListContainer extends React.Component {
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
+
+                        <div className='panel-container'>
+                            <span className='panel-heading'>Inventory List</span>
+
+                            <div>
+                            <SaveButton disabled={this.selectedIds.length === 0} Class_Name="m-r-10" buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
+                            <SaveButton disabled={this.selectedIds.length === 0} Class_Name="btn-info" buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
+                            </div>
+                        </div>
+
+
                 <div>
-                    <div classNam="col-sm-12">
-                        <div className="col-sm-10 form-btn-group">
-                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Adjust Quantity'} handlerSearch={() => this.adjustQuantity()} />
-                            {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
-                        </div>
-                        <div className="col-sm-2 form-btn-group">
-                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                            {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
-                        </div>
-                    </div>
-                    <div>
+                    <div className="row">
+                    <div className="col-sm-4">
                         <label>Select Store</label>
                         {/* {
                             !_isEmpty(this.storeList) ?  */}
@@ -392,6 +395,7 @@ class InventoryListContainer extends React.Component {
                             changeHandler={(id) => { this.handleSelectChange(id, 'stores') }}
                         />
                         {/* } */}
+                    </div>
                     </div>
                     <div>
                         <BootstrapTable data={this.inventoryList} options={options}

@@ -11,7 +11,7 @@ import _isEmpty from 'lodash/isEmpty';
 // import "../../components/LoginForm/LoginFormStyle.css";
 import "bootstrap/dist/css/bootstrap.css";
 import '../../assets/stylesheets/main.css';
-import logologin from '../../assets/images/logo-main.jpg';
+import logologin from '../../assets/images/aobLogo.png';
 
 
 //import LoginForm from "../../components/LoginForm/LoginForm.jsx"
@@ -97,6 +97,7 @@ class LoginContainer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (!this.state.redirectToSearch && nextProps.status === 200) {
+            // this.showAlert(false, 'User Authenticated.');
             this.setState({
                 redirectToSearch: true,
             });
@@ -113,8 +114,6 @@ class LoginContainer extends React.Component {
             //     localStorage.setItem('storeManager', nextProps.user.id)
             // }
             localStorage.setItem('storeID', _get(decodeToken, 'Store.id', ''));
-            this.showAlert(false, 'User Authenticated.');
-
         } else {
             if (nextProps.status !== 200 && nextProps.status !== '' && nextProps.status !== undefined)
                 this.showAlert(true, 'Login Failed.');
@@ -166,6 +165,8 @@ class LoginContainer extends React.Component {
                             <div className="login-logo">
                                 <img src={logologin} />
                             </div>
+
+                            <div className="login-block">
                             <form onSubmit={this.handleSubmit}>
                                 <FormGroup controlId="email" bsSize="large">
                                     {/*                                     
@@ -223,6 +224,7 @@ class LoginContainer extends React.Component {
                                     Login
                                 </Button>
                             </form>
+                            </div>
                         </div>
                     )
                 }

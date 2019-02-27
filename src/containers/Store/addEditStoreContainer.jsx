@@ -42,7 +42,7 @@ class AddEditStoreContainer extends React.Component {
 
     componentDidMount() {
         if (!_isEmpty(this.props.selectedStore)) {
-            this.setState({ isUpdating: true})
+            this.setState({ isUpdating: true })
             this.storeInfo = this.props.selectedStore;
             _set(this.storeInfo, 'retailerId', localStorage.getItem('retailerID'));
             // if(!_isEmpty(this.storeInfo.storeAddress)){
@@ -60,7 +60,7 @@ class AddEditStoreContainer extends React.Component {
 
     handleInputChange(event, props) {
         _set(this.storeInfo, event.target.name, event.target.value);
-        if(props){
+        if (props) {
             props.handleChange(event);
         }
         this.forceUpdate();
@@ -95,7 +95,7 @@ class AddEditStoreContainer extends React.Component {
     onSave() {
         const { dispatch, storesReducer } = this.props;
         let url = ''
-        if(this.state.isUpdating) {
+        if (this.state.isUpdating) {
             url = '/Store/Update';
         } else {
             url = '/Store/Create';
@@ -105,13 +105,13 @@ class AddEditStoreContainer extends React.Component {
         data.name = this.storeInfo.storeName
         data.retailerId = this.storeInfo.retailerId
         data.address = {}
-        data.address.addressLine1 = _get(this.storeInfo,'addressLine1', '')
+        data.address.addressLine1 = _get(this.storeInfo, 'addressLine1', '')
         data.address.addressLine2 = this.storeInfo.addressLine2
         data.address.city = this.storeInfo.city
         data.address.state = this.storeInfo.state
         data.address.country = this.storeInfo.country
-        data.address.postalCode = zip 
-        if(this.state.isUpdating) {
+        data.address.postalCode = zip
+        if (this.state.isUpdating) {
             data.id = this.updatedStoreInfo.id
         }
         dispatch(fetchPostStore(storesReducer, data, url))
@@ -125,15 +125,15 @@ class AddEditStoreContainer extends React.Component {
         let value = event.target.value;
         this.gotAddressData = false;
         this.getAddressFlag = true;
-        if(props){
+        if (props) {
             this.props1 = props;
         }
         if (name === 'postalCode') {
-            if(isNaN(value)){
+            if (isNaN(value)) {
                 return
-            }else{
+            } else {
                 let intVal = parseInt(value);
-                _set(this.storeInfo,'postalCode',intVal);
+                _set(this.storeInfo, 'postalCode', intVal);
             }
             const { dispatch, storesReducer } = this.props;
             let data = {
@@ -148,30 +148,25 @@ class AddEditStoreContainer extends React.Component {
             if (!_isEmpty(props.addressData)) {
                 this.gotAddressData = true;
                 this.getAddressFlag = false;
-                _set(this.storeInfo,'city', _get(props.addressData,'city',''));
-                _set(this.storeInfo,'state', _get(props.addressData,'state',''));
-                _set(this.storeInfo,'latitude', _get(props.addressData,'latitude',''));
-                _set(this.storeInfo,'streetAddress1', _get(props.addressData,'location',''));
-                _set(this.storeInfo,'longitude', _get(props.addressData,'longitude',''));
-                _set(this.storeInfo,'country', 'US');
+                _set(this.storeInfo, 'city', _get(props.addressData, 'city', ''));
+                _set(this.storeInfo, 'state', _get(props.addressData, 'state', ''));
+                _set(this.storeInfo, 'latitude', _get(props.addressData, 'latitude', ''));
+                _set(this.storeInfo, 'streetAddress1', _get(props.addressData, 'location', ''));
+                _set(this.storeInfo, 'longitude', _get(props.addressData, 'longitude', ''));
+                _set(this.storeInfo, 'country', 'US');
                 this.props1.setValues(this.storeInfo);
             }
         }
         else if (props.type === 'RECEIVED_STORE_POST') {
-            // if (!_isEmpty(props.storePostData)) {
-                if (props.status !== 200 && props.status !== '') {
-                    this.showAlert(true, 'Some Error Occured!');
-                } else if (props.status === 200) {
-                    this.showAlert(false, 'Store Created Successfully!');
-                    this.redirectToSearch = true;
-                    // const { dispatch, storesReducer } = this.props;
-                    // let retailerId = localStorage.getItem('retailerID');
-                    // dispatch(fetchStore(storesReducer, retailerId));
-                    // this.isUpdate = false;
-                    // this.open = false;                    
-                }
-                this.forceUpdate();
-            // }
+            if(props.status == 200) {
+                this.showAlert(false, 'Store Created Successfully!')
+                this.redirectToSearch = true
+                this.forceUpdate()
+            } else if(props.status !== 200 && props.status !== '') {
+                this.showAlert('Some Error Occured!')
+                this.redirectToSearch = false
+                this.forceUpdate()
+            }
         }
     }
 
@@ -205,7 +200,7 @@ class AddEditStoreContainer extends React.Component {
                 onSubmit={() => { }}
                 values={this.storeInfo}
                 render={(props) => {
-                   
+
                     return (
                         <div className="strainBlock">
                             {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
@@ -225,20 +220,20 @@ class AddEditStoreContainer extends React.Component {
                                     <GenericInput
                                         htmlFor="storeName" displayName="Store Name"
                                         inputName="storeName" defaultValue={_get(this.storeInfo, 'storeName', '')}
-                                        onChange={(event)=>this.handleInputChange(event, props)} errorCheck={true}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         onBlur={props.handleBlur} errorMessage={props.errors.storeName}
                                         error={props.errors} errorValue={props.errors.storeName}
                                         touched={props.touched} touchedValue={props.touched.storeName}
                                         className="text-input error"
                                     />
                                 </div>
-                                
+
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Street Address1</label>
                                     <GenericInput
                                         htmlFor="addressLine1" displayName="Street Address1"
                                         inputName="addressLine1" defaultValue={_get(this.storeInfo, 'addressLine1', '')}
-                                        onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
@@ -247,7 +242,7 @@ class AddEditStoreContainer extends React.Component {
                                     <GenericInput
                                         htmlFor="addressLine2" displayName="Street Address2"
                                         inputName="addressLine2" defaultValue={_get(this.storeInfo, 'addressLine2', '')}
-                                        onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
@@ -256,7 +251,7 @@ class AddEditStoreContainer extends React.Component {
                                     <GenericInput
                                         htmlFor="city" displayName="City"
                                         inputName="city" defaultValue={_get(this.storeInfo, 'city', '')}
-                                        onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
@@ -265,7 +260,7 @@ class AddEditStoreContainer extends React.Component {
                                     <GenericInput
                                         htmlFor="postalCode" displayName="Zip Code" type="text"
                                         inputName="postalCode" defaultValue={_get(this.storeInfo, 'postalCode', '')}
-                                        onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         onBlur={(event) => this.handleBlur(event, props)}
                                         className="text-input error"
                                     />
@@ -275,7 +270,7 @@ class AddEditStoreContainer extends React.Component {
                                     <GenericInput
                                         htmlFor="state" displayName="State"
                                         inputName="state" defaultValue={_get(this.storeInfo, 'state', '')}
-                                        onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
@@ -284,7 +279,7 @@ class AddEditStoreContainer extends React.Component {
                                     <GenericInput
                                         htmlFor="country" displayName="Country"
                                         inputName="country" defaultValue={_get(this.storeInfo, 'country', '')}
-                                        onChange={(event)=>this.handleInputChange(event, props)} errorCheck={false}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
                                 </div>
@@ -317,8 +312,8 @@ class AddEditStoreContainer extends React.Component {
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
                                         <SaveButton
-                                        //  disabled={!props.isValid} 
-                                         buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.onSave} />
+                                            //  disabled={!props.isValid} 
+                                            buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.onSave} />
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.onCancel} />
                                     </div>
                                 </div>
@@ -336,7 +331,7 @@ class AddEditStoreContainer extends React.Component {
 
 }
 const storeFormValidation = Yup.object().shape({
-    storeName:Yup.string().required('Store Name is required'), 
+    storeName: Yup.string().required('Store Name is required'),
     latitude: Yup.string().required('Latitude is required'),
     longitude: Yup.string().required('Longitude is required'),
 

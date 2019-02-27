@@ -10,10 +10,9 @@ import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import _pull from 'lodash/pull';
+import _filter from 'lodash/filter'
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
-
-
 
 const options = {
     paginationPosition: 'top',
@@ -25,9 +24,7 @@ const options = {
         text: '5', value: 5
     }, {
         text: '10', value: 10
-    }],
-
-
+    }]
 };
 
 class ProductListContainer extends React.Component {
@@ -52,19 +49,15 @@ class ProductListContainer extends React.Component {
         this.selectedProduct = {};
         this.isAdmin =  localStorage.getItem('role')==='Admin';
     }
+
     componentWillReceiveProps(props) {
         if(!_isEmpty(props.productData) && !props.productData.message){
             this.productList = [];
             props.productData.map(product=>{
                 let prod = {};
-                prod.name = product.name;
-                prod.sku = product.sku;
-                prod.description = product.description;
-                prod.id = product.id;
+                prod = product
                 prod.sellingPrice = _get(product,'salePrice.price','');
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
-                prod.image = product.imageLink;
-                
                 this.productList.push(prod);
             });
             this.forceUpdate();
@@ -87,9 +80,14 @@ class ProductListContainer extends React.Component {
     }
     onUpdate(){
         const {dispatch, productsReducer} = this.props;
-        dispatch(requestProductUpdate(productsReducer, this.selectedProduct));
+        console.log(this.productList, 'this.productList')
+        let selectedProduct = _filter(this.productList, product => {
+            return product.id == this.selectedProduct.id
+        })
+        dispatch(requestProductUpdate(productsReducer, selectedProduct[0]));
         this.redirectToNewProduct = true;
     }
+
     onRowSelect = (row, isSelected, e) => {
         isSelected ? this.selectedIds = [(row.sku)] : _pull(this.selectedIds, row.sku);
         // this.handleAllChecks();        
@@ -143,7 +141,7 @@ class ProductListContainer extends React.Component {
             )
         }
         return (
-            <div className="">
+            <React.Fragment>
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div>
@@ -154,7 +152,6 @@ class ProductListContainer extends React.Component {
                     </div>
                     {/* } */}
                     <div>
-
                         <BootstrapTable height='515' data={this.productList} options={options}
                             selectRow={this.selectRowProp}
                             striped hover
@@ -167,24 +164,18 @@ class ProductListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
                             <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>
                         </BootstrapTable>
-
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
         )
-
     }
-
 }
 
 const mapStateToProps = state => {
-
     let { productsReducer, userRolesReducer } = state
-
     let { status } = productsReducer || '';
     let { isFetching } = productsReducer || false;
     let { type, productData } = productsReducer || [];
-    
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
     return {
         status,

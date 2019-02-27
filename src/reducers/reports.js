@@ -36,7 +36,13 @@ import {
   RECEIVE_EMP_DISCOUNT_REPORT_ERROR,
   REQUEST_EMP_DETAILS_LIST,
   RECEIVE_EMP_DETAILS_LIST,
-  RECEIVE_EMP_DETAILS_LIST_ERROR
+  RECEIVE_EMP_DETAILS_LIST_ERROR,
+  REQUEST_Z_REPORT_DATA,
+  RECEIVE_Z_REPORT_DATA,
+  RECEIVE_Z_REPORT_DATA_ERROR,
+  REQUEST_SALE_REPORT_DATA,
+  RECEIVE_SALE_REPORT_DATA,
+  RECEIVE_SALE_REPORT_DATA_ERROR
 } from '../constants/reports';
 
 const reportReducer = (state = 'reportState', action) => {
@@ -66,9 +72,59 @@ const reportsData = (state = {
   empPayrollDeductDetailsData: [],
   empPayrollDeductSummaryData: [],
   empDiscountReportData: [],
-  empDetailsList: []
+  empDetailsList: [],
+  zReportData: [],
+  saleReportData: []
 }, action) => {
   switch (action.type) {
+    case REQUEST_SALE_REPORT_DATA:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_SALE_REPORT_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        saleReportData: action.data,
+        lastUpdated: action.receivedAt
+      });
+
+    case RECEIVE_SALE_REPORT_DATA_ERROR:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        saleReportData: action.error,
+        lastUpdated: action.receivedAt
+      });
+
+    case REQUEST_Z_REPORT_DATA:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        lastUpdated: action.receivedAt
+      });
+    case RECEIVE_Z_REPORT_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        zReportData: action.data,
+        lastUpdated: action.receivedAt
+      });
+
+    case RECEIVE_Z_REPORT_DATA_ERROR:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type,
+        zReportData: action.error,
+        lastUpdated: action.receivedAt
+      });
+
     case REQUEST_PRODUCT_VOLUME_DATA:
       return Object.assign({}, state, {
         isFetching: true,
@@ -248,7 +304,6 @@ const reportsData = (state = {
     case REQUEST_EMP_PAYROLL_DEDUCT_DETAILS:
       return Object.assign({}, state, {
         isFetching: true,
-        empPayrollDeductDetailsData: [],
         type: action.type,
         lastUpdated: action.receivedAt
       });

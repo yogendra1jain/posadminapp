@@ -35,16 +35,17 @@ class MainLayout extends Component {
       <div className="main-container">
         {/* {/ <HeaderLayout /> /} */}
         <div className="content">
-          <div className="col-sm-3 col-md-2">
+          <div className="col-sm-3 col-md-2 no-gutters">
             <div className="row visible-xs">
             </div>
 
             <NavBar />
 
           </div>
-          <div className="col-sm-9 col-md-10 right-content" >
-
-            {this.props.children}
+          <div className="col-sm-9 col-md-10 no-gutters " >
+          <div className="right-content" >
+              {this.props.children}
+          </div>
           </div>
           <div>
             {this.props.message.text && <Snackbar

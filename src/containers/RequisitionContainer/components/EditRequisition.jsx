@@ -3,6 +3,9 @@ import React from 'react';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
 
+import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
+import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
+
 import _isArray from 'lodash/isArray';
 import _uniq from 'lodash/uniq';
 import _isEmpty from 'lodash/isEmpty';
@@ -38,123 +41,56 @@ const styles = theme => ({
     },
 });
 
+const options = {
+    paginationPosition: 'top',
+    defaultSortName: 'posProductId',
+    defaultSortOrder: 'asc',
+    clearSearch: true,
+    withFirstAndLast: true,
+    sizePerPageList: [{
+        text: '5', value: 5
+    }, {
+        text: '10', value: 10
+    }],
+};
 class EditRequisition extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            cachedProducts: [],
+            cachedVendors: [],
         }
     }
 
     componentDidMount() {
+        // this.fetchBasicDetails();
+        let reqObj = {
+            id: localStorage.getItem('retailerID')
+        }
+        let url = `/Vendor/ByRetailerId`;
+        let posProductUrl = `/Product/ByRetailerId`;
+        let vendorProdUrl = `/VendorProduct/GetByRetailerId`;
+        let storeUrl = '/Store/ByRetailerId';
+        this.props.dispatch(getVendorData('', url, reqObj))
+        this.props.dispatch(fetchRetailerProducts('', posProductUrl, reqObj))
+        const { dispatch, storesReducer } = this.props;
+        dispatch(fetchStore(storesReducer, storeUrl, reqObj));
 
+        this.fetchVendorProducts(vendorProdUrl, reqObj);
     }
-    
-    populateRequisitionList = () => {
-        let rows = []
-        this.props.fields.map((member, index) => {
-            rows.push(
-                <div className='box-conversion-row'>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>
-                            <Field
-                                name={`${member}.vendorId`}
-                                options={_get(this.props, 'vendorList', [])}
-                                disabled={true}
-                                component={ReactSelectWrapper}
-                            />
-                        </span>
-                        <span className='box-conversion-title'>Vendor</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>
-                            <Field
-                                name={`${member}.posProductId`}
-                                options={_get(this.props, 'retailerProducts', [])}
-                                component={ReactSelectWrapper}
-                                disabled={true}
-                            />
-                        </span>
-                        <span className='box-conversion-title'>POS Product</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>
-                            <Field
-                                name={`${member}.storeId`}
-                                options={_get(this.props, 'storeList', [])}
-                                component={ReactSelectWrapper}
-                                disabled={true}
-                            />
-                        </span>
-                        <span className='box-conversion-title'>Store</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>
-                            <Field
-                                name={`${member}.vendorProductId`}
-                                options={_get(this.props, 'vendorProductsList', [])}
-                                component={ReactSelectWrapper}
-                                disabled={true}
-                            />
-                        </span>
-                        <span className='box-conversion-title'>Vendor Product</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>
-                            <Field
-                                name={`${member}.quantity`}
-                                component={TextFieldInput}
-                                type={"number"}
-                                parse={value => parseInt(value, 10)}
-                                disabled={false}
-                            />
-                        </span>
-                        <span className='box-conversion-title'>Quantity</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>
-                            <Field
-                                name={`${member}.status`}
-                                component={TextFieldInput}
-                                disabled={true}
-                            />
-                        </span>
-                        <span className='box-conversion-title'>Status</span>
-                    </div>
-                    <DeleteIcon className={this.props.classes.icon} onClick={() => { }} />
-                </div>
-            )
-        })
-        return <div className='box-conversion-container width-100-percent'>{rows}</div>
-    }
-
-    addNewRequisition = () => {
-        this.setState({
-            openAddDialog: true,
-        });
-    }
-    toggleAddDialog = () => {
-        this.setState({
-            openAddDialog: !this.state.openAddDialog,
-        });
-    }
-    handleSubmitHandler = (values, selProd) => {
-        let data = { ...values };
-        data.posProductId = selProd.posProductId;
-        // data.storeId = selProd.storeId;
-        data.vendorId = selProd.vendorId;
-        data.retailerId = selProd.retailerId;
-        _set(data, 'createdTime.seconds', new Date().getTime());
-        console.log('values to create new requisition', data);
-
-        let url = `/Requisition/Save`
-        this.props.dispatch(saveRequisitionForm('', url, data))
+    fetchVendorProducts = (vendorProdUrl, reqObj) => {
+        this.props.dispatch(fetchVendorProducts('', vendorProdUrl, reqObj))
             .then((data) => {
-                console.log('requisition is saved successfully.');
-                this.props.fetchBasicDetails();
-                this.props.toggleEditState();
+                console.log('came in then of vendorproduct service call.');
+                let productIds = [];
+                let vendorIds = [];
+                !_isEmpty(data) && _isArray(data) && data.map((value) => {
+                    productIds.push(value.posProductId);
+                    vendorIds.push(value.vendorId);
+                })
+                this.getProductsFromCache(_uniq(productIds), _uniq(vendorIds));
             }, (err) => {
-                console.log('err while saving requisition form', err);
+                console.log('err', err);
                 this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
                 setTimeout(() => {
                     this.props.dispatch(showMessage({}));
@@ -162,34 +98,218 @@ class EditRequisition extends React.Component {
             })
     }
 
-    render() {
-        const { classes, fields } = this.props;
-        const { onEditClick, openAddDialog } = this.state
-        return (
-            <div className='edit-conversion-container'>
-                <FormDialog
-                    open={openAddDialog}
-                    handleClose={this.toggleAddDialog}
-                    title={'Add New'}
-                    fullScreen={false}
-                    fullWidth={true}
-                    dialogContent={
-                        <AddRequisitionForm
-                            storeList={this.props.storeList}
-                            handleSubmitHandler={this.handleSubmitHandler}
-                            classes={classes}
-                        />
-                    }
-                />
 
-                <Button
-                    variant="outlined"
-                    onClick={() => this.addNewRequisition()}
-                    color="primary"
-                    className={classes.button}>+ New Requisition</Button>
-                {this.populateRequisitionList()}
+    getProductsFromCache = (prodIds, vendorIds) => {
+        let productsUrl = `/Product/GetByIds`;
+        let data = {
+            ids: prodIds,
+        };
+        this.props.dispatch(fetchProductsFromCache('', productsUrl, data))
+            .then((data) => {
+                this.setState({
+                    cachedProducts: data,
+                });
+                this.props.dispatch(updateVendorProductsList('', data));
+                let vendorsUrl = `/Vendor/GetByIds`;
+                let req = {
+                    ids: vendorIds,
+                };
+                this.props.dispatch(fetchProductsFromCache('', vendorsUrl, req))
+                    .then((data) => {
+                        this.setState({
+                            cachedVendors: data,
+                        });
+                        this.props.dispatch(updateVendorsList('', data));
+                    }, (err) => {
+                        console.log('err while fetching products from cache', err);
+                    })
+            }, (err) => {
+                console.log('err while fetching products from cache', err);
+            })
+    }
+    mapProductName = (productId) => {
+        let prod = _find(_get(this.state, 'cachedProducts', []), {
+            'id': productId
+        });
+        return _get(prod, 'name', '');
+    }
+    mapVendorName = (vendorId) => {
+        let vendor = _find(_get(this.state, 'cachedVendors', []), {
+            'id': vendorId
+        });
+        return _get(vendor, 'name', '');
+    }
+    mapStoreName = (id) => {
+        let store = _find(_get(this.props, 'storeList', []), {
+            'value': id
+        });
+        return _get(store, 'label', '');
+    }
+    mapVendorProductName = (id) => {
+        let vendor = _find(_get(this.props, 'vendorProductsList', []), {
+            'id': id
+        });
+        return _get(vendor, 'name', '');
+    }
+    getRequisitionStatus = (status) => {
+        let statusValue = '';
+        switch (status) {
+            case 0:
+                statusValue = 'SCRATCH';
+                break
+            case 1:
+                statusValue = 'CAPTURED';
+                break
+            case 2:
+                statusValue = 'REJECTED';
+                break
+            case 3:
+                statusValue = 'COMPLETE';
+                break
+            default:
+                statusValue = 'SCRATCH';
+                break;
+        }
+        return statusValue;
+    }
+
+    productColumn = (cell, row) => {
+        return (
+            <div>
+                <span>{this.mapProductName(row.posProductId)}</span>
             </div>
-        );
+        )
+    }
+    vendorColumn = (cell, row) => {
+        return (
+            <div>
+                <span>{this.mapVendorName(row.vendorId)}</span>
+            </div>
+        )
+    }
+    storeColumn = (cell, row) => {
+        return (
+            <div>
+                <span>{this.mapStoreName(row.storeId)}</span>
+            </div>
+        )
+    }
+    statusColumn = (cell, row) => {
+        return (
+            <div>
+                <span>{this.getRequisitionStatus(row.status)}</span>
+            </div>
+        )
+    }
+
+    populateRequisitions = () => {
+        let rows = []
+        _get(this, 'props.requisitions', []).map((data, index) => {
+            rows.push(
+                <div className={'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
+                    <div className='box-conversion-item'>
+                        <span className='box-conversion-data'>{this.mapProductName(data.posProductId)}</span>
+                        <span className='box-conversion-title'>POS Product</span>
+                    </div>
+                    <div className='box-conversion-item'>
+                        <span className='box-conversion-data'>{this.mapVendorName(data.vendorId)}</span>
+                        <span className='box-conversion-title'>Vendor Id</span>
+                    </div>
+                    <div className='box-conversion-item'>
+                        <span className='box-conversion-data'>{this.mapStoreName(data.storeId)}</span>
+                        <span className='box-conversion-title'>Store Id</span>
+                    </div>
+                    {/* <div className='box-conversion-item'>
+                        <span className='box-conversion-data'>{data.vendorProductId}</span>
+                        <span className='box-conversion-title'>Vendor Product</span>
+                    </div> */}
+                    {
+                        this.props.showReceievedQuantity ?
+                            <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{data.quantity}</span>
+                                <span className='box-conversion-title'>{'Ordered Quantity'}</span>
+                            </div>
+                            : <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{data.proposedQuantity ? data.proposedQuantity : data.quantity}</span>
+                                <span className='box-conversion-title'>{'Proposed Quantity'}</span>
+                            </div>
+
+                    }
+                    {
+                        this.props.showReceievedQuantity ?
+                            <div className='box-conversion-item'>
+                                <input style={{ width: '100px' }} className='box-conversion-data' disabled={this.props.isPOViewFlag} onChange={(e) => this.props.handleChangeInput(e, index, data.quantity)} value={data.fulfilledQuantity ? data.fulfilledQuantity: data.quantity} />
+                                <span className='box-conversion-title'>{'Received Quantity'}</span>
+                            </div>
+                            : <div className='box-conversion-item'>
+                                <input style={{ width: '100px' }} className='box-conversion-data' disabled={this.props.isPOViewFlag} onChange={(e) => this.props.handleChangeInput(e, index, data.proposedQuantity ? data.proposedQuantity : data.quantity)} value={data.quantity} />
+                                <span className='box-conversion-title'>{'Quantity'}</span>
+                            </div>
+
+                    }
+                    <div className='box-conversion-item'>
+                        <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
+                        <span className='box-conversion-title'>Status</span>
+                    </div>
+                    {
+                        !this.props.isPOViewFlag &&
+                        <div>
+                            <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={() => this.props.handleSubmitHandler(index)}>Save</Button>
+                        </div>
+                    }
+                </div>
+            )
+        })
+
+        return (
+            <div className='box-conversion-container'>
+                <div className='panel-container'>
+                    <span className='panel-heading'>Requisition List </span>
+                </div>
+                {rows}
+            </div>
+        )
+    }
+
+    render() {
+        const { classes, fields, forEdit } = this.props;
+        const { onEditClick, openAddDialog } = this.state
+        if (forEdit) {
+            return (
+                <div className="row">
+                    {
+                        this.props.handleCancel &&
+                        <div className="form-btn-group">
+                            <Button variant="outlined" color="primary" className={classes.button} onClick={() => this.props.handleSubmitHandler('', true)}>Save All</Button>
+                            <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.props.handleCancel()}>Cancel</Button>
+                        </div>
+                    }
+
+                    {this.populateRequisitions()}
+                </div>
+            );
+        } else {
+            return (
+                <BootstrapTable
+                    data={_get(this.props, 'requisitionListData', [])}
+                    options={options}
+                    selectRow={this.props.selectRowProp}
+                    striped hover
+                    pagination={true}
+                    exportCSV={true}
+                    search={true}
+                    searchPlaceholder={'Search PO'}>
+
+                    <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id</TableHeaderColumn>
+                    <TableHeaderColumn width='100' dataField='posProductId' dataFormat={this.productColumn} >Product</TableHeaderColumn>
+                    <TableHeaderColumn width='100' dataField='vendorId' dataFormat={this.vendorColumn}>Vendor</TableHeaderColumn>
+                    <TableHeaderColumn width='100' dataField='storeId' dataFormat={this.storeColumn}>Store</TableHeaderColumn>
+                    <TableHeaderColumn width='100' dataField='quantity' >Quantity</TableHeaderColumn>
+                    <TableHeaderColumn width='100' dataField='status' dataFormat={this.statusColumn} dataSort>Status</TableHeaderColumn>
+                    {/* <TableHeaderColumn width='100' dataField='' dataFormat={this.props.actionColumn} dataSort>Actions</TableHeaderColumn> */}
+                </BootstrapTable>
+            );
+        }
     }
 }
 

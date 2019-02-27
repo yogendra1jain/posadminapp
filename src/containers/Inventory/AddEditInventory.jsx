@@ -63,12 +63,7 @@ class AddEditInventoryContainer extends React.Component {
 
 
     handleInputChange(event) {
-        if (event.target.value == "-1") {
-            _set(this.selectedInventory, event.target.name, 0);
-        }
-        else {
-            _set(this.selectedInventory, event.target.name, event.target.value);
-        }
+        _set(this.selectedInventory, event.target.name, event.target.value);
         this.forceUpdate();
     }
 

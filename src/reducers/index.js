@@ -14,6 +14,8 @@ import posReducer, { posTerminalData as posTerminalReducer } from './posTerminal
 import sessionReducer, { sessionsData as sessionsReducer } from './session';
 import { categoriesData as categoriesReducer } from './categories'
 import purchaseOrderReducer, { purchaseOrderData as purchaseOrdersReducer } from './purchaseOrder';
+import employeeReducer, { employeeData as employeesReducer } from './employees';
+import retailerReducer, { retailerData as retailersReducer } from './retailer';
 import commonData from './common';
 
 
@@ -64,6 +66,10 @@ const rootReducer = combineReducers({
   form: formReducer,
   purchaseOrderReducer,
   purchaseOrdersReducer,
+  employeeReducer,
+  employeesReducer,
+  retailerReducer,
+  retailersReducer
 })
 
 export default rootReducer;
