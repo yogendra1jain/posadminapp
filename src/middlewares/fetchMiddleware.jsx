@@ -103,7 +103,7 @@ const fetchMiddleware = store => next => action => {
                     return Promise.resolve({});
                 })
         })
-        .then(json => dispatch(successHandler(subreddit, json, status, id, resolve, action.successCbPassOnParams)))
+        .then(json => dispatch(successHandler(subreddit, json, status, resolve, id, action.successCbPassOnParams)))
         .catch(error => dispatch(failureHandler(subreddit, error, 500, reject)))
 }
 
