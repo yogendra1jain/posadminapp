@@ -188,14 +188,24 @@ class VendorProductsContainer extends React.Component {
         let { selectedValue } = this.state;
         return (
             <div className="">
+
+                
+                        <div className='panel-container'>
+                            <span className='panel-heading'>Vendor Products</span>
+
+                            <div>
+                                <SaveButton  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
+                                <SaveButton Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
+                            </div>
+                        </div>
+
                 <div>
-                    <div className="" style={{ marginBottom: '10px' }}>
+                <div className="row">
+                    <div className="col-sm-4 m-t-10">
                         <Select name='vendor' options={vendorList} value={selectedValue} onChange={this.handleVendorChange} />
                     </div>
-                    <div className="form-btn-group">
-                        <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.updateVendorProduct()}>Update</Button>
-                        <Button type="button" variant="raised" onClick={() => this.addNewVendorProduct()}>Add New</Button>
                     </div>
+                    
                     <div>
                         <BootstrapTable
                             data={vendorProductsList}

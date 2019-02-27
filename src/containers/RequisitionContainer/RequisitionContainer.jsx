@@ -17,6 +17,7 @@ import { reduxForm } from 'redux-form';
 // import asyncValidate from './validate';
 /* Component Imports */
 import AddRequisitionForm from './components/AddRequisitionComp';
+import SaveButton from '../../components/common/SaveButton.jsx'
 import FormDialog from '../../components/common/CommonDialog/index';
 import EditRequisition from './components/EditRequisition.jsx';
 import { fetchRequisitionList, saveRequisitionForm } from '../../actions/vendor';
@@ -179,15 +180,16 @@ class RequisitionContainer extends PureComponent {
                         />
                     }
                 />
-                <div style={{ padding: "20px" }}>
+                <div >
                     {
                         !forEdit &&
                         <div className='panel-container'>
                             <span className='panel-heading'>Requisition List</span>
 
                             <div>
-                                <Button variant="outlined" color="primary" className={classes.button} onClick={() => this.toggleDialog(true)}>+ New Requisition</Button>
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleEdit()}>Edit</Button>
+                                
+                                <SaveButton Class_Name={"btn-info"} buttonDisplayText={'+ New Requisition'} handlerSearch={this.toggleDialog}/>
+                                <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Edit'} handlerSearch={this.handleEdit}/>
                             </div>
 
                         </div>
