@@ -118,16 +118,12 @@ class AddEditRetailerContainer extends React.Component {
 
             <div className="strainBlock">
                 <form onSubmit={handleSubmit(this.addRetailer)}>
-                    <AddEditRetailerComponent
-                        {...this.props}
-                    />
-                    <div className="row" style={{ marginTop: '10px', marginLeft: '10px' }}>
-                        <Button type="submit" variant="raised">SAVE</Button>
-                    </div>
-                </form>
-                <div className="col-sm-6 col-md-4 form-d">
-                    <div className="row">
-                        <div className="col-sm-12">
+                    <div className="col-sm-12">
+                        <AddEditRetailerComponent
+                            {...this.props}
+                        />
+
+                        <div className="col-sm-4" style={{ marginTop: '25px' }}>
                             <label className="control-label">Upload Image</label>
                             <div className="" style={{ marginTop: "5px", float: "left", marginRight: "15px" }}>
                                 {/* <input type="file" id="files" className="hidden"/> */}
@@ -138,6 +134,9 @@ class AddEditRetailerContainer extends React.Component {
                                 <ul>{this.fileNames}</ul>
                             </div>
                         </div>
+                        <div className="col-sm-3" style={{ marginTop: '25px' }}>
+                            <Button type="submit" variant="raised">SAVE</Button>
+                        </div>
                     </div>
                     {this.imagePreviewUrl != '' &&
                         <div className="row" style={{ marginTop: "10px" }}>
@@ -147,7 +146,10 @@ class AddEditRetailerContainer extends React.Component {
                         </div>
                     }
 
-                </div>
+
+
+                </form>
+
             </div>
         )
     }

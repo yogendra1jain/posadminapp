@@ -6,16 +6,14 @@ import Row from "react-bootstrap/lib/Row";
 
 const AddEditRetailerComponent = () => {
     return (
-        <Row className="d-flex">
-            <div className="col-sm-12" style={{ marginLeft: 0 }}>
-                <div className="col-sm-4" style={{ marginTop: '25px' }}>
-                    <Field name={`name`} placeholder="Name" id={`name`} label={'Name *'} component={TextFieldInput} />
-                </div>
-                <div className="col-sm-4">
-                    <Field name={`domainLink`} placeholder="Domain Link" id={`domainLink`} label={'Domain Link *'} component={TextFieldInput} />
-                </div>
+        <div>
+            <div className="col-sm-4" style={{ marginTop: '25px' }}>
+                <Field name={`name`} placeholder="Name" id={`name`} label={'Name *'} component={TextFieldInput} />
             </div>
-        </Row>
+            <div className="col-sm-4" style={{ marginTop: '25px' }}>
+                <Field name={`domainLink`} placeholder="Domain Link" id={`domainLink`} label={'Domain Link *'} component={TextFieldInput} />
+            </div>
+        </div>
     )
 }
 
