@@ -118,7 +118,7 @@ class SaleDataReportContainer extends React.Component {
                 <div className="row">
                     <div className="col-sm-6 col-xs-8">
                         <ul className="breadcrumb" >
-                            <li>Employee Payroll Deduct Summary</li>
+                            <li>Sale Data Report</li>
                         </ul>
                     </div>
                 </div>

@@ -139,30 +139,30 @@ class NavBarComponent extends React.Component {
                                                 <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')}  to={"/employee_payroll_deduct_details"}>Employee Payroll Deduct Details </Link>
                                             </Panel.Body>
                                         </div>
-                                        <div onClick={() => this.changeCurrentPath(6, 2)} key={2}>
+                                        {/* <div onClick={() => this.changeCurrentPath(6, 2)} key={2}>
                                             <Panel.Body style={{}} className={this.state.activeMenuIndex === 2 && this.state.activeSubMenuIndex === 2 ? 'active' : 'inActive'}
                                                 collapsible={this.state.clickedSubIndex !== 2}>
 
                                                 {/* <a href={"/#"+subMenu.link}>{subMenu.displayText}</a> */}
-                                                <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_summary')}  to={"/employee_payroll_deduct_summary"}>Employee Payroll Deduct Summary </Link>
+                                                {/* <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_summary')}  to={"/employee_payroll_deduct_summary"}>Employee Payroll Deduct Summary </Link>
                                             </Panel.Body>
-                                        </div>
-                                        <div onClick={() => this.changeCurrentPath(6, 3)} key={3}>
+                                        </div>  */}
+                                        {/* <div onClick={() => this.changeCurrentPath(6, 3)} key={3}>
                                             <Panel.Body style={{}} className={this.state.activeMenuIndex === 3 && this.state.activeSubMenuIndex === 3 ? 'active' : 'inActive'}
                                                 collapsible={this.state.clickedSubIndex !== 3}>
 
                                                 {/* <a href={"/#"+subMenu.link}>{subMenu.displayText}</a> */}
-                                                <Link onClick={() => this.changeCurrentPath('/employee_discount_report')}  to={"/employee_discount_report"}>Employee Discount Report </Link>
+                                                {/* <Link onClick={() => this.changeCurrentPath('/employee_discount_report')}  to={"/employee_discount_report"}>Employee Discount Report </Link>
                                             </Panel.Body>
-                                        </div>
-                                        <div onClick={() => this.changeCurrentPath(6, 4)} key={4}>
+                                        </div>  */}
+                                        {/* <div onClick={() => this.changeCurrentPath(6, 4)} key={4}>
                                             <Panel.Body style={{}} className={this.state.activeMenuIndex === 4 && this.state.activeSubMenuIndex === 4 ? 'active' : 'inActive'}
-                                                collapsible={this.state.clickedSubIndex !== 4}>
+                                                collapsible={this.state.clickedSubIndex !== 4}> */}
 
                                                 {/* <a href={"/#"+subMenu.link}>{subMenu.displayText}</a> */}
-                                                <Link onClick={() => this.changeCurrentPath('/employee_details_report')}  to={"/employee_details_report"}>Employee Details Report </Link>
+                                                {/* <Link onClick={() => this.changeCurrentPath('/employee_details_report')}  to={"/employee_details_report"}>Employee Details Report </Link>
                                             </Panel.Body>
-                                        </div>
+                                        </div> */}
                                         <div onClick={() => this.changeCurrentPath(6, 5)} key={5}>
                                             <Panel.Body style={{}} className={this.state.activeMenuIndex === 5 && this.state.activeSubMenuIndex === 5 ? 'active' : 'inActive'}
                                                 collapsible={this.state.clickedSubIndex !== 5}>
