@@ -121,7 +121,6 @@ class LoginContainer extends React.Component {
                 redirectToSearch: false
             });
         }
-
     }
     onPaste(e) {
         e.preventDefault();

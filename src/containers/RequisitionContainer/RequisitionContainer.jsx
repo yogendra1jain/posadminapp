@@ -90,7 +90,7 @@ class RequisitionContainer extends PureComponent {
         let requisitionUrl = `/Requisition/GetByCriteria`;
         let reqObj = {
             statuses: [0],
-            id: localStorage.getItem('retailerID'),
+            retailerId: localStorage.getItem('retailerID'),
         };
         this.props.dispatch(fetchRequisitionList('', requisitionUrl, reqObj))
             .then((data) => {
