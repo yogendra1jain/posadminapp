@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import SaveButton from '../../components/common/SaveButton.jsx'
 import { fetchStore, fetchPostStore, requestStoreUpdate } from '../../actions/store';
 import connect from 'react-redux/lib/connect/connect';
+import ReactDrawer from 'react-drawer';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
@@ -15,7 +16,8 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 // import Category from './category';
 import 'react-drawer/lib/react-drawer.css';
 import Alert from 'react-s-alert';
-
+import AddProductDrawer from './addProductsDrawer';
+import { fetchProductLookupData } from '../../actions/products';
 
 const options = {
     paginationPosition: 'top',
@@ -34,6 +36,9 @@ const options = {
 class StoreListContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            openDrawer: false
+        }
         this.open = false;
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -121,21 +126,17 @@ class StoreListContainer extends React.Component {
 
     }
     componentDidMount() {
-        const { dispatch, storesReducer } = this.props;
+        const { dispatch, storesReducer, productsReducer } = this.props;
         let reqBody = {
             id: localStorage.getItem('retailerID')
         }
         let url = '/Store/ByRetailerId'
         dispatch(fetchStore(storesReducer, url, reqBody));
+        let ProductListurl = '/Product/ByRetailerId';
+        dispatch(fetchProductLookupData(productsReducer,ProductListurl, reqBody));
     }
     onUpdate() {
         let tempStore = _find(this.storeList, { 'id': this.selectedStore.id });
-        // this.id = this.selectedStore.id;
-        // this.store = tempStore.storeName;
-        // this.storeInfo = {
-        //     storeName: this.store,
-        //     storeId: this.id,
-        // }
         this.open = true;
         const { dispatch, storesReducer } = this.props;
         dispatch(requestStoreUpdate(storesReducer, tempStore));
@@ -196,6 +197,15 @@ class StoreListContainer extends React.Component {
     handleSelectChange = (id, name) => {
 
     }
+
+    addProduct = () => {
+        this.setState({openDrawer: true})
+    }
+
+    onDrawerClose = () => {
+        this.setState({openDrawer: false})
+    }
+
     render() {
         if (this.open) {
             return (
@@ -220,6 +230,7 @@ class StoreListContainer extends React.Component {
 
                 <div>
                     <div className="form-btn-group">
+                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Add Products'} handlerSearch={this.addProduct} />
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
                         <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
                     </div>
@@ -246,51 +257,23 @@ class StoreListContainer extends React.Component {
                     </div>
                 </div>
                 <div>
-                    {/* <ReactDrawer
-                        open={this.open}
+                    <ReactDrawer
+                        open={this.state.openDrawer}
                         position={'bottom'}
-                        // onClose={this.onDrawerClose}
+                        onClose={this.onDrawerClose}
                         noOverlay={true}
                     >
                         <div className="slide-panel">
                             <div className="row">
-                            <fieldset className="col-sm-6 form-d" disabled={true}>
-                                <div className="col-sm-12 form-d">
-                                   <label className="control-label">Reatailer Id</label>
-                                         <FormControl
-                                            type="text"
-                                            name="retailer"
-                                            value={localStorage.getItem('retailerID')}
-                                            placeholder="Retailer Id"
-                                        // onChange = {this.handleInputChange}
-                                        >
-                                        </FormControl>
-                                   
-                                </div>
-                                </fieldset>
-                                <div className="col-sm-6 form-d">
-                                    <label className="control-label">Store Name</label>
-                                    <FormControl
-                                        type="text"
-                                        name="store"
-                                        value={this.store}
-                                        placeholder="Store Name"
-                                        onChange={this.handleInputChange}
-                                    >
-                                    </FormControl>
-                                </div>
+                                <AddProductDrawer 
+                                    productData={_get(this,'props.productData', [])}
+                                    storeId={this.selectedStore.id}
+                                    onClose={this.onDrawerClose}
+                                    {...this.props}
+                                />
                             </div>
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <div className="form-btn-group">
-                                        <SaveButton buttonDisplayText={'Save'} handlerSearch={this.saveHandler} />
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            
                         </div>
-                    </ReactDrawer> */}
+                    </ReactDrawer>
                 </div>
             </div>
         )

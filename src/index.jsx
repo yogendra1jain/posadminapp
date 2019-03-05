@@ -109,7 +109,7 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/staffs" component={StaffListContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/posList" component={PosList} />
         <RouteWithLayout layout={MainLayout} exact path="/addEditPos" component={AddEditPosContainer} />
-        {/* <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/> */}
+        <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/>
         {/* <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/> */}
         <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer} />

@@ -209,3 +209,40 @@ export const fetchStoreList = (subreddit, url, data) => dispatch => {
         }));
     })
 }
+
+//map products with store
+
+const requestMapProductsWithStore = (subreddit) => ({
+    type: STORE_CONSTANTS.REQUEST_STORE,
+    subreddit
+});
+
+const receiveMapProductsWithStoreError = (subreddit, err, errCode) => ({
+    type: STORE_CONSTANTS.RECEIVED_STORE_ERROR,
+    subreddit,
+    error: err,
+    errorCode: errCode
+})
+
+const receiveMapProductsWithStore = (subreddit, json, status) => ({
+    type: STORE_CONSTANTS.RECEIVED_STORE,
+    subreddit,
+    data: json,
+    status: status,
+    receivedAt: Date.now()
+})
+
+export const mapProductsWithStore = (subreddit, url, data) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: STORE_CONSTANTS.STORE_URL + url,
+        method: 'POST',
+        body: data,
+        initCb: requestMapProductsWithStore,
+        successCb: receiveMapProductsWithStore,
+        failureCb: receiveMapProductsWithStoreError,
+        resolve: '',
+        reject: '',
+        subreddit,
+        wrapperActionType: 'MAP_PRODUCTS_WITH_STORE_WRAPPER',
+        redirect: 'follow'
+    }));
