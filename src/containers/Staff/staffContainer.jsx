@@ -78,10 +78,8 @@ class AddEditStaffContainer extends React.Component {
             active: true
         };
         this.roles = [
-            { displayText: 'Operator', value: 'Operator' },
-            { displayText: 'Cashier', value: 'Cashier' },
-            { displayText: 'Volunteer', value: 'Volunteer' },
-            { displayText: 'Manager', value: 'Manager' }
+            { displayText: 'Cashier', value: 'cashier' },
+            { displayText: 'Manager', value: 'manager' }
         ]
         this.status = [
             { displayText: 'Active', value: 'Active' },
