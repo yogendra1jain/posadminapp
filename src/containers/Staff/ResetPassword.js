@@ -51,9 +51,17 @@ class ResetPassword extends Component {
         }
         if(e.target.name == 'confirmPassword') {
             if(e.target.value !== this.passwordInfo.newPassword) {
-                this.setState({errorMsg: 'Confirm password is not matching.'})
+                this.setState({
+                    errorMsg: 'Confirm password is not matching.', 
+                    isError: true
+                })
+            } else {
+                this.setState({
+                    errorMsg: '', 
+                    isError: false
+                })
             }
-        }
+        } 
         if (props) {
             props.handleChange(e)
         }
@@ -135,6 +143,8 @@ class ResetPassword extends Component {
                                 className="text-input error"
                                 type="password"
                             />
+                            {this.state.errorMsg == '' ? '' : 
+                            <span style={{color: 'red'}}>{this.state.errorMsg}</span>}
                         </div>
                         </Row>
                         <Row>
