@@ -230,7 +230,7 @@ class StoreListContainer extends React.Component {
 
                 <div>
                     <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Add Products'} handlerSearch={this.addProduct} />
+                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Add Products'} handlerSearch={this.addProduct} /> */}
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
                         <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
                     </div>
@@ -256,7 +256,7 @@ class StoreListContainer extends React.Component {
 
                     </div>
                 </div>
-                <div>
+                {/* <div>
                     <ReactDrawer
                         open={this.state.openDrawer}
                         position={'bottom'}
@@ -274,7 +274,7 @@ class StoreListContainer extends React.Component {
                             </div>
                         </div>
                     </ReactDrawer>
-                </div>
+                </div> */}
             </div>
         )
 

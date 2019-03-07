@@ -122,6 +122,7 @@ class ResetPassword extends Component {
                                 htmlFor="newPassword" displayName="New Password" type="text"
                                 inputName="newPassword" defaultValue={_get(this.passwordInfo, 'newPassword', '')}
                                 onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                type="password"
                                 className="text-input error"
                             />
                         </div>
@@ -132,6 +133,7 @@ class ResetPassword extends Component {
                                 inputName="confirmPassword" defaultValue={_get(this.passwordInfo, 'confirmPassword', '')}
                                 onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                 className="text-input error"
+                                type="password"
                             />
                         </div>
                         </Row>
