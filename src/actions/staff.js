@@ -101,19 +101,19 @@ const requestChangePassword = (subreddit)=> ({
     subreddit
 });
 
-const receiveChangePasswordError = (subreddit,err,errCode) => ({
-    type: STAFF_CONSTANTS.RECEIVE_CHANGE_PASSWORD_ERROR,
-    subreddit,
-    error: err,
-    errorCode: errCode
-})
-
 const receiveChangePassword = (subreddit, json, status )=> ({
     type: STAFF_CONSTANTS.RECEIVE_CHANGE_PASSWORD,
     subreddit,
     data: json,
     status: status,
     receivedAt: Date.now()
+})
+
+const receiveChangePasswordError = (subreddit,err,errCode) => ({
+    type: STAFF_CONSTANTS.RECEIVE_CHANGE_PASSWORD_ERROR,
+    subreddit,
+    error: err,
+    errorCode: errCode
 })
 
 export const changePassword = (subreddit, data,url) => dispatch =>

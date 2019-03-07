@@ -9,8 +9,10 @@ import {
   RECEIVED_STAFF_LIST_ERROR,  
   REQUEST_STAFF_UPDATE,
   RECEIVED_STAFF_UPDATE,
-  RECEIVED_STAFF_UPDATE_ERROR
-
+  RECEIVED_STAFF_UPDATE_ERROR,
+  REQUEST_CHANGE_PASSWORD,
+  RECEIVE_CHANGE_PASSWORD,
+  RECEIVE_CHANGE_PASSWORD_ERROR
 } from '../constants/staff';
 
 const staffReducer = (state = 'staffState', action) => {
@@ -86,7 +88,31 @@ const staffsData = (state = {
         didInvalidate: false, selectedStaff: action.error,staffSaveData:[],
         lastUpdated: action.receivedAt
     });
-     
+    case REQUEST_CHANGE_PASSWORD:
+    return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        lastUpdated: action.receivedAt
+    });
+    case RECEIVE_CHANGE_PASSWORD:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        lastUpdated: action.receivedAt
+    });
+    case RECEIVE_CHANGE_PASSWORD_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        status: action.status,
+        errorMsg: action.error,
+        didInvalidate: false, 
+        lastUpdated: action.receivedAt
+    }); 
 
     default:
       return state

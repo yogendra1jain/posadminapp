@@ -76,15 +76,16 @@ class ResetPassword extends Component {
         this.setState({isError: true})
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if(nextProps.type == 'RECEIVE_CHANGE_PASSWORD') {
-    //         if(nextProps.status == 200) {
-    //             this.showAlert(false, 'Password Reset Successfully!')
-    //             this.redirectToList = true
-    //             this.forceUpdate();
-    //         }
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        debugger
+        if(nextProps.type == 'RECEIVE_CHANGE_PASSWORD') {
+            if(nextProps.status == 200) {
+                this.showAlert(false, 'Password Reset Successfully!')
+                this.redirectToList = true
+                this.forceUpdate();
+            }
+        }
+    }
 
     handleChangePassword = () => {
         let reqBody = {
@@ -104,6 +105,7 @@ class ResetPassword extends Component {
     }
 
     render() {
+
         if (this.redirectToList) {
             return (
                 <Redirect push to={{

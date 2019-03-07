@@ -57,6 +57,7 @@ class ProductListContainer extends React.Component {
                 let prod = {};
                 prod = product
                 prod.sellingPrice = _get(product,'salePrice.price','');
+                prod.costPrice = _get(product,'costPrice.price','')
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
                 this.productList.push(prod);
             });
@@ -161,6 +162,7 @@ class ProductListContainer extends React.Component {
                                 Product Name
                             </TableHeaderColumn>
                             <TableHeaderColumn width='50' dataField='currencyCode' >Currency Code</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='costPrice' dataSort searchable={true} >Cost Price</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
                             <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>
                         </BootstrapTable>

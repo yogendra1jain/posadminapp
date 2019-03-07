@@ -198,10 +198,14 @@ class ProductContainer extends React.Component {
         }
         _set(data, 'upcCode', Number(_get(data, 'upcCode', '0')))
         console.log(data, 'data is here')
-        let price = parseFloat(this.productInfo.sellingPrice)
+        let salePrice = parseFloat(this.productInfo.sellingPrice)
+        let costPrice = parseFloat(this.productInfo.costPrice)
         data.salePrice = {}
         data.salePrice.currencyCode = '$'
-        data.salePrice.price = price
+        data.salePrice.price = salePrice
+        data.costPrice = {}
+        data.costPrice.currencyCode = '$'
+        data.costPrice.price = costPrice
         data.retailerId = localStorage.getItem('retailerID');
         data.image = this.imagePreviewUrl;
         if (this.state.isUpdating) {
@@ -333,6 +337,7 @@ class ProductContainer extends React.Component {
                         <label className="control-label">Product Detail</label>
                         <Input
                             name="description"
+                            multiline
                             label="Description"
                             onChange={this.handleInputChange}
                             value={_get(this.productInfo, 'description', '')}
@@ -344,6 +349,15 @@ class ProductContainer extends React.Component {
                             onChange={this.handleInputChange} errorCheck={false}
                             className="text-input error"
                         /> */}
+                    </div>
+                    <div className="col-sm-6 col-md-4 form-d">
+                        <label className="control-label">Cost Price</label>
+                        <GenericInput
+                            htmlFor="costPrice" displayName="Cost Price" type="number"
+                            inputName="costPrice" defaultValue={_get(this.productInfo, 'costPrice', '')}
+                            onChange={this.handleInputChange} errorCheck={false}
+                            className="text-input error"
+                        />
                     </div>
 
                     <div className="col-sm-6 col-md-4 form-d">
