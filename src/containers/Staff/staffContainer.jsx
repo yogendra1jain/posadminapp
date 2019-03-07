@@ -185,16 +185,15 @@ class AddEditStaffContainer extends React.Component {
 
 }
 componentDidMount() {
-    console.log(this.props.selectedId, 'this.props.selectedStaff')
     if (this.props.selectedId) {
         this.setState({ isUpdating: true })
         let selectedStaff = _find(this.props.staffListData, { 'id': this.props.selectedId })
-        console.log(selectedStaff, 'selectedStaff')
         this.staffInfo = selectedStaff
         this.staffInfo.firstName = selectedStaff.person.firstName
         this.staffInfo.middleName = selectedStaff.person.middleName
         this.staffInfo.lastName = selectedStaff.person.lastName
-        this.staffInfo.phone = selectedStaff.phoneNumber.phoneNumber
+        this.staffInfo.phone = selectedStaff.phoneNumber.phoneNumber 
+        this.staffInfo.active = selectedStaff.active ? 'Active' : 'Inactive'
     }
     this.forceUpdate()
 }
@@ -436,6 +435,8 @@ render() {
                                     className="text-input error"
                                 />
                             </div>
+                            {this.state.isUpdating ? 
+                            '' : 
                             <div className="col-sm-6 col-md-4 form-d">
                                 <label className="control-label">Password</label>
                                 <GenericInput
@@ -449,49 +450,7 @@ render() {
                                 />
                                 <span className={this.btnDisplayText === 'Show Password' ? 'show-password' : 'hide-password'} onClick={this.showPassword}>{this.btnDisplayText}</span>
                             </div>
-                            {/* {!this.isUpdate &&
-                                    <div className="col-sm-6 col-md-4 form-d">
-                                        <label className="control-label">Confirm Password</label>
-                                        <GenericInput
-                                            htmlFor="password" displayName="Confirm Password" type={this.passwordType}
-                                            inputName="confirmPassword" defaultValue={_get(this.staffInfo, 'confirmPassword', '')}
-                                            onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
-                                            onBlur={props.handleBlur} errorMessage={props.errors.confirmPassword}
-                                            error={props.errors} errorValue={props.errors.confirmPassword}
-                                            touched={props.touched} touchedValue={props.touched.confirmPassword}
-                                            className="text-input error"
-                                        />
-                                    </div>
-                                } */}
-                            {/* {this.isSalesExecutive && !this.isUpdate &&
-                                    <div className="col-sm-6 col-md-4 form-d">
-                                        <label className="control-label">Pin</label>
-                                        <GenericInput
-                                            htmlFor="pin" displayName="pin" type="number"
-                                            inputName="pin" defaultValue={_get(this.staffInfo, 'pin', '')}
-                                            onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                            className="text-input error"
-                                        />
-                                    </div>
-                                } */}
-                            {/* <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Employee ID</label>
-                                    <GenericInput
-                                        htmlFor="email" displayName="Employee ID" type="text"
-                                        inputName="employeeId" defaultValue={_get(this.staffInfo, 'employeeId', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div> */}
-                            {/* <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Age</label>
-                                    <GenericInput
-                                        htmlFor="age" displayName="Age" type="number"
-                                        inputName="age" defaultValue={_get(this.staffInfo, 'age', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div> */}
+                            }
                             <div className="col-sm-6 col-md-4 form-d">
                                 <label className="control-label">Contact Number</label>
                                 <GenericInput
@@ -510,113 +469,6 @@ render() {
                                     className="text-input error"
                                 />
                             </div>
-                            {/* <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Alternative Contact Number</label>
-                                    <GenericInput
-                                        htmlFor="alternativeContactNo" displayName="Alternative Contact Number" type="text"
-                                        inputName="alternativeContactNo" defaultValue={_get(this.staffInfo, 'alternativeContactNo', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div> */}
-
-                            {/* <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Gender</label>
-                                    <GenericInput
-                                        htmlFor="gender" displayName="Gender" type="text"
-                                        inputName="gender" defaultValue={_get(this.staffInfo, 'gender', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div> */}
-
-                            {/* <div className="col-sm-6 col-md-4 form-d">
-                    <label className="control-label">Sales Admin</label>
-                    <GenericInput
-                        htmlFor="salesAdmin" displayName="salesAdmin" type="text"
-                        inputName="salesAdmin" defaultValue={_get(this.staffInfo,'salesAdmin','')}
-                        onChange={this.handleInputChange} errorCheck={false}
-                        className="text-input error"
-                    />
-                </div> */}
-                            {/* <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Street Address1</label>
-                                    <GenericInput
-                                        htmlFor="streetAddress1" displayName="streetAddress1" type="text"
-                                        inputName="streetAddress1" defaultValue={_get(this.staffInfo, 'streetAddress1', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Street Address2</label>
-                                    <GenericInput
-                                        htmlFor="streetAddress2" displayName="streetAddress2" type="text"
-                                        inputName="streetAddress2" defaultValue={_get(this.staffInfo, 'streetAddress2', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">City</label>
-                                    <GenericInput
-                                        htmlFor="city" displayName="city" type="text"
-                                        inputName="city" defaultValue={_get(this.staffInfo, 'city', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">ZipCode</label>
-                                    <GenericInput
-                                        htmlFor="zipCode" displayName="zipCode" type="text"
-                                        inputName="zipCode" defaultValue={_get(this.staffInfo, 'zipCode', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        onBlur={(event)=>this.handleBlur(event, props)}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">State</label>
-                                    <GenericInput
-                                        htmlFor="state" displayName="state" type="text"
-                                        inputName="state" defaultValue={_get(this.staffInfo, 'state', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Country</label>
-                                    <GenericInput
-                                        htmlFor="country" displayName="country" type="text"
-                                        inputName="country" defaultValue={_get(this.staffInfo, 'country', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div> */}
-
-                            {/* <div className="col-sm-6 col-md-4 form-d">
-                    <label className="control-label">Categories</label>
-                    <AutoComplete
-                        type="multi"
-                        data={_get(this.categories,'data',[])}
-                        name="categories"
-                        value={_get(this.productInfo,'categories','')}
-                        changeHandler={(id, name) => { this.handleSelectChange(id, "categories") }}
-                    />
-                </div> */}
-
-
-
-                            {/* <div className="col-sm-5">
-                    <ul>{this.fileNames}</ul>
-                    </div> */}
-                            {/* <div className="col-sm-12" style={{marginBottom:"20px"}}>
-                        <img src={this.imagePreviewUrl} />
-                    </div> */}
-
-
-
                         </Row>
                         <Row>
                             <div className="col-sm-12">

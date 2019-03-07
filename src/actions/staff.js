@@ -25,25 +25,6 @@ const receiveStaff = (subreddit, json, status )=> ({
     receivedAt: Date.now()
 })
 
-// export const fetchSaveStaff = (subreddit, data,method,url) => dispatch => {
-    
-//     dispatch(requestStaff(subreddit));
-    
-//     fetch(STAFF_CONSTANTS.STAFF_URL+url, { method: method,
-//     headers: {
-//         "Content-type": "application/json"
-//     },
-//     body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         status = response.status;
-         
-//         return response.json() } 
-//     )
-//     .then(json => { return dispatch(receiveStaff(subreddit, json, status )) } )
-//     .catch(err => { return dispatch(receiveStaffError(subreddit,err,500)) } )
-// }
-
 export const fetchSaveStaff = (subreddit, data,method,url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: STAFF_CONSTANTS.STAFF_URL+url,
@@ -76,25 +57,6 @@ const receiveStaffList = (subreddit, json, status )=> ({
     status: status,
     receivedAt: Date.now()
 })
-
-// export const fetchStaffList = (subreddit, url) => dispatch => {
-    
-//     dispatch(requestStaffList(subreddit));
-    
-//     fetch(STAFF_CONSTANTS.STAFF_URL+"/staff/search"+url, { method: 'GET',
-//     headers: {
-//         "Content-type": "application/json"
-//     },
-//     // body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         status = response.status;
-         
-//         return response.json() } 
-//     )
-//     .then(json => { return dispatch(receiveStaffList(subreddit, json, status )) } )
-//     .catch(err => { return dispatch(receiveStaffListError(subreddit,err,500)) } )
-// }
 
 export const fetchStaffList = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
@@ -133,33 +95,36 @@ const receiveStaffUpdate = (subreddit, json, status )=> ({
     receivedAt: Date.now()
 })
 
-// export const fetchStaffUpdate = (subreddit, id, role) => dispatch => {
-    
-//     dispatch(requestStaffUpdate(subreddit));
-    
-//     fetch(STAFF_CONSTANTS.STAFF_URL+"/staff/"+id+"/details?role="+role, { method: 'GET',
-//     headers: {
-//         "Content-type": "application/json"
-//     },
-//     // body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         status = response.status;
-         
-//         return response.json() } 
-//     )
-//     .then(json => { return dispatch(receiveStaffUpdate(subreddit, json, status )) } )
-//     .catch(err => { return dispatch(receiveStaffUpdateError(subreddit,err,500)) } )
-// }
+//Action for Change Password
+const requestChangePassword = (subreddit)=> ({
+    type: STAFF_CONSTANTS.REQUEST_CHANGE_PASSWORD,
+    subreddit
+});
 
-// export const fetchStaffUpdate = (subreddit, id, role) => dispatch =>
-//     dispatch(dynamicActionWrapper({
-//         path: STAFF_CONSTANTS.STAFF_URL+"/staff/"+id+"/details?role="+role,
-//         method: 'POST',
-//         initCb: requestStaffUpdate,
-//         successCb: receiveStaffUpdate,
-//         failureCb: receiveStaffUpdateError,
-//         subreddit,
-//         wrapperActionType: 'FETCH_STAFF_UPDATE_WRAPPER',
-//         redirect: 'follow'
-//     }));
+const receiveChangePasswordError = (subreddit,err,errCode) => ({
+    type: STAFF_CONSTANTS.RECEIVE_CHANGE_PASSWORD_ERROR,
+    subreddit,
+    error: err,
+    errorCode: errCode
+})
+
+const receiveChangePassword = (subreddit, json, status )=> ({
+    type: STAFF_CONSTANTS.RECEIVE_CHANGE_PASSWORD,
+    subreddit,
+    data: json,
+    status: status,
+    receivedAt: Date.now()
+})
+
+export const changePassword = (subreddit, data,url) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: STAFF_CONSTANTS.STAFF_URL+url,
+        method: 'POST',
+        body: data,
+        initCb: requestChangePassword,
+        successCb: receiveChangePassword,
+        failureCb: receiveChangePasswordError,
+        subreddit,
+        wrapperActionType: 'FETCH_CHANGE_PASSWORD_WRAPPER',
+        redirect: 'follow'
+    }));

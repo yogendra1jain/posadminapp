@@ -59,7 +59,9 @@ import SaleDataReport from './containers/Reports/SaleDataReport.jsx';
 import RetailerContainer from './containers/Retailer/RetailerContainer.jsx';
 import AddEditRetailerContainer from './containers/Retailer/AddEditRetailer/AddEditRetailerContainer.jsx'
 import CategoriesContainer from './containers/Categories/CategoriesContainer'
-import AddNewCategoryContainer from './containers/Categories/AddNewCategoryContainer'
+import AddNewCategoryContainer from './containers/Categories/AddNewCategoryContainer';
+import ResetPassword from './containers/Staff/ResetPassword';
+
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'c',
@@ -137,6 +139,7 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/sale_report" component={SaleDataReport} />
         <RouteWithLayout layout={MainLayout} exact path="/retailers" component={RetailerContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
+        <RouteWithLayout layout={MainLayout} exact path='/staff/resetPassword' component={ResetPassword} />
       </Switch>
     </Router>
   </Provider>

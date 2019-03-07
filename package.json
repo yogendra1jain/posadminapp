@@ -52,6 +52,7 @@
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.16",
     "optimize-css-assets-webpack-plugin": "5.0.1",
+    "password-validator": "^4.1.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",

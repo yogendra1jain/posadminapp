@@ -47,6 +47,7 @@ class StaffListContainer extends React.Component {
             // selected : this.selectedIds,
         }       
         this.selectedIds = [];
+        this.enableAddNew = false
         this.selectedInfo = {};
         this.selectedInventory = {};
         this.products = [];
@@ -58,6 +59,7 @@ class StaffListContainer extends React.Component {
         this.isUpdate = false;
         this.method = 'POST';
         this.redirectToAddEditPAge = false;
+        this.redirectToChangePasswordPage = false;
         this.addNew = this.addNew.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -87,8 +89,6 @@ class StaffListContainer extends React.Component {
     componentWillReceiveProps(props) {
         if(props.type === 'RECEIVED_STAFF_LIST'){
             if((props.staffListData != null)){
-                console.log("this.stafflistdata: ",props.staffListData)
-                // this.staffList = props.staffListData;
                 this.staffList = [];
                 props.staffListData.map(staff  => {
                     console.log(staff, 'staff data')
@@ -121,12 +121,12 @@ class StaffListContainer extends React.Component {
                 tempStore.value = store.id;
                 this.storeList.push(tempStore);
             })
-            // this.storeList = props.storeData.stores;
             this.forceUpdate();
         }
     }
 
     componentDidMount(){
+        this.staffList = []
         const { dispatch, storesReducer } = this.props;
         let reqBody = {
             id: localStorage.getItem('retailerID')
@@ -134,6 +134,10 @@ class StaffListContainer extends React.Component {
         let url = '/Store/ByRetailerId'
         dispatch(fetchStore(storesReducer, url, reqBody));
         this.selectedStore.stores= _get(this.props,'location.state.id', '')
+        if(this.selectedStore.stores !== '') {
+            this.enableAddNew = true
+            this.forceUpdate()
+        }
         if(this.selectedStore.stores) {
             const { dispatch, staffsReducer } = this.props;
             let reqBody = {
@@ -184,9 +188,12 @@ class StaffListContainer extends React.Component {
     onUpdate(){
         const {dispatch, staffsReducer} = this.props;
         let tempStore = _find(this.staffList,{'id': this.selectedStaff.id});
-        console.log(tempStore, 'tempStore')
         dispatch(requestStaffUpdate(staffsReducer,tempStore,this.selectedStaff.id));
         this.redirectToAddEditPAge = true;
+    }
+    handleChangePassword = () => {
+        this.redirectToChangePasswordPage = true;
+        this.forceUpdate();
     }
     addNew() {
        this.redirectToAddEditPAge = true;
@@ -199,6 +206,7 @@ class StaffListContainer extends React.Component {
     }
 
     handleSelectChange = (id, name) => {
+        this.enableAddNew = true
         _set(this.selectedStore,name,id);
         this.forceUpdate()
         const { dispatch, staffsReducer } = this.props;
@@ -216,12 +224,19 @@ class StaffListContainer extends React.Component {
    
   
     render() {
-        
         if(this.redirectToAddEditPAge){
             return (
                 <Redirect push to={{
                     pathname: '/staff',
                     state: { id: this.selectedStore.stores },
+                  }} />
+            )
+        }
+        if(this.redirectToChangePasswordPage){
+            return (
+                <Redirect push to={{
+                    pathname: '/staff/resetPassword',
+                    state: { operatorId: this.selectedIds[0], id: this.selectedStore.stores },
                   }} />
             )
         }
@@ -236,15 +251,13 @@ class StaffListContainer extends React.Component {
                 </div>
             </div>);
         }
-        console.log(this.props.staffListData, 'this.props.staffListData')
-        console.log(this.staffList, 'this.staffList')
         return (
             <div className="">
                 <div>
                     <div className="form-btn-group">
-                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={this.selectedStatus === 'Enable' ? 'Disable' : 'Enable'} handlerSearch={this.onUpdateStatus} /> */}
+                        <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Change Password'} handlerSearch={this.handleChangePassword}/>
                         <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate}/>
-                        <SaveButton disabled={this.selectedIds.length===0} Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
+                        <SaveButton disabled={!this.enableAddNew} Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
                     </div>
                     <div>
                         <label>Select Store</label>
@@ -268,7 +281,6 @@ class StaffListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='role' >Role</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
-                            {/* <TableHeaderColumn width='50' dataField='status' >Status</TableHeaderColumn> */}
                             <TableHeaderColumn width='100' dataField='phone' >Phone</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
