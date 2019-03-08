@@ -19,10 +19,6 @@ class CategoriesContainer extends React.Component {
     }
   }
 
-  componentWillReceiveProps(props) {
-    
-  }
-
   componentDidMount() {
     let reqObj = {
       id: localStorage.getItem('retailerID')

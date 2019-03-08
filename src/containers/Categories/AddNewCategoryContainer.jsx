@@ -46,6 +46,7 @@ class AddNewCategoryContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.type === RECEIVE_LEVEL1_CATEGORY_DATA) {
       if (!_isEmpty(nextProps.level1CategoryData)) {
+        console.log(nextProps.level1CategoryData, 'nextProps.level1CategoryData')
         let categoryList = [];
         _get(nextProps, 'level1CategoryData', []).map((category, index) => {
           categoryList.push({
@@ -183,7 +184,7 @@ class AddNewCategoryContainer extends React.Component {
       <div className='flex-column'>
         <h3>Add New Category</h3>
         <div>
-          <div className="col-sm-4 col-md-3 form-d">
+          <div className="col-sm-4 col-md-3 form-d" style={{marginTop: '60px'}}>
             <label className="control-label">Select Root Cateogry</label>
             <AutoCompletePosition
               type="single"

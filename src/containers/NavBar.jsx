@@ -223,7 +223,10 @@ class NavBarComponent extends React.Component {
                                     <Link onClick={() => this.changeCurrentPath('/staffs')}  to={"/staffs"}>Staff Operators</Link>
                                 </Panel.Title>
 
+                                <Panel.Title className={(this.activePath === '/categories/add' ? 'active' : 'inactive')} >
 
+                                    <Link onClick={() => this.changeCurrentPath('/categories/add')}  to={"/categories/add"}>Categories</Link>
+                                </Panel.Title>
 
                                 <Panel.Title className={(this.activePath === '/inventories' ? 'active' : 'inactive')} >
 
