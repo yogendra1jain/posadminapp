@@ -85,7 +85,6 @@ class StoreListContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log(props.storeData, 'props.storeData')
         if (props.type === 'RECEIVED_STORE') {
             if (!_isEmpty(props.storeData)) {
                 this.storeList = [];
@@ -227,15 +226,15 @@ class StoreListContainer extends React.Component {
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
-
-                <div>
-                    <div className="form-btn-group">
-                        {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Add Products'} handlerSearch={this.addProduct} /> */}
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
+                    <div className='panel-container'>
+                        <span className='panel-heading'>Store List</span>
+                        <div>
+                            {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Add Products'} handlerSearch={this.addProduct} /> */}
+                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} Class_Name="m-r-10" handlerSearch={this.onUpdate} />
+                            <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
+                        </div>
                     </div>
                     <div>
-
                         <BootstrapTable
                             data={this.storeList}
                             options={options}
@@ -250,13 +249,10 @@ class StoreListContainer extends React.Component {
                                 Store Name
                         </TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='displayAddress' >Address</TableHeaderColumn>
-
-
                         </BootstrapTable>
 
                     </div>
-                </div>
-                {/* <div>
+                    {/* <div>
                     <ReactDrawer
                         open={this.state.openDrawer}
                         position={'bottom'}
@@ -275,7 +271,8 @@ class StoreListContainer extends React.Component {
                         </div>
                     </ReactDrawer>
                 </div> */}
-            </div>
+                </div>
+                
         )
 
     }

@@ -22,7 +22,7 @@ import { fetchEmployeesList } from '../../actions/employees';
 import { fetchStore } from '../../actions/store';
 import Select from 'react-select';
 import FormDialog from '../../components/common/CommonDialog/index';
-
+import AutoComplete from '../../components/Elements/AutoComplete';
 import { uploadEmployeesCSV, requestEmployeesUpdate } from '../../actions/employees';
 import Dropzone from 'react-dropzone';
 import FileUploadComp from './components/FileUploadComp.jsx';
@@ -44,11 +44,11 @@ const options = {
 
 const ActiveList = [
     {
-        label: 'Active',
+        displayText: 'Active',
         value: true,
     },
     {
-        label: 'InActive',
+        displayText: 'InActive',
         value: false,
     },
 ]
@@ -72,6 +72,7 @@ class EmployeesContainer extends React.Component {
             // selected : this.selectedIds,
         }
         this.method = 'POST';
+        this.storeList = [] 
     }
 
 
@@ -83,27 +84,36 @@ class EmployeesContainer extends React.Component {
         const { dispatch, storesReducer } = this.props;
         dispatch(fetchStore(storesReducer, storeUrl, reqObj));
     }
-    handleChange = (e, type) => {
-        let value = _get(e, 'value', '');
+
+    componentWillReceiveProps(props) {
+        if(!_isEmpty(props.storeList)) {
+            this.storeList = [] 
+            _get(props,'storeList',[]).map(store => {
+                this.storeList.push({ displayText: store.label, value: store.value });
+            })
+            this.forceUpdate()
+        }
+    }
+
+    handleChange = (id, type) => {
         let employeeUrl = `/Employee/ByStore`;
         let reqData = {
-            storeId: value,
+            storeId: id,
             active: this.state.isActive,
         };
         this.setState({
-            selectedStore: value,
+            selectedStore: id,
         })
         this.getEmployees(employeeUrl, reqData);
     }
-    handleActiveChange = (e) => {
-        let value = _get(e, 'value', '');
+    handleActiveChange = (id) => {
         let employeeUrl = `/Employee/ByStore`;
         let reqData = {
             storeId: this.state.selectedStore,
-            active: value,
+            active: id,
         };
         this.setState({
-            isActive: value,
+            isActive: id,
         })
         this.getEmployees(employeeUrl, reqData);
     }
@@ -238,6 +248,7 @@ class EmployeesContainer extends React.Component {
 
         let { customerList } = this.props;
         let { selectedValue, file } = this.state;
+        console.log(this.storeList, 'this.storeList')
         return (
             <div className="">
                 <FormDialog
@@ -259,21 +270,40 @@ class EmployeesContainer extends React.Component {
                 />
                 <div className='panel-container'>
                     <span className='panel-heading'>Employees </span>
+                    <div>
+                        <SaveButton Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
+                        <SaveButton Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={()=>this.updateEmployee()} />
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
+                    </div>
                 </div>
                 <div>
-                    <div className="row" style={{ marginBottom: '10px' }}>
+                    <div className="row">
                         <div className="col-sm-6">
-                            <Select placeholder="Select Store" name='store' options={this.props.storeList} value={this.state.selectedStore} onChange={(e) => this.handleChange(e, 'store')} />
+                        <label>Select Store</label>
+                            <AutoComplete
+                                type="single"
+                                data={this.storeList}
+                                name="store"
+                                value={this.state.selectedStore}
+                                changeHandler={(id) => {this.handleChange(id, 'store')}}
+                            />
                         </div>
                         <div className="col-sm-6">
-                            <Select placeholder="Select Active" name='activeFlag' options={ActiveList} value={this.state.isActive} onChange={(e) => this.handleActiveChange(e, 'store')} />
+                            <label>Select Active Status</label>
+                            <AutoComplete
+                                type="single"
+                                data={ActiveList}
+                                name="activeFlag"
+                                value={this.state.isActive}
+                                changeHandler={(e) => this.handleActiveChange(e, 'store')}
+                            />
                         </div>
                     </div>
-                    <div className="form-btn-group">
+                    {/* <div className="form-btn-group">
                         <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.addNewEmployee()}>+ Add New</Button>
                         <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.updateEmployee()}>Update</Button>
                         <Button type="button" variant="raised" onClick={() => this.toggleDialog()}>+ Bulk Upload</Button>
-                    </div>
+                    </div> */}
                     <div>
                         <BootstrapTable
                             data={customerList}
@@ -296,8 +326,6 @@ class EmployeesContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='employeeDiscount' dataSort>Discount</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
-                </div>
-                <div>
                 </div>
             </div>
         )

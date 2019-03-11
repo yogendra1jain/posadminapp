@@ -18,27 +18,6 @@ export const receiveProductVolumeData = (subreddit, json) => ({
     receivedAt: Date.now()
 })
 
-// export const GetProductVolumeData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestProductVolumeData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveProductVolumeData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
-
 export const GetProductVolumeData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: url,
@@ -51,18 +30,6 @@ export const GetProductVolumeData = (subreddit, url) => dispatch =>
         redirect: 'follow'
     }));
 
-
-// export const GetProductVolumeData = (subreddit, url) => dispatch =>
-//     dispatch(dynamicActionWrapper({
-//         path: url,
-//         method: 'Get',
-//         initCb: requestProductVolumeData,
-//         successCb: receiveProductVolumeData,
-//         subreddit,
-//         wrapperActionType: 'FETCH_ORGANIZATION_ADD_FORM_WRAPPER',
-//         redirect: 'follow'
-//     }));
-
 export const requestProductWiseVolumeData = subreddit => ({
     type: REPORT_CONSTANTS.REQUEST_PRODUCT_WISE_VOLUME_DATA,
     subreddit
@@ -74,27 +41,6 @@ export const receiveProductWiseVolumeData = (subreddit, json) => ({
     data: json,
     receivedAt: Date.now()
 })
-
-// export const GetProductWiseVolumeData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestProductWiseVolumeData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveProductWiseVolumeData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
 
 export const GetProductWiseVolumeData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
@@ -120,27 +66,6 @@ export const receiveProductWiseProfitData = (subreddit, json) => ({
     receivedAt: Date.now()
 })
 
-// export const GetProductWiseProfitData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestProductWiseProfitData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveProductWiseProfitData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
-
 export const GetProductWiseProfitData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: url,
@@ -164,27 +89,6 @@ export const receiveProductRevenueData = (subreddit, json) => ({
     data: json,
     receivedAt: Date.now()
 })
-
-// export const GetProductRevenueData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestProductRevenueData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveProductRevenueData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
 
 export const GetProductRevenueData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
@@ -210,27 +114,6 @@ export const receiveProductWiseRevenueData = (subreddit, json) => ({
     receivedAt: Date.now()
 })
 
-// export const GetProductWiseRevenueData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestProductWiseRevenueData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveProductWiseRevenueData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
-
 export const GetProductWiseRevenueData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: url,
@@ -254,27 +137,6 @@ export const receiveProductProfitData = (subreddit, json) => ({
     data: json,
     receivedAt: Date.now()
 })
-
-// export const GetProductProfitData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestProductProfitData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveProductProfitData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
 
 export const GetProductProfitData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
@@ -300,27 +162,6 @@ export const receiveProductAllData = (subreddit, json) => ({
     receivedAt: Date.now()
 })
 
-// export const GetProductAllData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestProductAllData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveProductAllData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
-
 export const GetProductAllData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: url,
@@ -344,27 +185,6 @@ export const receiveCustomerData = (subreddit, json) => ({
     data: json,
     receivedAt: Date.now()
 })
-
-// export const GetCustomerData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestCustomerData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveCustomerData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
 
 export const GetCustomerData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
@@ -390,27 +210,6 @@ export const receiveInventoryData = (subreddit, json) => ({
     receivedAt: Date.now()
 })
 
-// export const GetInventoryData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestInventoryData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveInventoryData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
-
 export const GetInventoryData = (subreddit, url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: url,
@@ -435,27 +234,6 @@ export const receiveSaleByStoreData = (subreddit, json) => ({
     receivedAt: Date.now()
 })
 
-// export const GetSaleByStoreData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestSaleByStoreData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveSaleByStoreData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
-
 export const requestTopProducts = subreddit => ({
     type: REPORT_CONSTANTS.REQUEST_TOP_PRODUCTS,
     subreddit
@@ -467,27 +245,6 @@ export const receiveTopProducts = (subreddit, json) => ({
     data: json,
     receivedAt: Date.now()
 })
-
-// export const GetCustomerData = (subreddit, url) => dispatch => {
-
-//     dispatch(requestCustomerData(subreddit));
-
-//     fetch(url, {
-//         method: 'GET',
-//         headers: {
-//             "Content-type": "application/json"
-//         },
-//         // body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             status = response.status;
-
-//             return response.json()
-//         }
-//         )
-//         .then(json => { return dispatch(receiveCustomerData(subreddit, json, status)) })
-//     // .catch(err => { return dispatch(receiveTerminalError(subreddit,err,500)) } )
-// }
 
 export const GetTopProducts = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({

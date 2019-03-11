@@ -13,10 +13,10 @@ const mapEmpPayrollDeductDetails = data => (
 const mapData = data => ({
     employeeId: get(data, 'employee.id', ''),
     employeeName: get(data, 'employee.customer.firstName', '') + ' ' + get(data, 'employee.customer.lastName', ''),
-    orderId: get(data, 'saleTransactions.id', ''),
-    totalSales: get(data, 'saleTransactions.totalAmount', 0).toFixed(2),
+    orderId: get(data, 'saleId', ''),
+    totalSales: get(data, 'employeePayDeductAmount.amount', 0).toFixed(2),
     totalRefund: get(data, 'saleTransactions.totalRefund', 0),
-    orderDate: moment.utc(get(data, 'saleTransactions.saleTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY")
+    orderDate: moment.utc(get(data, 'saleTimestamp.seconds', 0)* 1000).format("DD-MMM-YYYY")
 })
 
 const EmpPayrollDeductDetailsSel = createSelector(

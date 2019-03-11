@@ -105,28 +105,29 @@ class RetailerContainer extends React.Component {
 
         return (
             <div className="">
-                <div>
-                    <div className="form-btn-group">
-                        <Button type="button" variant="raised" onClick={() => this.addNewRetailer()}>Add New</Button>
-                    </div>
+                <div className='panel-container'>
+                    <span className='panel-heading'>Retailer List</span>
                     <div>
-                        <BootstrapTable
-                            data={retailerList}
-                            options={options}
-                            selectRow={this.selectRowProp}
-                            striped hover
-                            pagination={true}
-                            exportCSV={true}
-                            search={true}
-                            searchPlaceholder={'Search Retailer'}>
-
-                            <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='domainLink'>Domain Link</TableHeaderColumn>
-                        </BootstrapTable>
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewRetailer()} />
                     </div>
                 </div>
                 <div>
+                    {/* <div className="form-btn-group">
+                        <Button type="button" variant="raised" onClick={() => this.addNewRetailer()}>Add New</Button>
+                    </div> */}
+                    <BootstrapTable
+                        data={retailerList}
+                        options={options}
+                        selectRow={this.selectRowProp}
+                        striped hover
+                        pagination={true}
+                        exportCSV={true}
+                        search={true}
+                        searchPlaceholder={'Search Retailer'}>
+                        <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='domainLink'>Domain Link</TableHeaderColumn>
+                    </BootstrapTable>
                 </div>
             </div>
         )

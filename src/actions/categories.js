@@ -40,11 +40,6 @@ const level1CategoryRecieve = (subreddit, json, status) => ({
     receivedAt: Date.now()
 })
 
-
-
-
-
-
 export const getAllByRetailerId = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: CATEGORIES_CONSTANTS.MAIN_URL + url,

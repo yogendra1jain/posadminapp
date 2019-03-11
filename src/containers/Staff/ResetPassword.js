@@ -77,13 +77,14 @@ class ResetPassword extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        debugger
-        if(nextProps.type == 'RECEIVE_CHANGE_PASSWORD') {
-            if(nextProps.status == 200) {
-                this.showAlert(false, 'Password Reset Successfully!')
-                this.redirectToList = true
-                this.forceUpdate();
-            }
+        if(nextProps.status == 200) {
+            this.showAlert(false, 'Password Reset Successfully!')
+            this.redirectToList = true
+            this.forceUpdate();
+        } else {
+            this.showAlert(false, 'Password Reset Failed!')
+            this.redirectToList = false
+            this.forceUpdate();
         }
     }
 
@@ -94,9 +95,6 @@ class ResetPassword extends Component {
         } 
         let url = '/Operator/ResetPassword'
         this.props.dispatch(changePassword('',reqBody, url))
-        this.showAlert(false, 'Password Reset Successfully!')
-        this.redirectToList = true
-        this.forceUpdate();
     }
 
     handleCancel = () => {
@@ -165,4 +163,18 @@ class ResetPassword extends Component {
     }               
 }
 
-export default connect()(ResetPassword);
+const mapStateToProps = state => {
+    const {staffsReducer} = state
+    let { status } = staffsReducer || '';
+    let { isFetching } = staffsReducer || false;
+    let { type } = staffsReducer || '';
+
+    return {
+        staffsReducer,
+        status,
+        isFetching,
+        type
+    }
+}
+
+export default connect(mapStateToProps)(ResetPassword);
