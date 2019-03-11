@@ -50,7 +50,7 @@ class ZReportPrintData extends React.Component {
                     </Modal.Body>
                     <Modal.Footer>
                          <div className="col-sm-4 plr-5">
-                            <SaveButton Class_Name="btn-default btn-gray" buttonDisplayText={'Close'} handlerSearch={this.handleClose} />
+                            <SaveButton ClassName="btn-default btn-gray" buttonDisplayText={'Close'} handlerSearch={this.handleClose} />
                         </div>
                         <div className="col-sm-4 plr-5" >
                             <ReactToPrint
