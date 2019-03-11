@@ -19,12 +19,17 @@ const mapData = data => ({
     closedAt: moment.utc(get(data, 'shift.closingTimeStamp.seconds', 0)* 1000) != 0 ? moment.utc(get(data, 'shift.closingTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY HH:MM:SS") : '',
     cashSales: get(data, 'shift.openingBalance.currencyCode', '') + get(data, 'shift.cashSalesAmount', 0).toFixed(2),
     cardSales: get(data, 'shift.openingBalance.currencyCode', '') + get(data, 'shift.cardSalesAmount', 0).toFixed(2),
-    cashAdded: get(data, 'shift.openingBalance.currencyCode', '') + get(data, 'shift.cashAdded', 0).toFixed(2),
-    cashRemoved: get(data, 'shift.openingBalance.currencyCode', '') + get(data, 'shift.cashRemoved', 0).toFixed(2),
+    cashAdded: get(data, 'shift.cashAdded',0).toFixed(2),
+    cashRemoved: get(data, 'shift.cashRemoved',0).toFixed(2),
     realClosingBalance: get(data, 'shift.openingBalance.currencyCode', '') + get(data, 'shift.closingBalance.amount', 0).toFixed(2),
     theoreticalClosingBalance: get(data, 'shift.openingBalance.currencyCode', '') + get(data, 'shift.theoreticalClosingBalance', 0).toFixed(2),
-    difference: get(data, 'shift.closingDifference', ''),
-    totalSales: get(data, 'shift.totalSales', '')
+    difference: parseFloat(get(data, 'shift.closingBalance.amount', 0)) -parseFloat(get(data, 'shift.theoreticalClosingBalance', 0)),
+    totalSales: get(data, 'shift.totalSales',0).toFixed(2),
+    taxAmount: get(data, 'shift.taxAmount',0).toFixed(2),
+    totalSalesAmount: get(data, 'shift.totalSalesAmount',0).toFixed(2),
+    preTaxSalesAmount: get(data, 'shift.preTaxSalesAmount',0).toFixed(2),
+    
+
 })
 
 
