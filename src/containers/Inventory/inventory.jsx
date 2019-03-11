@@ -66,6 +66,9 @@ const options = {
 class InventoryListContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isStoreSelected: false
+        }
         this.selectRowProp = {
             mode: 'radio',
             clickToSelect: false,
@@ -147,6 +150,7 @@ class InventoryListContainer extends React.Component {
             });
         }
         if (props.storeData) {
+            if(Array.isArray(props.storeData)) {
             this.storeList = [];
             _get(props, 'storeData', []).map(store => {
                 let tempStore = {};
@@ -157,6 +161,7 @@ class InventoryListContainer extends React.Component {
             // this.storeList = props.storeData.stores;
             this.forceUpdate();
         }
+    }
         //    if(!_isEmpty(props.productData)){
         //         this.products = [];
         //         props.productData.map(product=>{
@@ -199,6 +204,7 @@ class InventoryListContainer extends React.Component {
     }
 
     handleSelectChange = (id, name) => {
+        this.setState({ isStoreSelected: true })
         _set(this.selectedStore, name, id);
         const { dispatch, inventoriesReducer } = this.props;
         let reqBody = {
@@ -352,6 +358,9 @@ class InventoryListContainer extends React.Component {
 
 
     render() {
+        if(!this.state.isStoreSelected) {
+            this.inventoryList = []
+        }
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
