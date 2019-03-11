@@ -34,8 +34,11 @@ const staffsData = (state = {
   switch (action.type) {
     case REQUEST_STAFF:
       return Object.assign({}, state, {
-        isFetching: true,staffSaveData:[],staffListData:[],
-        type: action.type, lastUpdated: action.receivedAt
+        isFetching: true,
+        staffSaveData:[],
+        staffListData:[],
+        type: action.type,
+        lastUpdated: action.receivedAt
       });
     case RECEIVED_STAFF:
       return Object.assign({}, state, {
@@ -92,8 +95,8 @@ const staffsData = (state = {
     return Object.assign({}, state, {
         isFetching: true,
         type: action.type, 
-        status: action.status,
-        didInvalidate: false, 
+        // status: action.status,
+        // didInvalidate: false, 
         lastUpdated: action.receivedAt
     });
     case RECEIVE_CHANGE_PASSWORD:

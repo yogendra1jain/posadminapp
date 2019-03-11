@@ -41,7 +41,7 @@ class RequisitionContainer extends PureComponent {
             cachedProducts: [],
             showDialog: false,
             forEdit: false,
-            selectedRequisitions: [],
+            selectedRequisitions: []
         }
         this.selectRowProp = {
             mode: 'checkbox',
@@ -94,7 +94,7 @@ class RequisitionContainer extends PureComponent {
         };
         this.props.dispatch(fetchRequisitionList('', requisitionUrl, reqObj))
             .then((data) => {
-                console.log('requisition list fetched successfully.');
+                console.log('Data is here')
             }, (err) => {
                 console.log('error while fetching requisition list', err);
                 this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
@@ -163,7 +163,6 @@ class RequisitionContainer extends PureComponent {
     render() {
         const { classes } = this.props;
         const { forEdit, selectedRequisitions } = this.state
-
         return (
             <form>
                 <FormDialog
@@ -185,10 +184,8 @@ class RequisitionContainer extends PureComponent {
                         !forEdit &&
                         <div className='panel-container'>
                             <span className='panel-heading'>Requisition List</span>
-
                             <div>
-                                
-                                <SaveButton Class_Name={"btn-info"} buttonDisplayText={'+ New Requisition'} handlerSearch={this.toggleDialog}/>
+                                <SaveButton Class_Name={"btn-info"} buttonDisplayText={'New Requisition'} Class_Name="m-r-10" handlerSearch={this.toggleDialog}/>
                                 <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Edit'} handlerSearch={this.handleEdit}/>
                             </div>
 

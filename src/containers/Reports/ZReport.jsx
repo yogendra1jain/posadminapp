@@ -149,19 +149,18 @@ class ZReportContainer extends React.Component {
         let { zReportDetailsData } = this.props;
 
         return (
-            <div>
-                <div className="row">
-                    <div className="col-sm-6 col-xs-8">
-                        <ul className="breadcrumb" >
-                            <li>Z Report</li>
-                        </ul>
-                    </div>
+            <div className="">
+                <div className='panel-container'>
+                    <span className='panel-heading'>Z Report</span>
                 </div>
-
-                <div className="col-sm-12">
-                    <div className="date-range">
-                        <div class="head-title">Date Range: </div>
-                        <div className="col-sm-3 form-d date-parent">
+                <div className="react-bs-table-container mb-10">
+                    <div className="row">
+                        <div className="col-sm-3 date-parent">
+                            <div class="head-title">
+                                <label>
+                                    Date Range: 
+                                </label>
+                            </div>
                             <label className="control-label">From </label>
                             <DatePicker
                                 selected={this.state.startDate}
@@ -173,20 +172,6 @@ class ZReportContainer extends React.Component {
                                 className="form-control"
                             />
                         </div>
-
-                        <div className="col-sm-3 form-d date-parent">
-                            <label className="control-label">To </label>
-                            <DatePicker
-                                selected={this.state.endDate}
-                                selectsEnd
-                                showYearDropdown={true}
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
-                                onSelect={this.handleChangeEndDate}
-                                className="form-control"
-                            />
-                        </div>
-
                         <div className="col-sm-3">
                             <label>Select Store</label>
                             <AutoComplete
@@ -197,9 +182,8 @@ class ZReportContainer extends React.Component {
                                 changeHandler={(id) => { this.handleSelectChange(id) }}
                             />
                         </div>
-                        <div className="col-sm-3 form-btn-group">
+                        <div className="col-sm-3 form-btn-group m-t-20">
                             <SaveButton buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
-                            {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
                         </div>
                     </div>
                 </div>
@@ -237,8 +221,6 @@ class ZReportContainer extends React.Component {
                         <TableHeaderColumn width='100' dataField='totalSales' dataSort>Total Sales</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='' dataFormat={this.actionColumn} dataSort>Actions</TableHeaderColumn>
                     </BootstrapTable>
-                </div>
-                <div>
                 </div>
             </div>
         )

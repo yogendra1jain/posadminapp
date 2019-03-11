@@ -205,30 +205,29 @@ class StoreListContainer extends React.Component {
         let { customerList } = this.props
         return (
             <div className="">
-                <div>
+                <div className="panel-container">
+                    <span className='panel-heading'>Customer List</span>
                     <div className="form-btn-group">
                         <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
                         <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
                     </div>
-                    <div>
-                        <BootstrapTable
-                            data={customerList}
-                            options={options}
-                            selectRow={this.selectRowProp}
-                            striped hover
-                            pagination={true}
-                            exportCSV={true}
-                            search={true}
-                            searchPlaceholder={'Search Customers'}>
-
-                            <TableHeaderColumn width='100' dataField='id' isKey={true} >ID</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='name'>Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='email' dataSort>Email</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='phone' dataSort>Phone</TableHeaderColumn>
-                        </BootstrapTable>
-                    </div>
                 </div>
                 <div>
+                    <BootstrapTable
+                        data={customerList}
+                        options={options}
+                        selectRow={this.selectRowProp}
+                        striped hover
+                        pagination={true}
+                        exportCSV={true}
+                        search={true}
+                        searchPlaceholder={'Search Customers'}>
+
+                        <TableHeaderColumn width='100' dataField='id' isKey={true} >ID</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='name'>Name</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='email' dataSort>Email</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='phone' dataSort>Phone</TableHeaderColumn>
+                    </BootstrapTable>
                 </div>
             </div>
         )

@@ -69,10 +69,10 @@ class SaleDataReportContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if(!_isEmpty(props.storeData)) {
-            this.setState({isLoading: false})
+        if (!_isEmpty(props.storeData)) {
             let storeList = [];
-            if(Array.isArray(props.storeData)) {
+            if (Array.isArray(props.storeData)) {
+                this.setState({ isLoading: false })
                 _get(props, 'storeData', []).map(store => {
                     let tempStore = {};
                     tempStore.displayText = store.name;
@@ -85,30 +85,28 @@ class SaleDataReportContainer extends React.Component {
 
         if (_get(props, 'saleReportData', [])) {
             let saleReport = []
-            if(Array.isArray(props.saleReportData)) {
+            if (Array.isArray(props.saleReportData)) {
                 _get(props, 'saleReportData', []).map(report => {
                     let paymentMethod1 = ''
                     let paymentMethod2 = ''
                     let paymentMethod3 = ''
-                    if(_get(report,'payments.length','') == 1) {
+                    if (_get(report, 'payments.length', '') == 1) {
                         paymentMethod1 = report.payments[0].paymentMethod
-                    }
-                    if(_get(report,'payments.length','') == 2) {
+                    } else if (_get(report, 'payments.length', '') == 2) {
                         paymentMethod1 = report.payments[0].paymentMethod
                         paymentMethod2 = report.payments[1].paymentMethod
-                    }
-                    if(_get(report,'payments.length','') == 3) {
+                    } else if (_get(report, 'payments.length', '') == 3) {
                         paymentMethod1 = report.payments[0].paymentMethod
                         paymentMethod2 = report.payments[1].paymentMethod
                         paymentMethod3 = report.payments[2].paymentMethod
                     }
                     let tax
-                    let isTaxExist = !('taxPercentage' in _get(report,'saleItem', {}))
-                    isTaxExist ? tax = 0 : tax = (_get(report,'saleItem.itemSubTotal.amount',0) * _get(report,'saleItem.taxPercentage',0)) / 100
+                    let isTaxExist = !('taxPercentage' in _get(report, 'saleItem', {}))
+                    isTaxExist ? tax = 0 : tax = (_get(report, 'saleItem.itemSubTotal.amount', 0) * _get(report, 'saleItem.taxPercentage', 0)) / 100
                     let isProductExist = !('product' in report)
                     let isMiscExist = !('misc' in _get(report, 'product', {}))
                     let tempStore = {}
-                    tempStore.date = moment.utc(_get(report, 'saleTransactionDetail.saleTimeStamp.seconds', 0)* 1000).format("DD-MMM-YYYY hh:mm:ss")
+                    tempStore.date = moment.utc(_get(report, 'saleTransactionDetail.saleTimeStamp.seconds', 0) * 1000).format("DD-MMM-YYYY hh:mm:ss")
                     tempStore.orderId = _get(report, 'saleTransactionDetail.id', '')
                     tempStore.staffName = _get(report, 'staff.person.firstName', '') + ' ' + _get(report, 'staff.person.lastName', '')
                     tempStore.customerName = _get(report, 'customer.customer.firstName', '') + ' ' + _get(report, 'customer.customer.lastName', '')
@@ -122,28 +120,28 @@ class SaleDataReportContainer extends React.Component {
                     tempStore.category = _get(report, 'category.name', '')
                     tempStore.subCategory = _get(report, 'subCategory.name', '')
                     tempStore.itemType = isProductExist ? 'Gift Card' : isMiscExist ? 'product' : 'Miscellaneous Product'
-                    tempStore.priceRetailUnit = _get(report,'product.salePrice.price',0)
-                    tempStore.quantity = _get(report,'saleItem.qty',1)
-                    tempStore.totalRetailSales = _get(report,'saleItem.itemRegularTotal.amount',0)
-                    tempStore.totalItemDiscount = _get(report,'saleItem.itemTotalDiscountAmount.amount',0)
-                    tempStore.preTaxSales = _get(report,'saleItem.itemSubTotal.amount',0)
+                    tempStore.priceRetailUnit = _get(report, 'product.salePrice.price', 0)
+                    tempStore.quantity = _get(report, 'saleItem.qty', 1)
+                    tempStore.totalRetailSales = _get(report, 'saleItem.itemRegularTotal.amount', 0)
+                    tempStore.totalItemDiscount = _get(report, 'saleItem.itemTotalDiscountAmount.amount', 0)
+                    tempStore.preTaxSales = _get(report, 'saleItem.itemSubTotal.amount', 0)
                     tempStore.tax = tax
-                    tempStore.totalSales = _get(report,'saleItem.itemEffectiveTotal.amount',0)
-                    tempStore.employeeDiscountAmount = ((_get(report,'saleItem.itemRegularTotal.amount',0) * _get(report,'saleItem.employeeDiscountPercent',1)) / 100).toFixed(2)
-                    tempStore.itemDiscountAmount = ((_get(report,'saleItem.itemRegularTotal.amount') * _get(report,'saleItem.itemDiscountPercent',1)) / 100).toFixed(2)
-                    tempStore.cartDiscountAmount = ((_get(report,'saleItem.itemRegularTotal.amount') * _get(report,'saleItem.cartDiscountPercent',1)) / 100).toFixed(2)
-                    tempStore.costPrice = _get(report,'product.costPrice.price',0) * _get(report,'saleItem.qty',1)
+                    tempStore.totalSales = _get(report, 'saleItem.itemEffectiveTotal.amount', 0)
+                    tempStore.employeeDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount', 0) * _get(report, 'saleItem.employeeDiscountPercent', 1)) / 100).toFixed(2)
+                    tempStore.itemDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.itemDiscountPercent', 1)) / 100).toFixed(2)
+                    tempStore.cartDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.cartDiscountPercent', 1)) / 100).toFixed(2)
+                    tempStore.costPrice = _get(report, 'product.costPrice.price', 0) * _get(report, 'saleItem.qty', 1)
                     tempStore.paymentMethod1 = paymentMethod1
                     tempStore.paymentMethod2 = paymentMethod2
                     tempStore.paymentMethod3 = paymentMethod3
-                    tempStore.itemVendorNo = _get(report,'vendorProduct.sku','')
-                    tempStore.vendorName = _get(report,'vendor.name','')
+                    tempStore.itemVendorNo = _get(report, 'vendorProduct.sku', '')
+                    tempStore.vendorName = _get(report, 'vendor.name', '')
                     saleReport.push(tempStore)
                 })
-                this.setState({saleReportData: saleReport})
-            }
+                this.setState({ saleReportData: saleReport })
             }
         }
+    }
 
     componentDidMount() {
         const { dispatch, storesReducer } = this.props;
@@ -167,7 +165,7 @@ class SaleDataReportContainer extends React.Component {
     }
 
     handleSubmitReportData = () => {
-        this.setState({ isLoading: true})
+        this.setState({ isLoading: true })
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
         let endDate = toTimestamp(_get(this, 'state.endDate', 0))
         console.log(fromDate, 'fromDate', endDate, 'endDate')
@@ -197,112 +195,107 @@ class SaleDataReportContainer extends React.Component {
         }
 
         return (
-            <div>
+            <div className="">
+                <div className='panel-container'>
+                    <span className='panel-heading'>Sale Data Report</span>
+                </div>
+                <div className="react-bs-table-container mb-10">
                 <div className="row">
-                    <div className="col-sm-6 col-xs-8">
-                        <ul className="breadcrumb" >
-                            <li>Sale Data Report</li>
-                        </ul>
+                    <div className="col-sm-3 date-parent">
+                    <div class="head-title"><label>Select Date: </label></div>
+                        <label className="control-label">Date</label>
+                        <DatePicker
+                            selected={this.state.startDate}
+                            selectsStart
+                            showYearDropdown={true}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate}
+                            onSelect={this.handleChangeStartDate}
+                            className="form-control"
+                        />
+                    </div>
+                    <div className="col-sm-3">
+                        <label>Select Store</label>
+                        <AutoComplete
+                            type="single"
+                            data={this.state.storeList}
+                            name="stores"
+                            value={_get(this.state, 'storeId', '')}
+                            changeHandler={(id) => { this.handleSelectChange(id) }}
+                        />
+                    </div>
+                    <div className="col-sm-3 form-btn-group m-t-20">
+                        <SaveButton buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
+                        {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
                     </div>
                 </div>
-                <div className="col-sm-12">
-                    <div className="date-range">
-                        <div class="head-title">Select Date: </div>
-                        <div className="col-sm-3 form-d date-parent">
-                            <label className="control-label">Date </label>
-                            <DatePicker
-                                selected={this.state.startDate}
-                                selectsStart
-                                showYearDropdown={true}
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
-                                onSelect={this.handleChangeStartDate}
-                                className="form-control"
-                            />
-                        </div>
+                </div>
 
-                        <div className="col-sm-3">
-                            <label>Select Store</label>
-                            <AutoComplete
-                                type="single"
-                                data={this.state.storeList}
-                                name="stores"
-                                value={_get(this.state, 'storeId', '')}
-                                changeHandler={(id) => { this.handleSelectChange(id) }}
-                            />
-                        </div>
-                        <div className="col-sm-3 form-btn-group">
-                            <SaveButton buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
-                            {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
-                        </div>
-                    </div>
-                </div>
                 <div>
-                    {
-                        this.state.isLoading ? <div style={{marginLeft: '450px', marginTop: '200px'}}><CircularProgress
+                {
+                    this.state.isLoading ? <div style={{ marginLeft: '450px', marginTop: '200px' }}><CircularProgress
                         className="progress"
                         size={100}
                         value={this.state.isLoading}
                         disableShrink
                         color='secondary'
                     /></div> :
-                    
-                    <BootstrapTable
-                        height='515'
-                        data={_get(this,'state.saleReportData',[])}
-                        options={options}
-                        striped hover
-                        pagination={true}
-                        exportCSV={true}
-                        search={true}
-                        searchPlaceholder={'Search'}>
+                        <div>
+                            <BootstrapTable
+                                height='515'
+                                data={_get(this, 'state.saleReportData', [])}
+                                options={options}
+                                striped hover
+                                pagination={true}
+                                exportCSV={true}
+                                search={true}
+                                searchPlaceholder={'Search'}>
 
-                        <TableHeaderColumn width='100' dataField='date' isKey={true} >Date
+                                <TableHeaderColumn width='100' dataField='date' isKey={true} >Date
                         </TableHeaderColumn>
-                        {/* <TableHeaderColumn width='100' dataField='time'>Time
+                                {/* <TableHeaderColumn width='100' dataField='time'>Time
                         </TableHeaderColumn> */}
-                        <TableHeaderColumn width='100' dataField='orderId' dataSort>Order Id
+                                <TableHeaderColumn width='100' dataField='orderId' dataSort>Order Id
                         </TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='staffName' dataSort>Staff Name</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='customerName' dataSort>Customer Name</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='customerId' dataSort>Customer Id</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='employeeCode' dataSort>Employee Code</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='sku' dataSort>SKU</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='barCode' dataSort>Barcode</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='productName' dataSort>Product Name</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='staffNote'>Staff Note</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='group' dataSort>Group</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='category' dataSort>Category</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='subCategory' dataSort>Sub Category</TableHeaderColumn>
-                        {/* <TableHeaderColumn width='100' dataField='totalRefund' dataSort>Hot Product</TableHeaderColumn> */}
-                        <TableHeaderColumn width='100' dataField='itemVendorNo' dataSort>Item Vender No</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='vendorName' dataSort>Vendor Name</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='itemType' dataSort>Item Type</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='priceRetailUnit' dataSort>Price Retail Unit</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='costPrice' dataSort>Cost Price</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='quantity'>Quantity</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='totalRetailSales'>Total Retail Sales</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='totalItemDiscount' dataSort>Total Item Discount</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='preTaxSales' dataSort>Total Pre-Tax Sales</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='tax' dataSort>Taxes</TableHeaderColumn>
-                        {/* <TableHeaderColumn width='100' dataField='totalRefund' dataSort>Total Sales Including GC</TableHeaderColumn> */}
-                        <TableHeaderColumn width='100' dataField='totalSales' dataSort>Total Sales</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='paymentMethod1' dataSort>Payment method1</TableHeaderColumn>
-                        {/* <TableHeaderColumn width='100' dataField='totalRemianingAmount' dataSort>Payment method1 Amount</TableHeaderColumn> */}
-                        <TableHeaderColumn width='100' dataField='paymentMethod2' dataSort>Payment method2</TableHeaderColumn>
-                        {/* <TableHeaderColumn width='100' dataField='companyCode'>Payment method2 Amount</TableHeaderColumn> */}
-                        <TableHeaderColumn width='100' dataField='paymentMethod3'>Payment method3</TableHeaderColumn>
-                        {/* <TableHeaderColumn width='100' dataField='deductionDate' dataSort>Payment method3 Amount</TableHeaderColumn> */}
-                        {/* <TableHeaderColumn width='100' dataField='employeeName' dataSort>Total Item Discount</TableHeaderColumn> */}
-                        <TableHeaderColumn width='100' dataField='employeeDiscountAmount' dataSort>Employee Discount Amount</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='itemDiscountAmount' dataSort>Item Discount Amount</TableHeaderColumn>
-                        {/* <TableHeaderColumn width='100' dataField='cartDiscountAmount' dataSort>Total Cart Discount</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='staffName' dataSort>Staff Name</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='customerName' dataSort>Customer Name</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='customerId' dataSort>Customer Id</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='employeeCode' dataSort>Employee Code</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='sku' dataSort>SKU</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='barCode' dataSort>Barcode</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='productName' dataSort>Product Name</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='staffNote'>Staff Note</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='group' dataSort>Group</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='category' dataSort>Category</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='subCategory' dataSort>Sub Category</TableHeaderColumn>
+                                {/* <TableHeaderColumn width='100' dataField='totalRefund' dataSort>Hot Product</TableHeaderColumn> */}
+                                <TableHeaderColumn width='100' dataField='itemVendorNo' dataSort>Item Vender No</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='vendorName' dataSort>Vendor Name</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='itemType' dataSort>Item Type</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='priceRetailUnit' dataSort>Price Retail Unit</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='costPrice' dataSort>Cost Price</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='quantity'>Quantity</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='totalRetailSales'>Total Retail Sales</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='totalItemDiscount' dataSort>Total Item Discount</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='preTaxSales' dataSort>Total Pre-Tax Sales</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='tax' dataSort>Taxes</TableHeaderColumn>
+                                {/* <TableHeaderColumn width='100' dataField='totalRefund' dataSort>Total Sales Including GC</TableHeaderColumn> */}
+                                <TableHeaderColumn width='100' dataField='totalSales' dataSort>Total Sales</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='paymentMethod1' dataSort>Payment method1</TableHeaderColumn>
+                                {/* <TableHeaderColumn width='100' dataField='totalRemianingAmount' dataSort>Payment method1 Amount</TableHeaderColumn> */}
+                                <TableHeaderColumn width='100' dataField='paymentMethod2' dataSort>Payment method2</TableHeaderColumn>
+                                {/* <TableHeaderColumn width='100' dataField='companyCode'>Payment method2 Amount</TableHeaderColumn> */}
+                                <TableHeaderColumn width='100' dataField='paymentMethod3'>Payment method3</TableHeaderColumn>
+                                {/* <TableHeaderColumn width='100' dataField='deductionDate' dataSort>Payment method3 Amount</TableHeaderColumn> */}
+                                {/* <TableHeaderColumn width='100' dataField='employeeName' dataSort>Total Item Discount</TableHeaderColumn> */}
+                                <TableHeaderColumn width='100' dataField='employeeDiscountAmount' dataSort>Employee Discount Amount</TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='itemDiscountAmount' dataSort>Item Discount Amount</TableHeaderColumn>
+                                {/* <TableHeaderColumn width='100' dataField='cartDiscountAmount' dataSort>Total Cart Discount</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='fileSource' dataSort>Loyalty Discount Amount</TableHeaderColumn> */}
-                        <TableHeaderColumn width='100' dataField='cartDiscountAmount' dataSort>Cart Discount Amount</TableHeaderColumn>
-                    </BootstrapTable>
-                    }
-                </div>
-                <div>
+                                <TableHeaderColumn width='100' dataField='cartDiscountAmount' dataSort>Cart Discount Amount</TableHeaderColumn>
+                            </BootstrapTable>
+                        </div>
+                }
                 </div>
             </div>
         )

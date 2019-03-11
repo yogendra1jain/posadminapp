@@ -25,7 +25,7 @@ import { TextFieldInput, ReactSelectWrapper } from '../../../components/common/M
 import { fetchVendorProducts, fetchRetailerProducts, fetchProductsFromCache, updateVendorProductsList, updateVendorsList } from '../../../actions/products';
 import { getVendorData } from '../../../actions/vendor';
 import { fetchStore } from '../../../actions/store';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 /* Component Imports */
 
 const styles = theme => ({
@@ -59,11 +59,13 @@ class EditRequisition extends React.Component {
         this.state = {
             cachedProducts: [],
             cachedVendors: [],
+            isLoading: false
         }
     }
 
     componentDidMount() {
         // this.fetchBasicDetails();
+        this.setState({ isLoading: true})
         let reqObj = {
             id: localStorage.getItem('retailerID')
         }
@@ -75,7 +77,6 @@ class EditRequisition extends React.Component {
         this.props.dispatch(fetchRetailerProducts('', posProductUrl, reqObj))
         const { dispatch, storesReducer } = this.props;
         dispatch(fetchStore(storesReducer, storeUrl, reqObj));
-
         this.fetchVendorProducts(vendorProdUrl, reqObj);
     }
     fetchVendorProducts = (vendorProdUrl, reqObj) => {
@@ -108,6 +109,7 @@ class EditRequisition extends React.Component {
             .then((data) => {
                 this.setState({
                     cachedProducts: data,
+                    isLoading: false
                 });
                 this.props.dispatch(updateVendorProductsList('', data));
                 let vendorsUrl = `/Vendor/GetByIds`;
@@ -274,6 +276,40 @@ class EditRequisition extends React.Component {
     render() {
         const { classes, fields, forEdit } = this.props;
         const { onEditClick, openAddDialog } = this.state
+        console.log(this.props.requisitionListData, 'requisitionListData')
+        let table
+
+        if(!this.state.isLoading) {
+            table = <BootstrapTable
+            data={_get(this.props, 'requisitionListData', [])}
+            options={options}
+            selectRow={this.props.selectRowProp}
+            striped hover
+            pagination={true}
+            exportCSV={true}
+            search={true}
+            searchPlaceholder={'Search PO'}>
+
+            <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='posProductId' dataFormat={this.productColumn} >Product</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='vendorId' dataFormat={this.vendorColumn}>Vendor</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='storeId' dataFormat={this.storeColumn}>Store</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='quantity' >Quantity</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='status' dataFormat={this.statusColumn} dataSort>Status</TableHeaderColumn>
+            {/* <TableHeaderColumn width='100' dataField='' dataFormat={this.props.actionColumn} dataSort>Actions</TableHeaderColumn> */}
+        </BootstrapTable>
+        } else {
+            return (<div style={{ marginLeft: '450px', marginTop: '200px' }}>
+                <CircularProgress
+                    className="progress"
+                    size={100}
+                    value={this.state.isLoading}
+                    disableShrink
+                    color='secondary'
+                />
+            </div>)
+        }
+
         if (forEdit) {
             return (
                 <div className="row">
@@ -289,26 +325,7 @@ class EditRequisition extends React.Component {
                 </div>
             );
         } else {
-            return (
-                <BootstrapTable
-                    data={_get(this.props, 'requisitionListData', [])}
-                    options={options}
-                    selectRow={this.props.selectRowProp}
-                    striped hover
-                    pagination={true}
-                    exportCSV={true}
-                    search={true}
-                    searchPlaceholder={'Search PO'}>
-
-                    <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id</TableHeaderColumn>
-                    <TableHeaderColumn width='100' dataField='posProductId' dataFormat={this.productColumn} >Product</TableHeaderColumn>
-                    <TableHeaderColumn width='100' dataField='vendorId' dataFormat={this.vendorColumn}>Vendor</TableHeaderColumn>
-                    <TableHeaderColumn width='100' dataField='storeId' dataFormat={this.storeColumn}>Store</TableHeaderColumn>
-                    <TableHeaderColumn width='100' dataField='quantity' >Quantity</TableHeaderColumn>
-                    <TableHeaderColumn width='100' dataField='status' dataFormat={this.statusColumn} dataSort>Status</TableHeaderColumn>
-                    {/* <TableHeaderColumn width='100' dataField='' dataFormat={this.props.actionColumn} dataSort>Actions</TableHeaderColumn> */}
-                </BootstrapTable>
-            );
+            return table
         }
     }
 }

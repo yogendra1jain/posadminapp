@@ -159,7 +159,7 @@ em {
     margin: 0 2px;
 }
 label.control-label{
-    margin: 5px 0;
+    margin: 5px;
 }
 .react-bs-table-container {
     padding: 20px 20px;
@@ -173,6 +173,9 @@ label.control-label{
   .panel-info {
     border-color: #31708f;
 }
+
+
+
 @media (max-width: 480px){
     #basic-nav-dropdown
     {
@@ -1856,7 +1859,7 @@ a.nav-link {
     display: block;
     text-align: center;
     background: #FFF;
-    padding: 5px 10px;
+    padding: 10px 10px;
     position: absolute;
     top: 0;
 

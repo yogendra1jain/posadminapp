@@ -112,28 +112,6 @@ class PosList extends React.Component {
             });
             this.forceUpdate();
         }
-
-        // if (props.posListData != null) {
-        //     if (props.posListData.message && this.fetchTerminalFlag) {
-        //         this.fetchTerminalFlag = false;
-        //         this.showAlert(true, props.posListData.message);
-        //     }
-        //     if ((props.posListData.length > 0)) {
-        //         this.fetchTerminalFlag = false;
-        //         this.posList = []
-        //         props.posListData.map(pos  => {
-        //             let tempPos = {};
-        //             tempPos.id = pos.id;
-        //             tempPos.name = pos.name;
-        //             tempPos.storeId = pos.storeId
-        //             tempPos.active = pos.active ? 'Active' : 'Inactive'
-        //             this.posList.push(tempPos)
-        //         })
-        //         this.forceUpdate();
-        //     }
-        // } else {
-        //     this.posList = []
-        // }
        
         if(props.type == 'RECEIVED_POS_TERMINAL_LIST') {
             debugger
@@ -385,12 +363,17 @@ class PosList extends React.Component {
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
-                <div>
-                    <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton disabled={!this.selectedStore.stores} Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
-                    </div>
+                <div className='panel-container'>
+                    <span className='panel-heading'>POS List</span>
                     <div>
+                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} Class_Name="m-r-10" />
+                        <SaveButton disabled={!this.selectedStore.stores} Class_Name="btn-info" buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
+                    </div>
+                </div>
+
+                <div>
+                    <div className="row">
+                        <div className="col-sm-4">
                             <label className="control-label"> Select Store</label>
                             <AutoComplete
                                 type="single"
@@ -400,8 +383,8 @@ class PosList extends React.Component {
                                 changeHandler={(id, name) => { this.handleSelectStoreChange(id, "stores") }}
                             />
                         </div>
+                    </div>
                     <div>
-
                         <BootstrapTable data={this.posList} options={options}
                             selectRow={this.selectRowProp}
                             striped hover
@@ -412,7 +395,6 @@ class PosList extends React.Component {
                             {/* <TableHeaderColumn width='100' dataField='posId' >Pos Id</TableHeaderColumn> */}
 
                         </BootstrapTable>
-
                     </div>
                 </div>
                 <div>

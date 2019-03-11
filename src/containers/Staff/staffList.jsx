@@ -221,9 +221,10 @@ class StaffListContainer extends React.Component {
        
     }
 
-   
-  
     render() {
+        if(!this.enableAddNew) {
+          this.staffList = []
+        }
         if(this.redirectToAddEditPAge){
             return (
                 <Redirect push to={{
@@ -253,24 +254,30 @@ class StaffListContainer extends React.Component {
         }
         return (
             <div className="">
-                <div>
-                    <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Change Password'} handlerSearch={this.handleChangePassword}/>
-                        <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate}/>
+                <div className='panel-container'>
+                    <span className='panel-heading'>Staff List</span>
+                    <div>
+                        <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Change Password'} handlerSearch={this.handleChangePassword} Class_Name="m-r-10" />
+                        <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} Class_Name="m-r-10" />
                         <SaveButton disabled={!this.enableAddNew} Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
                     </div>
-                    <div>
-                        <label>Select Store</label>
-                        {
-                            !_isEmpty(this.storeList) ? 
-                            <AutoComplete
-                                type="single"
-                                data={this.storeList}
-                                name="stores"
-                                value={_get(this.selectedStore,'stores','')} 
-                                changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
-                            /> : null
-                        }
+                </div>
+
+                <div>
+                    <div className="row">
+                        <div className="col-sm-4">
+                            <label>Select Store</label>
+                            {
+                                !_isEmpty(this.storeList) ? 
+                                <AutoComplete
+                                    type="single"
+                                    data={this.storeList}
+                                    name="stores"
+                                    value={_get(this.selectedStore,'stores','')} 
+                                    changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
+                                /> : null
+                            }
+                        </div>
                     </div>
                     <div>
                         <BootstrapTable data={this.staffList} options={options}

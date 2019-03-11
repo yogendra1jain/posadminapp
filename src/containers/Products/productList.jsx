@@ -142,33 +142,32 @@ class ProductListContainer extends React.Component {
             )
         }
         return (
-            <React.Fragment>
+            <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
-                <div>
-                    {/* {this.isAdmin &&  */}
-                    <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length===0} buttonDisplayText={'Update Product'} handlerSearch={this.onUpdate}/>
-                        <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNewProduct}/>
-                    </div>
-                    {/* } */}
+                <div className='panel-container'>
+                    <span className='panel-heading'>Product List</span>
                     <div>
-                        <BootstrapTable height='515' data={this.productList} options={options}
-                            selectRow={this.selectRowProp}
-                            striped hover
-                            pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='100' dataField='sku' isKey={true} >SKU</TableHeaderColumn>
-                            <TableHeaderColumn width='150' dataField='name' dataSort >
-                                Product Name
-                            </TableHeaderColumn>
-                            <TableHeaderColumn width='50' dataField='currencyCode' >Currency Code</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='costPrice' dataSort searchable={true} >Cost Price</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
-                            <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>
-                        </BootstrapTable>
+                        <SaveButton Class_Name="m-r-10" disabled={this.selectedIds.length===0} buttonDisplayText={'Update Product'} handlerSearch={this.onUpdate}/>
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Add new'} handlerSearch={this.addNewProduct}/>
                     </div>
                 </div>
-            </React.Fragment>
+                <div>
+                    <BootstrapTable height='515' data={this.productList} options={options}
+                        selectRow={this.selectRowProp}
+                        striped hover
+                        pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
+                        <TableHeaderColumn width='100' dataField='sku' isKey={true} >SKU</TableHeaderColumn>
+                        <TableHeaderColumn width='150' dataField='name' dataSort >
+                            Product Name
+                        </TableHeaderColumn>
+                        <TableHeaderColumn width='50' dataField='currencyCode' >Currency Code</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='costPrice' dataSort searchable={true} >Cost Price</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
+                        <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>
+                    </BootstrapTable>
+                </div>
+            </div>
         )
     }
 }

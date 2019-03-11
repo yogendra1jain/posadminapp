@@ -22,8 +22,7 @@ import Alert from 'react-s-alert';
 import { fetchVendorProducts, requestVendorProductUpdate, fetchProductsFromCache, updateVendorProductsList, updateVendorsList } from '../../actions/products';
 import { getVendorData } from '../../actions/vendor';
 import { showMessage } from '../../actions/common';
-import Select from 'react-select'
-
+import AutoComplete from '../../components/Elements/AutoComplete';
 
 const options = {
     paginationPosition: 'top',
@@ -54,6 +53,7 @@ class VendorProductsContainer extends React.Component {
             // selected : this.selectedIds,
         }
         this.method = 'POST';
+        this.vendorList = []
     }
     showAlert(error, msg) {
         if (error) {
@@ -85,6 +85,20 @@ class VendorProductsContainer extends React.Component {
         this.fetchVendorProducts(vendorProdUrl, reqObj);
 
     }
+
+    componentWillReceiveProps(props) {
+        if (props.vendorList) {
+            this.vendorList = [];
+            _get(props, 'vendorList', []).map(vendor => {
+                let tempStore = {};
+                tempStore.displayText = vendor.label;
+                tempStore.value = vendor.value;
+                this.vendorList.push(tempStore);
+            })
+            this.forceUpdate();
+        }
+    }
+
     fetchVendorProducts = (vendorProdUrl, reqObj) => {
         this.props.dispatch(fetchVendorProducts('', vendorProdUrl, reqObj))
             .then((data) => {
@@ -188,21 +202,26 @@ class VendorProductsContainer extends React.Component {
         let { selectedValue } = this.state;
         return (
             <div className="">
+                <div className='panel-container'>
+                    <span className='panel-heading'>Vendor Products</span>
 
-                
-                        <div className='panel-container'>
-                            <span className='panel-heading'>Vendor Products</span>
-
-                            <div>
-                                <SaveButton  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
-                                <SaveButton Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
-                            </div>
-                        </div>
+                    <div>
+                        <SaveButton  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
+                    </div>
+                </div>
 
                 <div>
                 <div className="row">
                     <div className="col-sm-4 m-t-10">
-                        <Select name='vendor' options={vendorList} value={selectedValue} onChange={this.handleVendorChange} />
+                        <label>Select Vendor</label>
+                        <AutoComplete
+                            type="single"
+                            data={this.vendorList}
+                            name="vendor"
+                            value={selectedValue}
+                            changeHandler={this.handleVendorChange}
+                        />
                     </div>
                     </div>
                     

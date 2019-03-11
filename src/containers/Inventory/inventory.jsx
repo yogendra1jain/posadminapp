@@ -147,7 +147,6 @@ class InventoryListContainer extends React.Component {
             });
         }
         if (props.storeData) {
-            console.log(props.storeData, 'props.storeData')
             this.storeList = [];
             _get(props, 'storeData', []).map(store => {
                 let tempStore = {};
@@ -369,18 +368,13 @@ class InventoryListContainer extends React.Component {
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
-
-
-                        <div className='panel-container'>
-                            <span className='panel-heading'>Inventory List</span>
-
-                            <div>
+                    <div className='panel-container'>
+                        <span className='panel-heading'>Inventory List</span>
+                        <div>
                             <SaveButton disabled={this.selectedIds.length === 0} Class_Name="m-r-10" buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
                             <SaveButton disabled={this.selectedIds.length === 0} Class_Name="btn-info" buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
-                            </div>
                         </div>
-
-
+                    </div>
                 <div>
                     <div className="row">
                     <div className="col-sm-4">
