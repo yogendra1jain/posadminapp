@@ -6,7 +6,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import SaveButton from '../../components/common/SaveButton.jsx'
 import { fetchStore, fetchPostStore, requestStoreUpdate } from '../../actions/store';
 import connect from 'react-redux/lib/connect/connect';
-import ReactDrawer from 'react-drawer';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
@@ -16,7 +15,6 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 // import Category from './category';
 import 'react-drawer/lib/react-drawer.css';
 import Alert from 'react-s-alert';
-import AddProductDrawer from './addProductsDrawer';
 import { fetchProductLookupData } from '../../actions/products';
 
 const options = {
@@ -225,58 +223,34 @@ class StoreListContainer extends React.Component {
 
         return (
             <div className="">
-                {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
-                    <div className='panel-container'>
-                        <span className='panel-heading'>Store List</span>
-                        <div>
-                            {/* <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Add Products'} handlerSearch={this.addProduct} /> */}
-                            <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} Class_Name="m-r-10" handlerSearch={this.onUpdate} />
-                            <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
-                        </div>
-                    </div>
-                    <div>
-                        <BootstrapTable
-                            data={this.storeList}
-                            options={options}
-                            selectRow={this.selectRowProp}
-                            striped hover
-                            pagination={true} 
-                            exportCSV={true} 
-                            search={true} 
-                            searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='storeName' dataSort >
-                                Store Name
-                        </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='displayAddress' >Address</TableHeaderColumn>
-                        </BootstrapTable>
-
-                    </div>
-                    {/* <div>
-                    <ReactDrawer
-                        open={this.state.openDrawer}
-                        position={'bottom'}
-                        onClose={this.onDrawerClose}
-                        noOverlay={true}
-                    >
-                        <div className="slide-panel">
-                            <div className="row">
-                                <AddProductDrawer 
-                                    productData={_get(this,'props.productData', [])}
-                                    storeId={this.selectedStore.id}
-                                    onClose={this.onDrawerClose}
-                                    {...this.props}
-                                />
-                            </div>
-                        </div>
-                    </ReactDrawer>
-                </div> */}
+            <div className='panel-container'>
+                <span className='panel-heading'>Store List</span>
+                <div>
+                    <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} Class_Name="m-r-10" handlerSearch={this.onUpdate} />
+                    <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
                 </div>
-                
+            </div>
+            <div>
+                <BootstrapTable
+                    data={this.storeList}
+                    options={options}
+                    selectRow={this.selectRowProp}
+                    striped hover
+                    pagination={true} 
+                    exportCSV={true} 
+                    search={true} 
+                    searchPlaceholder={'Search'}>
+                    <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
+                    <TableHeaderColumn width='100' dataField='storeName' dataSort >
+                        Store Name
+                </TableHeaderColumn>
+                    <TableHeaderColumn width='100' dataField='displayAddress' >Address</TableHeaderColumn>
+                </BootstrapTable>
+
+            </div>
+        </div>       
         )
-
     }
-
 }
 
 const mapStateToProps = state => {
