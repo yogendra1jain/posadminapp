@@ -61,6 +61,7 @@ import AddEditRetailerContainer from './containers/Retailer/AddEditRetailer/AddE
 import CategoriesContainer from './containers/Categories/CategoriesContainer'
 import AddNewCategoryContainer from './containers/Categories/AddNewCategoryContainer';
 import ResetPassword from './containers/Staff/ResetPassword';
+import ProductOverRideContainer from './containers/ProductOverride/ProductOverrideContainers';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -140,6 +141,7 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/retailers" component={RetailerContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
         <RouteWithLayout layout={MainLayout} exact path='/staff/resetPassword' component={ResetPassword} />
+        <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideContainer} />
       </Switch>
     </Router>
   </Provider>
