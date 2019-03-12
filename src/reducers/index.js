@@ -17,7 +17,7 @@ import purchaseOrderReducer, { purchaseOrderData as purchaseOrdersReducer } from
 import employeeReducer, { employeeData as employeesReducer } from './employees';
 import retailerReducer, { retailerData as retailersReducer } from './retailer';
 import commonData from './common';
-
+import productOverride from './productOverride';
 
 const commonReducer = (state = 'initialState', action) => {
   switch (action.type) {
@@ -69,7 +69,8 @@ const rootReducer = combineReducers({
   employeeReducer,
   employeesReducer,
   retailerReducer,
-  retailersReducer
+  retailersReducer,
+  productOverride
 })
 
 export default rootReducer;

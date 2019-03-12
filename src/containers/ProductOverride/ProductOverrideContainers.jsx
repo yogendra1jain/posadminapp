@@ -2,9 +2,14 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {fetchStore} from '../../actions/store';
 import {fetchProductLookupData} from '../../actions/products';
+import {sendSelectedProducts} from '../../actions/poductOverride';
 import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
+import _pull from 'lodash/pull';
+import _isArray from 'lodash/isArray';
+import _cloneDeep from 'lodash/cloneDeep';
+import _findIndex from 'lodash/findIndex';
 import SaveButton from '../../components/common/SaveButton';
 import AutoComplete from '../../components/Elements/AutoComplete';
 import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
@@ -32,8 +37,19 @@ class ProductOverRide extends Component {
         this.state = {
             storeList: [],
             productList: [],
+            selectedProducts: [],
             selectedStore: {},
-            isLoading: false
+            selectedIds: [],
+            isLoading: false,
+            currencyCode: ''
+        }
+        this.selectRowProp = {
+            mode: 'checkbox',
+            clickToSelect: false,
+            onSelect: this.onRowSelect,
+            // onSelectAll: this.onSelectAll,
+            bgColor: '#ffffff',
+            selected : this.state.selectedIds,
         }
     }
 
@@ -63,11 +79,11 @@ class ProductOverRide extends Component {
             if(Array.isArray(nextProps.productData)) {
                 let productList = []
                 _get(nextProps,'productData', []).map(product => {
+                    this.setState({ currencyCode: product.currencyCode})
                     let tempStore = {}
                     tempStore = product.product
-                    tempStore.currencyCode = _get(product,'product.salePrice.currencyCode', '$')
-                    tempStore.salePrice = _get(product,'product.salePrice.price', 0)
-                    tempStore.costPrice = _get(product,'product.costPrice.price', 0)
+                    tempStore.salePrice = _get(product.product,'salePrice.price', 0)
+                    tempStore.costPrice = _get(product.product,'costPrice.price', 0)
                     productList.push(tempStore)
                 })
                 this.setState({ productList, isLoading: false })
@@ -87,8 +103,36 @@ class ProductOverRide extends Component {
         this.props.dispatch(fetchProductLookupData('', url, reqBody)); 
     }
 
+    onRowSelect = (row, isSelected, e) => {
+        isSelected ? this.state.selectedIds.push(row.id) : _pull(this.state.selectedIds, row.id);
+        let selectedProducts = _cloneDeep(this.state.selectedProducts);
+        if (isSelected) {
+            selectedProducts.push(row)
+        } else {
+            let index = _findIndex(selectedProducts, { 'id': row.id });
+            if (index !== -1) {
+                selectedProducts.splice(index, 1);
+            }
+        }
+        this.selectRowProp.selected = this.state.selectedIds;
+        this.setState({selectedProducts});
+    }
+
+    handleOverrideForStore = () => {
+        if(!_isEmpty(this.state.selectedProducts)) {
+            let data = {
+                selectedProducts: this.state.selectedProducts,
+                selectedStoreId: this.state.selectedStore.store
+            }
+            this.props.dispatch(sendSelectedProducts(data))
+            this.props.history.push('/overrideProduct')
+        } else {
+            alert('please select a product!')
+        } 
+    }
+
     render() {
-        
+
         let table = ''
         if(this.state.isLoading) {
             table =  <div style={{ marginLeft: '450px', marginTop: '100px' }}>
@@ -112,7 +156,10 @@ class ProductOverRide extends Component {
             search={true} 
             searchPlaceholder={'Search Products'}
         >
-            <TableHeaderColumn width='150' dataField='name' isKey={true} >Name</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id
+            </TableHeaderColumn>
+
+            <TableHeaderColumn width='150' dataField='name'>Name</TableHeaderColumn>
 
             <TableHeaderColumn width='100' dataField='sku'>SKU
             </TableHeaderColumn>
