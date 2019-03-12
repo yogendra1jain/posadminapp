@@ -11,11 +11,8 @@ import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import {fetchStore} from '../../actions/store';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { fetchStaffList, requestStaffUpdate } from '../../actions/staff';
+import { fetchStaffList, requestStaffUpdate, addNewStaff } from '../../actions/staff';
 import 'react-drawer/lib/react-drawer.css';
-import ReactDrawer from 'react-drawer';
-import { fetchProductLookupData } from '../../actions/products';
 import Alert from 'react-s-alert';
 import _pull from 'lodash/pull';
 import AutoComplete from '../../components/Elements/AutoComplete';
@@ -197,8 +194,7 @@ class StaffListContainer extends React.Component {
     }
     addNew() {
        this.redirectToAddEditPAge = true;
-       const {dispatch, staffsReducer} = this.props;
-    //    dispatch(requestStaffUpdate(staffsReducer, {}));
+       this.props.dispatch(addNewStaff())
        this.forceUpdate();
     }
     saveInventory (selectedInventory) {

@@ -80,6 +80,10 @@ export const requestStaffUpdate = (subreddit, staff, id) => ({
     data:staff
 });
 
+export const addNewStaff = () => ({
+    type: 'ADD_NEW_STAFF'
+})
+
 const receiveStaffUpdateError = (subreddit,err,errCode) => ({
     type: STAFF_CONSTANTS.RECEIVED_STAFF_UPDATE_ERROR,
     subreddit,

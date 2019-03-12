@@ -77,6 +77,11 @@ const staffsData = (state = {
         selectedId: action.id,
         lastUpdated: action.receivedAt
     });
+    case 'ADD_NEW_STAFF':
+      return Object.assign({}, state, {
+        selectedId: ''
+      })
+
     case RECEIVED_STAFF_UPDATE:
       return Object.assign({}, state, {
         isFetching: false,
