@@ -10,6 +10,7 @@ const productReducer = (state = {
     productOverrideData: [],
     overriddenProductData: {},
     isFetching: false,
+    error:'',
     type: '',
     status: ''
 }, action) => {
@@ -35,6 +36,7 @@ const productReducer = (state = {
                 type: action.type, 
                 status: action.status, 
                 overriddenProductData: action.data,
+                error: action.error,
                 lastUpdated: action.receivedAt
             });
 

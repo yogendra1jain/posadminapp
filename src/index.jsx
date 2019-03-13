@@ -142,8 +142,8 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path="/retailers" component={RetailerContainer} />
         <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
         <RouteWithLayout layout={MainLayout} exact path='/staff/resetPassword' component={ResetPassword} />
-        <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideContainer} />
-        <RouteWithLayout layout={MainLayout} exact path='/overrideProduct' component={ProductOverRideComponent} />
+        <RouteWithLayout layout={MainLayout} exact path='/storeProducts' component={ProductOverRideContainer} />
+        <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideComponent} />
       </Switch>
     </Router>
   </Provider>

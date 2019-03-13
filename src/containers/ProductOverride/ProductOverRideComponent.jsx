@@ -7,6 +7,9 @@ import _set from 'lodash/set';
 import SaveButton from '../../components/common/SaveButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import {saveProductOverride} from '../../actions/poductOverride';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Alert from 'react-s-alert';
+import Redirect from "react-router/Redirect";
 
 class ProductOverRideComponent extends Component {
     constructor(props) {
@@ -14,11 +17,31 @@ class ProductOverRideComponent extends Component {
         this.state = {
             selectedProducts: [],
             storeId: '',
-            active: true
+            active: true,
+            clickedSaveButton: ''
         }
     }
 
     _isMounted = false
+
+    showAlert(error, msg) {
+        if (error) {
+            Alert.error(msg || '', {
+                position: 'bottom-right',
+                effect: 'slide',
+                timeout: 5000,
+                html: true
+            });
+            this.forceUpdate();
+        } else {
+            Alert.success(msg || 'successfully saved.', {
+                position: 'bottom-right',
+                effect: 'slide',
+                timeout: 3000,
+                html: true
+            });
+        }
+    }
 
     handleChangeInput = (e, index, type) => {
         let value = _get(e, 'target.value', '');
@@ -38,6 +61,7 @@ class ProductOverRideComponent extends Component {
     }
 
     handleProductOverride = (index) => {
+        this.setState({ clickedSaveButton: index })
         let productToSave = this.state.selectedProducts[index]
         let reqObj = {
             storeId: this.state.storeId,
@@ -71,17 +95,29 @@ class ProductOverRideComponent extends Component {
         }
     }
 
+    handleCancel = () => {
+        this.props.history.push('/storeProducts'); 
+    }
+
     componentDidMount() {
         this._isMounted = true
         this.mapPropsWithState();
         if(_isEmpty(this.props.selectedProducts)) {
-            this.props.history.push('/productOverride')
+            this.props.history.push('/storeProducts')
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.type == 'RECEIVE_PRODUCT_OVERRIDE') {
+            if(nextProps.status == 200) {
+                this.showAlert(false, 'Product Overrided Successfully!');
+            } else if(nextProps.status !== 200) {
+                this.showAlert(true, 'Some Error Occured!');
+            }
         }
     }
 
     render() {
-        console.log(this.props.isFetching, 'this.props.isFetching')
-        console.log(this.state.selectedProducts, 'this.state.selectedProducts')
         let showSelectedProducts = () => {
             let rows = []
             if (!_isEmpty(this.state.selectedProducts)) {
@@ -112,7 +148,9 @@ class ProductOverRideComponent extends Component {
                                 />
                             </div>
                             <div>
-                                <SaveButton buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={()=>this.handleProductOverride(index)} />
+                                {this.state.clickedSaveButton == index &&   this.props.isFetching ? <CircularProgress disableShrink/> : 
+                                    <SaveButton buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={()=>this.handleProductOverride(index)} />
+                                }
                             </div>
                         </div>
                     )
@@ -121,7 +159,10 @@ class ProductOverRideComponent extends Component {
             return (
                 <div className='box-conversion-container'>
                     <div className='panel-container'>
-                        <span className='panel-heading'>Product List </span>
+                        <span className='panel-heading'>Selected Product List </span>
+                        <div>
+                            <SaveButton buttonDisplayText={'Cancel'} Class_Name={"btn-info"} handlerSearch={this.handleCancel} />
+                        </div>
                     </div>
                     {rows}
                 </div>
@@ -138,7 +179,7 @@ class ProductOverRideComponent extends Component {
 
 const mapStateToProps = state => {
     const { productOverride } = state
-    const { productOverrideData, status, type, isFetching } = productOverride
+    const { productOverrideData, status, type, isFetching, error } = productOverride
     const { selectedProducts, selectedStoreId } = productOverrideData
 
     return {
@@ -146,7 +187,8 @@ const mapStateToProps = state => {
         selectedStoreId,
         status,
         type,
-        isFetching
+        isFetching,
+        error
     }
 }
 

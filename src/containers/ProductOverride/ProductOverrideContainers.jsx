@@ -59,6 +59,11 @@ class ProductOverRide extends Component {
         }
         let url = '/Store/ByRetailerId'
         this.props.dispatch(fetchStore('', url, reqBody));
+        if(this.props.selectedStoreId !== '') {
+            let selectedStore = {}
+            selectedStore.store = this.props.selectedStoreId
+            this.setState({ selectedStore })
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -122,12 +127,13 @@ class ProductOverRide extends Component {
         if(!_isEmpty(this.state.selectedProducts)) {
             let data = {
                 selectedProducts: this.state.selectedProducts,
-                selectedStoreId: this.state.selectedStore.store
+                selectedStoreId: this.state.selectedStore.store,
+                selectedIds: this.state.selectedIds
             }
             this.props.dispatch(sendSelectedProducts(data))
-            this.props.history.push('/overrideProduct')
+            this.props.history.push('/productOverride')
         } else {
-            alert('please select a product!')
+            alert('Please Select a Product to Override!')
         } 
     }
 
@@ -202,13 +208,18 @@ class ProductOverRide extends Component {
 }
 
 const mapStateToProps = state => {
-    const {storesReducer, productsReducer} = state
+    const {storesReducer, productsReducer, productOverride} = state
     let {productData} = productsReducer || [];
     const {storeData} = storesReducer || {}
+    const { productOverrideData } = productOverride
+    const { selectedProducts, selectedStoreId, selectedIds } = productOverrideData
 
     return {
         productData,
-        storeData
+        storeData,
+        selectedProducts,
+        selectedStoreId,
+        selectedIds
     }
 }
 
