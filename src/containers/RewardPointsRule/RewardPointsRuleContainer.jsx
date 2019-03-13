@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {createRewardPointsEarningRule, createRewardPointsRedeemptionRule} from '../../actions/rewardPointsRule';
 import {connect} from 'react-redux';
 import Alert from 'react-s-alert';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import SaveButton from '../../components/common/SaveButton';
 
 class RewardPointsRuleContainer extends Component {
     constructor(props) {
@@ -104,8 +106,7 @@ class RewardPointsRuleContainer extends Component {
                     <input type='number' value={this.state.earningMultiplier} 
                     onChange={(e) => this.handleInputChange(e, 'earningMultiplier')} />
                     {
-                        this.props.rpEarningLoader ? '' :  <button type='submit' onClick={this.handleRPEarningSubmit}>Submit
-                        </button>
+                        this.props.rpEarningLoader ? <CircularProgress disableShrink/> :  <SaveButton type='submit' buttonDisplayText={'Submit'} Class_Name={"btn-info"} handlerSearch={this.handleRPEarningSubmit} />
                     }
                    
                 </div>
@@ -118,8 +119,8 @@ class RewardPointsRuleContainer extends Component {
                     <input type='number' value={this.state.redeemptionMultiplier} 
                     onChange={(e) => this.handleInputChange(e, 'redeemptionMultiplier')} />
                     {
-                        this.props.rpRedeemptionLoader ? '' : 
-                        <button type='submit' onClick={this.handleRPRedeemptionSubmit}>Submit</button>
+                        this.props.rpRedeemptionLoader ? <CircularProgress disableShrink/> : 
+                        <SaveButton type='submit' buttonDisplayText={'Submit'} Class_Name={"btn-info"} handlerSearch={this.handleRPRedeemptionSubmit} />
                     }
                 </div>
             </div>
