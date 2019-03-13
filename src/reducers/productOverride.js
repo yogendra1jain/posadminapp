@@ -36,7 +36,6 @@ const productReducer = (state = {
                 type: action.type, 
                 status: action.status, 
                 overriddenProductData: action.data,
-                error: action.error,
                 lastUpdated: action.receivedAt
             });
 

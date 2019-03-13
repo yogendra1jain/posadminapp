@@ -63,6 +63,7 @@ import AddNewCategoryContainer from './containers/Categories/AddNewCategoryConta
 import ResetPassword from './containers/Staff/ResetPassword';
 import ProductOverRideContainer from './containers/ProductOverride/ProductOverrideContainers';
 import ProductOverRideComponent from './containers/ProductOverride/ProductOverRideComponent';
+import RewardPointsRule from './containers/RewardPointsRule/RewardPointsRuleContainer';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -144,6 +145,7 @@ ReactDom.render(
         <RouteWithLayout layout={MainLayout} exact path='/staff/resetPassword' component={ResetPassword} />
         <RouteWithLayout layout={MainLayout} exact path='/storeProducts' component={ProductOverRideContainer} />
         <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideComponent} />
+        <RouteWithLayout layout={MainLayout} exact path='/rewardPointsRule' component={RewardPointsRule} />
       </Switch>
     </Router>
   </Provider>

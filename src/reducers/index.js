@@ -18,6 +18,7 @@ import employeeReducer, { employeeData as employeesReducer } from './employees';
 import retailerReducer, { retailerData as retailersReducer } from './retailer';
 import commonData from './common';
 import productOverride from './productOverride';
+import rewardPointsRule from './rewardPointsRule';
 
 const commonReducer = (state = 'initialState', action) => {
   switch (action.type) {
@@ -70,7 +71,8 @@ const rootReducer = combineReducers({
   employeesReducer,
   retailerReducer,
   retailersReducer,
-  productOverride
+  productOverride,
+  rewardPointsRule
 })
 
 export default rootReducer;
