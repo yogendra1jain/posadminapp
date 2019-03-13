@@ -54,16 +54,23 @@ class ProductOverRide extends Component {
     }
 
     componentDidMount() {
+        this.setState({productList: []})
+        if(this.props.selectedStoreId !== '') {
+            let selectedStore = {}
+            selectedStore.store = this.props.selectedStoreId
+            this.setState({ selectedStore })
+            let url = '/Inventory/ByStoreId';
+            let reqBody = {
+                id: this.props.selectedStoreId
+            }
+            this.props.dispatch(fetchProductLookupData('', url, reqBody)); 
+        }
         let reqBody = {
             id: localStorage.getItem('retailerID')
         }
         let url = '/Store/ByRetailerId'
         this.props.dispatch(fetchStore('', url, reqBody));
-        if(this.props.selectedStoreId !== '') {
-            let selectedStore = {}
-            selectedStore.store = this.props.selectedStoreId
-            this.setState({ selectedStore })
-        }
+        
     }
 
     componentWillReceiveProps(nextProps) {

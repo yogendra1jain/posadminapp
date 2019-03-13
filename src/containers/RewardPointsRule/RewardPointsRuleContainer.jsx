@@ -77,7 +77,7 @@ class RewardPointsRuleContainer extends Component {
     handleRPEarningSubmit = () => {
         let url = '/Rewards/EarningRule/Create'
         let reqObj = {
-            retailerId : localStorage.getItem('retailerId'),
+            retailerId : localStorage.getItem('retailerID'),
             minimumSaleAmount : parseFloat(this.state.minSaleAmountEarning),
             earningMultiplier : parseFloat(this.state.earningMultiplier)
         }
