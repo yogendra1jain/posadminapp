@@ -24,6 +24,8 @@ import { getVendorData, saveRequisitionForm } from '../../../actions/vendor';
 import { fetchStore } from '../../../actions/store';
 import { showMessage } from '../../../actions/common';
 import { purchaseOrderSave } from '../../../actions/purchaseOrder';
+import AutoComplete from '../../../components/Elements/AutoComplete';
+import SaveButton from '../../../components/common/SaveButton';
 
 const styles = theme => ({
     button: {
@@ -40,9 +42,9 @@ class AddEditPurchaseOrder extends React.Component {
         super();
         this.state = {
             selectedRows: [],
-            selectedVendor: '',
-            selectedStore: '',
         }
+        this.selectedStore = {}
+        this.selectedVendor = {}
     }
 
     componentDidMount() {
@@ -154,7 +156,7 @@ class AddEditPurchaseOrder extends React.Component {
         let prod = _find(_get(this.state, 'cachedProducts', []), {
             'id': productId
         });
-        return _get(prod, 'name', '');
+        return _get(prod, 'name', 'Not Found');
     }
     mapVendorName = (vendorId) => {
         let vendor = _find(_get(this.state, 'cachedVendors', []), {
@@ -166,7 +168,7 @@ class AddEditPurchaseOrder extends React.Component {
         let store = _find(_get(this.props, 'storeList', []), {
             'value': id
         });
-        return _get(store, 'label', '');
+        return _get(store, 'displayText', '');
     }
     mapVendorProductName = (id) => {
         let vendor = _find(_get(this.props, 'vendorProductsList', []), {
@@ -190,42 +192,44 @@ class AddEditPurchaseOrder extends React.Component {
 
     populateRequisitionList = () => {
         let rows = []
-        _get(this, 'props.requisitionListData', []).map((data, index) => {
-            rows.push(
-                <div onClick={() => this.selectRequisitionRow(data)} className={_findIndex(this.state.selectedRows, { 'id': data.id }) !== -1 ? 'box-conversion-row selected' : 'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.mapProductName(data.posProductId)}</span>
-                        <span className='box-conversion-title'>POS Product</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.mapVendorName(data.vendorId)}</span>
-                        <span className='box-conversion-title'>Vendor Id</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.mapStoreName(data.storeId)}</span>
-                        <span className='box-conversion-title'>Store Id</span>
-                    </div>
-                    {/* <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{data.vendorProductId}</span>
-                        <span className='box-conversion-title'>Vendor Product</span>
-                    </div> */}
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{data.quantity}</span>
-                        <span className='box-conversion-title'>Quantity</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
-                        <span className='box-conversion-title'>Status</span>
-                    </div>
-                </div>
-            )
-        })
+        if(!_isEmpty(this.props.requisitionListData)) {
+            if(Array.isArray(this.props.requisitionListData)) {
+
+                _get(this, 'props.requisitionListData', []).map((data, index) => {
+                    rows.push(
+                        <div onClick={() => this.selectRequisitionRow(data)} className={_findIndex(this.state.selectedRows, { 'id': data.id }) !== -1 ? 'box-conversion-row selected' : 'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
+                            <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{this.mapProductName(data.posProductId)}</span>
+                                <span className='box-conversion-title'>POS Product</span>
+                            </div>
+                            <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{this.mapVendorName(data.vendorId)}</span>
+                                <span className='box-conversion-title'>Vendor Id</span>
+                            </div>
+                            <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{this.mapStoreName(data.storeId)}</span>
+                                <span className='box-conversion-title'>Store Id</span>
+                            </div>
+                            {/* <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{data.vendorProductId}</span>
+                                <span className='box-conversion-title'>Vendor Product</span>
+                            </div> */}
+                            <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{data.quantity}</span>
+                                <span className='box-conversion-title'>Quantity</span>
+                            </div>
+                            <div className='box-conversion-item'>
+                                <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
+                                <span className='box-conversion-title'>Status</span>
+                            </div>
+                        </div>
+                    )
+                })
+            }
+        }
 
         return (
-            <div className='box-conversion-container'>
-                <div className='panel-container'>
-                    <span className='panel-heading'>Requisition List </span>
-                </div>
+            <div className='react-bs-table-container'>
                 {rows}
             </div>
         )
@@ -236,24 +240,19 @@ class AddEditPurchaseOrder extends React.Component {
             showDialog: !this.state.showDialog,
         });
     }
-    handleChange = (e, type) => {
-        let value = _get(e, 'value', '');
-        if (type == 'vendor') {
-            this.setState({
-                selectedVendor: value,
-            });
+    handleChange = (id, name) => {
+        if (name == 'vendor') {
+            _set(this.selectedVendor, name, id);
         } else {
-            this.setState({
-                selectedStore: value,
-            });
+            _set(this.selectedStore, name, id);
         }
-
+        this.forceUpdate();
         let requisitionUrl = `/Requisition/GetByCriteria`;
         let reqData = {
             statuses: [0],
             id: localStorage.getItem('retailerID'),
-            vendorId: type === 'vendor' ? value : this.state.selectedVendor,
-            storeId: type === 'store' ? value : this.state.selectedStore,
+            vendorId: name === 'vendor' ? id : this.selectedVendor.vendor,
+            storeId: name === 'store' ? id : this.selectedStore.store,
         };
         this.fetchBasicDetails(requisitionUrl, reqData);
     }
@@ -308,16 +307,66 @@ class AddEditPurchaseOrder extends React.Component {
             </div>);
         }
         return (
-            <div style={{ padding: "20px" }}>
-                <div className="" style={{ marginBottom: '10px' }}>
-                    <Select placeholder="Select Vendor" name='vendor' options={this.props.vendorList} value={this.state.selectedVendor} onChange={(e) => this.handleChange(e, 'vendor')} />
-                    <Select placeholder="Select Store" name='vendor' options={this.props.storeList} value={this.state.selectedStore} onChange={(e) => this.handleChange(e, 'store')} />
+            <div className="">
+                <div className='panel-container'>
+                    <span className='panel-heading'>Requisition List </span>
+                    <div>
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.cancelPO()} />
+                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Create PO'} handlerSearch={() => this.SavePO()} />
+                        {/* <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.cancelPO()}>Cancel</Button>
+                        <Button type="button" variant="raised" onClick={() => this.SavePO()}>Create PO</Button> */}
+                    </div>
                 </div>
-                <div className="form-btn-group">
-                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.cancelPO()}>Cancel</Button>
-                    <Button type="button" variant="raised" onClick={() => this.SavePO()}>Create PO</Button>
+
+                <div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <label>Select Vendor</label>
+                            <AutoComplete
+                                type="single"
+                                data={this.props.vendorList}
+                                value={this.selectedVendor.vendor}
+                                name="vendor"
+                                placeholder="Select Vendor"
+                                changeHandler={(e) => this.handleChange(e, 'vendor')}
+                            />
+                        </div>
+                        <div className="col-md-6">
+                            <label>Select Store</label>
+                            <AutoComplete
+                                type="single"
+                                data={this.props.storeList}
+                                value={this.selectedStore.store}
+                                name="store"
+                                placeholder="Select Store"
+                                changeHandler={(e) => this.handleChange(e, 'store')}
+                            />
+                        </div>
+                    </div> 
+                    <div>
+                        <div className="row">
+                            <div className="col-sm-2">
+                                <span>Product Name</span>
+                            </div>
+                            <div className="col-sm-2">
+                                <span>Vendor Id</span>
+                            </div>
+                            <div className="col-sm-2">
+                                <span>Store Id</span>
+                            </div>
+                            <div className="col-sm-2">
+                                <span>Proposed Quantity</span>
+                            </div>
+                            <div className="col-sm-2">
+                                <span>Quantity</span>
+                            </div>
+                            <div className="col-sm-2">
+                                <span>Status</span>
+                            </div>
+                        </div>
+                        {this.populateRequisitionList()}
+                    </div>
                 </div>
-                {this.populateRequisitionList()}
             </div>
         );
     }
@@ -340,7 +389,7 @@ const mapStateToProps = state => {
         storeList.push(
             {
                 value: data.id,
-                label: data.name,
+                displayText: data.name,
             }
         )
     })
@@ -357,7 +406,7 @@ const mapStateToProps = state => {
         vendorList.push(
             {
                 value: data.id,
-                label: data.name,
+                displayText: data.name,
             }
         )
     })
