@@ -126,19 +126,15 @@ class ProductOverRideComponent extends Component {
                         <div className={'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
                             <div className='box-conversion-item'>
                                 <span className='box-conversion-data'>{product.name}</span>
-                                <span className='box-conversion-title'>POS Product</span>
                             </div>
                             <div className='box-conversion-item'>
                                 <span className='box-conversion-data'>{product.sku}</span>
-                                <span className='box-conversion-title'>SKU</span>
                             </div>
                             <div className='box-conversion-item'>
                                 <input style={{ width: '100px' }} className='box-conversion-data' onChange={(e) => this.handleChangeInput(e, index, 'costPrice')} value={product.costPrice} />
-                                <span className='box-conversion-title'>Cost Price</span>
                             </div>
                             <div className='box-conversion-item'>
                                 <input style={{ width: '100px' }} className='box-conversion-data' onChange={(e) => this.handleChangeInput(e, index, 'salePrice')} value={product.salePrice} />
-                                <span className='box-conversion-title'>Sale Price</span>
                             </div>
                             <div className='box-conversion-item'>
                                 <Checkbox
@@ -162,6 +158,23 @@ class ProductOverRideComponent extends Component {
                         <span className='panel-heading'>Selected Product List </span>
                         <div>
                             <SaveButton buttonDisplayText={'Close'} Class_Name={"btn-info"} handlerSearch={this.handleCancel} />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-2">
+                            <span>Product Name</span>
+                        </div>
+                        <div className="col-sm-2">
+                            <span>SKU</span>
+                        </div>
+                        <div className="col-sm-2">
+                            <span>Cost Price</span>
+                        </div>
+                        <div className="col-sm-2">
+                            <span>Sale Price</span>
+                        </div>
+                        <div>
+                            <span>Active</span>
                         </div>
                     </div>
                     {rows}

@@ -94,6 +94,7 @@ class ProductOverRide extends Component {
                     let tempStore = {}
                     tempStore.id = _get(product.product, 'id','');
                     tempStore.active = _get(product.product,'active', false)
+                    tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
                     tempStore.name = _get(product.product, 'name', '');
                     tempStore.sku = _get(product.product, 'sku', '');
                     tempStore.salePrice = _get(product.product,'salePrice.price', '')
@@ -108,7 +109,9 @@ class ProductOverRide extends Component {
                 })
                 this.productList = productList
                 this.forceUpdate()
-                this.setState({ isLoading: false })
+                if(nextProps.productData !== this.props.productData) {
+                    this.setState({ isLoading: false })
+                }
             }
         }
     }
@@ -193,7 +196,7 @@ class ProductOverRide extends Component {
 
             <TableHeaderColumn width='100' dataField='salePrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
 
-            <TableHeaderColumn width='100' dataField='active' dataSort searchable={true} >Active</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='activeStatus' dataSort searchable={true} >Active</TableHeaderColumn>
         </BootstrapTable>
         }
         return (    
