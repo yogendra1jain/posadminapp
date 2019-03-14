@@ -93,7 +93,7 @@ class ProductOverRide extends Component {
                     this.setState({ currencyCode: product.currencyCode})
                     let tempStore = {}
                     tempStore.id = _get(product.product, 'id','');
-                    tempStore.active = _get(product.product,'active', '')
+                    tempStore.active = _get(product.product,'active', false)
                     tempStore.name = _get(product.product, 'name', '');
                     tempStore.sku = _get(product.product, 'sku', '');
                     tempStore.salePrice = _get(product.product,'salePrice.price', '')

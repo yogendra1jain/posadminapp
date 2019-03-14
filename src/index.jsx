@@ -64,6 +64,8 @@ import ResetPassword from './containers/Staff/ResetPassword';
 import ProductOverRideContainer from './containers/ProductOverride/ProductOverrideContainers';
 import ProductOverRideComponent from './containers/ProductOverride/ProductOverRideComponent';
 import RewardPointsRule from './containers/RewardPointsRule/RewardPointsRuleContainer';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import theme from './Global/MaterialUiSettings/theme';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -72,7 +74,7 @@ const generateClassName = createGenerateClassName({
 
 
 
-const middleware = [ thunk, fetchMiddleware]
+const middleware = [thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
   console.log('ENV URL', process.env.REACT_APP_API_HOST);
   middleware.push(createLogger())
@@ -95,60 +97,63 @@ function RouteWithLayout({ layout, component, ...rest }) {
 ReactDom.render(
   //   <div>
   //     <Favicon url="/src/assets/images/favicon.ico" />
-<JssProvider generateClassName={generateClassName}>
-  <Provider store={store}>
-    <Router>
-      <Switch>
+  <JssProvider generateClassName={generateClassName}>
+    <MuiThemeProvider theme={theme}>
+
+      <Provider store={store}>
+        <Router>
+          <Switch>
 
 
-        <RouteWithLayout layout={EmptyLayout} exact path="/" component={LoginContainer} />
-        {/* <RouteWithLayout layout={EmptyLayout} exact path="/store" component={StoreContainer}/> */}
-        <RouteWithLayout layout={MainLayout} exact path="/products" component={ProductListContainer} />
-        {/* <RouteWithLayout layout={MainLayout} exact path="/productReports" component={ChartsContainer}/> */}
-        {/* <RouteWithLayout layout={MainLayout} exact path="/customerReport" component={customerChartsContainer}/> */}
-        <RouteWithLayout layout={MainLayout} exact path="/product" component={ProductContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/inventories" component={InventoryListContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/stores" component={StoreListContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/addEditStore" component={AddEditStoreContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/staff" component={AddEditStaffContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/staffs" component={StaffListContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/posList" component={PosList} />
-        <RouteWithLayout layout={MainLayout} exact path="/addEditPos" component={AddEditPosContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer}/>
-        {/* <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/> */}
-        <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer} />
+            <RouteWithLayout layout={EmptyLayout} exact path="/" component={LoginContainer} />
+            {/* <RouteWithLayout layout={EmptyLayout} exact path="/store" component={StoreContainer}/> */}
+            <RouteWithLayout layout={MainLayout} exact path="/products" component={ProductListContainer} />
+            {/* <RouteWithLayout layout={MainLayout} exact path="/productReports" component={ChartsContainer}/> */}
+            {/* <RouteWithLayout layout={MainLayout} exact path="/customerReport" component={customerChartsContainer}/> */}
+            <RouteWithLayout layout={MainLayout} exact path="/product" component={ProductContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/inventories" component={InventoryListContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/stores" component={StoreListContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/addEditStore" component={AddEditStoreContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/staff" component={AddEditStaffContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/staffs" component={StaffListContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/posList" component={PosList} />
+            <RouteWithLayout layout={MainLayout} exact path="/addEditPos" component={AddEditPosContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer} />
+            {/* <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/> */}
+            <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer} />
 
-        <RouteWithLayout layout={MainLayout} exact path="/categories" component={CategoriesContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/categories/add" component={AddNewCategoryContainer}/>
-        <RouteWithLayout layout={MainLayout} exact path="/vendorproducts" component={VendorProductsContainer}/> 
-        
-        <RouteWithLayout layout={MainLayout} exact path="/vendorproducts/add" component={AddEditVendorProduct} />
-        <RouteWithLayout layout={MainLayout} exact path="/requisitions" component={RequisitionContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders" component={PurchaseOrderContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/add" component={AddEditPurchaseOrder} />
-        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/review/:id" component={ReviewPurchaseOrderContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/reciept/:id" component={RecieptAddEdit} />
-        <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_details" component={EmployeePayrollDeductDetails} />
-        <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_summary" component={EmployeePayrollDeductSummary} />
-        <RouteWithLayout layout={MainLayout} exact path="/employee_discount_report" component={EmployeeDiscountReport} />
-        <RouteWithLayout layout={MainLayout} exact path="/employee_details_report" component={EmployeeDetailsReport} />
-        <RouteWithLayout layout={MainLayout} exact path="/z_report" component={ZReportContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/employees" component={EmployeesContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/employees/add" component={AddEditEmployee} />
-        <RouteWithLayout layout={MainLayout} exact path="/sale_report" component={SaleDataReport} />
-        <RouteWithLayout layout={MainLayout} exact path="/retailers" component={RetailerContainer} />
-        <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
-        <RouteWithLayout layout={MainLayout} exact path='/staff/resetPassword' component={ResetPassword} />
-        <RouteWithLayout layout={MainLayout} exact path='/storeProducts' component={ProductOverRideContainer} />
-        <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideComponent} />
-        <RouteWithLayout layout={MainLayout} exact path='/rewardPointsRule' component={RewardPointsRule} />
-      </Switch>
-    </Router>
-  </Provider>
+            <RouteWithLayout layout={MainLayout} exact path="/categories" component={CategoriesContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/categories/add" component={AddNewCategoryContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/vendorproducts" component={VendorProductsContainer} />
+
+            <RouteWithLayout layout={MainLayout} exact path="/vendorproducts/add" component={AddEditVendorProduct} />
+            <RouteWithLayout layout={MainLayout} exact path="/requisitions" component={RequisitionContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/purchaseorders" component={PurchaseOrderContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/add" component={AddEditPurchaseOrder} />
+            <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/review/:id" component={ReviewPurchaseOrderContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/purchaseorders/reciept/:id" component={RecieptAddEdit} />
+            <RouteWithLayout layout={MainLayout} exact path="/vendors/add" component={AddVendorContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/vendors" component={VendorListContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_details" component={EmployeePayrollDeductDetails} />
+            <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_summary" component={EmployeePayrollDeductSummary} />
+            <RouteWithLayout layout={MainLayout} exact path="/employee_discount_report" component={EmployeeDiscountReport} />
+            <RouteWithLayout layout={MainLayout} exact path="/employee_details_report" component={EmployeeDetailsReport} />
+            <RouteWithLayout layout={MainLayout} exact path="/z_report" component={ZReportContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/employees" component={EmployeesContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/employees/add" component={AddEditEmployee} />
+            <RouteWithLayout layout={MainLayout} exact path="/sale_report" component={SaleDataReport} />
+            <RouteWithLayout layout={MainLayout} exact path="/retailers" component={RetailerContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
+            <RouteWithLayout layout={MainLayout} exact path='/staff/resetPassword' component={ResetPassword} />
+            <RouteWithLayout layout={MainLayout} exact path='/storeProducts' component={ProductOverRideContainer} />
+            <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideComponent} />
+            <RouteWithLayout layout={MainLayout} exact path='/rewardPointsRule' component={RewardPointsRule} />
+          </Switch>
+        </Router>
+      </Provider>
+    </MuiThemeProvider>
   </JssProvider>,
   //   </div>,
   document.getElementById('root')

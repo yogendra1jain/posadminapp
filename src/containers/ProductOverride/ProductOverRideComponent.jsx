@@ -161,7 +161,7 @@ class ProductOverRideComponent extends Component {
                     <div className='panel-container'>
                         <span className='panel-heading'>Selected Product List </span>
                         <div>
-                            <SaveButton buttonDisplayText={'Cancel'} Class_Name={"btn-info"} handlerSearch={this.handleCancel} />
+                            <SaveButton buttonDisplayText={'Close'} Class_Name={"btn-info"} handlerSearch={this.handleCancel} />
                         </div>
                     </div>
                     {rows}

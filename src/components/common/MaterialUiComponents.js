@@ -14,7 +14,7 @@ import TextInputIcons from './TextInputIcons.jsx';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 const TextFieldInput = (props) => {
-  let { input, label, multiline = false, rows = 3, hideLabel, autoFocus, meta: { touched, error, pristine }, ...custom } = props;
+  let { input, label, multiline = false, rows = 3, hideLabel, autoFocus, fullWidth, meta: { touched, error, pristine }, ...custom } = props;
   return (
     [
       // <label style={{    display: 'inline-block',
@@ -23,7 +23,7 @@ const TextFieldInput = (props) => {
       // fontWeight: '000',
       // color: 'rgba(0, 0, 0, 0.38)'}}>{label}</label>,
       
-      <FormControl key={`${input.id}textform`}>
+      <FormControl key={`${input.id}textform`} fullWidth>
         <TextField
           multiline={multiline}
           rows={rows}
@@ -32,6 +32,7 @@ const TextFieldInput = (props) => {
           placeholder={label}
           error={touched && error ? true : false}
           autoFocus={autoFocus}
+          fullWidth
           {...input}
           {...custom}
         />

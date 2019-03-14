@@ -8,7 +8,9 @@ const AddEditRetailerComponent = () => {
     return (
         <div>
             <div className="col-sm-4" style={{ marginTop: '25px' }}>
-                <Field name={`name`} placeholder="Name" id={`name`} label={'Name *'} component={TextFieldInput} />
+                <div>
+                <Field name={`name`} placeholder="Name" id={`name`} label={'Name *'} fullWidth component={TextFieldInput} />
+                </div>
             </div>
             <div className="col-sm-4" style={{ marginTop: '25px' }}>
                 <Field name={`domainLink`} placeholder="Domain Link" id={`domainLink`} label={'Domain Link *'} component={TextFieldInput} />
