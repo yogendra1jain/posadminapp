@@ -343,6 +343,9 @@ class PosList extends React.Component {
     }
 
     render() {
+        if(_isEmpty(this.selectedStore)) {
+            this.posList = []
+        }
         if (this.redirectToAddEditPage) {
             return (
                 <Redirect push to="/addEditPos" />

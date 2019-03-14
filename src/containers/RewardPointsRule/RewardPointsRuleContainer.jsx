@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import Alert from 'react-s-alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SaveButton from '../../components/common/SaveButton';
+import {getRewardPointRedeemptionRule, getRewardPointEarningRule} from '../../actions/rewardPointsRule';
+import _isEmpty from 'lodash/isEmpty';
 
 class RewardPointsRuleContainer extends Component {
     constructor(props) {
@@ -35,6 +37,16 @@ class RewardPointsRuleContainer extends Component {
         }
     }
 
+    componentDidMount() {
+        let reqObj = {
+            id: localStorage.getItem('retailerID')
+        }
+        let earningUrl = '/Rewards/EarningRule/ByRetailer'
+        let redeemptionUrl = '/Rewards/RedemptionRule/ByRetailer'
+        this.props.dispatch(getRewardPointEarningRule('', earningUrl, reqObj))
+        this.props.dispatch(getRewardPointRedeemptionRule('', redeemptionUrl, reqObj))
+    }
+    
     componentWillReceiveProps(nextProps) {
         if(nextProps.type == 'SUCCESS_CREATE_RP_EARNING_RULE') {
             if(nextProps.status == 200) {
@@ -58,6 +70,22 @@ class RewardPointsRuleContainer extends Component {
             } else {
                 this.showAlert(false, 'Some error occured!')
             }
+        }
+
+        if(!_isEmpty(nextProps.rewardPointsEarningRule)) {
+            let earningRule =  nextProps.rewardPointsEarningRule.earningRule
+            this.setState({
+                minSaleAmountEarning: earningRule.minimumSaleAmount,
+                earningMultiplier: earningRule.earningMultiplier
+            })  
+        }
+
+        if(!_isEmpty(nextProps.rewardPointsRedeemptionRule)) {
+            let redemptionRule =  nextProps.rewardPointsRedeemptionRule.redemptionRule
+            this.setState({
+                minSaleAmountRedeemption: redemptionRule.minimumSaleAmount,
+                redeemptionMultiplier: redemptionRule.redemptionMultiplier
+            })  
         }
     }
 
@@ -87,7 +115,7 @@ class RewardPointsRuleContainer extends Component {
     handleRPRedeemptionSubmit = () => {
         let url = '/Rewards/RedemptionRule/Create'
         let reqObj = {
-            retailerId : localStorage.getItem('retailerId'),
+            retailerId : localStorage.getItem('retailerID'),
             minimumSaleAmount : parseFloat(this.state.minSaleAmountRedeemption),
             redemptionMultiplier : parseFloat(this.state.redeemptionMultiplier)
         }
@@ -95,6 +123,8 @@ class RewardPointsRuleContainer extends Component {
     }
 
     render() {
+        
+        console.log(this.props.rewardPointsRedeemptionRule.redemptionRule, 'this.props.rewardPointsRedeemptionRule.redemptionRule')
         return (
             <div>
                 <div>
@@ -130,13 +160,15 @@ class RewardPointsRuleContainer extends Component {
 
 const mapStateToProps = state => {
     const {rewardPointsRule} = state
-    const {status, type, rpEarningLoader, rpRedeemptionLoader, error} = rewardPointsRule
+    const {status, type, rpEarningLoader, rpRedeemptionLoader, error, rewardPointsEarningRule, rewardPointsRedeemptionRule} = rewardPointsRule
     return {
         status,
         type,
         rpEarningLoader,
         rpRedeemptionLoader,
-        error
+        error,
+        rewardPointsEarningRule,
+        rewardPointsRedeemptionRule
     } 
 }
 

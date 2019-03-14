@@ -190,9 +190,11 @@ class NavBarComponent extends React.Component {
 
                                     <Link onClick={() => this.changeCurrentPath('/products')}  to={"/products"}>Product Master </Link>
                                 </Panel.Title>
-                                <Panel.Title className={(this.activePath === '/productOverride' ? 'active' : 'inactive')} >
-                                    <Link onClick={() => this.changeCurrentPath('/products')}  to={"/productOverride"}>Product Override </Link>
+
+                                <Panel.Title className={(this.activePath === '/storeProducts' ? 'active' : 'inactive')} >
+                                    <Link onClick={() => this.changeCurrentPath('/storeProducts')}  to={"/storeProducts"}>Product Override </Link>
                                 </Panel.Title>
+
                                 <Panel.Title className={(this.activePath === '/purchaseorders' ? 'active' : 'inactive')} >
 
                                     <Link onClick={() => this.changeCurrentPath('/purchaseorders')}  to={"/purchaseorders"}>Purchase Orders </Link>

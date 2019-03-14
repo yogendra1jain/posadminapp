@@ -88,3 +88,91 @@ export const createRewardPointsRedeemptionRule = (subreddit, url, data) => dispa
         }));
     })
 }
+
+const requestRewardPointEarningRule = (subreddit) => ({
+    type: REWARD_POINT_CONSTANTS.REQUEST_RP_EARNING_RULE,
+    subreddit
+});
+
+const receiveRewardPointEarningRule = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REWARD_POINT_CONSTANTS.RECEIVE_RP_EARNING_RULE,
+        subreddit,
+        data,
+        status,
+        receivedAt: Date.now()
+    });
+}
+const receiveRewardPointEarningRuleError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REWARD_POINT_CONSTANTS.RECEIVE_RP_EARNING_RULE_ERROR,
+        subreddit,
+        error,
+        status,
+        receivedAt: Date.now()
+    })
+} 
+
+export const getRewardPointEarningRule = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REWARD_POINT_CONSTANTS.MAIN_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestRewardPointEarningRule,
+            successCb: receiveRewardPointEarningRule,
+            failureCb: receiveRewardPointEarningRuleError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'GET_REWARD_POINTS_EARNING_RULE',
+            redirect: 'follow'
+        }));
+    })
+}
+
+const requestRewardPointRedeemptionRule = (subreddit) => ({
+    type: REWARD_POINT_CONSTANTS.REQUEST_RP_REDEEMPTION_RULE,
+    subreddit
+});
+
+const receiveRewardPointRedeemptionRule = (subreddit, data, status, resolve) => {
+    resolve(data);
+    return ({
+        type: REWARD_POINT_CONSTANTS.RECEIVE_RP_REDEEMPTION_RULE,
+        subreddit,
+        data,
+        status,
+        receivedAt: Date.now()
+    });
+}
+const receiveRewardPointRedeemptionRuleError = (subreddit, error, status, reject) => {
+    reject(error)
+    return ({
+        type: REWARD_POINT_CONSTANTS.RECEIVE_RP_REDEEMPTION_RULE_ERROR,
+        subreddit,
+        error,
+        status,
+        receivedAt: Date.now()
+    })
+} 
+
+export const getRewardPointRedeemptionRule = (subreddit, url, data) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: REWARD_POINT_CONSTANTS.MAIN_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: requestRewardPointRedeemptionRule,
+            successCb: receiveRewardPointRedeemptionRule,
+            failureCb: receiveRewardPointRedeemptionRuleError,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'GET_REWARD_POINTS_REDEEMPTION_RULE',
+            redirect: 'follow'
+        }));
+    })
+}

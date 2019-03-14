@@ -36,7 +36,6 @@ class ProductOverRide extends Component {
         super(props);
         this.state = {
             storeList: [],
-            productList: [],
             selectedProducts: [],
             selectedStore: {},
             selectedIds: [],
@@ -47,18 +46,19 @@ class ProductOverRide extends Component {
             mode: 'checkbox',
             clickToSelect: false,
             onSelect: this.onRowSelect,
-            // onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
             selected : this.state.selectedIds,
         }
+        this.productList = []
     }
 
     componentDidMount() {
-        this.setState({productList: []})
-        if(this.props.selectedStoreId !== '') {
+        this.productList = []
+        this.forceUpdate()
+        if(this.props.selectedStoreId) {
             let selectedStore = {}
             selectedStore.store = this.props.selectedStoreId
-            this.setState({ selectedStore })
+            this.setState({ selectedStore, isLoading: true })
             let url = '/Inventory/ByStoreId';
             let reqBody = {
                 id: this.props.selectedStoreId
@@ -70,7 +70,6 @@ class ProductOverRide extends Component {
         }
         let url = '/Store/ByRetailerId'
         this.props.dispatch(fetchStore('', url, reqBody));
-        
     }
 
     componentWillReceiveProps(nextProps) {
@@ -93,12 +92,23 @@ class ProductOverRide extends Component {
                 _get(nextProps,'productData', []).map(product => {
                     this.setState({ currencyCode: product.currencyCode})
                     let tempStore = {}
-                    tempStore = product.product
-                    tempStore.salePrice = _get(product.product,'salePrice.price', 0)
-                    tempStore.costPrice = _get(product.product,'costPrice.price', 0)
+                    tempStore.id = _get(product.product, 'id','');
+                    tempStore.active = _get(product.product,'active', '')
+                    tempStore.name = _get(product.product, 'name', '');
+                    tempStore.sku = _get(product.product, 'sku', '');
+                    tempStore.salePrice = _get(product.product,'salePrice.price', '')
+                    tempStore.costPrice = _get(product.product,'costPrice.price', '')
+                    tempStore.category1 = _get(product.product, 'category1','')
+                    tempStore.category2 = _get(product.product, 'category2','')
+                    tempStore.category3 = _get(product.product, 'category3','')
+                    tempStore.description = _get(product.product, 'description','')
+                    tempStore.retailerId = _get(product.product, 'retailerId','')
+                    tempStore.upcCode = _get(product.product, 'upcCode','')
                     productList.push(tempStore)
                 })
-                this.setState({ productList, isLoading: false })
+                this.productList = productList
+                this.forceUpdate()
+                this.setState({ isLoading: false })
             }
         }
     }
@@ -145,7 +155,9 @@ class ProductOverRide extends Component {
     }
 
     render() {
-
+        if(_isEmpty(this.state.selectedStore)) {
+            this.productList = []
+        }
         let table = ''
         if(this.state.isLoading) {
             table =  <div style={{ marginLeft: '450px', marginTop: '100px' }}>
@@ -160,7 +172,7 @@ class ProductOverRide extends Component {
         } else {
             table = <BootstrapTable 
             height='515' 
-            data={this.state.productList} 
+            data={this.productList && this.productList} 
             options={options}
             selectRow={this.selectRowProp}
             striped hover
