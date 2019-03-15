@@ -41,9 +41,7 @@ const options = {
 class VendorProductsContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            selectedValue: '',
-        };
+        this.selectedVendor = {}
         this.selectRowProp = {
             mode: 'radio',
             clickToSelect: false,
@@ -174,17 +172,15 @@ class VendorProductsContainer extends React.Component {
 
     }
 
-    handleVendorChange = (e) => {
-        let value = _get(e, 'value', '');
-        this.setState({
-            selectedValue: value,
-        });
+    handleVendorChange = (id, name) => {
+        _set(this.selectedVendor, name, id);
         let vendorProdUrl = `/VendorProduct/GetByVendorId`;
         let reqObj = {
-            id: value,
+            id: id,
         }
         this.fetchVendorProducts(vendorProdUrl, reqObj);
     }
+    
     render() {
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
@@ -199,7 +195,6 @@ class VendorProductsContainer extends React.Component {
         }
 
         let { vendorProductsList, vendorList } = this.props;
-        let { selectedValue } = this.state;
         return (
             <div className="">
                 <div className='panel-container'>
@@ -219,8 +214,8 @@ class VendorProductsContainer extends React.Component {
                             type="single"
                             data={this.vendorList}
                             name="vendor"
-                            value={selectedValue}
-                            changeHandler={this.handleVendorChange}
+                            value={this.selectedVendor.vendor}
+                            changeHandler={(e) => this.handleVendorChange(e, 'vendor')}
                         />
                     </div>
                     </div>
