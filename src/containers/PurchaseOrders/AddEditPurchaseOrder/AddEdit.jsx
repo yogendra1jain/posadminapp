@@ -344,7 +344,7 @@ class AddEditPurchaseOrder extends React.Component {
                         </div>
                     </div> 
                     <div>
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col-sm-2">
                                 <span>Product Name</span>
                             </div>
@@ -363,7 +363,7 @@ class AddEditPurchaseOrder extends React.Component {
                             <div className="col-sm-2">
                                 <span>Status</span>
                             </div>
-                        </div>
+                        </div> */}
                         {this.populateRequisitionList()}
                     </div>
                 </div>

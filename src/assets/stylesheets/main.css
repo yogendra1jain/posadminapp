@@ -3335,10 +3335,11 @@ input.login-number.form-control {
 
 .box-conversion-item .box-conversion-data {
     color: rgba(0, 0, 0, 0.8);
+    font-size: 1.4rem;
 }
 
 .box-conversion-item .box-conversion-title {
-    font-size: 0.7em;
+    font-size: 1.1rem;
     color: rgba(0, 0, 0, 0.7);
 }
 
@@ -3348,12 +3349,39 @@ input.login-number.form-control {
     align-items: flex-end;
 }
 
-.selected {
+/* .selected {
     background: #005383;
-}
+} */
 
 .dropzone {
     height: 200px;
     width: 300px;
     border: dashed;
+}
+.white-box-container {
+    border-radius: 4px;
+    background: #FFF;
+    box-shadow: 2px 2px 2px -2px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    margin-bottom: 2rem;
+}
+.white-box-header {
+    padding: 1.5rem 2rem;
+    border-bottom: solid 1px #DDD;
+}
+.white-box-title {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.white-box-body {
+    padding: 2rem;
+}
+.form-custom{
+    margin-bottom:2rem;
+}
+.form-custom label.control-label {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 1.4rem;
+    font-weight: 400;
 }

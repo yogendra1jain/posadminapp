@@ -127,31 +127,55 @@ class RewardPointsRuleContainer extends Component {
         console.log(this.props.rewardPointsRedeemptionRule.redemptionRule, 'this.props.rewardPointsRedeemptionRule.redemptionRule')
         return (
             <div>
-                <div>
-                    <h2>Reward Points Earning Rule</h2>
-                    <label>Minimum Sale Amount:</label>
-                    <input type='number' value={this.state.minSaleAmountEarning} 
-                    onChange={(e) => this.handleInputChange(e, 'saleAmountEarning')} />
-                    <label>Earning Multiplier:</label>
-                    <input type='number' value={this.state.earningMultiplier} 
-                    onChange={(e) => this.handleInputChange(e, 'earningMultiplier')} />
-                    {
-                        this.props.rpEarningLoader ? <CircularProgress disableShrink/> :  <SaveButton type='submit' buttonDisplayText={'Submit'} Class_Name={"btn-info"} handlerSearch={this.handleRPEarningSubmit} />
-                    }
-                   
+                <div className="white-box-container">
+                    <div className="white-box-header">
+                        <h2 className="white-box-title">Reward Points Earning Rule</h2>
+                    </div>
+                    <div className="white-box-body">
+                        <div className="row">
+                            <div className="col-sm-6 col-md-4 form-custom">
+                                <label className="control-label">Minimum Sale Amount:</label>
+                                <input className="form-control" type='number' value={this.state.minSaleAmountEarning} 
+                                onChange={(e) => this.handleInputChange(e, 'saleAmountEarning')} />
+                            </div>
+                            <div className="col-sm-6 col-md-4 form-custom">
+                                <label className="control-label">Earning Multiplier:</label>
+                                <input className="form-control" type='number' value={this.state.earningMultiplier} 
+                                onChange={(e) => this.handleInputChange(e, 'earningMultiplier')} />
+                            </div>
+                            <div className="col-sm-12 form-btn-group">
+                                {
+                                    this.props.rpEarningLoader ? <CircularProgress disableShrink/> :  <SaveButton type='submit' buttonDisplayText={'Submit'} Class_Name={"btn-info"} handlerSearch={this.handleRPEarningSubmit} />
+                                }
+                            </div>
+                        </div> 
+                    </div>
+                                      
                 </div>
-                <div>
-                    <h2>Reward Points Redeemption Rule</h2>
-                    <label>Minimum Sale Amount:</label>
-                    <input type='number' value={this.state.minSaleAmountRedeemption} 
-                    onChange={(e) => this.handleInputChange(e, 'saleAmountRedeemption')} />
-                    <label>Redeemption Multiplier:</label>
-                    <input type='number' value={this.state.redeemptionMultiplier} 
-                    onChange={(e) => this.handleInputChange(e, 'redeemptionMultiplier')} />
-                    {
-                        this.props.rpRedeemptionLoader ? <CircularProgress disableShrink/> : 
-                        <SaveButton type='submit' buttonDisplayText={'Submit'} Class_Name={"btn-info"} handlerSearch={this.handleRPRedeemptionSubmit} />
-                    }
+                <div className="white-box-container">
+                    <div className="white-box-header">
+                        <h2 className="white-box-title">Reward Points Redeemption Rule</h2>
+                    </div>
+                    <div className="white-box-body">
+                        <div className="row">
+                            <div className="col-sm-6 col-md-4 form-custom">
+                                <label className="control-label">Minimum Sale Amount:</label>
+                                <input className="form-control" type='number' value={this.state.minSaleAmountRedeemption} 
+                                onChange={(e) => this.handleInputChange(e, 'saleAmountRedeemption')} />
+                            </div>
+                            <div className="col-sm-6 col-md-4 form-custom">
+                                <label className="control-label">Redeemption Multiplier:</label>
+                                <input className="form-control" type='number' value={this.state.redeemptionMultiplier} 
+                                onChange={(e) => this.handleInputChange(e, 'redeemptionMultiplier')} />
+                            </div>
+                            <div className="col-sm-12 form-btn-group">
+                                {
+                                    this.props.rpRedeemptionLoader ? <CircularProgress disableShrink/> : 
+                                    <SaveButton type='submit' buttonDisplayText={'Submit'} Class_Name={"btn-info"} handlerSearch={this.handleRPRedeemptionSubmit} />
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

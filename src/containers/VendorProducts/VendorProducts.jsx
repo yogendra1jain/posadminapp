@@ -215,7 +215,7 @@ class VendorProductsContainer extends React.Component {
                             data={this.vendorList}
                             name="vendor"
                             value={this.selectedVendor.vendor}
-                            changeHandler={(e) => this.handleVendorChange(e, 'vendor')}
+                            changeHandler={(id) => this.handleVendorChange(id, 'vendor')}
                         />
                     </div>
                     </div>
