@@ -264,11 +264,13 @@ class EditRequisition extends React.Component {
         })
 
         return (
-            <div className='box-conversion-container'>
-                <div className='panel-container'>
-                    <span className='panel-heading'>Requisition List </span>
+            <div className='white-box-container'>
+                <div className='white-box-header'>
+                    <h2 className='white-box-title'>Requisition List</h2>
                 </div>
-                {rows}
+                <div className="white-box-body">
+                    {rows}
+                </div>
             </div>
         )
     }
@@ -312,7 +314,7 @@ class EditRequisition extends React.Component {
 
         if (forEdit) {
             return (
-                <div className="row">
+                <div className="row m0">
                     {
                         this.props.handleCancel &&
                         <div className="form-btn-group">

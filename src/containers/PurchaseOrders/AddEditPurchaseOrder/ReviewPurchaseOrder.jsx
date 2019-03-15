@@ -175,40 +175,43 @@ class ReviewPurchaseOrderContainer extends React.Component {
         const { purchaseOrderById, isPOViewFlag } = this.props;
         return (
             <div className="" id="divToPrint">
-                <div className='panel-container'>
-                    <span className='panel-heading'>Purchase Order </span>
+            <div className="white-box-container">
+                <div className='white-box-header'>
+                    <h2 className='white-box-title'>Purchase Order </h2>
                 </div>
-                <FormDialog
-                    open={this.state.openDialog}
-                    handleClose={this.toggleDialog}
-                    title={'Confirm'}
-                    fullScreen={false}
-                    fullWidth={true}
-                    dialogContent={
-                        <div>
-                            <span>Are You Sure To Reject.</span>
-                            <div className="form-btn-group">
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(true)}>Reject</Button>
-                                <Button type="button" variant="raised" onClick={() => this.toggleDialog()}>Cancel</Button>
+                <div className="white-box-body">
+                    <FormDialog
+                        open={this.state.openDialog}
+                        handleClose={this.toggleDialog}
+                        title={'Confirm'}
+                        fullScreen={false}
+                        fullWidth={true}
+                        dialogContent={
+                            <div>
+                                <span>Are You Sure To Reject.</span>
+                                <div className="form-btn-group">
+                                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(true)}>Reject</Button>
+                                    <Button type="button" variant="raised" onClick={() => this.toggleDialog()}>Cancel</Button>
+                                </div>
                             </div>
-                        </div>
-                    }
-                />
-                <div>
-                    {
-                        !this.props.isPOViewFlag ?
-                            <div className="form-btn-group">
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
-                                <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
-                            </div>
-                            :
-                            <div className="form-btn-group">
-                                <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
-                            </div>
-                    }
-                    <div >
-                        <div className="row" style={{ marginTop: '25px' }}>
+                        }
+                    />
+                    <div className="row">
+                        {
+                            !this.props.isPOViewFlag ?
+                                <div className="form-btn-group col-sm-12">
+                                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
+                                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
+                                    <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                                </div>
+                                :
+                                <div className="form-btn-group col-sm-12">
+                                    <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                                </div>
+                        }
+                    </div>
+
+                    <div className="row m0">
                             <div className="col-sm-6" style={{ border: 'solid 1px #ddd' }}>
                                 <div className='box-conversion-container'>
                                     <div className={'box-conversion-row'} style={{ height: '105px' }}>
@@ -241,24 +244,22 @@ class ReviewPurchaseOrderContainer extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row" style={{ paddingLeft: '15px', paddingRight: '15px' }}>
-                            <EditRequisition
-                                forEdit={true}
-                                handleChangeInput={this.handleChangeInput}
-                                handleSubmitHandler={this.handleSubmitHandler}
-                                selectRowProp={{}}
-                                // handleCancel={}
-                                isPOViewFlag={isPOViewFlag}
-                                requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
-                                requisitionListData={_get(this.props, 'requisitionListData', [])}
-                            />
-
-                        </div>
                     </div>
                 </div>
-                <div>
-                </div>
+            </div>
+            
+                <EditRequisition
+                    forEdit={true}
+                    handleChangeInput={this.handleChangeInput}
+                    handleSubmitHandler={this.handleSubmitHandler}
+                    selectRowProp={{}}
+                    // handleCancel={}
+                    isPOViewFlag={isPOViewFlag}
+                    requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
+                    requisitionListData={_get(this.props, 'requisitionListData', [])}
+                />
+            
+
             </div>
         )
 
