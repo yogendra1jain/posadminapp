@@ -41,7 +41,8 @@ const options = {
 class VendorProductsContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.selectedVendor = {}
+        this.selectedVendor = {};
+        this.state = { isVendorSelected: false };
         this.selectRowProp = {
             mode: 'radio',
             clickToSelect: false,
@@ -178,7 +179,9 @@ class VendorProductsContainer extends React.Component {
         let reqObj = {
             id: id,
         }
-        this.fetchVendorProducts(vendorProdUrl, reqObj);
+        this.setState({ isVendorSelected: true }, () => {
+            this.fetchVendorProducts(vendorProdUrl, reqObj);
+        });
     }
     
     render() {
@@ -195,6 +198,10 @@ class VendorProductsContainer extends React.Component {
         }
 
         let { vendorProductsList, vendorList } = this.props;
+        let productLists = [];
+        if(this.state.isVendorSelected) {
+            productLists = vendorProductsList;
+        }
         return (
             <div className="">
                 <div className='panel-container'>
@@ -222,7 +229,7 @@ class VendorProductsContainer extends React.Component {
                     
                     <div>
                         <BootstrapTable
-                            data={vendorProductsList}
+                            data={productLists}
                             options={options}
                             selectRow={this.selectRowProp}
                             striped hover
@@ -250,7 +257,7 @@ class VendorProductsContainer extends React.Component {
 
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
 
     let { productsReducer, vendorsReducer } = state
 
