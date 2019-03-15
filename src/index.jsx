@@ -5,6 +5,7 @@ import { Switch } from "react-router-dom";
 import Provider from 'react-redux/lib/components/Provider';
 import { createLogger } from 'redux-logger/src/index';
 import createStore from 'redux/lib/createStore';
+import compose from 'redux/lib/compose';
 import applyMiddleware from 'redux/lib/applyMiddleware';
 import Router from 'react-router-dom/HashRouter';
 import Route from 'react-router-dom/Route';
@@ -76,11 +77,22 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('ENV URL', process.env.REACT_APP_API_HOST);
   middleware.push(createLogger())
 }
+let store;
+if(process.env.NODE_ENV !== 'production') {
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  store = createStore(
+    reducer,
+    composeEnhancers(
+      applyMiddleware(...middleware)
+    )
+  )
+} else {
+  store = createStore(
+    reducer,
+    applyMiddleware(...middleware)
+  )
+}
 
-const store = createStore(
-  reducer,
-  applyMiddleware(...middleware)
-)
 function RouteWithLayout({ layout, component, ...rest }) {
   return (
     <Route {...rest} render={(props) =>
