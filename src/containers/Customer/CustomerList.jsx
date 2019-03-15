@@ -246,10 +246,10 @@ const mapStateToProps = state => {
     customerData.map((data, index) => {
         customerList.push(
             {
-                id: data.id,
-                name: data.customer.firstName + ' ' + data.customer.lastName,
-                email: data.email,
-                phone: data.phoneNumber.phoneNumber
+                id: _get(data,'id', ''),
+                name: _get(data,'customer.firstName', '') + ' ' + _get(data,'customer.lastName', ''),
+                email: _get(data,'email', ''),
+                phone: _get(data,'phoneNumber.phoneNumber','')
             }
         )
     })
