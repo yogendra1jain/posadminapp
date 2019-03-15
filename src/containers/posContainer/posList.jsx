@@ -40,9 +40,10 @@ const options = {
 class PosList extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { isStoreSelected: false };
         this.selectRowProp = {
             mode: 'radio',
-            clickToSelect: false,
+            clickToSelect: true,
             onSelect: this.onRowSelect,
             onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
@@ -115,8 +116,8 @@ class PosList extends React.Component {
        
         if(props.type == 'RECEIVED_POS_TERMINAL_LIST') {
             debugger
-            if(!_isEmpty(props.posListData)) {
-                this.posList = []
+            if(!_isEmpty(props.posListData) && this.state.isStoreSelected) {
+                this.posList = [];
                 props.posListData.map(pos => {
                     let tempPos = {};
                     tempPos.id = pos.id;
@@ -221,10 +222,12 @@ class PosList extends React.Component {
         //     this.fetchTerminals();
         // }
         this.forceUpdate();
+        console.log('Pos list: ', this.posList);
     }
 
     onRowSelect = (row, isSelected, e) => {
         isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
+        console.log('Selected Ids: ', this.selectedIds);
         // this.handleAllChecks();        
         this.selectedPos = row;
         if (isSelected == false) {
@@ -339,7 +342,8 @@ class PosList extends React.Component {
         }
         let url = '/Terminal/ByStoreId';
         dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
-        this.forceUpdate();
+        this.setState({ isStoreSelected: true });
+        //this.forceUpdate();
     }
 
     render() {
@@ -362,6 +366,7 @@ class PosList extends React.Component {
                 </div>
             </div>);
         }
+        console.log('Poslist in render: ', this.posList);
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
@@ -377,7 +382,7 @@ class PosList extends React.Component {
                 <div>
                     <div className="row">
                         <div className="col-sm-4">
-                            <label className="control-label"> Select Store</label>
+                            <label className="control-label">Select Store</label>
                             <AutoComplete
                                 type="single"
                                 data={this.storeList}

@@ -63,6 +63,7 @@ class EmployeesContainer extends React.Component {
             openDialog: false,
             file: {},
         };
+        this.employeesList = []
         this.selectRowProp = {
             mode: 'radio',
             clickToSelect: false,
@@ -121,7 +122,8 @@ class EmployeesContainer extends React.Component {
     getEmployees = (url, reqObj) => {
         this.props.dispatch(fetchEmployeesList('', url, reqObj))
             .then((data) => {
-                console.log('data fetched', data);
+                this.customerList = data
+                this.forceUpdate()
             }, (err) => {
                 this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
                 setTimeout(() => {
@@ -248,6 +250,9 @@ class EmployeesContainer extends React.Component {
 
         let { customerList } = this.props;
         let { selectedValue, file } = this.state;
+        if(this.state.selectedStore == '') { 
+            this.customerList = []
+        }
         console.log(this.storeList, 'this.storeList')
         return (
             <div className="">
@@ -306,7 +311,7 @@ class EmployeesContainer extends React.Component {
                     </div> */}
                     <div>
                         <BootstrapTable
-                            data={customerList}
+                            data={this.customerList}
                             options={options}
                             selectRow={this.selectRowProp}
                             striped hover
