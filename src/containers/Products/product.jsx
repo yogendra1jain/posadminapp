@@ -196,6 +196,12 @@ class ProductContainer extends React.Component {
         else {
             _set(data, 'active', false)
         }
+        if (data.dicountable) {
+
+        }
+        else {
+            _set(data, 'dicountable', false)
+        }
         _set(data, 'upcCode', Number(_get(data, 'upcCode', '0')))
         console.log(data, 'data is here')
         let salePrice = parseFloat(this.productInfo.sellingPrice)
@@ -422,6 +428,14 @@ class ProductContainer extends React.Component {
                             name="active"
                             onChange={(e) => this.handleCheckboxChange(e)}
                             value={_get(this.productInfo, 'active', '')}
+                        />
+                    </div>
+                    <div className="col-sm-4 col-md-3 form-d">
+                        <label className="control-label">Is Discountable</label>
+                        <Checkbox
+                            name="dicountable"
+                            onChange={(e) => this.handleCheckboxChange(e)}
+                            value={_get(this.productInfo, 'dicountable', '')}
                         />
                     </div>
                     <div className="col-sm-6 col-md-4 form-d">

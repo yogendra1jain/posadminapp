@@ -182,10 +182,10 @@ class NavBarComponent extends React.Component {
 
                                     </div>
                                 </Panel>
-                                <Panel.Title className={(this.activePath === '/retailers' ? 'active' : 'inactive')} >
+                                {/* <Panel.Title className={(this.activePath === '/retailers' ? 'active' : 'inactive')} >
 
                                     <Link onClick={() => this.changeCurrentPath('/retailers')} style={{ textDecoration: "none", color: '#FFF' }} to={"/retailers"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Retailer </Link>
-                                </Panel.Title>
+                                </Panel.Title> */}
                                 <Panel.Title className={(this.activePath === '/products' ? 'active' : 'inactive')} >
 
                                     <Link onClick={() => this.changeCurrentPath('/products')}  to={"/products"}>Product Master </Link>
