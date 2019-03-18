@@ -1,29 +1,33 @@
-import React from 'react';
-import Redirect from "react-router/Redirect";
-import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
-import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
+import React, { Component } from 'react';
+import { Redirect } from "react-router";
+import { BootstrapTable } from 'react-bootstrap-table';
+import { TableHeaderColumn } from 'react-bootstrap-table';
 import "bootstrap/dist/css/bootstrap.css";
 import SaveButton from '../../components/common/SaveButton.jsx'
 import { fetchStore } from '../../actions/store';
 import AutoComplete from '../../components/Elements/AutoComplete.jsx';
 import AutoCompletePosition from '../../components/Elements/AutoCompletePosition.jsx';
-import connect from 'react-redux/lib/connect/connect';
-import _get from 'lodash/get';
-import _cloneDeep from 'lodash/cloneDeep';
-import _set from 'lodash/set';
-import _isEmpty from 'lodash/isEmpty';
-import _find from 'lodash/find';
-import { findIndex as _findIndex } from 'lodash';
-import _pull from 'lodash/pull';
-import Row from "react-bootstrap/lib/Row";
+import { connect } from 'react-redux';
+import { 
+    get as _get,
+    cloneDeep as _cloneDeep,
+    set as _set,
+    isEmpty as _isEmpty,
+    find as _find,
+    findIndex as _findIndex,
+    pull as _pull
+} from 'lodash';
+import { Row } from "react-bootstrap";
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { fetchPosTerminalList, fetchPosTerminalData, fetchPosTerminalStatus } from '../../actions/posTerminal';
+import { 
+    fetchPosTerminalList, 
+    fetchPosTerminalData, 
+    fetchPosTerminalStatus 
+} from '../../actions/posTerminal';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
 import Alert from 'react-s-alert';
-
-
 
 const options = {
     paginationPosition: 'top',
@@ -40,24 +44,31 @@ const options = {
     }],
 };
 
-class PosList extends React.Component {
+class PosList extends Component {
     constructor(props) {
         super(props);
-        this.state = { isStoreSelected: false };
+        this.state = { 
+            isStoreSelected: false  
+        };
         this.selectRowProp = {
             mode: 'radio',
             clickToSelect: true,
             onSelect: this.onRowSelect,
             onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
-        }
+        };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.addNew = this.addNew.bind(this);
+        this.showAlert = this.showAlert.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+        this.fetchTerminals = this.fetchTerminals.bind(this);
+        this.onSave = this.onSave.bind(this);
         this.posInfo = {};
         this.storeList = [];
         this.fetchStatusFlag = false;
-        this.selectedStatus = true
-        this.selectedStore = {}
+        this.selectedStatus = true;
+        this.selectedStore = {};
         this.status = {
             data: [
                 {
@@ -69,9 +80,8 @@ class PosList extends React.Component {
                     value: false
                 }
             ]
-        }
+        };
         this.redirectToSearch = false;
-        this.onSave = this.onSave.bind(this);
         this.method = 'POST';
         this.open = false;
         this.selectedIds = '';
@@ -81,10 +91,6 @@ class PosList extends React.Component {
         this.posList = [];
         this.isUpdate = false;
         this.redirectToAddEditPage = false;
-        this.addNew = this.addNew.bind(this);
-        this.showAlert = this.showAlert.bind(this);
-        this.onUpdate = this.onUpdate.bind(this);
-        this.fetchTerminals = this.fetchTerminals.bind(this);
         this.isError = false;
     }
 
@@ -131,7 +137,7 @@ class PosList extends React.Component {
                 })
                 this.forceUpdate();                
             } else {
-                this.posList = []
+                this.posList = [];
             }
         }
 
@@ -173,33 +179,39 @@ class PosList extends React.Component {
     onSave() {
         const { dispatch, posTerminalReducer, posListData } = this.props;
         console.log('Poslist data: ', posListData);
-        this.open = false;
         let url = '';
         let data = {}
-        if(this.isUpdate){
+        if(this.isUpdate) {
             console.log(this.posInfo, 'this.posInfo')
             url = "/Terminal/Update"
             data = this.posInfo
         } else {
-            console.log('Index: ', _findIndex(posListData, pos => pos.name === _get(this.posInfo,'name', '')));
+            console.log('Index: ', _findIndex(posListData, pos => pos.name === _get(this.posInfo, 'name', '')));
             if(_findIndex(posListData, pos => pos.name === _get(this.posInfo,'name', '')) === -1) {
-                url = "/Terminal/Create";
-                data = {};
-                data.storeId = _get(this.selectedStore,'stores', '');
-                data.name = _get(this.posInfo,'name', '');
-                data.active = this.posInfo.active ? true : false;
+                if(_get(this.posInfo, 'name', '') === '') {
+                    
+                } else {
+                    this.open = false;
+                    url = "/Terminal/Create";
+                    data = {};
+                    data.storeId = _get(this.selectedStore,'stores', '');
+                    data.name = _get(this.posInfo,'name', '');
+                    data.active = this.posInfo.active ? true : false;
+                    dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
+                    debugger;
+                    this.forceUpdate();
+                    if(this.props.status === 200) {
+                        console.log(this.selectedStore.stores, 'this.selectedStore.stores')
+                        let reqBody = {
+                            id: this.selectedStore.stores
+                        }
+                        let listurl = '/Terminal/ByStoreId';
+                        dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
+                    }
+                }
+            } else {
+                this.posInfo = {};
             }
-        }
-        dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
-        this.forceUpdate();
-        debugger;
-        if(this.props.status === 200) {
-            console.log(this.selectedStore.stores, 'this.selectedStore.stores')
-            let reqBody = {
-                id: this.selectedStore.stores
-            }
-            let listurl = '/Terminal/ByStoreId';
-            dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
         }
         
     }
@@ -337,7 +349,6 @@ class PosList extends React.Component {
         this.method = 'POST';
         this.fetchStores();
         this.posInfo = {};
-        
         this.open = true;
         this.forceUpdate();
     }
@@ -350,7 +361,6 @@ class PosList extends React.Component {
         let url = '/Terminal/ByStoreId';
         dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
         this.setState({ isStoreSelected: true });
-        //this.forceUpdate();
     }
 
     render() {
@@ -381,11 +391,20 @@ class PosList extends React.Component {
                 <div className='panel-container'>
                     <span className='panel-heading'>POS List</span>
                     <div>
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} Class_Name="m-r-10" />
-                        <SaveButton disabled={!this.selectedStore.stores} Class_Name="btn-info" buttonDisplayText={'Add new'} handlerSearch={this.addNew} />
+                        <SaveButton 
+                            disabled={ this.selectedIds.length === 0 } 
+                            buttonDisplayText={'Update'} 
+                            handlerSearch={this.onUpdate} 
+                            Class_Name="m-r-10" 
+                        />
+                        <SaveButton 
+                            disabled={ !this.selectedStore.stores } 
+                            Class_Name="btn-info" 
+                            buttonDisplayText={'Add new'} 
+                            handlerSearch={this.addNew} 
+                        />
                     </div>
                 </div>
-
                 <div>
                     <div className="row">
                         <div className="col-sm-4">
@@ -400,15 +419,38 @@ class PosList extends React.Component {
                         </div>
                     </div>
                     <div>
-                        <BootstrapTable data={this.posList} options={options}
+                        <BootstrapTable 
+                            data={this.posList} 
+                            options={options}
                             selectRow={this.selectRowProp}
-                            striped hover
-                            pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}>ID</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='name' >Pos Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='active'>Pos Status</TableHeaderColumn>
+                            striped 
+                            hover
+                            pagination={true} 
+                            exportCSV={true} 
+                            search={true} 
+                            searchPlaceholder={'Search'}
+                        >
+                            <TableHeaderColumn 
+                                width='50' 
+                                dataField='id' 
+                                isKey={true} 
+                                hidden={true}
+                            >
+                                ID
+                            </TableHeaderColumn>
+                            <TableHeaderColumn 
+                                width='100' 
+                                dataField='name'
+                            >
+                                Pos Name
+                            </TableHeaderColumn>
+                            <TableHeaderColumn 
+                                width='100' 
+                                dataField='active'
+                            >
+                                Pos Status
+                            </TableHeaderColumn>
                             {/* <TableHeaderColumn width='100' dataField='posId' >Pos Id</TableHeaderColumn> */}
-
                         </BootstrapTable>
                     </div>
                 </div>
@@ -421,14 +463,17 @@ class PosList extends React.Component {
                     >
                         <div className="slide-panel">
                             {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
-
                             <Row className="d-flex">
                                 <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">Pos Name</label>
+                                    <label id="name" className="control-label">Pos Name</label>
                                     <GenericInput
-                                        htmlFor="name" displayName="Pos Name"
-                                        inputName="name" defaultValue={_get(this.posInfo, 'name', '')}
-                                        onChange={this.handleInputChange} errorCheck={false}
+                                        type="text"
+                                        htmlFor="name"
+                                        displayName="Pos Name"
+                                        inputName="name" 
+                                        defaultValue={_get(this.posInfo, 'name', '')}
+                                        onChange={this.handleInputChange} 
+                                        errorCheck={true}
                                         className="text-input error"
                                     />
                                 </div>
@@ -439,23 +484,26 @@ class PosList extends React.Component {
                                         data={_get(this.status, 'data', [])}
                                         name="store"
                                         value={_get(this.posInfo, 'active', '')}
-                                        changeHandler={(id, name) => { this.handleSelectChange(id, "active") }}
+                                        changeHandler={ (id, name) => { this.handleSelectChange(id, "active") }}
                                     />
                                 </div>
-
-
-
                             </Row>
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        <SaveButton buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={this.onSave} />
-                                        <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
-
+                                        <SaveButton 
+                                            buttonDisplayText={'Save'} 
+                                            Class_Name={"btn-info"} 
+                                            handlerSearch={this.onSave} 
+                                        />
+                                        <SaveButton 
+                                            buttonDisplayText={'Cancel'} 
+                                            Class_Name={""} 
+                                            handlerSearch={this.handleCancel} 
+                                        />
                                     </div>
                                 </div>
                             </Row>
-
                         </div>
                     </ReactDrawer>
                 </div>
@@ -465,15 +513,12 @@ class PosList extends React.Component {
 }
 
 const mapStateToProps = state => {
-
     let { posTerminalReducer, userRolesReducer, storesReducer, productsReducer } = state
     let { status } = posTerminalReducer || '';
     let { isFetching } = posTerminalReducer || false;
     let { type, posListData, posSaveData, posStatusData } = posTerminalReducer || '';
     let { storeData } = storesReducer || {};
-
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
-
     return {
         status,
         isFetching,
