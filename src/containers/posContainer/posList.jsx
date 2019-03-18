@@ -13,6 +13,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
+import { findIndex as _findIndex } from 'lodash';
 import _pull from 'lodash/pull';
 import Row from "react-bootstrap/lib/Row";
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
@@ -34,6 +35,8 @@ const options = {
         text: '5', value: 5
     }, {
         text: '10', value: 10
+    }, {
+        text: '15', value: 15
     }],
 };
 
@@ -168,7 +171,8 @@ class PosList extends React.Component {
     }
 
     onSave() {
-        const { dispatch, posTerminalReducer } = this.props;
+        const { dispatch, posTerminalReducer, posListData } = this.props;
+        console.log('Poslist data: ', posListData);
         this.open = false;
         let url = '';
         let data = {}
@@ -176,17 +180,20 @@ class PosList extends React.Component {
             console.log(this.posInfo, 'this.posInfo')
             url = "/Terminal/Update"
             data = this.posInfo
-        }else{
-            url = "/Terminal/Create"
-            data = {};
-            data.storeId = _get(this.selectedStore,'stores', '')
-            data.name = _get(this.posInfo,'name', '')
-            data.active = this.posInfo.active ? true : false
+        } else {
+            console.log('Index: ', _findIndex(posListData, pos => pos.name === _get(this.posInfo,'name', '')));
+            if(_findIndex(posListData, pos => pos.name === _get(this.posInfo,'name', '')) === -1) {
+                url = "/Terminal/Create";
+                data = {};
+                data.storeId = _get(this.selectedStore,'stores', '');
+                data.name = _get(this.posInfo,'name', '');
+                data.active = this.posInfo.active ? true : false;
+            }
         }
         dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
         this.forceUpdate();
-        
-        if(this.props.status == 200) {
+        debugger;
+        if(this.props.status === 200) {
             console.log(this.selectedStore.stores, 'this.selectedStore.stores')
             let reqBody = {
                 id: this.selectedStore.stores
@@ -222,7 +229,7 @@ class PosList extends React.Component {
         //     this.fetchTerminals();
         // }
         this.forceUpdate();
-        console.log('Pos list: ', this.posList);
+        //console.log('Pos list: ', this.posList);
     }
 
     onRowSelect = (row, isSelected, e) => {
@@ -366,7 +373,7 @@ class PosList extends React.Component {
                 </div>
             </div>);
         }
-        console.log('Poslist in render: ', this.posList);
+        //console.log('Poslist in render: ', this.posList);
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
