@@ -13,6 +13,16 @@ body{
 .react-bs-table-bordered{
     font-size: 1.4rem;
 }
+.flex-row{
+    display: flex;
+}
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
+.justify-space-between{
+    justify-content: space-between;
+}
 .justify-center{
     justify-content: center;
 }
