@@ -117,15 +117,21 @@ class ProductOverRide extends Component {
     }
 
     handleSelectChange = (id, name) => {
-        this.setState({ isLoading: true })
-        let selectedStore = {}
-        _set(selectedStore, name, id)
-        this.setState({ selectedStore })
-        let url = '/Inventory/ByStoreId';
-        let reqBody = {
-            id: id
-        }
-        this.props.dispatch(fetchProductLookupData('', url, reqBody)); 
+        if(id == null) {
+            this.setState({ selectedStore: {}})
+            this.productList= []
+            this.forceUpdate()
+        } else {
+            this.setState({ isLoading: true })
+            let selectedStore = {}
+            _set(selectedStore, name, id)
+            this.setState({ selectedStore })
+            let url = '/Inventory/ByStoreId';
+            let reqBody = {
+                id: id
+            }
+            this.props.dispatch(fetchProductLookupData('', url, reqBody)); 
+        }  
     }
 
     onRowSelect = (row, isSelected, e) => {
