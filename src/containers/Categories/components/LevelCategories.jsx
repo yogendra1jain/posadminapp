@@ -8,6 +8,9 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+/* Material Icons */
+import Create from '@material-ui/icons/Create'
+import Add from '@material-ui/icons/Add'
 /* Components Imports */
 import SubCategories from './SubCategories'
 
@@ -20,22 +23,36 @@ const styles = theme => ({
 function LevelCategories(props) {
   const { classes } = props;
   let pannels = []
-  debugger
-  _get(props, 'categoriesTree', []).map((data, index)=>{
-    debugger
+  _get(props, 'categoriesTree', []).map((data, index) => {
     pannels.push(
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          {data.name}
+          <div className='flex-row align-center justify-space-between fwidth' >
+            <div className='p-r-10'>
+              {data.name}
+            </div>
+            <div className='flex-row'>
+              <div className='p-r-10' onClick={() => props.handleClickOpen(1, data, 'add')}>
+                <Add style={{ fontSize: '1.7em' }} />
+              </div>
+              <div onClick={() => props.handleClickOpen(0, data, 'edit')}>
+                <Create style={{ fontSize: '1.5em' }} />
+              </div>
+            </div>
+
+          </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-            <SubCategories children={data.children}/>
+          <SubCategories
+            children={data.children}
+            handleClickOpen={props.handleClickOpen}
+          />
         </ExpansionPanelDetails>
       </ExpansionPanel>
     )
   })
 
-  
+
   return (
     <div className={classes.root}>
       {pannels}
