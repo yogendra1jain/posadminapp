@@ -4,8 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+/* Material Icons */
+import Create from '@material-ui/icons/Create'
+import Add from '@material-ui/icons/Add'
 /* Lodash Imports */
 import _get from 'lodash/get';
 
@@ -64,7 +66,7 @@ class SubCategories extends React.Component {
 
   populateSubCategories = () => {
     let pannel = []
-    
+
     _get(this, 'props.children', []).map((data, index) => {
       pannel.push(
         <ExpansionPanel
@@ -74,31 +76,58 @@ class SubCategories extends React.Component {
           style={{ width: '100%' }}
         >
           <ExpansionPanelSummary>
-            {data.name}
+            <div className='flex-row align-center justify-space-between fwidth' >
+              <div className='p-r-10'>
+                {data.name}
+              </div>
+              <div className='flex-row'>
+                <div className='p-r-10' onClick={() => this.props.handleClickOpen(2, data, 'add')}>
+                  <Add style={{ fontSize: '1.7em' }} />
+                </div>
+                <div onClick={() => this.props.handleClickOpen(1, data, 'edit')}>
+                  <Create style={{ fontSize: '1.5em' }} />
+                </div>
+              </div>
+            </div>
           </ExpansionPanelSummary>
-            {data.children ? this.populateChips(data.children) : null}
+          {data.children ? this.populateChips(data.children) : null}
         </ExpansionPanel>
       )
     })
 
-    return(
+    return (
       <React.Fragment>
         {pannel}
       </React.Fragment>
-      
+
     )
   }
 
   populateChips = (children) => {
     let chips = []
-    children.map((data, index)=>{
+    children.map((data, index) => {
       chips.push(
-        <Chip label={data.name} style={{ margin: '10px', fontSize: '0.85em' }} />
+        <Chip
+          label={
+            <div className='flex-row'>
+              <div className='p-r-10'>
+                {data.name}
+              </div>
+              <div className='flex-row'>
+                <div onClick={() => this.props.handleClickOpen(2, data, 'edit')}>
+                  <Create style={{ fontSize: '1.5em' }} />
+                </div>
+              </div>
+            </div>
+          }
+          style={{ margin: '10px', fontSize: '0.85em' }} />
       )
     })
-    return(
+    return (
       <ExpansionPanelDetails>
-        {chips}
+        <div className='flex-row flex-wrap'>
+          {chips}
+        </div>
       </ExpansionPanelDetails>
     )
   }
