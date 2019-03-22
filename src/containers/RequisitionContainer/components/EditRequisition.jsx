@@ -301,15 +301,15 @@ class EditRequisition extends React.Component {
             {/* <TableHeaderColumn width='100' dataField='' dataFormat={this.props.actionColumn} dataSort>Actions</TableHeaderColumn> */}
         </BootstrapTable>
         } else {
-            return (<div style={{ marginLeft: '450px', marginTop: '200px' }}>
-                <CircularProgress
-                    className="progress"
-                    size={100}
-                    value={this.state.isLoading}
-                    disableShrink
-                    color='secondary'
-                />
-            </div>)
+            return (<div className='loader-wrapper-main' style={{marginTop: '40px', marginLeft: "20px"}}>
+            <div className="spinner">
+                <div className="rect1"></div>
+                <div className="rect2"></div>
+                <div className="rect3"></div>
+                <div className="rect4"></div>
+                <div className="rect5"></div>
+            </div>
+        </div>)
         }
 
         if (forEdit) {

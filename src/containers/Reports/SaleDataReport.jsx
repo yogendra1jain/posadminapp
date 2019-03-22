@@ -233,13 +233,15 @@ class SaleDataReportContainer extends React.Component {
 
                 <div>
                 {
-                    this.state.isLoading ? <div style={{ marginLeft: '450px', marginTop: '200px' }}><CircularProgress
-                        className="progress"
-                        size={100}
-                        value={this.state.isLoading}
-                        disableShrink
-                        color='secondary'
-                    /></div> :
+                    this.state.isLoading ? <div style={{marginTop: '100px'}} className='loader-wrapper-main'>
+                    <div className="spinner">
+                        <div className="rect1"></div>
+                        <div className="rect2"></div>
+                        <div className="rect3"></div>
+                        <div className="rect4"></div>
+                        <div className="rect5"></div>
+                    </div>
+                </div> :
                         <div>
                             <BootstrapTable
                                 height='515'

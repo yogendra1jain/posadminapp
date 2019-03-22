@@ -169,14 +169,14 @@ class ProductOverRide extends Component {
         }
         let table = ''
         if(this.state.isLoading) {
-            table =  <div style={{ marginLeft: '450px', marginTop: '100px' }}>
-                        <CircularProgress
-                            className="progress"
-                            size={100}
-                            value={this.state.isLoading}
-                            disableShrink
-                            color='primary'
-                        />
+            table =  <div className='loader-wrapper-main' style={{marginTop: '50px', marginLeft: "20px"}}>
+                        <div className="spinner">
+                            <div className="rect1"></div>
+                            <div className="rect2"></div>
+                            <div className="rect3"></div>
+                            <div className="rect4"></div>
+                            <div className="rect5"></div>
+                        </div>
                     </div>
         } else {
             table = <BootstrapTable 
