@@ -60,7 +60,7 @@ const fetchMiddleware = store => next => action => {
         "Content-Type": config.contentType || 'application/json',
         "Authorization":`Bearer ${localStorage.getItem('Token')}`
     };
-
+    debugger
     if (!config.doNotSendAuthHeader) {
         // metaHeaders.Authorization = state.userRolesReducer && state.userRolesReducer.authToken
         // metaHeaders.checkauth = true;
@@ -83,6 +83,8 @@ const fetchMiddleware = store => next => action => {
             ...passOnParams
         }
     }
+
+    console.log(options,"jjjjjjjjjjjj");
 
     fetch(path,
         options)

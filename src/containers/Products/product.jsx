@@ -143,6 +143,11 @@ class ProductContainer extends React.Component {
 
         const { dispatch, productsReducer } = this.props;
         let fileUrl = `${process.env.MEDIA_SERVICE_ADDRESS}`
+        let config = {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('Token')
+            }
+          }
         dispatch(uploadDocument(file, fileUrl, productsReducer));
 
         // this.props.dispatch(uploadDocument('', '', file))

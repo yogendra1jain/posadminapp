@@ -3,6 +3,7 @@ import dynamicActionWrapper from '../helpers/actionHelper';
 import {
     debug
 } from 'util';
+import { generateV1uuid } from '../helpers/helpers';
 
 let status = '';
 //upload document
@@ -29,14 +30,20 @@ export const uploadDocument = (file, url, subreddit) => (dispatch) => {
     const formData = new FormData();
     // formData.append('file', file);
     formData.append('file', file);
-    formData.append('mediaType', 'customer')
-    formData.append('mediaType', 'customer');
-    formData.append('mediaTypeId', '123');
-    formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
-    console.log(formData, 'formData')
+    // formData.append('mediaType', 'customer')
+    // formData.append('mediaType', 'customer');
+    // formData.append('mediaTypeId', '123');
+    // formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
     // formData.append('folderName', file.folderName);
     dispatch(uploadDocumentAction(subreddit));
+    const metaHeaders = {
+        "CorrelationId": generateV1uuid(),
+        "Content-Type": 'application/x-www-form-urlencoded',
+        "Authorization": `Bearer ${localStorage.getItem('Token')}`
+    };
+
     fetch(url, {
+            headers: metaHeaders,
             method: 'POST',
             body: formData
         })
