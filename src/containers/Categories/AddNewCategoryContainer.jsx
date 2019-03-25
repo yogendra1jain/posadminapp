@@ -147,99 +147,9 @@ class AddNewCategoryContainer extends React.Component {
     this.forceUpdate();
   }
 
-  saveNewCategory = () => {
-    let categoryName = this.productInfo.newCategory
-    let retailerID = localStorage.getItem('retailerID')
-    let reqObj = {}
-    switch (this.state.addNewlabel) {
-      case 'New Root Category':
-        reqObj = {
-          name: categoryName,
-          categoryType: 0,
-          retailerId: retailerID,
-        }
-        break;
-      case 'New Sub Category':
-        reqObj = {
-          name: categoryName,
-          parentCategoryId: this.productInfo.level1,
-          categoryType: 1,
-          retailerId: retailerID,
-        }
-        break;
-      case 'New Leaf Category':
-        reqObj = {
-          name: categoryName,
-          parentCategoryId: this.productInfo.level2,
-          categoryType: 2,
-          retailerId: retailerID,
-        }
-        break;
-    }
-    this.props.dispatch(getAllByRetailerId('', '/Category/Save', { ...reqObj }))
-  }
-
-  clearAddNewCategory = () => {
-
-  }
-
   render() {
     return (
       <div className='flex-column'>
-        <h3>Add New Category</h3>
-        <div className='flex-row align-center'>
-          {
-            !_get(this.state, 'level2Category', []).length ? 
-            <div className="col-sm-4 col-md-3 form-d" >
-              <label className="control-label">Select Root Cateogry</label>
-              <AutoCompletePosition
-                type="single"
-                data={_get(this.state, 'level1Category', [])}
-                name="level1Cat"
-                value={_get(this.productInfo, 'level1', '')}
-                changeHandler={(id, name) => { this.handleLevel1Category(id, 'level1') }}
-              />
-            </div> : 
-            <div className="col-sm-4 col-md-3 form-d">
-              <label className="control-label">Select Sub Cateogry</label>
-              <AutoCompletePosition
-                type="single"
-                data={_get(this.state, 'level2Category', [])}
-                name="level2Cat"
-                value={_get(this.productInfo, 'level2', '')}
-                changeHandler={(id, name) => { this.handleLevel2Category(id, 'level2') }}
-              />
-            </div>
-          }
-          <span className="col-sm-1 col-md-1 flex-row justify-center">Or</span>
-          <div className="col-sm-4 col-md-3 form-d">
-            <label className="control-label">{this.state.addNewlabel}</label>
-            <GenericInput
-              htmlFor="newCategory"
-              displayName={this.state.addNewlabel}
-              inputName="newCategory"
-              defaultValue={_get(this.productInfo, 'newCategory', '')}
-              onChange={this.handleInputChange}
-              errorCheck={false}
-              className="text-input error"
-            />
-          </div>
-          <div className="col-sm-4 col-md-3 flex-row">
-            <div className="form-btn-group">
-              <SaveButton buttonDisplayText={'Add New'} Class_Name={"btn-info"} handlerSearch={this.saveNewCategory} />
-            </div>
-            <div className="form-btn-group">
-              <SaveButton buttonDisplayText={'Clear'} Class_Name={"btn-info"} handlerSearch={this.clearAddNewCategory} />
-            </div>
-          </div>
-        </div>
-
-
-
-        <Divider />
-
-
-
         <h3>Make New Category</h3>
         <AddCategoryForm submitForm={this.submitCategories} />
       </div>
