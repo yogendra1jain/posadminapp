@@ -32,8 +32,8 @@ export default class EditCategoriesDialogue extends React.Component {
     saveNewCategory = () => {
         let categoryName = this.state.name
         let retailerID = localStorage.getItem('retailerID')
-        let categoryId = _get(this.props, 'categoryData.id')
-        let parentCategoryId = _get(this.props, 'categoryData.parentCategoryId')
+        let categoryId = _get(this.props, 'categoryData.id', '')
+        let parentCategoryId = _get(this.props, 'categoryData.parentCategoryId', '')
         let reqObj = {}
 
         if (this.props.event == 'edit') {
@@ -65,9 +65,30 @@ export default class EditCategoriesDialogue extends React.Component {
             }
         }
         else if(this.props.event == 'add'){
-            
+            if (this.props.level === 0) {
+                reqObj = {
+                    name: categoryName,
+                    categoryType: 0,
+                    retailerId: retailerID,
+                }
+            }
+            else if (this.props.level === 1) {
+                reqObj = {
+                    name: categoryName,
+                    parentCategoryId: categoryId,
+                    categoryType: 1,
+                    retailerId: retailerID,
+                }
+            }
+            else if (this.props.level === 2) {
+                reqObj = {
+                    name: categoryName,
+                    parentCategoryId: categoryId,
+                    categoryType: 2,
+                    retailerId: retailerID,
+                }
+            }
         }
-
         this.props.dispatch(getAllByRetailerId('', '/Category/Save', { ...reqObj }))
         this.setState({
             name: '',
