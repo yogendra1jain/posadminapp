@@ -51,10 +51,11 @@ class RewardPointsRuleContainer extends Component {
         if(nextProps.type == 'SUCCESS_CREATE_RP_EARNING_RULE') {
             if(nextProps.status == 200) {
                 this.showAlert(false, 'Reward points earning rule created successfully!')
-                this.setState({
-                    minSaleAmountEarning: 0,
-                    earningMultiplier: 1
-                })
+                let reqBody = {
+                    id: localStorage.getItem('retailerID')
+                }
+                let earningUrl = '/Rewards/EarningRule/ByRetailer'
+                this.props.dispatch(getRewardPointEarningRule('', earningUrl, reqBody))
             } else {
                 this.showAlert(false, 'Some error occured!')
             }
@@ -63,10 +64,11 @@ class RewardPointsRuleContainer extends Component {
         if(nextProps.type == 'SUCCESS_CREATE_RP_REDEEMPTION_RULE') {
             if(nextProps.status == 200) {
                 this.showAlert(false, 'Reward points redeemption rule created successfully!')
-                this.setState({
-                    minSaleAmountRedeemption: 0,
-                    redeemptionMultiplier: 1
-                })
+                let reqBody = {
+                    id: localStorage.getItem('retailerID')
+                }
+                let redeemptionUrl = '/Rewards/RedemptionRule/ByRetailer'
+                this.props.dispatch(getRewardPointRedeemptionRule('', redeemptionUrl, reqBody))
             } else {
                 this.showAlert(false, 'Some error occured!')
             }
@@ -122,9 +124,7 @@ class RewardPointsRuleContainer extends Component {
         this.props.dispatch(createRewardPointsRedeemptionRule('', url, reqObj))
     }
 
-    render() {
-        
-        console.log(this.props.rewardPointsRedeemptionRule.redemptionRule, 'this.props.rewardPointsRedeemptionRule.redemptionRule')
+    render() {  
         return (
             <div>
                 <div className="white-box-container">
