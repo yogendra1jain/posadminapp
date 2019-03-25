@@ -36,8 +36,8 @@ class ReviewPurchaseOrderContainer extends React.Component {
         this.state = {
             selectedValue: '',
             params: params,
+            isPrinting: false
         };
-        console.log('params:', params);
     }
 
 
@@ -126,7 +126,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
     }
 
     printPDF = () => {
-        this.setState({ applyPdfClass: true }, () => {
+        this.setState({ applyPdfClass: true, isPrinting: true }, () => {
             const input = document.getElementById('divToPrint');
 
             html2canvas(input).then(canvas => {
@@ -155,7 +155,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
 
             });
             setTimeout(() => {
-                this.setState({ applyPdfClass: false });
+                this.setState({ applyPdfClass: false, isPrinting: false });
             }, 10);
         })
     }
@@ -198,16 +198,18 @@ class ReviewPurchaseOrderContainer extends React.Component {
                     />
                     <div className="row">
                         {
-                            !this.props.isPOViewFlag ?
+                            // !this.props.isPOViewFlag ?
+                                !this.state.isPrinting ? 
                                 <div className="form-btn-group col-sm-12">
                                     <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
                                     <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
                                     <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
                                 </div>
                                 :
-                                <div className="form-btn-group col-sm-12">
-                                    <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
-                                </div>
+                                // <div className="form-btn-group col-sm-12">
+                                //     <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                                // </div>
+                                ''
                         }
                     </div>
 
@@ -248,24 +250,22 @@ class ReviewPurchaseOrderContainer extends React.Component {
                 </div>
             </div>
             
-                <EditRequisition
-                    forEdit={true}
-                    handleChangeInput={this.handleChangeInput}
-                    handleSubmitHandler={this.handleSubmitHandler}
-                    selectRowProp={{}}
-                    // handleCancel={}
-                    isPOViewFlag={isPOViewFlag}
-                    requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
-                    requisitionListData={_get(this.props, 'requisitionListData', [])}
-                />
-            
-
-            </div>
+            <EditRequisition
+                forEdit={true}
+                handleChangeInput={this.handleChangeInput}
+                handleSubmitHandler={this.handleSubmitHandler}
+                selectRowProp={{}}
+                // handleCancel={}
+                isPrinting={this.state.isPrinting}
+                isPOViewFlag={isPOViewFlag}
+                requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
+                requisitionListData={_get(this.props, 'requisitionListData', [])}
+            />
+            </div>   
         )
-
     }
-
 }
+
 const mapStateToProps = state => {
 
     let { purchaseOrdersReducer, vendorsReducer, storesReducer } = state

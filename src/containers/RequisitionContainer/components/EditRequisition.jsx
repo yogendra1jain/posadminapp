@@ -238,6 +238,7 @@ class EditRequisition extends React.Component {
 
                     }
                     {
+                        !this.props.isPrinting ? 
                         this.props.showReceievedQuantity ?
                             <div className='box-conversion-item'>
                                 <input style={{ width: '100px' }} className='box-conversion-data' disabled={this.props.isPOViewFlag} onChange={(e) => this.props.handleChangeInput(e, index, data.quantity)} value={data.fulfilledQuantity ? data.fulfilledQuantity: data.quantity} />
@@ -247,17 +248,18 @@ class EditRequisition extends React.Component {
                                 <input style={{ width: '100px' }} className='box-conversion-data' disabled={this.props.isPOViewFlag} onChange={(e) => this.props.handleChangeInput(e, index, data.proposedQuantity ? data.proposedQuantity : data.quantity)} value={data.quantity} />
                                 <span className='box-conversion-title'>{'Quantity'}</span>
                             </div>
-
+                        : ''
                     }
                     <div className='box-conversion-item'>
                         <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
                         <span className='box-conversion-title'>Status</span>
                     </div>
                     {
-                        !this.props.isPOViewFlag &&
+                        // !this.props.isPOViewFlag &&
+                        !this.props.isPrinting ? 
                         <div>
                             <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={() => this.props.handleSubmitHandler(index)}>Save</Button>
-                        </div>
+                        </div> : ''
                     }
                 </div>
             )
