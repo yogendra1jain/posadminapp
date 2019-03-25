@@ -87,7 +87,7 @@ class StaffListContainer extends React.Component {
         if(props.type === 'RECEIVED_STAFF_LIST'){
             if((props.staffListData != null)){
                 this.staffList = [];
-                props.staffListData.map(staff  => {
+                _get(props,'staffListData',[]).map(staff  => {
                     console.log(staff, 'staff data')
                     let tempStaff = {};
                     tempStaff.name = staff.person.firstName + " " + staff.person.lastName;
@@ -202,15 +202,21 @@ class StaffListContainer extends React.Component {
     }
 
     handleSelectChange = (id, name) => {
-        this.enableAddNew = true
-        _set(this.selectedStore,name,id);
-        this.forceUpdate()
-        const { dispatch, staffsReducer } = this.props;
-        let reqBody = {
-            id: id
+        if(id == null) {
+            this.selectedStore = {}
+            this.staffList= []
+            this.forceUpdate()
+        } else {
+            this.enableAddNew = true
+            _set(this.selectedStore,name,id);
+            this.forceUpdate()
+            const { dispatch, staffsReducer } = this.props;
+            let reqBody = {
+                id: id
+            }
+            let url = '/Operator/ByStoreId';
+            dispatch(fetchStaffList(staffsReducer, url, reqBody));
         }
-        let url = '/Operator/ByStoreId';
-        dispatch(fetchStaffList(staffsReducer, url, reqBody));
     }
 
     handleInputChange (event) {

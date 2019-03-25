@@ -204,15 +204,21 @@ class InventoryListContainer extends React.Component {
     }
 
     handleSelectChange = (id, name) => {
-        this.setState({ isStoreSelected: true })
-        _set(this.selectedStore, name, id);
-        const { dispatch, inventoriesReducer } = this.props;
-        let reqBody = {
-            id: id
+        if(id == null) {
+            this.selectedStore = {}
+            this.inventoryList= []
+            this.forceUpdate()
+        } else {
+            this.setState({ isStoreSelected: true })
+            _set(this.selectedStore, name, id);
+            const { dispatch, inventoriesReducer } = this.props;
+            let reqBody = {
+                id: id
+            }
+            let url = '/Inventory/ByStoreId';
+            dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
+            this.forceUpdate();
         }
-        let url = '/Inventory/ByStoreId';
-        dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
-        this.forceUpdate();
     }
 
     componentDidMount() {

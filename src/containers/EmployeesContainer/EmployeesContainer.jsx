@@ -97,32 +97,53 @@ class EmployeesContainer extends React.Component {
     }
 
     handleChange = (id, type) => {
-        let employeeUrl = `/Employee/ByStore`;
-        let reqData = {
-            storeId: id,
-            active: this.state.isActive,
-        };
-        this.setState({
-            selectedStore: id,
-        })
-        this.getEmployees(employeeUrl, reqData);
+        if(id == null) {
+            this.setState({ selectedStore: ''})
+            this.customerList= []
+            this.forceUpdate()
+        } else {
+            if(this.state.isActive == '') {
+                this.setState({ isActive : true})
+            }
+            let employeeUrl = `/Employee/ByStore`;
+            let reqData = {
+                storeId: id,
+                active: this.state.isActive !== '' ? this.state.isActive : true,
+            };
+            this.setState({
+                selectedStore: id,
+            })
+            this.getEmployees(employeeUrl, reqData);
+        }
     }
+
     handleActiveChange = (id) => {
-        let employeeUrl = `/Employee/ByStore`;
-        let reqData = {
-            storeId: this.state.selectedStore,
-            active: id,
-        };
-        this.setState({
-            isActive: id,
-        })
-        this.getEmployees(employeeUrl, reqData);
+        if(id == null) {
+            this.setState({ isActive: ''})
+            this.customerList= []
+            this.forceUpdate()
+        } else {
+            let employeeUrl = `/Employee/ByStore`;
+            let reqData = {
+                    storeId: this.state.selectedStore,
+                    active: id,
+                };
+               
+            this.setState({
+                isActive: id,
+            })
+            this.getEmployees(employeeUrl, reqData);
+        }
     }
 
     getEmployees = (url, reqObj) => {
         this.props.dispatch(fetchEmployeesList('', url, reqObj))
             .then((data) => {
-                this.customerList = data
+                if(data ==null) {
+                    this.customerList = []    
+                } else {
+                    this.customerList = data
+                }
                 this.forceUpdate()
             }, (err) => {
                 this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
@@ -293,6 +314,7 @@ class EmployeesContainer extends React.Component {
                                 changeHandler={(id) => {this.handleChange(id, 'store')}}
                             />
                         </div>
+                        {this.state.selectedStore !== '' ?
                         <div className="col-sm-6">
                             <label>Select Active Status</label>
                             <AutoComplete
@@ -302,7 +324,18 @@ class EmployeesContainer extends React.Component {
                                 value={this.state.isActive}
                                 changeHandler={(e) => this.handleActiveChange(e, 'store')}
                             />
-                        </div>
+                        </div> : 
+                        <div className="col-sm-6">
+                            <label>Select Active Status</label>
+                            <AutoComplete
+                                type="single"
+                                disabled
+                                data={ActiveList}
+                                name="activeFlag"
+                                value={this.state.isActive}
+                                changeHandler={(e) => this.handleActiveChange(e, 'store')}
+                            />
+                        </div>}
                     </div>
                     {/* <div className="form-btn-group">
                         <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.addNewEmployee()}>+ Add New</Button>

@@ -353,14 +353,20 @@ class PosList extends Component {
         this.forceUpdate();
     }
     handleSelectStoreChange(id, name) {
-        _set(this.selectedStore, name, id);
-        const { dispatch, posTerminalReducer } = this.props;
-        let reqBody = {
-            id: id
+        if(id == null) {
+            this.selectedStore = {}
+            this.posList= []
+            this.forceUpdate()
+        } else {
+            _set(this.selectedStore, name, id);
+            const { dispatch, posTerminalReducer } = this.props;
+            let reqBody = {
+                id: id
+            }
+            let url = '/Terminal/ByStoreId';
+            dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
+            this.setState({ isStoreSelected: true });
         }
-        let url = '/Terminal/ByStoreId';
-        dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
-        this.setState({ isStoreSelected: true });
     }
 
     render() {
