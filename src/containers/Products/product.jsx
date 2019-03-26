@@ -142,7 +142,7 @@ class ProductContainer extends React.Component {
         this.fileNames = fileNames;
 
         const { dispatch, productsReducer } = this.props;
-        let fileUrl = `${process.env.MEDIA_SERVICE_ADDRESS}`
+        let fileUrl = `${process.env.APPLICATION_BFF_URL}/Upload/File`
         dispatch(uploadDocument(file, fileUrl, productsReducer));
         this.forceUpdate();
     }

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { reduxForm } from 'redux-form'
 import AddEditCustomerComponent from '../../../components/Customer/AddEditCustomerNew';
-import SaveButton from '../../../components/common/SaveButton';
 
 class AddEditCustomer extends Component {
 

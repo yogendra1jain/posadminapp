@@ -138,29 +138,11 @@ const receiveAddressFromZip = (subreddit, json, status) => ({
     receivedAt: Date.now()
 })
 
-// export const fetchAddressFromZip = (subreddit, zipCode) => dispatch => {
-
-//     dispatch(requestAddressFromZip(subreddit));
-
-//     fetch(STORE_CONSTANTS.STORE_URL+"/zipCodes/"+zipCode+"/details", { method: 'GET',
-//     headers: {
-//         "Content-type": "application/json"
-//     },
-//     // body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         status = response.status;
-
-//         return response.json() } 
-//     )
-//     .then(json => { return dispatch(receiveAddressFromZip(subreddit, json, status )) } )
-//     .catch(err => { return dispatch(receiveAddressFromZipError(subreddit,err,500)) } )
-// }
-
-export const fetchAddressFromZip = (subreddit, zipCode) => dispatch =>
+export const fetchAddressFromZip = (subreddit, data) => dispatch =>
     dispatch(dynamicActionWrapper({
-        path: STORE_CONSTANTS.STORE_URL + "/zipCodes/" + zipCode + "/details",
-        method: 'GET',
+        path: `${process.env.APPLICATION_BFF_URL}/Reference/GetZipCodeData`,
+        method: 'POST',
+        body: data,
         initCb: requestAddressFromZip,
         successCb: receiveAddressFromZip,
         failureCb: receiveAddressFromZipError,

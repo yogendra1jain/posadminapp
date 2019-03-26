@@ -109,18 +109,25 @@ class AddEditCustomerNew extends React.Component {
                 this.storeList.push({ displayText: store.storeName, value: store.id });
             });
         }
-        // if (props.type === 'RECEIVED_ADDRESS_FROM_ZIP') {
-        if (!_isEmpty(props.addressData) && this.getAddressFlag) {
-            this.getAddressFlag = false;
-            _set(this.staffInfo, 'city', _get(props.addressData, 'city', ''));
-            _set(this.staffInfo, 'state', _get(props.addressData, 'state', ''));
-            // _set(this.staffInfo,'latitude', _get(props.addressData,'latitude',''));
-            _set(this.staffInfo, 'streetAddress1', _get(props.addressData, 'location', ''));
-            // _set(this.staffInfo,'longitude', _get(props.addressData,'longitude',''));
-            _set(this.staffInfo, 'country', 'US');
-            this.props1.setValues(this.staffInfo);
-
+        if (props.type === 'RECEIVED_ADDRESS_FROM_ZIP') {
+            if(props.status == 200) {
+                if (!_isEmpty(props.addressData) && this.getAddressFlag) {
+                    this.getAddressFlag = false;
+                    _set(this.staffInfo, 'city', _get(props.addressData, 'city', ''));
+                    _set(this.staffInfo, 'state', _get(props.addressData, 'state', ''));
+                    _set(this.staffInfo, 'country', _get(props.addressData, 'country', ''));
+                    // _set(this.staffInfo,'latitude', _get(props.addressData,'latitude',''));
+                    // _set(this.staffInfo, 'streetAddress1', _get(props.addressData, 'location', ''));
+                    // _set(this.staffInfo,'longitude', _get(props.addressData,'longitude',''));
+                    this.props1.setValues(this.staffInfo);
+                }
+            } else if(props.status == 500) {
+                _set(this.staffInfo, 'city', '');
+                _set(this.staffInfo, 'state', '');
+                _set(this.staffInfo, 'country', '');
+            }
         }
+        
         // }
         // if (props.type === 'RECEIVED_STAFF_LIST') {
         //     if (!_isEmpty(props.staffListData)) {
@@ -290,7 +297,7 @@ class AddEditCustomerNew extends React.Component {
         this.getAddressFlag = true;
         this.gotAddressData = false;
         this.props1 = props;
-        if (name === 'zipCode') {
+        if (name === 'zipcode') {
             if (isNaN(value)) {
                 return
             } else {
@@ -300,8 +307,9 @@ class AddEditCustomerNew extends React.Component {
             const { dispatch, storesReducer } = this.props;
             let data = {
                 zipCode: value,
+                countryShortCode: "US"
             }
-            dispatch(fetchAddressFromZip(storesReducer, value));
+            dispatch(fetchAddressFromZip(storesReducer, data));
             this.forceUpdate();
         }
     }
@@ -420,6 +428,7 @@ class AddEditCustomerNew extends React.Component {
                                     <GenericInput
                                         htmlFor="zipcode" displayName="Zipcode" type="text"
                                         inputName="zipcode" defaultValue={_get(this.staffInfo, 'zipcode', '')}
+                                        onBlur={(event) => this.handleBlur(event, props)}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
@@ -438,6 +447,16 @@ class AddEditCustomerNew extends React.Component {
                                     <GenericInput
                                         htmlFor="state" displayName="State" type="text"
                                         inputName="state" defaultValue={_get(this.staffInfo, 'state', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">Country</label>
+                                    <GenericInput
+                                        htmlFor="country" displayName="Country" type="text"
+                                        inputName="country" defaultValue={_get(this.staffInfo, 'country', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
                                         className="text-input error"
                                     />
@@ -482,11 +501,13 @@ const staffFormValidation = Yup.object().shape({
 
 const mapStateToProps = state => {
 
-    let { customersReducer } = state
+    let { customersReducer, storesReducer } = state
     let { selectedStore } = customersReducer || {}
+    let { addressData, type, status } = storesReducer || {}
     let initialValues = {}
     if (!_isEmpty(selectedStore)) {
         let temp = _find(customersReducer.customerData, { 'id': selectedStore.id });
+        console.log(temp, 'temp')
         initialValues = {
             firstName: _get(temp, 'customer.firstName', ''),
             middleName: _get(temp, 'customer.middleName', ''),
@@ -499,7 +520,7 @@ const mapStateToProps = state => {
             zipcode: _get(temp, 'billingAddress.postalCode', ''),
             country: _get(temp, 'billingAddress.country', 'USA'),
             countryCode: _get(temp, 'phoneNumber.countryCode', 91),
-            phone: parseInt(_get(temp, 'phoneNumber.phone', 0), 10),
+            phone: parseInt(_get(temp, 'phoneNumber.phoneNumber', 0), 10),
             id: _get(temp, 'id'),
         }
     }
@@ -508,6 +529,9 @@ const mapStateToProps = state => {
         customersReducer,
         initialValues,
         selectedStore,
+        addressData,
+        type,
+        status
     }
 }
 

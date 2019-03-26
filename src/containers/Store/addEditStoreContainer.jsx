@@ -116,7 +116,7 @@ class AddEditStoreContainer extends React.Component {
         this.fileNames = fileNames;
 
         const { dispatch, productsReducer } = this.props;
-        let fileUrl = `${process.env.MEDIA_SERVICE_ADDRESS}`
+        let fileUrl = `${process.env.APPLICATION_BFF_URL}/Upload/File`
         dispatch(uploadDocument(file, fileUrl, productsReducer));
         this.forceUpdate();
     }
@@ -167,24 +167,32 @@ class AddEditStoreContainer extends React.Component {
             }
             const { dispatch, storesReducer } = this.props;
             let data = {
-                postalCode: value,
+                zipCode: value,
+                countryShortCode: "US"
             }
-            dispatch(fetchAddressFromZip(storesReducer, this.storeInfo.postalCode));
+            dispatch(fetchAddressFromZip(storesReducer, data));
             this.forceUpdate();
         }
     }
     componentWillReceiveProps(props) {
         if (props.type === 'RECEIVED_ADDRESS_FROM_ZIP' && this.getAddressFlag) {
-            if (!_isEmpty(props.addressData)) {
-                this.gotAddressData = true;
-                this.getAddressFlag = false;
-                _set(this.storeInfo, 'city', _get(props.addressData, 'city', ''));
-                _set(this.storeInfo, 'state', _get(props.addressData, 'state', ''));
-                _set(this.storeInfo, 'latitude', _get(props.addressData, 'latitude', ''));
-                _set(this.storeInfo, 'streetAddress1', _get(props.addressData, 'location', ''));
-                _set(this.storeInfo, 'longitude', _get(props.addressData, 'longitude', ''));
-                _set(this.storeInfo, 'country', 'US');
-                this.props1.setValues(this.storeInfo);
+            if(props.status == 200) {
+                if (!_isEmpty(props.addressData)) {
+                    this.gotAddressData = true;
+                    this.getAddressFlag = false;
+                    _set(this.storeInfo, 'city', _get(props.addressData, 'city', ''));
+                    _set(this.storeInfo, 'state', _get(props.addressData, 'state', ''));
+                    _set(this.storeInfo, 'country',  _get(props.addressData, 'country', ''));
+
+                    _set(this.storeInfo, 'latitude', _get(props.addressData, 'latitude', ''));
+                    _set(this.storeInfo, 'streetAddress1', _get(props.addressData, 'location', ''));
+                    _set(this.storeInfo, 'longitude', _get(props.addressData, 'longitude', ''));
+                    this.props1.setValues(this.storeInfo);
+                }
+            } else if(props.status == 500) {
+                _set(this.storeInfo, 'city', '');
+                _set(this.storeInfo, 'state', '');
+                _set(this.storeInfo, 'country', '');
             }
         }
         else if (props.type === 'RECEIVED_STORE_POST') {
@@ -287,15 +295,6 @@ class AddEditStoreContainer extends React.Component {
                                     />
                                 </div>
                                 <div className="col-sm-6 col-md-4 form-d">
-                                    <label className="control-label">City</label>
-                                    <GenericInput
-                                        htmlFor="city" displayName="City"
-                                        inputName="city" defaultValue={_get(this.storeInfo, 'city', '')}
-                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                        className="text-input error"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Zip Code</label>
                                     <GenericInput
                                         htmlFor="postalCode" displayName="Zip Code" type="text"
@@ -305,6 +304,16 @@ class AddEditStoreContainer extends React.Component {
                                         className="text-input error"
                                     />
                                 </div>
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">City</label>
+                                    <GenericInput
+                                        htmlFor="city" displayName="City"
+                                        inputName="city" defaultValue={_get(this.storeInfo, 'city', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                        className="text-input error"
+                                    />
+                                </div>
+                               
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">State</label>
                                     <GenericInput
