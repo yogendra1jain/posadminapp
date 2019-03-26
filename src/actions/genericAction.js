@@ -1,7 +1,6 @@
 import dynamicActionWrapper from '../helpers/actionHelper';
 
 export const getData = (url, data, subreddit, constants, uploadConfig) => dispatch => {
-    debugger
     return new Promise((resolve, reject) => {
         dispatch(dynamicActionWrapper({
             path: url,

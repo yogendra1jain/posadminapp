@@ -107,7 +107,6 @@ class AddEditStaffContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        debugger
         if (!_isEmpty(props.storeData)) {
             this.storeList = [];
             _get(props.storeData, 'stores', []).map((store, index) => {

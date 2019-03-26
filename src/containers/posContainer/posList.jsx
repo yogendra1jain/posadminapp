@@ -124,7 +124,6 @@ class PosList extends Component {
         }
        
         if(props.type == 'RECEIVED_POS_TERMINAL_LIST') {
-            debugger
             if(!_isEmpty(props.posListData) && this.state.isStoreSelected) {
                 this.posList = [];
                 props.posListData.map(pos => {
@@ -198,7 +197,6 @@ class PosList extends Component {
                     data.name = _get(this.posInfo,'name', '');
                     data.active = this.posInfo.active ? true : false;
                     dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
-                    debugger;
                     this.forceUpdate();
                     if(this.props.status === 200) {
                         console.log(this.selectedStore.stores, 'this.selectedStore.stores')
