@@ -111,6 +111,34 @@ const storesData = (state = {
         lastUpdated: action.receivedAt
       });
 
+      case "UPLOAD_LOGO":
+        return Object.assign({}, state, {
+          isFetching: true,
+          type: action.type,
+          error: undefined,
+          lastUpdated: action.receivedAt,
+          requestToUrl: action.url, // use for printing requested url
+          requestWithDataBody: action.data // use for printing data to be sent to server
+        });
+      case "RECEIVED_LOGO_UPLOAD_SUCCESS_RESPONSE":
+        return Object.assign({}, state, {
+          isFetching: false,
+          type: action.type,
+          didInvalidate: false,
+          // @todo remove and make specific data at root level
+          fileData: action.data,
+          lastUpdated: action.receivedAt
+        });
+
+      case "RECEIVED_LOGO_UPLOAD_ERROR":
+        return Object.assign({}, state, {
+          isFetching: false,
+          type: action.type,
+          error: action.error,
+          didInvalidate: false,
+          lastUpdated: action.receivedAt
+        });
+
     default:
       return state
   }

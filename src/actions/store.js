@@ -1,5 +1,6 @@
 import * as STORE_CONSTANTS from '../constants/store';
 import dynamicActionWrapper from '../helpers/actionHelper';
+import { generateV1uuid } from '../helpers/helpers';
 
 // Action start for post login
 
@@ -246,3 +247,44 @@ export const mapProductsWithStore = (subreddit, url, data) => dispatch =>
         wrapperActionType: 'MAP_PRODUCTS_WITH_STORE_WRAPPER',
         redirect: 'follow'
     }));
+
+
+    //Action for logo upload
+
+    export const uploadDocumentAction = (subreddit) => ({
+        type: "UPLOAD_LOGO",
+        subreddit
+    });
+    
+    export const receivedLogoUploadResponse = (subreddit, data) => ({
+        type: "RECEIVED_LOGO_UPLOAD_SUCCESS_RESPONSE",
+        subreddit,
+        data,
+        receivedAt: Date.now()
+    });
+    
+    export const receivedLogoUploadError = (subreddit, error) => ({
+        type: "RECEIVED_LOGO_UPLOAD_ERROR",
+        subreddit,
+        error,
+        receivedAt: Date.now()
+    });
+    
+    export const uploadDocument = (file, url, subreddit) => (dispatch) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        dispatch(uploadDocumentAction(subreddit));
+        const metaHeaders = {
+            "CorrelationId": generateV1uuid(),
+            "Authorization": `Bearer ${localStorage.getItem('Token')}`
+        };
+    
+        fetch(url, {
+                headers: metaHeaders,
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(json => dispatch(receivedLogoUploadResponse(subreddit, json)))
+            .catch(e => dispatch(receivedLogoUploadError(subreddit, e)))
+    }

@@ -1,8 +1,7 @@
 import React from 'react';
 import Redirect from "react-router/Redirect";
 import SaveButton from '../../components/common/SaveButton.jsx'
-import { fetchStore, fetchTerminal, postPOSLogin, fetchAddressFromZip, fetchPostStore } from '../../actions/store';
-import AutoComplete from '../../components/Elements/AutoComplete.jsx';
+import { uploadDocument, fetchAddressFromZip, fetchPostStore } from '../../actions/store';
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
@@ -22,6 +21,7 @@ class AddEditStoreContainer extends React.Component {
         this.state = {
             isUpdating: false
         }
+        this.handleFileChange = this.handleFileChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.storeInfo = {
@@ -32,7 +32,8 @@ class AddEditStoreContainer extends React.Component {
 
         this.redirectToSearch = false;
         this.gotAddressData = false;
-
+        this.fileNames = [];
+        this.imagePreviewUrl = '';
         this.onSave = this.onSave.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
         this.handleInputAddressChange = this.handleInputAddressChange.bind(this);
@@ -45,13 +46,10 @@ class AddEditStoreContainer extends React.Component {
             this.setState({ isUpdating: true })
             this.storeInfo = this.props.selectedStore;
             _set(this.storeInfo, 'retailerId', localStorage.getItem('retailerID'));
-            // if(!_isEmpty(this.storeInfo.storeAddress)){
-            //     _set(this.storeInfo,'storeAddress',{});
-            // }
             delete this.storeInfo['displayAddress'];
             this.updatedStoreInfo = _cloneDeep(this.storeInfo);
+            // this.imagePreviewUrl = 
             console.log(this.updatedStoreInfo, 'this.updatedStoreInfo')
-            // _set(this.storeInfo,'id', localStorage.getItem('retailerID'));
             this.method = 'POST';
             this.forceUpdate();
         }
@@ -92,6 +90,37 @@ class AddEditStoreContainer extends React.Component {
             });
         }
     }
+
+    hexToBase64(str) {
+        return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
+    }
+
+    handleFileChange(event) {
+        event.preventDefault();
+        console.log(event.target.files[0], 'vfyufyfyfy')
+        let reader = new FileReader();
+        let file = event.target.files[0];
+        this.fileNames = (<li> {file.name} </li>)
+        reader.onloadend = () => {
+            this.fileData = {
+                file: file,
+                imagePreviewUrl: reader.result
+            };
+            this.imagePreviewUrl = 'data:image/jpeg;base64,' + this.hexToBase64(this.fileData.imagePreviewUrl);
+        }
+        reader.readAsDataURL(file)
+        this.files = event.target.files;
+        let fileNames = [];
+        this.fileNames = [];
+        Array.prototype.forEach.call(this.files, function (file, index) { fileNames.push(<li key={index}>{file.name}</li>) });
+        this.fileNames = fileNames;
+
+        const { dispatch, productsReducer } = this.props;
+        let fileUrl = `${process.env.MEDIA_SERVICE_ADDRESS}`
+        dispatch(uploadDocument(file, fileUrl, productsReducer));
+        this.forceUpdate();
+    }
+
     onSave() {
         const { dispatch, storesReducer } = this.props;
         let url = ''
@@ -109,6 +138,7 @@ class AddEditStoreContainer extends React.Component {
         data.address.addressLine2 = this.storeInfo.addressLine2
         data.address.city = this.storeInfo.city
         data.address.state = this.storeInfo.state
+        data.image = this.imagePreviewUrl;
         data.address.country = this.storeInfo.country
         data.address.postalCode = zip
         if (this.state.isUpdating) {
@@ -166,6 +196,16 @@ class AddEditStoreContainer extends React.Component {
                 this.showAlert('Some Error Occured!')
                 this.redirectToSearch = false
                 this.forceUpdate()
+            }
+        }
+
+        else if (props.type === "RECEIVED_LOGO_UPLOAD_SUCCESS_RESPONSE") {
+            debugger
+            if (props.fileData && !_isEmpty(props.fileData)) {
+                debugger
+                this.imagePreviewUrl = props.fileData.url;
+            } else {
+                this.showAlert(true, 'something went wrong.');
             }
         }
     }
@@ -283,6 +323,29 @@ class AddEditStoreContainer extends React.Component {
                                         className="text-input error"
                                     />
                                 </div>
+                                <div className="col-sm-6 col-md-4 form-d">
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <label className="control-label">Upload Logo</label>
+                                        <div className="" style={{ marginTop: "5px", float: "left", marginRight: "15px" }}>
+                                            {/* <input type="file" id="files" className="hidden"/> */}
+                                            <label className="btn btn-default" for="files">Select file</label>
+                                            <input type="file" title=" " className="hidden" id="files" name="images" multiple={false} onChange={this.handleFileChange} />
+                                        </div>
+                                        <div className="pull-left" style={{ marginTop: "5px", padding: "5px 0 0" }}>
+                                            <ul>{this.fileNames}</ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                {this.imagePreviewUrl != '' &&
+                                    <div className="row" style={{ marginTop: "10px" }}>
+                                        <div className="col-sm-12">
+                                            <img style={{ width: '100%', maxWidth: "500px", height: '350px' }} src={this.imagePreviewUrl} />
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
                                 {/* <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Latitude</label>
                                     <GenericInput
@@ -344,7 +407,7 @@ const mapStateToProps = state => {
 
     let { status } = storesReducer || '';
     let { isFetching } = storesReducer || false;
-    let { type, storeData, selectedStore, storePostData, addressData } = storesReducer || {};
+    let { type, storeData, selectedStore, storePostData, addressData, fileData } = storesReducer || {};
 
 
 
@@ -356,8 +419,8 @@ const mapStateToProps = state => {
         type,
         selectedStore,
         addressData,
-        storePostData
-
+        storePostData,
+        fileData
     }
 }
 

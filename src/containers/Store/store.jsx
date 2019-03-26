@@ -91,6 +91,7 @@ class StoreListContainer extends React.Component {
                     tempStore.storeName = store.name;
                     tempStore.id = store.id;
                     tempStore.retailerId = store.retailerId
+                    tempStore.image = _get(store,'image','')
                     tempStore.displayAddress = _get(store.address, 'city', '') + ", " + _get(store.address, 'state', '') + ", " + _get(store.address, 'country', '') + ", "
                         + _get(store.address, 'postalCode', '')
                     tempStore.addressLine1 = _get(store.address, 'addressLine1', '');
