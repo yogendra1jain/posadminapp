@@ -143,20 +143,7 @@ class ProductContainer extends React.Component {
 
         const { dispatch, productsReducer } = this.props;
         let fileUrl = `${process.env.MEDIA_SERVICE_ADDRESS}`
-        let config = {
-            headers: {
-              'Authorization': 'Bearer ' + localStorage.getItem('Token')
-            }
-          }
         dispatch(uploadDocument(file, fileUrl, productsReducer));
-
-        // this.props.dispatch(uploadDocument('', '', file))
-        //     .then((data) => {
-        //         console.log('csv data saved successfully.', data);
-        //     }, (err) => {
-        //         console.log('err while saving csv data', err);
-
-        //     })
         this.forceUpdate();
     }
 
@@ -228,7 +215,7 @@ class ProductContainer extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.type === RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE) {
             if (nextProps.fileData && !_isEmpty(nextProps.fileData)) {
-                this.imagePreviewUrl = nextProps.fileData.message.absoluteURL;
+                this.imagePreviewUrl = nextProps.fileData.url;
             } else {
                 this.showAlert(true, 'something went wrong.');
             }
@@ -262,7 +249,6 @@ class ProductContainer extends React.Component {
 
         if (nextProps.type === RECEIVE_LEVEL2_CATEGORY_DATA) {
             if (!_isEmpty(nextProps.level2CategoryData)) {
-                debugger
                 let categoryList = [];
                 _get(nextProps, 'level2CategoryData', []).map((category, index) => {
                     categoryList.push({
@@ -276,7 +262,6 @@ class ProductContainer extends React.Component {
 
         if (nextProps.type === RECEIVE_LEVEL3_CATEGORY_DATA) {
             if (!_isEmpty(nextProps.level3CategoryData)) {
-                debugger
                 let categoryList = [];
                 _get(nextProps, 'level3CategoryData', []).map((category, index) => {
                     categoryList.push({
@@ -466,15 +451,7 @@ class ProductContainer extends React.Component {
                         }
 
                     </div>
-                    {/* <div className="col-sm-5">
-                        <ul>{this.fileNames}</ul>
-                        </div> */}
-                    {/* <div className="col-sm-12" style={{marginBottom:"20px"}}>
-                            <img src={this.imagePreviewUrl} />
-                        </div> */}
-
-
-
+                    
                 </Row>
                 <Row>
                     <div className="col-sm-12">

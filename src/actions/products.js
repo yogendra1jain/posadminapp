@@ -28,17 +28,10 @@ export const receivedDocumentUploadError = (subreddit, error) => ({
 
 export const uploadDocument = (file, url, subreddit) => (dispatch) => {
     const formData = new FormData();
-    // formData.append('file', file);
     formData.append('file', file);
-    // formData.append('mediaType', 'customer')
-    // formData.append('mediaType', 'customer');
-    // formData.append('mediaTypeId', '123');
-    // formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
-    // formData.append('folderName', file.folderName);
     dispatch(uploadDocumentAction(subreddit));
     const metaHeaders = {
         "CorrelationId": generateV1uuid(),
-        "Content-Type": 'application/x-www-form-urlencoded',
         "Authorization": `Bearer ${localStorage.getItem('Token')}`
     };
 
@@ -59,7 +52,8 @@ export const uploadDocument = (file, url, subreddit) => (dispatch) => {
 //             method: 'POST',
 //             formData: data,
 //             isFormData: true,
-//             // contentType: 'multipart/form-data',
+//             url,
+//             contentType: "multipart/form-data; boundary=—-WebKitFormBoundary7MA4YWxkTrZu0gW",
 //             initCb: uploadDocumentAction,
 //             successCb: receivedDocumentUploadResponse,
 //             failureCb: receivedDocumentUploadError,
