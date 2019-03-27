@@ -236,6 +236,13 @@ class AddEditStoreContainer extends React.Component {
             </div>);
         }
 
+        let previewImage = ''
+
+        if(this.imagePreviewUrl != '') { 
+            previewImage = this.imagePreviewUrl
+        } else if(this.storeInfo.image !== undefined) {
+            previewImage = this.storeInfo.image
+        }
 
         return (
             <Formik
@@ -332,7 +339,7 @@ class AddEditStoreContainer extends React.Component {
                                         className="text-input error"
                                     />
                                 </div>
-                                <div className="col-sm-6 col-md-4 form-d">
+                            <div className="col-sm-6 col-md-4 form-d">
                                 <div className="row">
                                     <div className="col-sm-12">
                                         <label className="control-label">Upload Logo</label>
@@ -346,13 +353,17 @@ class AddEditStoreContainer extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                                {this.imagePreviewUrl != '' &&
+
+                                {
+                                    previewImage !== '' ? 
                                     <div className="row" style={{ marginTop: "10px" }}>
                                         <div className="col-sm-12">
-                                            <img style={{ width: '100%', maxWidth: "500px", height: '350px' }} src={this.imagePreviewUrl} />
+                                        <img style={{ width: '100%', maxWidth: "500px", height: '350px' }} src={previewImage} />
                                         </div>
-                                    </div>
+                                    </div> : ''
                                 }
+                                
+                                
 
                             </div>
                                 {/* <div className="col-sm-6 col-md-4 form-d">
