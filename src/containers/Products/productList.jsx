@@ -56,8 +56,8 @@ class ProductListContainer extends React.Component {
             props.productData.map(product=>{
                 let prod = {};
                 prod = product
-                prod.sellingPrice = _get(product,'salePrice.price','');
-                prod.costPrice = _get(product,'costPrice.price','')
+                prod.sellingPrice = _get(product,'salePrice.price','').toFixed(2);
+                prod.cPrice = _get(product,'costPrice.price','').toFixed(2);
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
                 this.productList.push(prod);
             });
@@ -85,6 +85,7 @@ class ProductListContainer extends React.Component {
         let selectedProduct = _filter(this.productList, product => {
             return product.id == this.selectedProduct.id
         })
+        console.log(selectedProduct, 'selectedProduct')
         dispatch(requestProductUpdate(productsReducer, selectedProduct[0]));
         this.redirectToNewProduct = true;
     }
@@ -162,7 +163,7 @@ class ProductListContainer extends React.Component {
                             Product Name
                         </TableHeaderColumn>
                         <TableHeaderColumn width='50' dataField='currencyCode' >Currency Code</TableHeaderColumn>
-                        <TableHeaderColumn width='100' dataField='costPrice' dataSort searchable={true} >Cost Price</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='cPrice' dataSort searchable={true} >Cost Price</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
                         <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>
                     </BootstrapTable>

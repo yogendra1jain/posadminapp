@@ -188,16 +188,16 @@ class ProductContainer extends React.Component {
         else {
             _set(data, 'active', false)
         }
-        if (data.dicountable) {
+        if (data.discountable) {
 
         }
         else {
-            _set(data, 'dicountable', false)
+            _set(data, 'discountable', false)
         }
         _set(data, 'upcCode', Number(_get(data, 'upcCode', '0')))
         console.log(data, 'data is here')
         let salePrice = parseFloat(this.productInfo.sellingPrice)
-        let costPrice = parseFloat(this.productInfo.costPrice)
+        let costPrice = parseFloat(this.productInfo.cPrice)
         data.salePrice = {}
         data.salePrice.currencyCode = '$'
         data.salePrice.price = salePrice
@@ -210,6 +210,8 @@ class ProductContainer extends React.Component {
             data.id = this.productInfo.id
         }
         delete data['price']
+        delete data['sellingPrice']
+        delete data['cPrice']
         dispatch(ProductDataSave(data, productsReducer, url));
     }
     componentWillReceiveProps(nextProps) {
@@ -349,8 +351,8 @@ class ProductContainer extends React.Component {
                     <div className="col-sm-6 col-md-4 form-d">
                         <label className="control-label">Cost Price</label>
                         <GenericInput
-                            htmlFor="costPrice" displayName="Cost Price" type="number"
-                            inputName="costPrice" defaultValue={_get(this.productInfo, 'costPrice', '')}
+                            htmlFor="cPrice" displayName="Cost Price" type="number"
+                            inputName="cPrice" defaultValue={_get(this.productInfo, 'cPrice', '')}
                             onChange={this.handleInputChange} errorCheck={false}
                             className="text-input error"
                         />
@@ -407,6 +409,7 @@ class ProductContainer extends React.Component {
                     <div className="col-sm-4 col-md-3 form-d">
                         <label className="control-label">Is Taxable</label>
                         <Checkbox
+                            checked={this.productInfo.isTaxable}
                             name="isTaxable"
                             onChange={(e) => this.handleCheckboxChange(e)}
                             value={_get(this.productInfo, 'isTaxable', '')}
@@ -415,6 +418,7 @@ class ProductContainer extends React.Component {
                     <div className="col-sm-4 col-md-3 form-d">
                         <label className="control-label">Active</label>
                         <Checkbox
+                            checked={this.productInfo.active}
                             name="active"
                             onChange={(e) => this.handleCheckboxChange(e)}
                             value={_get(this.productInfo, 'active', '')}
@@ -423,9 +427,10 @@ class ProductContainer extends React.Component {
                     <div className="col-sm-4 col-md-3 form-d">
                         <label className="control-label">Is Discountable</label>
                         <Checkbox
-                            name="dicountable"
+                            checked={this.productInfo.discountable}
+                            name="discountable"
                             onChange={(e) => this.handleCheckboxChange(e)}
-                            value={_get(this.productInfo, 'dicountable', '')}
+                            value={_get(this.productInfo, 'discountable', '')}
                         />
                     </div>
                     <div className="col-sm-6 col-md-4 form-d">
@@ -445,7 +450,7 @@ class ProductContainer extends React.Component {
                         {this.imagePreviewUrl != '' &&
                             <div className="row" style={{ marginTop: "10px" }}>
                                 <div className="col-sm-12">
-                                    <img style={{ width: '100%', maxWidth: "500px", height: '350px' }} src={this.imagePreviewUrl} />
+                                    <img style={{ width: '100%', maxWidth: "500px" }} src={this.imagePreviewUrl} />
                                 </div>
                             </div>
                         }
