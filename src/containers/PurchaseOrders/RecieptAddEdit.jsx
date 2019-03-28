@@ -1,6 +1,5 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.css";
-import Button from '@material-ui/core/Button';
 
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
@@ -15,8 +14,7 @@ import EditRequisition from '../RequisitionContainer/components/EditRequisition.
 
 import { saveRequisitionForm } from '../../actions/vendor';
 import { fetchPurchaseOrderById, requestPORecieptRequisitionUpdate, purchaseOrderSave } from '../../actions/purchaseOrder';
-
-
+import SaveButton from '../../components/common/SaveButton';
 
 const styles = theme => ({
     button: {
@@ -92,6 +90,10 @@ class RecieptAddEdit extends React.Component {
         this.props.dispatch(requestPORecieptRequisitionUpdate('', value, index, proposedQuantity));
     }
 
+    handleSubmitHandler = () => {
+        console.log('saved')
+    }
+
     handleSave = () => {
         let values = _get(this, `props.purchaseOrderById.requisitions`, [])
         let data = {}
@@ -154,8 +156,8 @@ class RecieptAddEdit extends React.Component {
                         <div>
                             <span>Are You Sure To Reject.</span>
                             <div className="form-btn-group">
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(true)}>Reject</Button>
-                                <Button type="button" variant="raised" onClick={() => this.toggleDialog()}>Cancel</Button>
+                                <SaveButton Class_Name="m-r-10" buttonDisplayText={'Reject'} handlerSearch={() => this.onApproveReject(true)} />
+                                <SaveButton Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.toggleDialog()} />
                             </div>
                         </div>
                     }
@@ -163,11 +165,12 @@ class RecieptAddEdit extends React.Component {
                 <div>
                     {
                         <div className="form-btn-group">
+                            
+                            <SaveButton Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.handleCancel()} />
                             {
                                 !isPOViewFlag &&
-                                <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleSave()}>Save</Button>
+                                <SaveButton Class_Name="btn-info" buttonDisplayText={'Save'} handlerSearch={() => this.handleSave()} />
                             }
-                            <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleCancel()}>Cancel</Button>
                             {/* <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button> */}
                         </div>
                     }

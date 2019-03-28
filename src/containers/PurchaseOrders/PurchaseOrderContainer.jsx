@@ -129,21 +129,23 @@ class PurchaseOrderContainer extends React.Component {
         if (row.status === 'PENDING APPROVAL') {
             return (
                 <div>
-                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, false)}>Review</Button>
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'Review'} handlerSearch={() => this.handleReview(row, false)} />
                 </div>
             )
         } else if (row.status === 'APPROVED') {
             return (
                 <div>
-                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReciept(row, false)}>Receipt</Button>
-                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, true)}>View</Button>
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'Receipt'} handlerSearch={() => this.handleReciept(row, false)} />
+
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'View'} handlerSearch={() => this.handleReview(row, true)} />
                 </div>
             )
         } else if (row.status === 'RECEIVED') {
             return (
                 <div>
-                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, true)}>View</Button>
-                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReciept(row, true)}>View Receipt</Button>
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'View'} handlerSearch={() => this.handleReview(row, true)} />
+
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'View Receipt'} handlerSearch={() => this.handleReciept(row, true)} />
                 </div>
             )
         } else {
