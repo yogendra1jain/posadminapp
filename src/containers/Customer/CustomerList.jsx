@@ -243,16 +243,21 @@ const mapStateToProps = state => {
 
     let customerList = []
     let { customerData } = customersReducer || []
-    customerData.map((data, index) => {
-        customerList.push(
-            {
-                id: _get(data,'id', ''),
-                name: _get(data,'customer.firstName', '') + ' ' + _get(data,'customer.lastName', ''),
-                email: _get(data,'email', ''),
-                phone: _get(data,'phoneNumber.phoneNumber','')
-            }
-        )
-    })
+    if(Array.isArray(customerData)) {
+        if(!_isEmpty(customerData)) {
+            customerData.map((data, index) => {
+                customerList.push(
+                    {
+                        id: _get(data,'id', ''),
+                        name: _get(data,'customer.firstName', '') + ' ' + _get(data,'customer.lastName', ''),
+                        email: _get(data,'email', ''),
+                        phone: _get(data,'phoneNumber.phoneNumber','')
+                    }
+                )
+            })
+        }
+    }
+    
 
     return {
         customerList,
