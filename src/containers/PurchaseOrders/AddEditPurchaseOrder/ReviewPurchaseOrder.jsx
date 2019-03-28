@@ -198,18 +198,17 @@ class ReviewPurchaseOrderContainer extends React.Component {
                     />
                     <div className="row">
                         {
-                            // !this.props.isPOViewFlag ?
-                                !this.state.isPrinting ? 
+                            !this.props.isPOViewFlag ?
+                                // this.state.isPrinting ? 
                                 <div className="form-btn-group col-sm-12">
                                     <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
                                     <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
                                     <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
                                 </div>
                                 :
-                                // <div className="form-btn-group col-sm-12">
-                                //     <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
-                                // </div>
-                                ''
+                                <div className="form-btn-group col-sm-12">
+                                    <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                                </div>
                         }
                     </div>
 
