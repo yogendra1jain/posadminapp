@@ -290,7 +290,7 @@ class StaffListContainer extends React.Component {
                             <TableHeaderColumn width='100' dataField='role' >Role</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
                             <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='phone' >Phone</TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='phoneNumber' >Phone</TableHeaderColumn>
                         </BootstrapTable>
                     </div>
                 </div>
