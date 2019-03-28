@@ -17,8 +17,7 @@ import { saveRequisitionForm } from '../../../actions/vendor';
 import { fetchPurchaseOrderById, requestPORequisitionUpdate, purchaseOrderSave } from '../../../actions/purchaseOrder';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-
-
+import SaveButton from '../../../components/common/SaveButton';
 
 const styles = theme => ({
     button: {
@@ -190,8 +189,9 @@ class ReviewPurchaseOrderContainer extends React.Component {
                             <div>
                                 <span>Are You Sure To Reject.</span>
                                 <div className="form-btn-group">
-                                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(true)}>Reject</Button>
-                                    <Button type="button" variant="raised" onClick={() => this.toggleDialog()}>Cancel</Button>
+                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Reject'} handlerSearch={() => this.onApproveReject(true)}/>
+
+                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Cancel'} handlerSearch={() => this.toggleDialog()}/>
                                 </div>
                             </div>
                         }
@@ -201,13 +201,13 @@ class ReviewPurchaseOrderContainer extends React.Component {
                             !this.props.isPOViewFlag ?
                                 // this.state.isPrinting ? 
                                 <div className="form-btn-group col-sm-12">
-                                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.onApproveReject(false)}>Approve</Button>
-                                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.toggleDialog()}>Reject</Button>
-                                    <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Approve'} handlerSearch={() => this.onApproveReject(false)}/>
+                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Reject'} handlerSearch={() => this.toggleDialog()}/>
+                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Export PDF'} handlerSearch={() => this.printPDF()}/>
                                 </div>
                                 :
                                 <div className="form-btn-group col-sm-12">
-                                    <Button type="button" variant="raised" onClick={() => this.printPDF()}>Export PDF</Button>
+                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Export PDF'} handlerSearch={() => this.printPDF()}/>
                                 </div>
                         }
                     </div>

@@ -151,7 +151,8 @@ class PurchaseOrderContainer extends React.Component {
         } else {
             return (
                 <div>
-                    <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.handleReview(row, true)}>View</Button>
+
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'View'} handlerSearch={() => this.handleReview(row, true)} />
                 </div>
             )
         }

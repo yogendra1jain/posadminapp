@@ -56,8 +56,8 @@ class ProductListContainer extends React.Component {
             props.productData.map(product=>{
                 let prod = {};
                 prod = product
-                prod.sellingPrice = _get(product,'salePrice.price','').toFixed(2);
-                prod.cPrice = _get(product,'costPrice.price','').toFixed(2);
+                prod.sellingPrice = _get(product,'salePrice.price',0).toFixed(2);
+                prod.cPrice = _get(product,'costPrice.price',0).toFixed(2);
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
                 this.productList.push(prod);
             });
