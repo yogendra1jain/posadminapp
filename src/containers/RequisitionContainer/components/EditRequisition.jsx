@@ -27,6 +27,7 @@ import { getVendorData } from '../../../actions/vendor';
 import { fetchStore } from '../../../actions/store';
 import CircularProgress from '@material-ui/core/CircularProgress';
 /* Component Imports */
+import SaveButton from '../../../components/common/SaveButton';
 
 const styles = theme => ({
     button: {
@@ -255,11 +256,11 @@ class EditRequisition extends React.Component {
                         <span className='box-conversion-title'>Status</span>
                     </div>
                     {
-                        // !this.props.isPOViewFlag &&
-                        !this.props.isPrinting ? 
+                        !this.props.isPOViewFlag &&
+                        // !this.props.isPrinting ? 
                         <div>
                             <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={() => this.props.handleSubmitHandler(index)}>Save</Button>
-                        </div> : ''
+                        </div> 
                     }
                 </div>
             )
@@ -320,8 +321,11 @@ class EditRequisition extends React.Component {
                     {
                         this.props.handleCancel &&
                         <div className="form-btn-group">
-                            <Button variant="outlined" color="primary" className={classes.button} onClick={() => this.props.handleSubmitHandler('', true)}>Save All</Button>
-                            <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.props.handleCancel()}>Cancel</Button>
+                            <SaveButton disabled={this.state.selectedRows.length < 1} Class_Name="btn-info" buttonDisplayText={'Save All'} handlerSearch={() => this.props.handleSubmitHandler('', true)} />
+
+                            <SaveButton disabled={this.state.selectedRows.length < 1} Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.props.handleCancel()} />
+
+                            
                         </div>
                     }
 
