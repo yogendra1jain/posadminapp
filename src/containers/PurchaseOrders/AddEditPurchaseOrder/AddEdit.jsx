@@ -69,6 +69,7 @@ class AddEditPurchaseOrder extends React.Component {
         this.fetchVendorProducts(vendorProdUrl, reqObj);
     }
     fetchVendorProducts = (vendorProdUrl, reqObj) => {
+        this.setState({ loading: true })
         this.props.dispatch(fetchVendorProducts('', vendorProdUrl, reqObj))
             .then((data) => {
                 console.log('came in then of vendorproduct service call.');
@@ -108,6 +109,7 @@ class AddEditPurchaseOrder extends React.Component {
                     .then((data) => {
                         this.setState({
                             cachedVendors: data,
+                            loading: false
                         });
                         this.props.dispatch(updateVendorsList('', data));
                     }, (err) => {
@@ -120,6 +122,7 @@ class AddEditPurchaseOrder extends React.Component {
     fetchBasicDetails = (requisitionUrl, reqObj) => {
         this.props.dispatch(fetchRequisitionList('', requisitionUrl, reqObj))
             .then((data) => {
+                this.setState({ loadingList: false })
                 console.log('requisition list fetched successfully.');
             }, (err) => {
                 console.log('error while fetching requisition list', err);
@@ -194,7 +197,6 @@ class AddEditPurchaseOrder extends React.Component {
         let rows = []
         if(!_isEmpty(this.props.requisitionListData)) {
             if(Array.isArray(this.props.requisitionListData)) {
-
                 _get(this, 'props.requisitionListData', []).map((data, index) => {
                     rows.push(
                         <div onClick={() => this.selectRequisitionRow(data)} className={_findIndex(this.state.selectedRows, { 'id': data.id }) !== -1 ? 'box-conversion-row selected' : 'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
@@ -230,7 +232,7 @@ class AddEditPurchaseOrder extends React.Component {
 
         return (
             <div className='react-bs-table-container'>
-                {rows}
+                {rows.length < 1 ? 'No Data Found' : rows}
             </div>
         )
     }
@@ -241,6 +243,7 @@ class AddEditPurchaseOrder extends React.Component {
         });
     }
     handleChange = (id, name) => {
+        this.setState({ loadingList: true })
         if (name == 'vendor') {
             _set(this.selectedVendor, name, id);
         } else {
@@ -295,7 +298,7 @@ class AddEditPurchaseOrder extends React.Component {
 
     render() {
         const { classes } = this.props;
-        if (_get(this, 'props.isFetching')) {
+        if (_get(this, 'state.loading')) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
                     <div className="rect1"></div>
@@ -311,10 +314,8 @@ class AddEditPurchaseOrder extends React.Component {
                 <div className='panel-container'>
                     <span className='panel-heading'>Requisition List </span>
                     <div>
-                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.cancelPO()} />
-                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Create PO'} handlerSearch={() => this.SavePO()} />
-                        {/* <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.cancelPO()}>Cancel</Button>
-                        <Button type="button" variant="raised" onClick={() => this.SavePO()}>Create PO</Button> */}
+                        <SaveButton Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.cancelPO()} />
+                        <SaveButton disabled={this.state.selectedRows.length < 1} Class_Name="btn-info" buttonDisplayText={'Create PO'} handlerSearch={() => this.SavePO()} />
                     </div>
                 </div>
 
@@ -364,7 +365,16 @@ class AddEditPurchaseOrder extends React.Component {
                                 <span>Status</span>
                             </div>
                         </div> */}
-                        {this.populateRequisitionList()}
+
+                        {this.state.loadingList ? <div style={{marginTop: "50px", marginLeft: "50px"}} className='loader-wrapper-main'>
+                        <div className="spinner">
+                            <div className="rect1"></div>
+                            <div className="rect2"></div>
+                            <div className="rect3"></div>
+                            <div className="rect4"></div>
+                            <div className="rect5"></div>
+                        </div>
+                        </div> : this.populateRequisitionList()}
                     </div>
                 </div>
             </div>
