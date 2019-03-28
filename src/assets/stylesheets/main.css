@@ -3386,9 +3386,9 @@ input.login-number.form-control {
     align-items: flex-end;
 }
 
-/* .selected {
-    background: #005383;
-} */
+.selected {
+    background: #696969;
+}
 
 .dropzone {
     height: 200px;
