@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {fetchStore} from '../../actions/store';
-import {fetchProductLookupData} from '../../actions/products';
-import {sendSelectedProducts} from '../../actions/poductOverride';
+import {sendSelectedProducts, fetchProductData} from '../../actions/poductOverride';
 import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
@@ -59,11 +58,11 @@ class ProductOverRide extends Component {
             let selectedStore = {}
             selectedStore.store = this.props.selectedStoreId
             this.setState({ selectedStore, isLoading: true })
-            let url = '/Inventory/ByStoreId';
+            let url = '/Product/WithOverride/ByStore';
             let reqBody = {
                 id: this.props.selectedStoreId
             }
-            this.props.dispatch(fetchProductLookupData('', url, reqBody)); 
+            this.props.dispatch(fetchProductData('', url, reqBody)); 
         }
         let reqBody = {
             id: localStorage.getItem('retailerID')
@@ -86,30 +85,42 @@ class ProductOverRide extends Component {
             }
         }
 
-        if(!_isEmpty(nextProps.productData)) {
-            if(Array.isArray(nextProps.productData)) {
+        if(!_isEmpty(nextProps.productList)) {
+            if(Array.isArray(nextProps.productList)) {
                 let productList = []
-                _get(nextProps,'productData', []).map(product => {
+                _get(nextProps,'productList', []).map(product => {
+                    let isOverride = ('override' in product)
                     this.setState({ currencyCode: product.currencyCode})
                     let tempStore = {}
                     tempStore.id = _get(product.product, 'id','');
-                    tempStore.active = _get(product.product,'active', false)
-                    tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
                     tempStore.name = _get(product.product, 'name', '');
                     tempStore.sku = _get(product.product, 'sku', '');
-                    tempStore.salePrice = _get(product.product,'salePrice.price', '')
-                    tempStore.costPrice = _get(product.product,'costPrice.price', '')
                     tempStore.category1 = _get(product.product, 'category1','')
                     tempStore.category2 = _get(product.product, 'category2','')
                     tempStore.category3 = _get(product.product, 'category3','')
                     tempStore.description = _get(product.product, 'description','')
                     tempStore.retailerId = _get(product.product, 'retailerId','')
                     tempStore.upcCode = _get(product.product, 'upcCode','')
+                    if(isOverride) {
+                        tempStore.isOverriden = 'Yes'
+                        tempStore.salePrice = _get(product.override,'salePrice.price', '')
+                        tempStore.costPrice = _get(product.override,'costPrice.price', '')
+                        tempStore.active = _get(product.override,'active', false || false)
+                        tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
+
+                    } else {
+                        tempStore.isOverriden = 'No'
+                        tempStore.salePrice = _get(product.product,'salePrice.price', '')
+                        tempStore.costPrice = _get(product.product,'costPrice.price', '')
+                        tempStore.active = _get(product.product,'active', false)
+                        tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
+
+                    }
                     productList.push(tempStore)
                 })
                 this.productList = productList
                 this.forceUpdate()
-                if(nextProps.productData !== this.props.productData) {
+                if(nextProps.productList !== this.props.productList) {
                     this.setState({ isLoading: false })
                 }
             }
@@ -126,11 +137,11 @@ class ProductOverRide extends Component {
             let selectedStore = {}
             _set(selectedStore, name, id)
             this.setState({ selectedStore })
-            let url = '/Inventory/ByStoreId';
+            let url = '/Product/WithOverride/ByStore';
             let reqBody = {
                 id: id
             }
-            this.props.dispatch(fetchProductLookupData('', url, reqBody)); 
+            this.props.dispatch(fetchProductData('', url, reqBody)); 
         }  
     }
 
@@ -203,6 +214,8 @@ class ProductOverRide extends Component {
             <TableHeaderColumn width='100' dataField='salePrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
 
             <TableHeaderColumn width='100' dataField='activeStatus' dataSort searchable={true} >Active</TableHeaderColumn>
+
+            <TableHeaderColumn width='100' dataField='isOverriden' dataSort searchable={true} >Is Overriden</TableHeaderColumn>
         </BootstrapTable>
         }
         return (    
@@ -239,7 +252,7 @@ const mapStateToProps = state => {
     const {storesReducer, productsReducer, productOverride} = state
     let {productData} = productsReducer || [];
     const {storeData} = storesReducer || {}
-    const { productOverrideData } = productOverride
+    const { productOverrideData, productList, isFetching } = productOverride
     const { selectedProducts, selectedStoreId, selectedIds } = productOverrideData
 
     return {
@@ -247,7 +260,9 @@ const mapStateToProps = state => {
         storeData,
         selectedProducts,
         selectedStoreId,
-        selectedIds
+        selectedIds,
+        productList,
+        isFetching
     }
 }
 
