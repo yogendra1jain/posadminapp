@@ -259,7 +259,7 @@ class EditRequisition extends React.Component {
                         !this.props.isPOViewFlag &&
                         // !this.props.isPrinting ? 
                         <div>
-                            <SaveButton Class_Name="btn-info" buttonDisplayText={'Save'} handlerSearch={() => this.props.handleSubmitHandler(index)}/>
+                            {/* <SaveButton Class_Name="btn-info" buttonDisplayText={'Save'} handlerSearch={() => this.props.handleSubmitHandler(index)}/> */}
                         </div> 
                     }
                 </div>
