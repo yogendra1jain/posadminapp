@@ -7,6 +7,8 @@ class POPrintView extends React.Component {
         return (
             <div className="po-print-container">
                 <h1 className="po-print-title">Purchase Order</h1>
+                <label className="po-id-date">Purchase Order Id: <span>{this.props.poId}</span></label>
+                <label className="po-id-date">Date: <span>{this.props.date}</span></label>
                 <div className="store-vendor-row">
                     <div className="sv-col">
                         <div className="sv-box">

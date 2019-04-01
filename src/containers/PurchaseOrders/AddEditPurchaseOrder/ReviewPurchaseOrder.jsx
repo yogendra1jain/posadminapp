@@ -20,6 +20,7 @@ import SaveButton from '../../../components/common/SaveButton';
 import Button from "react-bootstrap/lib/Button";
 import ReactToPrint from 'react-to-print';
 import POPrintView from '../POPrintView/POPrintView';
+import moment from "moment";
 
 const styles = theme => ({
     button: {
@@ -183,7 +184,11 @@ class ReviewPurchaseOrderContainer extends React.Component {
         const { purchaseOrderById, isPOViewFlag } = this.props;
         let address = _get(purchaseOrderById, 'order.store.address', '')
         let storeAddress = _get(address, 'addressLine1', '') + ' ' + _get(address, 'addressLine2', '') + ' ' + _get(address, 'city', '') + ' ' + _get(address, 'state', '') + ' ' + _get(address, 'country', '')
-
+        console.log(purchaseOrderById, 'purchaseOrderById jgugu')
+        let date = moment.utc(_get(purchaseOrderById,'order.createdTime.seconds','' * 1000)).format('DD/MM/YYYY hh:mm:ss')
+        console.log(date, 'vfugugu date')
+        let poId = _get(purchaseOrderById,'order.id','')
+        console.log(poId, 'gugftux poid')
         return (
             <div className="" id="divToPrint">
                 <div className="white-box-container">
@@ -282,6 +287,8 @@ class ReviewPurchaseOrderContainer extends React.Component {
                 <div style={{ display: "none" }}>
                     <POPrintView
                         ref={el => (this.componentRef = el)}
+                        date={date}
+                        poId={poId}
                         storeName={_get(purchaseOrderById, 'order.store.name', '')}
                         storeAddress={storeAddress && storeAddress}
                         vendorName={_get(purchaseOrderById, 'order.vendor.name', '')}
