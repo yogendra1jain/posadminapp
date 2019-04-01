@@ -159,7 +159,7 @@ class AddEditPurchaseOrder extends React.Component {
         let prod = _find(_get(this.state, 'cachedProducts', []), {
             'id': productId
         });
-        return _get(prod, 'name', 'Not Found');
+        return _get(prod, 'name', '');
     }
     mapVendorName = (vendorId) => {
         let vendor = _find(_get(this.state, 'cachedVendors', []), {
@@ -412,14 +412,18 @@ const mapStateToProps = state => {
             }
         )
     })
-    !_isEmpty(vendorData) && _get(vendorsReducer, 'vendorData', []).map((data, index) => {
-        vendorList.push(
-            {
-                value: data.id,
-                displayText: data.name,
-            }
-        )
-    })
+    if(Array.isArray(vendorData)) {
+        if(!_isEmpty(vendorData)) {
+            vendorData.map((data, index) => {
+                vendorList.push(
+                    {
+                        value: data.id,
+                        displayText: data.name,
+                    }
+                )
+            })
+        }
+    }
     return {
         requisitionListData,
         productsFromCache,

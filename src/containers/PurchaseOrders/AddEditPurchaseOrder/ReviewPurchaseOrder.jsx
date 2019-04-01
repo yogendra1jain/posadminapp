@@ -1,6 +1,5 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.css";
-import Button from '@material-ui/core/Button';
 
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
@@ -18,6 +17,9 @@ import { fetchPurchaseOrderById, requestPORequisitionUpdate, purchaseOrderSave }
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import SaveButton from '../../../components/common/SaveButton';
+import Button from "react-bootstrap/lib/Button";
+import ReactToPrint from 'react-to-print';
+import POPrintView from '../POPrintView/POPrintView';
 
 const styles = theme => ({
     button: {
@@ -35,12 +37,15 @@ class ReviewPurchaseOrderContainer extends React.Component {
         this.state = {
             selectedValue: '',
             params: params,
-            isPrinting: false
+            isPrinting: false,
+            enablePrint: false,
+            loading:  false
         };
     }
 
 
     componentDidMount() {
+        this.setState({ loading: true })
         let reqObj1 = {
             id: _get(this.state, 'params.id', ''),
         }
@@ -124,43 +129,47 @@ class ReviewPurchaseOrderContainer extends React.Component {
         });
     }
 
-    printPDF = () => {
-        this.setState({ applyPdfClass: true, isPrinting: true }, () => {
-            const input = document.getElementById('divToPrint');
+    // printPDF = () => {
+    //     this.setState({ applyPdfClass: true, isPrinting: true }, () => {
+    //         const input = document.getElementById('divToPrint');
 
-            html2canvas(input).then(canvas => {
-                // Few necessary setting options
+    //         html2canvas(input).then(canvas => {
+    //             // Few necessary setting options
 
-                const contentDataURL = canvas.toDataURL('image/png')
-                var imgWidth = 200;
-                var pageHeight = 295;
-                var imgHeight = canvas.height * imgWidth / canvas.width;
-                var heightLeft = imgHeight;
+    //             const contentDataURL = canvas.toDataURL('image/png')
+    //             var imgWidth = 200;
+    //             var pageHeight = 295;
+    //             var imgHeight = canvas.height * imgWidth / canvas.width;
+    //             var heightLeft = imgHeight;
 
-                var doc = new jsPDF('p', 'mm');
-                var position = 0;
+    //             var doc = new jsPDF('p', 'mm');
+    //             var position = 0;
 
-                doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    //             doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
 
-                heightLeft -= pageHeight;
+    //             heightLeft -= pageHeight;
 
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    doc.addPage();
-                    doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-                doc.save('PO.pdf');
+    //             while (heightLeft >= 0) {
+    //                 position = heightLeft - imgHeight;
+    //                 doc.addPage();
+    //                 doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    //                 heightLeft -= pageHeight;
+    //             }
+    //             doc.save('PO.pdf');
 
-            });
-            setTimeout(() => {
-                this.setState({ applyPdfClass: false, isPrinting: false });
-            }, 10);
-        })
+    //         });
+    //         setTimeout(() => {
+    //             this.setState({ applyPdfClass: false, isPrinting: false });
+    //         }, 10);
+    //     })
+    // }
+
+    getLoading = (loadingStatus) => {
+        this.setState({ loading: loadingStatus })
     }
 
     render() {
-        if (_get(this, 'props.isFetching')) {
+        if (this.state.loading) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
                     <div className="rect1"></div>
@@ -172,47 +181,56 @@ class ReviewPurchaseOrderContainer extends React.Component {
             </div>);
         }
         const { purchaseOrderById, isPOViewFlag } = this.props;
+        let address = _get(purchaseOrderById, 'order.store.address', '')
+        let storeAddress = _get(address, 'addressLine1', '') + ' ' + _get(address, 'addressLine2', '') + ' ' + _get(address, 'city', '') + ' ' + _get(address, 'state', '') + ' ' + _get(address, 'country', '')
+
         return (
             <div className="" id="divToPrint">
-            <div className="white-box-container">
-                <div className='white-box-header'>
-                    <h2 className='white-box-title'>Purchase Order </h2>
-                </div>
-                <div className="white-box-body">
-                    <FormDialog
-                        open={this.state.openDialog}
-                        handleClose={this.toggleDialog}
-                        title={'Confirm'}
-                        fullScreen={false}
-                        fullWidth={true}
-                        dialogContent={
-                            <div>
-                                <span>Are You Sure To Reject.</span>
-                                <div className="form-btn-group">
-                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Reject'} handlerSearch={() => this.onApproveReject(true)}/>
-
-                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Cancel'} handlerSearch={() => this.toggleDialog()}/>
-                                </div>
-                            </div>
-                        }
-                    />
-                    <div className="row">
-                        {
-                            !this.props.isPOViewFlag ?
-                                // this.state.isPrinting ? 
-                                <div className="form-btn-group col-sm-12">
-                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Approve'} handlerSearch={() => this.onApproveReject(false)}/>
-                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Reject'} handlerSearch={() => this.toggleDialog()}/>
-                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Export PDF'} handlerSearch={() => this.printPDF()}/>
-                                </div>
-                                :
-                                <div className="form-btn-group col-sm-12">
-                                    <SaveButton Class_Name="btn-info" buttonDisplayText={'Export PDF'} handlerSearch={() => this.printPDF()}/>
-                                </div>
-                        }
+                <div className="white-box-container">
+                    <div className='white-box-header'>
+                        <h2 className='white-box-title'>Purchase Order </h2>
                     </div>
+                    <div className="white-box-body">
+                        <FormDialog
+                            open={this.state.openDialog}
+                            handleClose={this.toggleDialog}
+                            title={'Confirm'}
+                            fullScreen={false}
+                            fullWidth={true}
+                            dialogContent={
+                                <div>
+                                    <span>Are You Sure To Reject.</span>
+                                    <div className="form-btn-group">
+                                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Reject'} handlerSearch={() => this.onApproveReject(true)} />
 
-                    <div className="row m0">
+                                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Cancel'} handlerSearch={() => this.toggleDialog()} />
+                                    </div>
+                                </div>
+                            }
+                        />
+                        <div className="row">
+                            {
+                                !this.props.isPOViewFlag ?
+                                    <div className="form-btn-group col-sm-12">
+                                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Approve'} handlerSearch={() => this.onApproveReject(false)} />
+                                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Reject'} handlerSearch={() => this.toggleDialog()} />
+                                        <ReactToPrint
+                                            trigger={() => <Button className="btn-info">Print</Button>} 
+                                            content={() => this.componentRef}
+                                        />
+
+                                    </div>
+                                    :
+                                    <div className="form-btn-group col-sm-12">
+                                        <ReactToPrint
+                                            trigger={() => <Button className="btn-info">Print</Button>} 
+                                            content={() => this.componentRef}
+                                        />
+                                    </div>
+                            }
+                        </div>
+
+                        <div className="row m0">
                             <div className="col-sm-6" style={{ border: 'solid 1px #ddd' }}>
                                 <div className='box-conversion-container'>
                                     <div className={'box-conversion-row'} style={{ height: '105px' }}>
@@ -221,7 +239,7 @@ class ReviewPurchaseOrderContainer extends React.Component {
                                             <span className='box-conversion-title'>Store Name</span>
                                         </div>
                                         <div className='box-conversion-item'>
-                                            <span className='box-conversion-data'>{`${_get(purchaseOrderById, 'order.store.address.addressLine1')} ${_get(purchaseOrderById, 'order.store.address.addressLine2')} ${_get(purchaseOrderById, 'order.store.address.city')} ${_get(purchaseOrderById, 'order.store.address.state')} ${_get(purchaseOrderById, 'order.store.address.country')}`}</span>
+                                            <span className='box-conversion-data'>{storeAddress}</span>
                                             <span className='box-conversion-title'>Store Address</span>
                                         </div>
                                     </div>
@@ -245,22 +263,34 @@ class ReviewPurchaseOrderContainer extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
+
             <EditRequisition
+                getLoading={this.getLoading}
                 forEdit={true}
                 handleChangeInput={this.handleChangeInput}
                 handleSubmitHandler={this.handleSubmitHandler}
                 selectRowProp={{}}
-                // handleCancel={}
                 isPrinting={this.state.isPrinting}
                 isPOViewFlag={isPOViewFlag}
                 requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
                 requisitionListData={_get(this.props, 'requisitionListData', [])}
             />
-            </div>   
+
+                <div style={{ display: "none" }}>
+                    <POPrintView
+                        ref={el => (this.componentRef = el)}
+                        storeName={_get(purchaseOrderById, 'order.store.name', '')}
+                        storeAddress={storeAddress && storeAddress}
+                        vendorName={_get(purchaseOrderById, 'order.vendor.name', '')}
+                        vendorEmail={_get(purchaseOrderById, 'order.vendor.email', '')}
+                        vendorPhoneNo={_get(purchaseOrderById, 'order.vendor.phoneNumber.phoneNumber', '')}
+                        {...this.props}
+                    />
+                </div>
+            </div>
         )
     }
 }
@@ -285,14 +315,19 @@ const mapStateToProps = state => {
             }
         )
     })
-    !_isEmpty(vendorData) && _get(vendorsReducer, 'vendorData', []).map((data, index) => {
-        vendorList.push(
-            {
-                value: data.id,
-                label: data.name,
-            }
-        )
-    })
+    if(Array.isArray(vendorData)) {
+        if(!_isEmpty(vendorData)) {
+            vendorData.map((data, index) => {
+                vendorList.push(
+                    {
+                        value: data.id,
+                        label: data.name,
+                    }
+                )
+            })
+        }
+    }
+    
     return {
         purchaseOrderById,
         isFetching,

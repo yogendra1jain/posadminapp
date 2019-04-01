@@ -18,7 +18,7 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 // import Category from './category';
 import 'react-drawer/lib/react-drawer.css';
 import { showMessage } from '../../actions/common';
-import { fetchPurchaseOrders, setPOViewFlag } from '../../actions/purchaseOrder';
+import { fetchPurchaseOrders, setPOViewFlag, setReceiptFlag } from '../../actions/purchaseOrder';
 
 
 const options = {
@@ -121,9 +121,9 @@ class PurchaseOrderContainer extends React.Component {
         this.props.history.push(`/purchaseorders/review/${row.id}`);
         this.props.dispatch(setPOViewFlag('', isView))
     }
-    handleReciept = (row, isView) => {
+    handleReciept = (row, isView, isReceipt) => {
         this.props.history.push(`/purchaseorders/reciept/${row.id}`);
-        this.props.dispatch(setPOViewFlag('', isView));
+        this.props.dispatch(setPOViewFlag('', isView, isReceipt));
     }
     actionColumn = (cell, row) => {
         if (row.status === 'PENDING APPROVAL') {
@@ -135,7 +135,7 @@ class PurchaseOrderContainer extends React.Component {
         } else if (row.status === 'APPROVED') {
             return (
                 <div>
-                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'Receipt'} handlerSearch={() => this.handleReciept(row, false)} />
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'Receipt'} handlerSearch={() => this.handleReciept(row, false, true)} />
 
                     <SaveButton Class_Name="m-r-10" buttonDisplayText={'View'} handlerSearch={() => this.handleReview(row, true)} />
                 </div>
@@ -143,9 +143,9 @@ class PurchaseOrderContainer extends React.Component {
         } else if (row.status === 'RECEIVED') {
             return (
                 <div>
-                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'View'} handlerSearch={() => this.handleReview(row, true)} />
-
                     <SaveButton Class_Name="m-r-10" buttonDisplayText={'View Receipt'} handlerSearch={() => this.handleReciept(row, true)} />
+
+                    <SaveButton Class_Name="m-r-10" buttonDisplayText={'View'} handlerSearch={() => this.handleReview(row, true)} />
                 </div>
             )
         } else {

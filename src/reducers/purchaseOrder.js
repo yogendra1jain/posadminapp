@@ -40,6 +40,7 @@ const purchaseOrderData = (state = {
     purchaseOrderById: {},
     purchaseOrderRecieptById: {},
     isPOViewFlag: false,
+    isReceiptFlag: false,
 }, action) => {
     switch (action.type) {
         case REQUEST_PURCHASE_ORDERS:
@@ -134,6 +135,7 @@ const purchaseOrderData = (state = {
                 status: action.status,
                 didInvalidate: false,
                 isPOViewFlag: action.isView,
+                isReceiptFlag: action.isReceipt,
                 lastUpdated: action.receivedAt
             });
         case REQUEST_PURCHASE_ORDER_RECIEPT_BY_ID:

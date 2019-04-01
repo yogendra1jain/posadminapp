@@ -267,16 +267,18 @@ const mapStateToProps = (state, ownProps) => {
     let vendorList = []
     let vendorProductsList = [];
     let { vendorData } = vendorsReducer || [];
-    !_isEmpty(vendorData) && _get(vendorsReducer, 'vendorData', []).map((data, index) => {
-        let phoneNumber = _get(data, 'phoneNumber.phoneNumber', 0);
-
-        vendorList.push(
-            {
-                value: data.id,
-                label: data.name,
-            }
-        )
-    })
+    if(!_isEmpty(vendorData)) {
+        _get(vendorsReducer, 'vendorData', []).map((data, index) => {
+            let phoneNumber = _get(data, 'phoneNumber.phoneNumber', 0);
+    
+            vendorList.push(
+                {
+                    value: data.id,
+                    label: data.name,
+                }
+            )
+        })
+    }
     !_isEmpty(vendorProductsData) && _isArray(vendorProductsData) && vendorProductsData.map((data, index) => {
         let price = `${_get(data, 'price.currencyCode', '')} ${_get(data, 'price.price', 0)}`;
 

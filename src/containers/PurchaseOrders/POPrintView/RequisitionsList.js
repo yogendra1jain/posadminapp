@@ -3,29 +3,18 @@ import React from 'react';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
 
-import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
-import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
-
 import _isArray from 'lodash/isArray';
 import _uniq from 'lodash/uniq';
 import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 /* Material import */
-import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
 /* Redux Imports */
 import { connect } from 'react-redux';
-import { Field } from 'redux-form';
-import FormDialog from '../../../components/common/CommonDialog/index.js';
-import AddRequisitionForm from './AddRequisitionComp.jsx';
-import { saveRequisitionForm } from '../../../actions/vendor';
 import { showMessage } from '../../../actions/common';
-import { TextFieldInput, ReactSelectWrapper } from '../../../components/common/MaterialUiComponents';
 import { fetchVendorProducts, fetchRetailerProducts, fetchProductsFromCache, updateVendorProductsList, updateVendorsList } from '../../../actions/products';
 import { getVendorData } from '../../../actions/vendor';
 import { fetchStore } from '../../../actions/store';
-import CircularProgress from '@material-ui/core/CircularProgress';
 /* Component Imports */
 import SaveButton from '../../../components/common/SaveButton';
 
@@ -42,18 +31,6 @@ const styles = theme => ({
     },
 });
 
-const options = {
-    paginationPosition: 'top',
-    defaultSortName: 'posProductId',
-    defaultSortOrder: 'asc',
-    clearSearch: true,
-    withFirstAndLast: true,
-    sizePerPageList: [{
-        text: '5', value: 5
-    }, {
-        text: '10', value: 10
-    }],
-};
 class EditRequisition extends React.Component {
     constructor(props) {
         super(props);
@@ -109,7 +86,6 @@ class EditRequisition extends React.Component {
         };
         this.props.dispatch(fetchProductsFromCache('', productsUrl, data))
             .then((data) => {
-                this.props.getLoading(false)
                 this.setState({
                     cachedProducts: data,
                     isLoading: false
@@ -178,38 +154,9 @@ class EditRequisition extends React.Component {
         return statusValue;
     }
 
-    productColumn = (cell, row) => {
-        return (
-            <div>
-                <span>{this.mapProductName(row.posProductId)}</span>
-            </div>
-        )
-    }
-    vendorColumn = (cell, row) => {
-        return (
-            <div>
-                <span>{this.mapVendorName(row.vendorId)}</span>
-            </div>
-        )
-    }
-    storeColumn = (cell, row) => {
-        return (
-            <div>
-                <span>{this.mapStoreName(row.storeId)}</span>
-            </div>
-        )
-    }
-    statusColumn = (cell, row) => {
-        return (
-            <div>
-                <span>{this.getRequisitionStatus(row.status)}</span>
-            </div>
-        )
-    }
-
     populateRequisitions = () => {
         let rows = []
-        _get(this, 'props.requisitions', []).map((data, index) => {
+        _get(this, 'props.requisitions', []).map((data) => {
             rows.push(
                 <div className={'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
                     <div className='box-conversion-item'>
@@ -240,29 +187,11 @@ class EditRequisition extends React.Component {
                             </div>
 
                     }
-                    {
-                        !this.props.isPrinting ? 
-                        this.props.showReceievedQuantity ?
-                            <div className='box-conversion-item'>
-                                <input style={{ width: '100px' }} className='box-conversion-data' disabled={this.props.isPOViewFlag} onChange={(e) => this.props.handleChangeInput(e, index, data.quantity)} value={data.fulfilledQuantity ? data.fulfilledQuantity: data.quantity} />
-                                <span className='box-conversion-title'>{'Received Quantity'}</span>
-                            </div>
-                            : <div className='box-conversion-item'>
-                                <input style={{ width: '100px' }} className='box-conversion-data' disabled={this.props.isPOViewFlag} onChange={(e) => this.props.handleChangeInput(e, index, data.proposedQuantity ? data.proposedQuantity : data.quantity)} value={data.quantity} />
-                                <span className='box-conversion-title'>{'Quantity'}</span>
-                            </div>
-                        : ''
-                    }
+                    
                     <div className='box-conversion-item'>
                         <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
                         <span className='box-conversion-title'>Status</span>
                     </div>
-                    {
-                        !this.props.isPOViewFlag ? !this.props.isReceiptFlag ?
-                        <div>
-                            <SaveButton Class_Name="btn-info" buttonDisplayText={'Save'} handlerSearch={() => this.props.handleSubmitHandler(index)}/>
-                        </div>  : " " : ""
-                    }
                 </div>
             )
         })
@@ -280,63 +209,13 @@ class EditRequisition extends React.Component {
     }
 
     render() {
-        const { forEdit } = this.props;
-        let table
-
-        if(!this.state.isLoading) {
-            table = <BootstrapTable
-            data={_get(this.props, 'requisitionListData', [])}
-            options={options}
-            selectRow={this.props.selectRowProp}
-            striped hover
-            pagination={true}
-            exportCSV={true}
-            search={true}
-            searchPlaceholder={'Search PO'}>
-
-            <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id</TableHeaderColumn>
-            <TableHeaderColumn width='100' dataField='posProductId' dataFormat={this.productColumn} >Product</TableHeaderColumn>
-            <TableHeaderColumn width='100' dataField='vendorId' dataFormat={this.vendorColumn}>Vendor</TableHeaderColumn>
-            <TableHeaderColumn width='100' dataField='storeId' dataFormat={this.storeColumn}>Store</TableHeaderColumn>
-            <TableHeaderColumn width='100' dataField='quantity' >Quantity</TableHeaderColumn>
-            <TableHeaderColumn width='100' dataField='status' dataFormat={this.statusColumn} dataSort>Status</TableHeaderColumn>
-            {/* <TableHeaderColumn width='100' dataField='' dataFormat={this.props.actionColumn} dataSort>Actions</TableHeaderColumn> */}
-        </BootstrapTable>
-        } else {
-            return (<div className='loader-wrapper-main' style={{marginTop: '40px', marginLeft: "20px"}}>
-            <div className="spinner">
-                <div className="rect1"></div>
-                <div className="rect2"></div>
-                <div className="rect3"></div>
-                <div className="rect4"></div>
-                <div className="rect5"></div>
-            </div>
-        </div>)
-        }
-
-        if (forEdit) {
             return (
                 <div className="row m0">
-                    {
-                        this.props.handleCancel &&
-                        <div className="form-btn-group">
-                            <SaveButton disabled={this.state.selectedRows.length < 1} Class_Name="btn-info" buttonDisplayText={'Save All'} handlerSearch={() => this.props.handleSubmitHandler('', true)} />
-
-                            <SaveButton disabled={this.state.selectedRows.length < 1} Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.props.handleCancel()} />
-
-                            
-                        </div>
-                    }
-
                     {this.populateRequisitions()}
                 </div>
             );
-        } else {
-            return table
-        }
-    }
+    } 
 }
-
 
 const mapStateToProps = state => {
     let { productsReducer, storesReducer, vendorsReducer } = state
@@ -358,8 +237,8 @@ const mapStateToProps = state => {
                         label: data.name,
                     }
                 )
-            })
-        }
+        })
+    }
     }
     !_isEmpty(retailerProductsData) && _get(productsReducer, 'retailerProductsData', []).map((data, index) => {
         retailerProducts.push(
@@ -377,19 +256,15 @@ const mapStateToProps = state => {
             }
         )
     })
-    if(_isArray(vendorProductsData)) {
-        if(!_isEmpty(vendorProductsData)) {
-            vendorProductsData.map((data, index) => {
-                vendorProductsList.push(
-                    {
-                        value: data.id,
-                        label: data.productName,
-                    }
-                )
-            })
-        }
-    }
-    
+
+    !_isEmpty(vendorProductsData) && _isArray(vendorProductsData) && vendorProductsData.map((data, index) => {
+        vendorProductsList.push(
+            {
+                value: data.id,
+                label: data.productName,
+            }
+        )
+    })
     return {
         vendorList,
         vendorProductsList,

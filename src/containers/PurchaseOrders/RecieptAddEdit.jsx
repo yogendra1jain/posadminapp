@@ -140,7 +140,7 @@ class RecieptAddEdit extends React.Component {
                 </div>
             </div>);
         }
-        const { purchaseOrderById, isPOViewFlag } = this.props;
+        const { purchaseOrderById, isPOViewFlag, isReceiptFlag } = this.props;
         return (
             <div className="">
                 <div className='panel-container'>
@@ -218,6 +218,7 @@ class RecieptAddEdit extends React.Component {
                                 showReceievedQuantity={true}
                                 // handleCancel={}
                                 isPOViewFlag={isPOViewFlag}
+                                isReceiptFlag={isReceiptFlag}
                                 requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
                                 requisitionListData={_get(this.props, 'requisitionListData', [])}
                             />
@@ -240,14 +241,15 @@ const mapStateToProps = state => {
 
     let { type } = purchaseOrdersReducer || {};
     let { purchaseOrderById } = purchaseOrdersReducer || [];
-    let { isFetching, isPOViewFlag } = purchaseOrdersReducer || false;
+    let { isFetching, isPOViewFlag, isReceiptFlag } = purchaseOrdersReducer || false;
 
     return {
         purchaseOrderById,
         isFetching,
         type,
         requisitionListData,
-        isPOViewFlag
+        isPOViewFlag,
+        isReceiptFlag
     }
 }
 

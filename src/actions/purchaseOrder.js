@@ -140,12 +140,12 @@ export const requestPORequisitionUpdate = (subreddit, quantity, index, proposedQ
     proposedQuantity: proposedQuantity,
 });
 
-export const setPOViewFlag = (subreddit, isView) => ({
+export const setPOViewFlag = (subreddit, isView, isReceipt) => ({
     type: PURCHASE_ORDER_CONSTANT.SET_PO_VIEW_FLAG,
     subreddit,
     isView: isView,
+    isReceipt: isReceipt
 });
-
 
 const requestPurchaseOrderRecieptById = (subreddit) => ({
     type: PURCHASE_ORDER_CONSTANT.REQUEST_PURCHASE_ORDER_RECIEPT_BY_ID,

@@ -208,9 +208,7 @@ class AddEditStoreContainer extends React.Component {
         }
 
         else if (props.type === "RECEIVED_LOGO_UPLOAD_SUCCESS_RESPONSE") {
-            debugger
             if (props.fileData && !_isEmpty(props.fileData)) {
-                debugger
                 this.imagePreviewUrl = props.fileData.url;
             } else {
                 this.showAlert(true, 'something went wrong.');
