@@ -6,25 +6,31 @@ class POPrintView extends React.Component {
     render() {
         return (
             <div className="po-print-container">
-                <div className="row" >
-                    <h1>Purchase Order</h1>
-                </div>
-                <div className="row store-vendor-detail">
-                    <div className="col-md-6">
-                        <label>STORE</label>
-                        <label>Store Name: <span>{_get(this.props,'storeName','')}</span></label>
-                        <label>Store Address: <span>{_get(this.props,'storeAddress','')}</span></label>
+                <h1 className="po-print-title">Purchase Order</h1>
+                <div className="store-vendor-row">
+                    <div className="sv-col">
+                        <div className="sv-box">
+                            <div className="sv-head">STORE</div>
+                            <div className="sv-body">
+                                <div className="sv-row"><label>Store Name: </label><span>{_get(this.props,'storeName','')}</span></div>
+                                <div className="sv-row"><label>Store Address:</label> <span>{_get(this.props,'storeAddress','')}</span></div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-md-6">
-                        <label>VENDOR</label>
-                        <label>Vendor Name: <span>{_get(this.props,'vendorName','')}</span></label>
-                        <label>Vendor Email: <span>{_get(this.props,'vendorEmail','')}</span></label>
-                        <label>Vendor PhoneNumber: <span>{_get(this.props,'vendorPhoneNo','')}</span></label>
+
+                    <div className="sv-col">
+                        <div className="sv-box">
+                            <div className="sv-head">VENDOR</div>
+                            <div className="sv-body">
+                                <div className="sv-row"><label>Vendor Name: </label><span>{_get(this.props,'vendorName','')}</span></div>
+                                <div className="sv-row"><label>Vendor Email: </label><span>{_get(this.props,'vendorEmail','')}</span></div>
+                                <div className="sv-row"><label>Vendor PhoneNumber: </label><span>{_get(this.props,'vendorPhoneNo','')}</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col=md-12">
-                        <h2>Requisition List</h2>
+                    <div className="col-sm-12">
                         <RequisitionList 
                             requisitions={_get(this, 'props.purchaseOrderById.requisitions', [])}
                         />
