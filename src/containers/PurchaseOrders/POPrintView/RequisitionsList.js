@@ -158,51 +158,75 @@ class EditRequisition extends React.Component {
         let rows = []
         _get(this, 'props.requisitions', []).map((data) => {
             rows.push(
-                <div className={'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.mapProductName(data.posProductId)}</span>
-                        <span className='box-conversion-title'>POS Product</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.mapVendorName(data.vendorId)}</span>
-                        <span className='box-conversion-title'>Vendor Id</span>
-                    </div>
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.mapStoreName(data.storeId)}</span>
-                        <span className='box-conversion-title'>Store Id</span>
-                    </div>
-                    {/* <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{data.vendorProductId}</span>
-                        <span className='box-conversion-title'>Vendor Product</span>
-                    </div> */}
+                <tr>
+                    <td>{this.mapProductName(data.posProductId)}</td>
+                    <td>{this.mapVendorName(data.vendorId)}</td>
+                    <td>{this.mapStoreName(data.storeId)}</td>
                     {
                         this.props.showReceievedQuantity ?
-                            <div className='box-conversion-item'>
-                                <span className='box-conversion-data'>{data.quantity}</span>
-                                <span className='box-conversion-title'>{'Ordered Quantity'}</span>
-                            </div>
-                            : <div className='box-conversion-item'>
-                                <span className='box-conversion-data'>{data.proposedQuantity ? data.proposedQuantity : data.quantity}</span>
-                                <span className='box-conversion-title'>{'Proposed Quantity'}</span>
-                            </div>
-
+                            <td>{data.quantity}</td> :
+                            <td>{data.proposedQuantity ? data.proposedQuantity : data.quantity}</td>
                     }
                     
-                    <div className='box-conversion-item'>
-                        <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
-                        <span className='box-conversion-title'>Status</span>
-                    </div>
-                </div>
+                    <td>{this.getRequisitionStatus(data.status)}</td>
+                </tr>
+                // <div className={'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
+                //     <div className='box-conversion-item'>
+                //         <span className='box-conversion-data'>{this.mapProductName(data.posProductId)}</span>
+                //         <span className='box-conversion-title'>POS Product</span>
+                //     </div>
+                //     <div className='box-conversion-item'>
+                //         <span className='box-conversion-data'></span>
+                //         <span className='box-conversion-title'>Vendor Id</span>
+                //     </div>
+                //     <div className='box-conversion-item'>
+                //         <span className='box-conversion-data'>{this.mapStoreName(data.storeId)}</span>
+                //         <span className='box-conversion-title'>Store Id</span>
+                //     </div>
+                //     {/* <div className='box-conversion-item'>
+                //         <span className='box-conversion-data'>{data.vendorProductId}</span>
+                //         <span className='box-conversion-title'>Vendor Product</span>
+                //     </div> */}
+                //     {
+                //         this.props.showReceievedQuantity ?
+                //             <div className='box-conversion-item'>
+                //                 <span className='box-conversion-data'>{data.quantity}</span>
+                //                 <span className='box-conversion-title'>{'Ordered Quantity'}</span>
+                //             </div>
+                //             : <div className='box-conversion-item'>
+                //                 <span className='box-conversion-data'>{data.proposedQuantity ? data.proposedQuantity : data.quantity}</span>
+                //                 <span className='box-conversion-title'>{'Proposed Quantity'}</span>
+                //             </div>
+
+                //     }
+                    
+                //     <div className='box-conversion-item'>
+                //         <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
+                //         <span className='box-conversion-title'>Status</span>
+                //     </div>
+                // </div>
             )
         })
         
         return (
-            <div className='white-box-container'>
-                <div className='white-box-header'>
-                    <h2 className='white-box-title'>Requisition List</h2>
-                </div>
-                <div className="white-box-body">
-                    {rows}
+            <div>                
+                <h2 className='po-print-subtitle'>Requisition List</h2>
+                
+                <div className="table-responsive">
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>POS Product</th>
+                                <th>Vendor ID</th>
+                                <th>Store ID</th>
+                                <th>Product Quantity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )
