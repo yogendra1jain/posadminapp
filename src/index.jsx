@@ -67,6 +67,7 @@ import ProductOverRideComponent from './containers/ProductOverride/ProductOverRi
 import RewardPointsRule from './containers/RewardPointsRule/RewardPointsRuleContainer';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './Global/MaterialUiSettings/theme';
+import AddFreedomPayConfigForm from './containers/posContainer/fpConfigForm';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -162,6 +163,7 @@ ReactDom.render(
             <RouteWithLayout layout={MainLayout} exact path='/storeProducts' component={ProductOverRideContainer} />
             <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideComponent} />
             <RouteWithLayout layout={MainLayout} exact path='/rewardPointsRule' component={RewardPointsRule} />
+            <RouteWithLayout layout={MainLayout} exact path='/freedompayconfig' component={AddFreedomPayConfigForm} />
           </Switch>
         </Router>
       </Provider>

@@ -78,25 +78,6 @@ const receiveStore = (subreddit, json, status) => ({
     receivedAt: Date.now()
 })
 
-// export const fetchStore = (subreddit, data) => dispatch => {
-
-//     dispatch(requestStore(subreddit));
-
-//     fetch(STORE_CONSTANTS.STORE_URL+"/stores/"+data, { method: 'GET',
-//     headers: {
-//         "Content-type": "application/json"
-//     },
-//     // body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         status = response.status;
-
-//         return response.json() } 
-//     )
-//     .then(json => { return dispatch(receiveStore(subreddit, json, status )) } )
-//     .catch(err => { return dispatch(receiveStoreError(subreddit,err,500)) } )
-// }
-
 export const fetchStore = (subreddit, url, data) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: STORE_CONSTANTS.STORE_URL + url,

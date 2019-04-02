@@ -1,7 +1,7 @@
 import React from 'react';
 import Redirect from "react-router/Redirect";
 import SaveButton from '../../components/common/SaveButton.jsx'
-import { fetchStore, fetchTerminal, postPOSLogin } from '../../actions/store';
+import { fetchStore } from '../../actions/store';
 import AutoComplete from '../../components/Elements/AutoComplete.jsx';
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
@@ -9,9 +9,7 @@ import _set from 'lodash/set';
 import _isEmpty from 'lodash/isEmpty';
 import Row from "react-bootstrap/lib/Row";
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { uploadDocument,ProductDataSave } from '../../actions/products';
 import Alert from 'react-s-alert';
-import {RECEIVE_PRODUCT_DATA, RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE} from '../../constants/products';
 
 
 

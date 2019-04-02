@@ -1,12 +1,13 @@
 import React from 'react';
-import Select from 'react-select';
 import Dropzone from 'react-dropzone';
+import SampleEmployeeUpload from '../../../assets/SampleCSV/sampleEmployeeUpload.ods';
 
 export default (props) => {
     return (
         <div>
             <div className='panel-container'>
                 <span className='panel-heading'>Create Employees In Bulk </span>
+                <a href={SampleEmployeeUpload}>Download Sample</a>
             </div>
             <div>
                 {/* <div className="row" style={{ marginBottom: '10px' }}>
