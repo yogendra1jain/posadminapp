@@ -109,7 +109,6 @@ class EditRequisition extends React.Component {
         };
         this.props.dispatch(fetchProductsFromCache('', productsUrl, data))
             .then((data) => {
-                this.props.getLoading(false)
                 this.setState({
                     cachedProducts: data,
                     isLoading: false

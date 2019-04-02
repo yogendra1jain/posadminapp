@@ -114,7 +114,6 @@ class ReviewPurchaseOrderContainer extends React.Component {
                 setTimeout(() => {
                     this.props.dispatch(showMessage({}));
                 }, 5000);
-                // this.props.toggleEditState();
             }, (err) => {
                 console.log('err while saving requisition form', err);
                 this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
@@ -130,47 +129,8 @@ class ReviewPurchaseOrderContainer extends React.Component {
         });
     }
 
-    // printPDF = () => {
-    //     this.setState({ applyPdfClass: true, isPrinting: true }, () => {
-    //         const input = document.getElementById('divToPrint');
-
-    //         html2canvas(input).then(canvas => {
-    //             // Few necessary setting options
-
-    //             const contentDataURL = canvas.toDataURL('image/png')
-    //             var imgWidth = 200;
-    //             var pageHeight = 295;
-    //             var imgHeight = canvas.height * imgWidth / canvas.width;
-    //             var heightLeft = imgHeight;
-
-    //             var doc = new jsPDF('p', 'mm');
-    //             var position = 0;
-
-    //             doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-
-    //             heightLeft -= pageHeight;
-
-    //             while (heightLeft >= 0) {
-    //                 position = heightLeft - imgHeight;
-    //                 doc.addPage();
-    //                 doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-    //                 heightLeft -= pageHeight;
-    //             }
-    //             doc.save('PO.pdf');
-
-    //         });
-    //         setTimeout(() => {
-    //             this.setState({ applyPdfClass: false, isPrinting: false });
-    //         }, 10);
-    //     })
-    // }
-
-    getLoading = (loadingStatus) => {
-        this.setState({ loading: loadingStatus })
-    }
-
     render() {
-        if (this.state.loading) {
+        if (this.props.isFetching) {
             return (<div className='loader-wrapper-main'>
                 <div className="spinner">
                     <div className="rect1"></div>
@@ -184,11 +144,10 @@ class ReviewPurchaseOrderContainer extends React.Component {
         const { purchaseOrderById, isPOViewFlag } = this.props;
         let address = _get(purchaseOrderById, 'order.store.address', '')
         let storeAddress = _get(address, 'addressLine1', '') + ' ' + _get(address, 'addressLine2', '') + ' ' + _get(address, 'city', '') + ' ' + _get(address, 'state', '') + ' ' + _get(address, 'country', '')
-        console.log(purchaseOrderById, 'purchaseOrderById jgugu')
-        let date = moment.utc(_get(purchaseOrderById,'order.createdTime.seconds','' * 1000)).format('DD/MM/YYYY hh:mm:ss')
-        console.log(date, 'vfugugu date')
+
+        let date = moment(_get(purchaseOrderById,'order.createdTime.seconds','') * 1000).format('DD/MM/YYYY hh:mm:ss')
+
         let poId = _get(purchaseOrderById,'order.id','')
-        console.log(poId, 'gugftux poid')
         return (
             <div className="" id="divToPrint">
                 <div className="white-box-container">
@@ -219,14 +178,10 @@ class ReviewPurchaseOrderContainer extends React.Component {
                                     <div className="form-btn-group col-sm-12">
                                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Approve'} handlerSearch={() => this.onApproveReject(false)} />
                                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Reject'} handlerSearch={() => this.toggleDialog()} />
-                                        <ReactToPrint
-                                            trigger={() => <Button className="btn-info">Print</Button>} 
-                                            content={() => this.componentRef}
-                                        />
-
                                     </div>
                                     :
                                     <div className="form-btn-group col-sm-12">
+                                        <SaveButton buttonDisplayText="Cancel" handlerSearch ={() => this.props.history.push('/purchaseorders')} />
                                         <ReactToPrint
                                             trigger={() => <Button className="btn-info">Print</Button>} 
                                             content={() => this.componentRef}
@@ -273,7 +228,6 @@ class ReviewPurchaseOrderContainer extends React.Component {
                 </div>
 
             <EditRequisition
-                getLoading={this.getLoading}
                 forEdit={true}
                 handleChangeInput={this.handleChangeInput}
                 handleSubmitHandler={this.handleSubmitHandler}
