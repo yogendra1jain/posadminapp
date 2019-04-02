@@ -94,13 +94,15 @@ const fetchMiddleware = store => next => action => {
                     // if (jsonData.message === 'jwt expired') {
                     //     dispatch(onLogout());
                     // } else {
-                        return Promise.resolve(jsonData);
+                        return jsonData;
+                        //return Promise.resolve(jsonData);
                     // }
                 })
                 .catch((err) => {
                     // @todo temp handling, need to fix bff api response
                     console.error(err);
-                    return Promise.resolve({});
+                    return err;
+                   // return Promise.resolve({});
                 })
         })
         .then(json => dispatch(successHandler(subreddit, json, status, resolve, id, action.successCbPassOnParams)))
