@@ -37,7 +37,8 @@ class EditRequisition extends React.Component {
         this.state = {
             cachedProducts: [],
             cachedVendors: [],
-            isLoading: false
+            isLoading: false,
+            product: {},
         }
         this.requisitionList = []
     }
@@ -154,90 +155,53 @@ class EditRequisition extends React.Component {
         return statusValue;
     }
 
-    populateRequisitions = () => {
+    render() {
         let rows = []
+        let subTotal = 0
         _get(this, 'props.requisitions', []).map((data) => {
+            let prod = _find(_get(this.state, 'cachedProducts', []), {
+                'id': data.posProductId
+            });
+            let Total = _get(prod,'salePrice.price',0) * data.quantity
+            subTotal += Total
             rows.push(
                 <tr>
-                    <td>{this.mapProductName(data.posProductId)}</td>
-                    <td>{this.mapVendorName(data.vendorId)}</td>
-                    <td>{this.mapStoreName(data.storeId)}</td>
+                    <td>{_get(prod,'name','')}</td>
+                    <td>{_get(prod,'sku','')}</td>
                     {
                         this.props.showReceievedQuantity ?
-                            <td>{data.quantity}</td> :
+                            <td>{_get(data,'quantity','')}</td> :
                             <td>{data.proposedQuantity ? data.proposedQuantity : data.quantity}</td>
                     }
-                    
-                    <td>{this.getRequisitionStatus(data.status)}</td>
+                    <td>{_get(prod,'salePrice.price',0).toFixed(2)}</td>
+                    <td>{Total.toFixed(2)}</td>
                 </tr>
-                // <div className={'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
-                //     <div className='box-conversion-item'>
-                //         <span className='box-conversion-data'>{this.mapProductName(data.posProductId)}</span>
-                //         <span className='box-conversion-title'>POS Product</span>
-                //     </div>
-                //     <div className='box-conversion-item'>
-                //         <span className='box-conversion-data'></span>
-                //         <span className='box-conversion-title'>Vendor Id</span>
-                //     </div>
-                //     <div className='box-conversion-item'>
-                //         <span className='box-conversion-data'>{this.mapStoreName(data.storeId)}</span>
-                //         <span className='box-conversion-title'>Store Id</span>
-                //     </div>
-                //     {/* <div className='box-conversion-item'>
-                //         <span className='box-conversion-data'>{data.vendorProductId}</span>
-                //         <span className='box-conversion-title'>Vendor Product</span>
-                //     </div> */}
-                //     {
-                //         this.props.showReceievedQuantity ?
-                //             <div className='box-conversion-item'>
-                //                 <span className='box-conversion-data'>{data.quantity}</span>
-                //                 <span className='box-conversion-title'>{'Ordered Quantity'}</span>
-                //             </div>
-                //             : <div className='box-conversion-item'>
-                //                 <span className='box-conversion-data'>{data.proposedQuantity ? data.proposedQuantity : data.quantity}</span>
-                //                 <span className='box-conversion-title'>{'Proposed Quantity'}</span>
-                //             </div>
-
-                //     }
-                    
-                //     <div className='box-conversion-item'>
-                //         <span className='box-conversion-data'>{this.getRequisitionStatus(data.status)}</span>
-                //         <span className='box-conversion-title'>Status</span>
-                //     </div>
-                // </div>
             )
         })
-        
         return (
-            <div>                
-                <h2 className='po-print-subtitle'>Requisition List</h2>
-                
-                <div className="table-responsive">
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>POS Product</th>
-                                <th>Vendor ID</th>
-                                <th>Store ID</th>
-                                <th>Product Quantity</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {rows}
-                        </tbody>
-                    </table>
+            <div className="row m0">
+                <div>                
+                    <h2 className='po-print-subtitle'>Requisition List</h2>
+                    <div className="table-responsive">
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>POS Product</th>
+                                    <th>SKU</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Sub Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {rows}
+                            </tbody>
+                        </table>
+                        <label style={{float: "right", fontSize: "20px"}}>SubTotal: <span>{subTotal.toFixed(2)}</span></label>
+                    </div>
                 </div>
             </div>
-        )
-    }
-
-    render() {
-            return (
-                <div className="row m0">
-                    {this.populateRequisitions()}
-                </div>
-            );
+        );
     } 
 }
 
