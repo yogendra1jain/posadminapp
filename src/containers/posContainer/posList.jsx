@@ -8,7 +8,7 @@ import { fetchStore } from '../../actions/store';
 import AutoComplete from '../../components/Elements/AutoComplete.jsx';
 import AutoCompletePosition from '../../components/Elements/AutoCompletePosition.jsx';
 import { connect } from 'react-redux';
-import { 
+import {
     get as _get,
     cloneDeep as _cloneDeep,
     set as _set,
@@ -20,10 +20,10 @@ import {
 import { Row } from "react-bootstrap";
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import { 
-    fetchPosTerminalList, 
-    fetchPosTerminalData, 
-    fetchPosTerminalStatus 
+import {
+    fetchPosTerminalList,
+    fetchPosTerminalData,
+    fetchPosTerminalStatus
 } from '../../actions/posTerminal';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
@@ -47,8 +47,8 @@ const options = {
 class PosList extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            isStoreSelected: false  
+        this.state = {
+            isStoreSelected: false
         };
         this.selectRowProp = {
             mode: 'radio',
@@ -122,9 +122,9 @@ class PosList extends Component {
             });
             this.forceUpdate();
         }
-       
-        if(props.type == 'RECEIVED_POS_TERMINAL_LIST') {
-            if(!_isEmpty(props.posListData) && this.state.isStoreSelected) {
+
+        if (props.type == 'RECEIVED_POS_TERMINAL_LIST') {
+            if (!_isEmpty(props.posListData) && this.state.isStoreSelected) {
                 this.posList = [];
                 props.posListData.map(pos => {
                     let tempPos = {};
@@ -134,7 +134,7 @@ class PosList extends Component {
                     tempPos.active = pos.active ? 'Active' : 'Inactive'
                     this.posList.push(tempPos)
                 })
-                this.forceUpdate();                
+                this.forceUpdate();
             } else {
                 this.posList = [];
             }
@@ -142,33 +142,33 @@ class PosList extends Component {
 
         if (!_isEmpty(props.posStatusData) && this.fetchStatusFlag) {
             this.fetchStatusFlag = false;
-            if( props.status===200 ){
+            if (props.status === 200) {
                 this.showAlert(false, props.posStatusData.message);
                 this.fetchTerminals();
                 this.forceUpdate();
-            }else if(props.status!==200 ){
+            } else if (props.status !== 200) {
                 // this.isError = true;
-                this.showAlert(true,props.posStatusData.message);            
+                this.showAlert(true, props.posStatusData.message);
                 this.forceUpdate();
             }
         }
-        if(!_isEmpty(props.posSaveData)&& this.submitted){
+        if (!_isEmpty(props.posSaveData) && this.submitted) {
             this.open = false;
             this.submitted = false;
-            if( props.status===200 ){
+            if (props.status === 200) {
                 this.showAlert(false, props.posSaveData.message);
                 this.fetchTerminals();
                 this.forceUpdate();
-            }else if(props.status!==200 ){
+            } else if (props.status !== 200) {
                 this.isError = true;
-                this.showAlert(true,props.posSaveData.message);            
+                this.showAlert(true, props.posSaveData.message);
                 this.forceUpdate();
             }
         }
     }
 
-    componentDidUpdate(){
-        if(this.isError){
+    componentDidUpdate() {
+        if (this.isError) {
             this.isError = false;
             this.open = true;
             this.forceUpdate();
@@ -176,29 +176,43 @@ class PosList extends Component {
     }
 
     onSave() {
-        const { dispatch, posTerminalReducer, posListData } = this.props;
+
+        const { dispatch, posTerminalReducer, posListData, storesReducer } = this.props;
         console.log('Poslist data: ', posListData);
         let url = '';
         let data = {}
-        if(this.isUpdate) {
+        if (this.isUpdate) {
             console.log(this.posInfo, 'this.posInfo')
             url = "/Terminal/Update"
             data = this.posInfo
+            debugger
+            // following call is for updating terminal
+            dispatch(fetchPosTerminalData(posTerminalReducer, data, url)).then(resp => {
+                // following call is for getting updated list of terminals
+                let reqBody = {
+                    id: this.selectedStore.stores
+                }
+                let listurl = '/Terminal/ByStoreId';
+                dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
+                this.selectRowProp.selected = '';
+                this.open = false;
+            });
         } else {
+
             console.log('Index: ', _findIndex(posListData, pos => pos.name === _get(this.posInfo, 'name', '')));
-            if(_findIndex(posListData, pos => pos.name === _get(this.posInfo,'name', '')) === -1) {
-                if(_get(this.posInfo, 'name', '') === '') {
-                    
+            if (_findIndex(posListData, pos => pos.name === _get(this.posInfo, 'name', '')) === -1) {
+                if (_get(this.posInfo, 'name', '') === '') {
+
                 } else {
                     this.open = false;
                     url = "/Terminal/Create";
                     data = {};
-                    data.storeId = _get(this.selectedStore,'stores', '');
-                    data.name = _get(this.posInfo,'name', '');
+                    data.storeId = _get(this.selectedStore, 'stores', '');
+                    data.name = _get(this.posInfo, 'name', '');
                     data.active = this.posInfo.active ? true : false;
                     dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
                     this.forceUpdate();
-                    if(this.props.status === 200) {
+                    if (this.props.status === 200) {
                         console.log(this.selectedStore.stores, 'this.selectedStore.stores')
                         let reqBody = {
                             id: this.selectedStore.stores
@@ -211,7 +225,6 @@ class PosList extends Component {
                 this.posInfo = {};
             }
         }
-        
     }
     fetchTerminals() {
         this.selectedIds = [];
@@ -243,6 +256,7 @@ class PosList extends Component {
     }
 
     onRowSelect = (row, isSelected, e) => {
+        debugger
         isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
         console.log('Selected Ids: ', this.selectedIds);
         // this.handleAllChecks();        
@@ -312,9 +326,9 @@ class PosList extends Component {
         //     isActive = tempobj.isActive;
         //     terData.push(id);
         // })
-        _set(data,'status', (isActive!==undefined ? !Boolean(isActive): false))
+        _set(data, 'status', (isActive !== undefined ? !Boolean(isActive) : false))
         _set(data, 'terminals', this.selectedIds);
-        let url = "/retailer/"+localStorage.getItem('retailerID')+"/terminal/changeStatus"
+        let url = "/retailer/" + localStorage.getItem('retailerID') + "/terminal/changeStatus"
 
         dispatch(fetchPosTerminalStatus(posTerminalReducer, data, url));
         this.forceUpdate();
@@ -322,24 +336,31 @@ class PosList extends Component {
 
 
     onUpdate() {
+        let test = this.selectedIds.length;
+        debugger
         if (this.selectedIds.length > 1) {
+            debugger
             this.showAlert(true, 'Please Select only 1 pos to update.');
             this.forceUpdate();
             return;
         } else {
+            debugger
             this.isUpdate = true;
             this.method = 'POST';
             const { dispatch, staffsReducer } = this.props;
-            this.fetchStores();
+           // this.fetchStores();
             this.open = true;
+            debugger
         }
-        let tempStore = _find(this.posList,{'id': this.selectedPos.id});
-        this.posInfo.name = _get(tempStore,'name', '')
-        this.posInfo.id = _get(tempStore,'id', '')
-        this.posInfo.storeId = _get(tempStore,'storeId', '')
-        if(tempStore.active) {
+        debugger
+        let tempStore = _find(this.posList, { 'id': this.selectedPos.id });
+        this.posInfo.name = _get(tempStore, 'name', '')
+        this.posInfo.id = _get(tempStore, 'id', '')
+        this.posInfo.storeId = _get(tempStore, 'storeId', '')
+        if (tempStore.active) {
             this.posInfo.active = tempStore.active == 'Active' ? true : false
         }
+        debugger
         this.forceUpdate();
     }
     addNew() {
@@ -351,9 +372,9 @@ class PosList extends Component {
         this.forceUpdate();
     }
     handleSelectStoreChange(id, name) {
-        if(id == null) {
+        if (id == null) {
             this.selectedStore = {}
-            this.posList= []
+            this.posList = []
             this.forceUpdate()
         } else {
             _set(this.selectedStore, name, id);
@@ -368,7 +389,7 @@ class PosList extends Component {
     }
 
     render() {
-        if(_isEmpty(this.selectedStore)) {
+        if (_isEmpty(this.selectedStore)) {
             this.posList = []
         }
         if (this.redirectToAddEditPage) {
@@ -395,17 +416,17 @@ class PosList extends Component {
                 <div className='panel-container'>
                     <span className='panel-heading'>POS List</span>
                     <div>
-                        <SaveButton 
-                            disabled={ this.selectedIds.length === 0 } 
-                            buttonDisplayText={'Update'} 
-                            handlerSearch={this.onUpdate} 
-                            Class_Name="m-r-10" 
+                        <SaveButton
+                            disabled={this.selectedIds.length === 0}
+                            buttonDisplayText={'Update'}
+                            handlerSearch={this.onUpdate}
+                            Class_Name="m-r-10"
                         />
-                        <SaveButton 
-                            disabled={ !this.selectedStore.stores } 
-                            Class_Name="btn-info" 
-                            buttonDisplayText={'Add new'} 
-                            handlerSearch={this.addNew} 
+                        <SaveButton
+                            disabled={!this.selectedStore.stores}
+                            Class_Name="btn-info"
+                            buttonDisplayText={'Add new'}
+                            handlerSearch={this.addNew}
                         />
                     </div>
                 </div>
@@ -417,39 +438,39 @@ class PosList extends Component {
                                 type="single"
                                 data={this.storeList}
                                 name="stores"
-                                value={_get(this.selectedStore,'stores','')}
+                                value={_get(this.selectedStore, 'stores', '')}
                                 changeHandler={(id, name) => { this.handleSelectStoreChange(id, "stores") }}
                             />
                         </div>
                     </div>
                     <div>
-                        <BootstrapTable 
-                            data={this.posList} 
+                        <BootstrapTable
+                            data={this.posList}
                             options={options}
                             selectRow={this.selectRowProp}
-                            striped 
+                            striped
                             hover
-                            pagination={true} 
-                            exportCSV={true} 
-                            search={true} 
+                            pagination={true}
+                            exportCSV={true}
+                            search={true}
                             searchPlaceholder={'Search'}
                         >
-                            <TableHeaderColumn 
-                                width='50' 
-                                dataField='id' 
-                                isKey={true} 
+                            <TableHeaderColumn
+                                width='50'
+                                dataField='id'
+                                isKey={true}
                                 hidden={true}
                             >
                                 ID
                             </TableHeaderColumn>
-                            <TableHeaderColumn 
-                                width='100' 
+                            <TableHeaderColumn
+                                width='100'
                                 dataField='name'
                             >
                                 Pos Name
                             </TableHeaderColumn>
-                            <TableHeaderColumn 
-                                width='100' 
+                            <TableHeaderColumn
+                                width='100'
                                 dataField='active'
                             >
                                 Pos Status
@@ -474,9 +495,9 @@ class PosList extends Component {
                                         type="text"
                                         htmlFor="name"
                                         displayName="Pos Name"
-                                        inputName="name" 
+                                        inputName="name"
                                         defaultValue={_get(this.posInfo, 'name', '')}
-                                        onChange={this.handleInputChange} 
+                                        onChange={this.handleInputChange}
                                         errorCheck={true}
                                         className="text-input error"
                                     />
@@ -488,22 +509,22 @@ class PosList extends Component {
                                         data={_get(this.status, 'data', [])}
                                         name="store"
                                         value={_get(this.posInfo, 'active', '')}
-                                        changeHandler={ (id, name) => { this.handleSelectChange(id, "active") }}
+                                        changeHandler={(id, name) => { this.handleSelectChange(id, "active") }}
                                     />
                                 </div>
                             </Row>
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        <SaveButton 
-                                            buttonDisplayText={'Save'} 
-                                            Class_Name={"btn-info"} 
-                                            handlerSearch={this.onSave} 
+                                        <SaveButton
+                                            buttonDisplayText={'Save'}
+                                            Class_Name={"btn-info"}
+                                            handlerSearch={this.onSave}
                                         />
-                                        <SaveButton 
-                                            buttonDisplayText={'Cancel'} 
-                                            Class_Name={""} 
-                                            handlerSearch={this.handleCancel} 
+                                        <SaveButton
+                                            buttonDisplayText={'Cancel'}
+                                            Class_Name={""}
+                                            handlerSearch={this.handleCancel}
                                         />
                                     </div>
                                 </div>
@@ -517,12 +538,14 @@ class PosList extends Component {
 }
 
 const mapStateToProps = state => {
+
     let { posTerminalReducer, userRolesReducer, storesReducer, productsReducer } = state
     let { status } = posTerminalReducer || '';
     let { isFetching } = posTerminalReducer || false;
     let { type, posListData, posSaveData, posStatusData } = posTerminalReducer || '';
     let { storeData } = storesReducer || {};
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
+    
     return {
         status,
         isFetching,
