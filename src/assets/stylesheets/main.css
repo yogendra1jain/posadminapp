@@ -1890,7 +1890,7 @@ ul.h-profile {
     right: 0;
     margin: 0;
     display: flex;  
-    z-index: 1;  
+    z-index: 10000;  
     background: white;
     justify-content: flex-end;
     box-shadow: 0 0px 2px 2px #d4d4d4;
