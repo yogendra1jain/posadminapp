@@ -1,7 +1,7 @@
 import React from 'react';
 import Redirect from "react-router/Redirect";
 import SaveButton from '../../components/common/SaveButton.jsx'
-import { uploadDocument, fetchAddressFromZip, fetchPostStore } from '../../actions/store';
+import { uploadDocument, fetchAddressFromZip, fetchPostStore, fetchPaymentMethodList } from '../../actions/store';
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
@@ -12,7 +12,7 @@ import Alert from 'react-s-alert';
 import _cloneDeep from 'lodash/cloneDeep';
 import { Formik } from 'formik';
 import Yup from 'yup';
-
+import AutoCompletePosition from '../../components/Elements/AutoCompletePosition.jsx';
 
 
 class AddEditStoreContainer extends React.Component {
@@ -42,6 +42,7 @@ class AddEditStoreContainer extends React.Component {
 
 
     componentDidMount() {
+        this.props.dispatch(fetchPaymentMethodList('', '/Store/AvailablePaymentMethods', {}));
         if (!_isEmpty(this.props.selectedStore)) {
             this.setState({ isUpdating: true })
             this.storeInfo = this.props.selectedStore;
@@ -141,6 +142,8 @@ class AddEditStoreContainer extends React.Component {
         data.image = this.imagePreviewUrl;
         data.address.country = this.storeInfo.country
         data.address.postalCode = zip
+        // !Hold for now
+        // data.paymentMethods = this.storeInfo.paymentMethodsList
         if (this.state.isUpdating) {
             data.id = this.updatedStoreInfo.id
         }
@@ -217,6 +220,7 @@ class AddEditStoreContainer extends React.Component {
     }
 
     render() {
+        console.log(this.props.paymentMethods, 'this.props.paymentMethods')
         if (this.redirectToSearch) {
             return (
                 <Redirect push to="/stores" />
@@ -342,7 +346,6 @@ class AddEditStoreContainer extends React.Component {
                                     <div className="col-sm-12">
                                         <label className="control-label">Upload Logo</label>
                                         <div className="" style={{ marginTop: "5px", float: "left", marginRight: "15px" }}>
-                                            {/* <input type="file" id="files" className="hidden"/> */}
                                             <label className="btn btn-default" for="files">Select file</label>
                                             <input type="file" title=" " className="hidden" id="files" name="images" multiple={false} onChange={this.handleFileChange} />
                                         </div>
@@ -360,10 +363,25 @@ class AddEditStoreContainer extends React.Component {
                                         </div>
                                     </div> : ''
                                 }
-                                
-                                
-
                             </div>
+
+                            <div className="col-sm-6 col-md-4 form-d">
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                    <label className="control-label">Select Payment Options</label>
+                                    <AutoCompletePosition
+                                        type="multi"
+                                        data={_get(this.props, 'paymentMethodsList', [])}
+                                        value={this.storeInfo.paymentMethodsList ? this.storeInfo.paymentMethodsList : ''}
+                                        name="paymentMethodsList"
+                                        placeholder="Select Payment Method"
+                                        changeHandler={(id) => {
+                                        this.handleSelectChange(id, "paymentMethodsList")}}
+                                    />
+                                    </div>
+                                </div>
+                            </div>
+                                
                                 {/* <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Latitude</label>
                                     <GenericInput
@@ -425,10 +443,20 @@ const mapStateToProps = state => {
 
     let { status } = storesReducer || '';
     let { isFetching } = storesReducer || false;
-    let { type, storeData, selectedStore, storePostData, addressData, fileData } = storesReducer || {};
+    let { type, storeData, selectedStore, storePostData, addressData, fileData, paymentMethods } = storesReducer || {};
 
-
-
+    let paymentMethodsList = []
+    if(!_isEmpty(paymentMethods)) {
+        if(Array.isArray(paymentMethods)) {
+            paymentMethods.map((method) => {
+                let obj = {};
+                obj.displayText = method.name;
+                obj.value = Number(method.id);
+                paymentMethodsList.push(obj);
+            })
+        }
+    }
+    
 
     return {
         status,
@@ -438,7 +466,8 @@ const mapStateToProps = state => {
         selectedStore,
         addressData,
         storePostData,
-        fileData
+        fileData,
+        paymentMethodsList
     }
 }
 

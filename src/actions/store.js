@@ -270,3 +270,45 @@ export const mapProductsWithStore = (subreddit, url, data) => dispatch =>
             .then(json => dispatch(receivedLogoUploadResponse(subreddit, json)))
             .catch(e => dispatch(receivedLogoUploadError(subreddit, e)))
     }
+
+    const requestPaymentMethodList = (subreddit) => ({
+        type: STORE_CONSTANTS.REQUEST_PAYMENT_METHOD_LIST,
+        subreddit
+    });
+    
+    const receivePaymentMethodList = (subreddit, data, status, resolve) => {
+        // resolve(data);
+        return ({
+            type: STORE_CONSTANTS.RECEIVED_PAYMENT_METHOD_LIST,
+            subreddit,
+            data,
+            receivedAt: Date.now()
+        });
+    }
+    const receivePaymentMethodListError = (subreddit, error, status, reject) => {
+        // reject(error)
+        return ({
+            type: STORE_CONSTANTS.RECEIVED_PAYMENT_METHOD_LIST_ERROR,
+            subreddit,
+            error,
+            receivedAt: Date.now()
+        })
+    }
+    
+    export const fetchPaymentMethodList = (subreddit, url, data) => dispatch => {
+        // return new Promise((resolve, reject) => {
+            dispatch(dynamicActionWrapper({
+                path: STORE_CONSTANTS.STORE_URL + url,
+                method: 'POST',
+                body: data,
+                initCb: requestPaymentMethodList,
+                successCb: receivePaymentMethodList,
+                failureCb: receivePaymentMethodListError,
+                // resolve: resolve,
+                // reject: reject,
+                subreddit,
+                wrapperActionType: 'FETCH_PAYMENT_METHOD_LIST_DATA_WRAPPER',
+                redirect: 'follow'
+            }));
+        // })
+    }

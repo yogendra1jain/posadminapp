@@ -13,8 +13,10 @@ import {
   REQUEST_STORE_UPDATE,
   REQUEST_ADDRESS_FROM_ZIP,
   RECEIVED_ADDRESS_FROM_ZIP,
-  RECEIVED_ADDRESS_FROM_ZIP_ERROR
-
+  RECEIVED_ADDRESS_FROM_ZIP_ERROR,
+  REQUEST_PAYMENT_METHOD_LIST,
+  RECEIVED_PAYMENT_METHOD_LIST,
+  RECEIVED_PAYMENT_METHOD_LIST_ERROR
 } from '../constants/store';
 
 const storeReducer = (state = 'storeState', action) => {
@@ -136,6 +138,35 @@ const storesData = (state = {
           type: action.type,
           error: action.error,
           didInvalidate: false,
+          lastUpdated: action.receivedAt
+        });
+
+      case REQUEST_PAYMENT_METHOD_LIST:
+        return Object.assign({}, state, {
+          isFetching: true,
+          paymentMethods: [],
+          status:'',
+          type: action.type, 
+          lastUpdated: action.receivedAt
+        });
+
+      case RECEIVED_PAYMENT_METHOD_LIST:
+        return Object.assign({}, state, {
+          isFetching: false,
+          type: action.type, 
+          status: action.status,
+          didInvalidate: false, 
+          paymentMethods: action.data,
+          lastUpdated: action.receivedAt
+        });
+
+      case RECEIVED_PAYMENT_METHOD_LIST_ERROR:
+        return Object.assign({}, state, {
+          isFetching: false,
+          type: action.type, 
+          status: action.status,
+          didInvalidate: false, 
+          paymentMethods: action.error,
           lastUpdated: action.receivedAt
         });
 
