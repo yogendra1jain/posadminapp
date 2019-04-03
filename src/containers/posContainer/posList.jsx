@@ -185,7 +185,6 @@ class PosList extends Component {
             console.log(this.posInfo, 'this.posInfo')
             url = "/Terminal/Update"
             data = this.posInfo
-            debugger
             // following call is for updating terminal
             dispatch(fetchPosTerminalData(posTerminalReducer, data, url)).then(resp => {
                 // following call is for getting updated list of terminals
