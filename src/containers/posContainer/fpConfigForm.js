@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import SaveButton from '../../components/common/SaveButton';
 import _set from 'lodash/set';
 import _get from 'lodash/get';
@@ -6,8 +6,8 @@ import _isEmpty from 'lodash/isEmpty';
 import { Formik } from 'formik';
 import Row from "react-bootstrap/lib/Row";
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import {addFreedomPayConfig, getFreedomPayConfig} from '../../actions/posTerminal'
-import {connect} from 'react-redux';
+import { addFreedomPayConfig, getFreedomPayConfig } from '../../actions/posTerminal'
+import { connect } from 'react-redux';
 import showMessage from '../../actions/toastAction';
 
 class FPConfig extends Component {
@@ -23,70 +23,105 @@ class FPConfig extends Component {
     }
 
     componentDidMount() {
-        if(_get(this.props,'history.location.state.storeId','') == '') {
+        if (_get(this.props, 'history.location.state.storeId', '') == '') {
             this.props.history.push('/posList')
-        } 
+        }
         else {
             let data = {
-                id: _get(this.props,'history.location.state.terminalId','')
+                id: _get(this.props, 'history.location.state.terminalId', '')
             }
             let url = '/Payment/FreedomPay/Config/Get'
-            this.props.dispatch(getFreedomPayConfig('', data,url))
-        }
-
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.type == 'SUCCESS_ADD_FP_CONFIG') {
-            if(nextProps.status == 200) {
-                this.setState({ disableSave: false })
-                this.handleCancel()
-                this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
-                setTimeout(() => {
-                    this.props.dispatch(showMessage({ text: '', isSuccess: true }));
-    
-                }, 1000)
-            } else {
-                this.setState({ disableSave: false })
-                this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
-                setTimeout(() => {
-                    this.props.dispatch(showMessage({ text: '', isSuccess: true }));
-            }, 1000)
-            }
-        }
-
-        if(nextProps.type == "SUCCESS_GET_FP_CONFIG") {
-            if(nextProps.status == 200) {
+            this.props.dispatch(getFreedomPayConfig('', data, url)).then(resp => {
                 this.isUpdate = true
-                this.freedomPayInfo = this.props.fpConfigdata
-                this.forceUpdate()
-            }
+                this.setState({
+                    fpConfigValues: {
+                        freedomPayClientEnvironment: _get(resp, 'freedomPayClientEnvironment'),
+                        freedomPayTerminalId: _get(resp, 'freedomPayTerminalId'),
+                        freedomPayStoreId: _get(resp, 'freedomPayStoreId'),
+                        freedomPayClientUrl: _get(resp, 'freedomPayClientUrl'),
+                        merchantReferenceCode: _get(resp, 'merchantReferenceCode'),
+                        freedomPayWorkstationId: _get(resp, 'freedomPayWorkstationId'),
+                    }
+                })
+
+            }).catch(err => {
+
+            })
         }
+
     }
+
+    // componentWillReceiveProps(nextProps) {
+    //     if(nextProps.type == 'SUCCESS_ADD_FP_CONFIG') {
+    //         if(nextProps.status == 200) {
+    //             this.setState({ disableSave: false })
+    //             this.handleCancel()
+    //             this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
+    //             setTimeout(() => {
+    //                 this.props.dispatch(showMessage({ text: '', isSuccess: true }));
+
+    //             }, 1000)
+    //         } else {
+    //             this.setState({ disableSave: false })
+    //             this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
+    //             setTimeout(() => {
+    //                 this.props.dispatch(showMessage({ text: '', isSuccess: true }));
+    //         }, 1000)
+    //         }
+    //     }
+
+    //     if(nextProps.type == "SUCCESS_GET_FP_CONFIG") {
+    //         if(nextProps.status == 200) {
+    //             this.isUpdate = true
+    //             this.freedomPayInfo = this.props.fpConfigdata
+    //             this.forceUpdate()
+    //         }
+    //     }
+    // }
 
     handleInputChange = (e, props) => {
-        _set(this.freedomPayInfo, e.target.name, e.target.value)
-        this.forceUpdate()
+        this.setState({
+            fpConfigValues: {
+                ...this.state.fpConfigValues,
+                [e.target.name]: e.target.value
+            }
+        })
     }
 
     createHandler() {
+
         this.setState({ disableSave: true })
-        let data = _get(this,'freedomPayInfo',{})
-        _set(data, 'posTerminalId',_get(this.props.history,'location.state.terminalId',''))
+        let data = _get(this, 'state.fpConfigValues', {})
+        _set(data, 'posTerminalId', _get(this.props.history, 'location.state.terminalId', ''))
         let url = "/Payment/FreedomPay/Config/Save"
-        this.props.dispatch(addFreedomPayConfig('',data, url))
+
+        this.props.dispatch(addFreedomPayConfig('', data, url)).then(resp => {
+            this.setState({ disableSave: false })
+            this.handleCancel();
+            this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
+            setTimeout(() => {
+                this.props.dispatch(showMessage({ text: '', isSuccess: true }));
+            }, 1000)
+        }).catch(err => {
+            this.setState({ disableSave: false })
+            this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
+            setTimeout(() => {
+                this.props.dispatch(showMessage({ text: '', isSuccess: false }));
+            }, 1000)
+        })
     }
 
     handleCancel = () => {
         this.props.history.push({
             pathname: '/posList',
             state: {
-                storeId: _get(this.props.history,'location.state.storeId','')
+                storeId: _get(this.props.history, 'location.state.storeId', '')
             }
         })
     }
 
     render() {
+
         return (
             <Formik
                 initialValues={this.updatedFreedomPayInfo}
@@ -104,7 +139,7 @@ class FPConfig extends Component {
                                     <label className="control-label">FP Client Environment</label>
                                     <GenericInput
                                         htmlFor="freedomPayClientEnvironment" displayName="FP Client Environment" type="text"
-                                        inputName="freedomPayClientEnvironment" defaultValue={_get(this.freedomPayInfo, 'freedomPayClientEnvironment', '')}
+                                        inputName="freedomPayClientEnvironment" defaultValue={_get(this, 'state.fpConfigValues.freedomPayClientEnvironment', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         className="text-input error"
                                     />
@@ -113,7 +148,7 @@ class FPConfig extends Component {
                                     <label className="control-label">FP Terminal Id</label>
                                     <GenericInput
                                         htmlFor="freedomPayTerminalId" displayName="FP Terminal Id" type="text"
-                                        inputName="freedomPayTerminalId" defaultValue={_get(this.freedomPayInfo, 'freedomPayTerminalId', '')}
+                                        inputName="freedomPayTerminalId" defaultValue={_get(this, 'state.fpConfigValues.freedomPayTerminalId', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         className="text-input error"
                                     />
@@ -122,7 +157,7 @@ class FPConfig extends Component {
                                     <label className="control-label">FP Store Id</label>
                                     <GenericInput
                                         htmlFor="freedomPayStoreId" displayName="FP Store Id" type="text"
-                                        inputName="freedomPayStoreId" defaultValue={_get(this.freedomPayInfo, 'freedomPayStoreId', '')}
+                                        inputName="freedomPayStoreId" defaultValue={_get(this, 'state.fpConfigValues.freedomPayStoreId', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         className="text-input error"
                                     />
@@ -131,7 +166,7 @@ class FPConfig extends Component {
                                     <label className="control-label">FP Client URL</label>
                                     <GenericInput
                                         htmlFor="freedomPayClientUrl" displayName="FP Client URL" type="text"
-                                        inputName="freedomPayClientUrl" defaultValue={_get(this.freedomPayInfo, 'freedomPayClientUrl', '')}
+                                        inputName="freedomPayClientUrl" defaultValue={_get(this, 'state.fpConfigValues.freedomPayClientUrl', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         className="text-input error"
                                     />
@@ -140,7 +175,7 @@ class FPConfig extends Component {
                                     <label className="control-label">Merchant Reference Code</label>
                                     <GenericInput
                                         htmlFor="merchantReferenceCode" displayName="Merchant Reference Code" type="text"
-                                        inputName="merchantReferenceCode" defaultValue={_get(this.freedomPayInfo, 'merchantReferenceCode', '')}
+                                        inputName="merchantReferenceCode" defaultValue={_get(this, 'state.fpConfigValues.merchantReferenceCode', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         className="text-input error"
                                     />
@@ -149,7 +184,7 @@ class FPConfig extends Component {
                                     <label className="control-label">FP Workstation Id</label>
                                     <GenericInput
                                         htmlFor="freedomPayWorkstationId" displayName="FP Workstation Id" type="text"
-                                        inputName="freedomPayWorkstationId" defaultValue={_get(this.freedomPayInfo, 'freedomPayWorkstationId', '')}
+                                        inputName="freedomPayWorkstationId" defaultValue={_get(this, 'state.fpConfigValues.freedomPayWorkstationId', '')}
                                         onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
                                         className="text-input error"
                                     />
@@ -158,8 +193,7 @@ class FPConfig extends Component {
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        
-                                        <SaveButton buttonDisplayText={this.isUpdate ? 'Update' : 'Create'} Class_Name={"btn-info"} disabled={this.state.disableSave} handlerSearch={() => this.createHandler()} /> 
+                                        <SaveButton buttonDisplayText={this.isUpdate ? 'Update' : 'Create'} Class_Name={"btn-info"} disabled={this.state.disableSave} handlerSearch={() => this.createHandler()} />
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
                                     </div>
                                 </div>
@@ -173,15 +207,16 @@ class FPConfig extends Component {
 }
 
 const mapStateToProps = state => {
-    const {posTerminalReducer} = state
-    const {status, type, saveFPConfig, fpConfigdata} = posTerminalReducer
-    
+    const { posTerminalReducer } = state
+    const { status, type, saveFPConfig, fpConfigdata } = posTerminalReducer
+    debugger
+
     return {
         status,
         type,
         saveFPConfig,
         fpConfigdata
-    } 
+    }
 }
 
-export default connect(mapStateToProps)(FPConfig);
+export default connect()(FPConfig);

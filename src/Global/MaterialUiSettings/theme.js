@@ -372,8 +372,9 @@ const theme = createMuiTheme({
    },
    typography: {
       fontFamily: "\"Karla\", \"sans-serif\"",
+      fontSize: "1.4rem",
       button: {
-         fontSize: "0.875rem",
+         fontSize: "1.4rem",
          textTransform: "uppercase",
          fontWeight: 500,
          fontFamily: "\"Karla\", \"sans-serif\"",
