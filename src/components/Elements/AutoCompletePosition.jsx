@@ -16,6 +16,7 @@ import 'react-select/dist/react-select.css';
 import FormControl from 'material-ui/Form/FormControl';
 import FormHelperText from 'material-ui/Form/FormHelperText';
 
+import _get from 'lodash/get';
 
 class Option extends React.Component {
   handleClick = event => {
@@ -42,11 +43,12 @@ class Option extends React.Component {
 }
 
 function SelectWrapped(props) {
-  const { classes, noResultFoundText, ...other } = props;
 
+  const { classes, noResultFoundText, ...other } = props;
+  const { name, id, type, placeholder, hideLabel, label, value, data, changeHandler, disabled, ...restProps } = props;
   return (
     <Select
-      menuContainerStyle={{top: 'auto', bottom: '100%'}}
+      menuContainerStyle={{ top: 'auto', bottom: '100%' }}
       optionComponent={Option}
       noResultsText={<Typography>No Result Found</Typography>}
       arrowRenderer={arrowProps => {
@@ -70,6 +72,7 @@ function SelectWrapped(props) {
               className={classes.chip}
               deleteIcon={<CancelIcon onTouchEnd={onDelete} />}
               onDelete={onDelete}
+
             />
           );
         }
@@ -159,7 +162,7 @@ const styles = theme => ({
       position: 'absolute',
       left: 0,
       fontSize: 20,
-     top: `calc(100% + ${theme.spacing.unit}px)`,
+      top: `calc(100% + ${theme.spacing.unit}px)`,
       width: '100%',
       zIndex: 2,
       maxHeight: ITEM_HEIGHT * 4.5,
@@ -206,121 +209,129 @@ class IntegrationReactSelectUp extends React.Component {
     this.setState({
       single,
     }, () => {
-        this.props.changeHandler(single);
+      this.props.changeHandler(single);
     });
   };
 
   handleChangeMulti = multi => {
     this.setState({
       multi,
-    },() => {
+    }, () => {
       this.props.changeHandler(multi);
-  });
+    });
   };
   handleBlur = single => {
-    if(this.props.error){
+    if (this.props.error) {
       this.props.blurHandler(single);
-    }    
+    }
   }
 
   handleRemove = single => {
     this.setState({
       single,
     }, () => {
-        this.props.onRemove(single);
+      this.props.onRemove(single);
     });
   }
 
   render() {
-    const { classes, 
-            noResultFoundText = 'No Results' , 
-            id, 
-            instanceId, 
-            name, 
-            placeholder, 
-            type, 
-            data, 
-            value, 
-            changeHandler, 
-            blurHandler,
-            valueKey='value', 
-            labelKey='displayText',
-            error,
-            className,
-            errorCheck = false,
-            errorValue,
-            errorMessage,
-            touched,
-            touchedValue,
-          } = this.props;
-          
+    const { classes,
+      input,
+      label,
+      disabled,
+      noResultFoundText = 'No Results',
+      id,
+      instanceId,
+      name,
+      placeholder,
+      type,
+      data,
+      value,
+      changeHandler,
+      blurHandler,
+      valueKey = 'value',
+      labelKey = 'displayText',
+      error,
+      className,
+      errorCheck = false,
+      errorValue,
+      errorMessage,
+      touched,
+      touchedValue,
+    } = this.props;
+
     const { single, multi } = this.state;
     const newData = data.map(suggestion => ({
-        value: suggestion[valueKey],
-        label: suggestion[labelKey],
-      }));
+      value: suggestion[valueKey],
+      label: suggestion[labelKey],
+    }));
     return (
       <div className={classes.root}>
-      {
-         (() =>{ switch(type){
+        {
+          (() => {
+            switch (type) {
               case 'single':
                 return (
-                  <FormControl className="custom-input" style={{width: "100%", fontSize: "14px" }}>
+                  <FormControl className="custom-input" style={{ width: "100%", fontSize: "14px" }}>
                     <Input
-                        fullWidth
-                        inputComponent={
-                            SelectWrapped
-                        }
-                        inputProps={{
-                            classes,
-                            value,
-                            onChange: this.handleChangeSingle,
-                            onBlur: this.handleBlur,
-                            placeholder,
-                            instanceId: instanceId || 'react-select-single',
-                            id: id || 'react-select-single',
-                            name: name || 'react-select-single',
-                            simpleValue: true,
-                            options: newData,
-                        }}
+                      fullWidth
+                      inputComponent={
+                        SelectWrapped
+                      }
+                      inputProps={{
+                        classes,
+                        value,
+                        onChange: this.handleChangeSingle,
+                        onBlur: this.handleBlur,
+                        placeholder,
+                        instanceId: instanceId || 'react-select-single',
+                        id: id || 'react-select-single',
+                        name: name || 'react-select-single',
+                        simpleValue: true,
+                        options: newData,
+                      }}
                     />
                     {errorCheck && error && errorValue && touched && touchedValue && (
-            <div className={className}><FormHelperText >
-            {errorMessage}
-            </FormHelperText></div> 
-            )}              
-        </FormControl>
+                      <div className={className}><FormHelperText >
+                        {errorMessage}
+                      </FormHelperText></div>
+                    )}
+                  </FormControl>
                 );
-            case 'multi':
-                return(
-                  <FormControl className="custom-input" style={{width: "100%", fontSize: "14px" }}>
+              case 'multi':
+                return (
+                  <FormControl className="custom-input" style={{ width: "100%", fontSize: "14px" }}>
                     <Input
-                        fullWidth
-                        inputComponent={SelectWrapped}
-                        inputProps={{
-                            classes,
-                            value,
-                            onBlur: this.handleBlur,
-                            multi: true,
-                            onChange: this.handleChangeMulti,
-                            placeholder,
-                            instanceId: 'react-select-chip',
-                            id: 'react-select-chip',
-                            name: 'react-select-chip',
-                            simpleValue: true,
-                            options: newData,
-                        }}
+                      fullWidth
+                      inputComponent={SelectWrapped}
+                      inputProps={{
+                        classes,
+                        value,
+                        onBlur: this.handleBlur,
+                        multi: true,
+                        onChange: this.handleChangeMulti,
+                        placeholder,
+                        label,
+                        instanceId: 'react-select-chip',
+                        id: 'react-select-chip',
+                        name: 'react-select-chip',
+                        simpleValue: true,
+                        options: newData,
+                        ...input
+                      }}
+                      disabled={disabled}
+                      label={label}
                     />
                     {errorCheck && error && errorValue && touched && touchedValue && (
-            <div className={className}><FormHelperText >
-            {errorMessage}
-            </FormHelperText></div> 
-            )}              
-        </FormControl>
+                      <div className={className}><FormHelperText >
+                        {errorMessage}
+                      </FormHelperText></div>
+                    )}
+                  </FormControl>
                 );
-          }
-        })()
-      }
+            }
+          })()
+        }
       </div>
     );
   }
