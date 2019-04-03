@@ -20,11 +20,9 @@ import 'react-drawer/lib/react-drawer.css';
 import { showMessage } from '../../actions/common';
 import { fetchEmployeesList } from '../../actions/employees';
 import { fetchStore } from '../../actions/store';
-import Select from 'react-select';
 import FormDialog from '../../components/common/CommonDialog/index';
 import AutoComplete from '../../components/Elements/AutoComplete';
 import { uploadEmployeesCSV, requestEmployeesUpdate } from '../../actions/employees';
-import Dropzone from 'react-dropzone';
 import FileUploadComp from './components/FileUploadComp.jsx';
 
 const options = {

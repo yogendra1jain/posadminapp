@@ -9,8 +9,13 @@ import {
  RECEIVED_POS_TERMINAL_DATA_ERROR,
  REQUEST_POS_TERMINAL_STATUS,
  RECEIVED_POS_TERMINAL_STATUS,
- RECEIVED_POS_TERMINAL_STATUS_ERROR
-
+ RECEIVED_POS_TERMINAL_STATUS_ERROR,
+ INIT_ADD_FP_CONFIG,
+ SUCCESS_ADD_FP_CONFIG,
+ FAIL_ADD_FP_CONFIG,
+ INIT_GET_FP_CONFIG,
+ SUCCESS_GET_FP_CONFIG,
+ FAIL_GET_FP_CONFIG
 } from '../constants/posTerminal';
 
 const posReducer = (state = 'posState', action) => {
@@ -29,6 +34,8 @@ const posTerminalData = (state = {
   posListData: [],
   posStatusData:[],
   posSaveData:[],
+  saveFPConfig: {},
+  fpConfigdata: {}
 }, action) => {
   switch (action.type) {
     case REQUEST_POS_TERMINAL_LIST:
@@ -93,8 +100,56 @@ const posTerminalData = (state = {
         didInvalidate: false, posStatusData:action.error,
         lastUpdated: action.receivedAt
     });
-     
+    case INIT_ADD_FP_CONFIG:
+      return Object.assign({}, state, {
+        isFetching: true,
+        type: action.type, 
+        lastUpdated: action.receivedAt,
+      });
+    case SUCCESS_ADD_FP_CONFIG:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        status: action.status,
+        saveFPConfig:action.data,
+        didInvalidate: false,
+        lastUpdated: action.receivedAt
+      });
 
+    case FAIL_ADD_FP_CONFIG:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        saveFPConfig:action.error,
+        lastUpdated: action.receivedAt,
+    });
+    case INIT_GET_FP_CONFIG:
+    return Object.assign({}, state, {
+      isFetching: true,
+      type: action.type, 
+      lastUpdated: action.receivedAt,
+    });
+  case SUCCESS_GET_FP_CONFIG:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      status: action.status,
+      fpConfigdata:action.data,
+      didInvalidate: false,
+      lastUpdated: action.receivedAt
+    });
+
+  case FAIL_GET_FP_CONFIG:
+    return Object.assign({}, state, {
+      isFetching: false,
+      type: action.type, 
+      status: action.status,
+      didInvalidate: false, 
+      fpConfigdata:action.error,
+      lastUpdated: action.receivedAt,
+  });
     default:
       return state
   }

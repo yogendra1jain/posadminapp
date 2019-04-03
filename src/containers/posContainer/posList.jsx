@@ -185,7 +185,6 @@ class PosList extends Component {
             console.log(this.posInfo, 'this.posInfo')
             url = "/Terminal/Update"
             data = this.posInfo
-            debugger
             // following call is for updating terminal
             dispatch(fetchPosTerminalData(posTerminalReducer, data, url)).then(resp => {
                 // following call is for getting updated list of terminals
@@ -235,6 +234,16 @@ class PosList extends Component {
         dispatch(fetchPosTerminalList(posTerminalReducer, url));
     }
     componentDidMount() {
+        if(_get(this.props,'history.location.state.storeId','') !== '') {
+            this.selectedStore.stores = _get(this.props,'history.location.state.storeId','')
+            const { dispatch, posTerminalReducer } = this.props;
+            let reqBody = {
+                id: _get(this.props,'history.location.state.storeId','')
+            }
+            let url = '/Terminal/ByStoreId';
+            dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
+            this.setState({ isStoreSelected: true });
+        }
         this.posList = []
         const { dispatch, storesReducer } = this.props;
         let reqBody = {
@@ -242,21 +251,10 @@ class PosList extends Component {
         }
         let url = '/Store/ByRetailerId'
         dispatch(fetchStore(storesReducer, url, reqBody));
-        // if (localStorage.getItem('role') === 'Admin') {
-        //     this.isStoreAdmin = false;
-        //     this.fetchStores();
-        // } else {
-        //     this.isStoreAdmin = true;
-        //     this.retailerStore = localStorage.getItem('storeID');
-        //     this.posInfo.store = this.retailerStore;
-        //     this.fetchTerminals();
-        // }
         this.forceUpdate();
-        //console.log('Pos list: ', this.posList);
     }
 
     onRowSelect = (row, isSelected, e) => {
-        debugger
         isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
         console.log('Selected Ids: ', this.selectedIds);
         // this.handleAllChecks();        
@@ -319,13 +317,6 @@ class PosList extends Component {
         let terData = [];
         let isActive = this.posInfo.isActive;
 
-        // this.selectedIds.map(id=>{
-        //     let tempobj = _find(this.posList, {'id': id});
-        //     let temp = {};
-        //     _set(temp, 'posId', tempobj.number);
-        //     isActive = tempobj.isActive;
-        //     terData.push(id);
-        // })
         _set(data, 'status', (isActive !== undefined ? !Boolean(isActive) : false))
         _set(data, 'terminals', this.selectedIds);
         let url = "/retailer/" + localStorage.getItem('retailerID') + "/terminal/changeStatus"
@@ -334,25 +325,26 @@ class PosList extends Component {
         this.forceUpdate();
     }
 
+    handleFPConfig = () => {
+        this.props.history.push({
+            pathname: 'freedompayconfig',
+            state: {
+                storeId: this.selectedStore.stores,
+                terminalId: this.selectedPos.id
+            }
+        })
+    }
 
     onUpdate() {
-        let test = this.selectedIds.length;
-        debugger
         if (this.selectedIds.length > 1) {
-            debugger
             this.showAlert(true, 'Please Select only 1 pos to update.');
             this.forceUpdate();
             return;
         } else {
-            debugger
             this.isUpdate = true;
             this.method = 'POST';
-            const { dispatch, staffsReducer } = this.props;
-           // this.fetchStores();
             this.open = true;
-            debugger
         }
-        debugger
         let tempStore = _find(this.posList, { 'id': this.selectedPos.id });
         this.posInfo.name = _get(tempStore, 'name', '')
         this.posInfo.id = _get(tempStore, 'id', '')
@@ -360,7 +352,6 @@ class PosList extends Component {
         if (tempStore.active) {
             this.posInfo.active = tempStore.active == 'Active' ? true : false
         }
-        debugger
         this.forceUpdate();
     }
     addNew() {
@@ -408,14 +399,18 @@ class PosList extends Component {
                 </div>
             </div>);
         }
-        //console.log('Poslist in render: ', this.posList);
         return (
             <div className="">
-                {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div className='panel-container'>
                     <span className='panel-heading'>POS List</span>
                     <div>
+                        <SaveButton
+                            disabled={this.selectedIds.length === 0}
+                            buttonDisplayText={'Freedom Pay Config'}
+                            handlerSearch={this.handleFPConfig}
+                            Class_Name="m-r-10"
+                        />
                         <SaveButton
                             disabled={this.selectedIds.length === 0}
                             buttonDisplayText={'Update'}

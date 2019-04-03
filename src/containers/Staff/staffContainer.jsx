@@ -186,7 +186,6 @@ class AddEditStaffContainer extends React.Component {
 }
 componentDidMount() {
     if (this.props.selectedId) {
-        // debugger
         this.setState({ isUpdating: true })
         let selectedStaff = _find(this.props.staffListData, { 'id': this.props.selectedId })
         this.staffInfo = selectedStaff

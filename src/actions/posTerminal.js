@@ -86,25 +86,6 @@ return({
 })
 }
 
-// export const fetchPosTerminalData = (subreddit, data, method, url) => dispatch => {
-
-//     dispatch(requestPosTerminalData(subreddit));
-
-//     fetch(POS_TERMINAL.POS_TERMINAL_URL+url, { method: method,
-//     headers: {
-//         "Content-type": "application/json"
-//     },
-//     body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         status = response.status;
-
-//         return response.json() } 
-//     )
-//     .then(json => { return dispatch(receivePosTerminalData(subreddit, json, status )) } )
-//     .catch(err => { return dispatch(receivePosTerminalDataError(subreddit,err,500)) } )
-// }
-
 export const fetchPosTerminalData = (subreddit, data, url) => dispatch => {
     return new Promise((resolve, reject) => {
         dispatch(dynamicActionWrapper({
@@ -122,8 +103,6 @@ export const fetchPosTerminalData = (subreddit, data, url) => dispatch => {
         }));
     })
 }
-
-
 
 const requestPosTerminalStatus = (subreddit) => ({
     type: POS_TERMINAL.REQUEST_POS_TERMINAL_STATUS,
@@ -145,25 +124,6 @@ const receivePosTerminalStatus = (subreddit, json, status) => ({
     receivedAt: Date.now()
 })
 
-// export const fetchPosTerminalStatus = (subreddit, data, url) => dispatch => {
-
-//     dispatch(requestPosTerminalStatus(subreddit));
-
-//     fetch(POS_TERMINAL.POS_TERMINAL_URL+url, { method: 'POST',
-//     headers: {
-//         "Content-type": "application/json"
-//     },
-//     body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         status = response.status;
-
-//         return response.json() } 
-//     )
-//     .then(json => { return dispatch(receivePosTerminalStatus(subreddit, json, status )) } )
-//     .catch(err => { return dispatch(receivePosTerminalStatusError(subreddit,err,500)) } )
-// }
-
 export const fetchPosTerminalStatus = (subreddit, data, url) => dispatch =>
     dispatch(dynamicActionWrapper({
         path: POS_TERMINAL.POS_TERMINAL_URL + url,
@@ -182,3 +142,70 @@ export const requestreceivePosTerminalUpdate = (subreddit, pos) => ({
     subreddit,
     data: pos
 });
+
+
+const initAddFPConfig = (subreddit) => ({
+    type: POS_TERMINAL.INIT_ADD_FP_CONFIG,
+    subreddit
+});
+
+const successAddFPConfig = (subreddit, json, status) => ({
+    type: POS_TERMINAL.SUCCESS_ADD_FP_CONFIG,
+    subreddit,
+    data: json,
+    status: status,
+    receivedAt: Date.now()
+})
+
+const failAddFPConfig = (subreddit, err, errCode) => ({
+    type: POS_TERMINAL.FAIL_ADD_FP_CONFIG,
+    subreddit,
+    error: err,
+    errorCode: errCode
+})
+
+export const addFreedomPayConfig = (subreddit, data, url) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: POS_TERMINAL.POS_TERMINAL_URL + url,
+        method: 'POST',
+        body: data,
+        initCb: initAddFPConfig,
+        successCb: successAddFPConfig,
+        failureCb: failAddFPConfig,
+        subreddit,
+        wrapperActionType: 'ADD_FP_CONFIG',
+        redirect: 'follow'
+    }));
+
+const initGetFPConfig = (subreddit) => ({
+    type: POS_TERMINAL.INIT_GET_FP_CONFIG,
+    subreddit
+});
+
+const successGetFPConfig = (subreddit, json, status) => ({
+    type: POS_TERMINAL.SUCCESS_GET_FP_CONFIG,
+    subreddit,
+    data: json,
+    status: status,
+    receivedAt: Date.now()
+})
+
+const failGetFPConfig = (subreddit, err, errCode) => ({
+    type: POS_TERMINAL.FAIL_GET_FP_CONFIG,
+    subreddit,
+    error: err,
+    errorCode: errCode
+})
+
+export const getFreedomPayConfig = (subreddit, data, url) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: POS_TERMINAL.POS_TERMINAL_URL + url,
+        method: 'POST',
+        body: data,
+        initCb: initGetFPConfig,
+        successCb: successGetFPConfig,
+        failureCb: failGetFPConfig,
+        subreddit,
+        wrapperActionType: 'GET_FP_CONFIG',
+        redirect: 'follow'
+    }));
