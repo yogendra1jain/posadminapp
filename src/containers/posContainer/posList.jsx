@@ -235,6 +235,16 @@ class PosList extends Component {
         dispatch(fetchPosTerminalList(posTerminalReducer, url));
     }
     componentDidMount() {
+        if(_get(this.props,'history.location.state.storeId','') !== '') {
+            this.selectedStore.stores = _get(this.props,'history.location.state.storeId','')
+            const { dispatch, posTerminalReducer } = this.props;
+            let reqBody = {
+                id: _get(this.props,'history.location.state.storeId','')
+            }
+            let url = '/Terminal/ByStoreId';
+            dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
+            this.setState({ isStoreSelected: true });
+        }
         this.posList = []
         const { dispatch, storesReducer } = this.props;
         let reqBody = {
@@ -242,17 +252,7 @@ class PosList extends Component {
         }
         let url = '/Store/ByRetailerId'
         dispatch(fetchStore(storesReducer, url, reqBody));
-        // if (localStorage.getItem('role') === 'Admin') {
-        //     this.isStoreAdmin = false;
-        //     this.fetchStores();
-        // } else {
-        //     this.isStoreAdmin = true;
-        //     this.retailerStore = localStorage.getItem('storeID');
-        //     this.posInfo.store = this.retailerStore;
-        //     this.fetchTerminals();
-        // }
         this.forceUpdate();
-        //console.log('Pos list: ', this.posList);
     }
 
     onRowSelect = (row, isSelected, e) => {

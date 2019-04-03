@@ -7,13 +7,44 @@ import { GenericInput } from '../../components/common/TextValidation.jsx';
 import _get from 'lodash/get';
 import {addFreedomPayConfig} from '../../actions/posTerminal'
 import {connect} from 'react-redux';
+import showMessage from '../../actions/toastAction';
+import { isUndefined } from 'util';
 
 class FPConfig extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            disableSave: false
+        }
         this.freedomPayInfo = {}
         this.updatedFreedomPayInfo = {}
         this.createHandler = this.createHandler.bind(this);
+    }
+
+    componentDidMount() {
+        if(_get(this.props,'history.location.state.storeId','') == '') {
+            this.props.history.push('/posList')
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.isSuccess) {
+            debugger
+            this.setState({ disableSave: false })
+            this.handleCancel()
+            this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
+            setTimeout(() => {
+                this.props.dispatch(showMessage({ text: '', isSuccess: true }));
+
+            }, 1000)
+        } else {
+            debugger
+            this.setState({ disableSave: false })
+            this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
+            setTimeout(() => {
+                this.props.dispatch(showMessage({ text: '', isSuccess: true }));
+            }, 1000)
+        }
     }
 
     handleInputChange = (e, props) => {
@@ -22,16 +53,21 @@ class FPConfig extends Component {
     }
 
     createHandler() {
-        const {dispatch} = this.props
+        this.setState({ disableSave: true })
         let data = _get(this,'freedomPayInfo',{})
         _set(data,'freedomPayStoreId', _get(this.props.history,'location.state.storeId',''))
-        _set(data, 'freedomPayTerminalId',_get(this.props.history,'location.state.storeId',''))
+        _set(data, 'freedomPayTerminalId',_get(this.props.history,'location.state.terminalId',''))
         let url = "/Payment/FreedomPay/Config/Save"
-        dispatch(addFreedomPayConfig('',data, url))
+        this.props.dispatch(addFreedomPayConfig('',data, url))
     }
 
     handleCancel = () => {
-
+        this.props.history.push({
+            pathname: '/posList',
+            state: {
+                storeId: _get(this.props.history,'location.state.storeId','')
+            }
+        })
     }
 
     render() {
@@ -88,7 +124,7 @@ class FPConfig extends Component {
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        <SaveButton buttonDisplayText={'Create'} Class_Name={"btn-info"} handlerSearch={() => this.createHandler()} /> 
+                                        <SaveButton buttonDisplayText={'Create'} Class_Name={"btn-info"} disabled={this.state.disableSave} handlerSearch={() => this.createHandler()} /> 
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
                                     </div>
                                 </div>
@@ -102,11 +138,24 @@ class FPConfig extends Component {
 }
 
 const mapStateToProps = state => {
-
+    const {posTerminalReducer} = state
+    const {status, type, saveFPConfig} = posTerminalReducer
+    let isSuccess = true 
+    if(type == 'SUCCESS_ADD_FP_CONFIG') {
+        if(status == 200) {
+            isSuccess = true
+        }
+    } else if(type == 'SUCCESS_ADD_FP_CONFIG') {
+        if(status == 400) {
+            isSuccess = false
+        }
+    }
+    return {
+        status,
+        type,
+        saveFPConfig,
+        isSuccess
+    } 
 }
 
-const mapDispatchToProps = dispatch => {
-
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(FPConfig);
+export default connect(mapStateToProps)(FPConfig);
