@@ -57,7 +57,7 @@ export const fetchPosTerminalList = (subreddit, url, data) => dispatch =>
         redirect: 'follow'
     }));
 
-const requestPosTerminalData = (subreddit ) => {
+const requestPosTerminalData = (subreddit) => {
     return ({
         type: POS_TERMINAL.REQUEST_POS_TERMINAL_DATA,
         subreddit
@@ -74,16 +74,15 @@ const receivePosTerminalDataError = (subreddit, err, errCode, reject) => {
     })
 }
 
-const receivePosTerminalData = (subreddit, json, status,resolve) =>
-{
-resolve(json);
-return({
-    type: POS_TERMINAL.RECEIVED_POS_TERMINAL_DATA,
-    subreddit,
-    data: json,
-    status: status,
-    receivedAt: Date.now()
-})
+const receivePosTerminalData = (subreddit, json, status, resolve) => {
+    resolve(json);
+    return ({
+        type: POS_TERMINAL.RECEIVED_POS_TERMINAL_DATA,
+        subreddit,
+        data: json,
+        status: status,
+        receivedAt: Date.now()
+    })
 }
 
 export const fetchPosTerminalData = (subreddit, data, url) => dispatch => {
@@ -149,63 +148,85 @@ const initAddFPConfig = (subreddit) => ({
     subreddit
 });
 
-const successAddFPConfig = (subreddit, json, status) => ({
-    type: POS_TERMINAL.SUCCESS_ADD_FP_CONFIG,
-    subreddit,
-    data: json,
-    status: status,
-    receivedAt: Date.now()
-})
-
-const failAddFPConfig = (subreddit, err, errCode) => ({
-    type: POS_TERMINAL.FAIL_ADD_FP_CONFIG,
-    subreddit,
-    error: err,
-    errorCode: errCode
-})
-
-export const addFreedomPayConfig = (subreddit, data, url) => dispatch =>
-    dispatch(dynamicActionWrapper({
-        path: POS_TERMINAL.POS_TERMINAL_URL + url,
-        method: 'POST',
-        body: data,
-        initCb: initAddFPConfig,
-        successCb: successAddFPConfig,
-        failureCb: failAddFPConfig,
+const successAddFPConfig = (subreddit, json, status, resolve) => {
+    resolve(json);
+    return ({
+        type: POS_TERMINAL.SUCCESS_ADD_FP_CONFIG,
         subreddit,
-        wrapperActionType: 'ADD_FP_CONFIG',
-        redirect: 'follow'
-    }));
+        data: json,
+        status: status,
+        receivedAt: Date.now()
+    })
+}
+
+const failAddFPConfig = (subreddit, err, errCode, reject) => {
+    reject(errCode);
+    return ({
+        type: POS_TERMINAL.FAIL_ADD_FP_CONFIG,
+        subreddit,
+        error: err,
+        errorCode: errCode
+    })
+}
+
+export const addFreedomPayConfig = (subreddit, data, url) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: POS_TERMINAL.POS_TERMINAL_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: initAddFPConfig,
+            successCb: successAddFPConfig,
+            failureCb: failAddFPConfig,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'ADD_FP_CONFIG',
+            redirect: 'follow'
+        }));
+    })
+};
 
 const initGetFPConfig = (subreddit) => ({
     type: POS_TERMINAL.INIT_GET_FP_CONFIG,
     subreddit
 });
 
-const successGetFPConfig = (subreddit, json, status) => ({
-    type: POS_TERMINAL.SUCCESS_GET_FP_CONFIG,
-    subreddit,
-    data: json,
-    status: status,
-    receivedAt: Date.now()
-})
-
-const failGetFPConfig = (subreddit, err, errCode) => ({
-    type: POS_TERMINAL.FAIL_GET_FP_CONFIG,
-    subreddit,
-    error: err,
-    errorCode: errCode
-})
-
-export const getFreedomPayConfig = (subreddit, data, url) => dispatch =>
-    dispatch(dynamicActionWrapper({
-        path: POS_TERMINAL.POS_TERMINAL_URL + url,
-        method: 'POST',
-        body: data,
-        initCb: initGetFPConfig,
-        successCb: successGetFPConfig,
-        failureCb: failGetFPConfig,
+const successGetFPConfig = (subreddit, json, status, resolve) => {
+    resolve(json);
+    return ({
+        type: POS_TERMINAL.SUCCESS_GET_FP_CONFIG,
         subreddit,
-        wrapperActionType: 'GET_FP_CONFIG',
-        redirect: 'follow'
-    }));
+        data: json,
+        status: status,
+        receivedAt: Date.now()
+    })
+}
+
+const failGetFPConfig = (subreddit, err, errCode, reject) => {
+    reject(errCode);
+    return ({
+        type: POS_TERMINAL.FAIL_GET_FP_CONFIG,
+        subreddit,
+        error: err,
+        errorCode: errCode
+    })
+}
+
+export const getFreedomPayConfig = (subreddit, data, url) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch(dynamicActionWrapper({
+            path: POS_TERMINAL.POS_TERMINAL_URL + url,
+            method: 'POST',
+            body: data,
+            initCb: initGetFPConfig,
+            successCb: successGetFPConfig,
+            failureCb: failGetFPConfig,
+            resolve: resolve,
+            reject: reject,
+            subreddit,
+            wrapperActionType: 'GET_FP_CONFIG',
+            redirect: 'follow'
+        }))
+    })
+}
