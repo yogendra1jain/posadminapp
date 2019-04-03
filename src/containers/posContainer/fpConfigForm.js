@@ -5,10 +5,9 @@ import { Formik } from 'formik';
 import Row from "react-bootstrap/lib/Row";
 import { GenericInput } from '../../components/common/TextValidation.jsx';
 import _get from 'lodash/get';
-import {addFreedomPayConfig} from '../../actions/posTerminal'
+import {addFreedomPayConfig, getFreedomPayConfig} from '../../actions/posTerminal'
 import {connect} from 'react-redux';
 import showMessage from '../../actions/toastAction';
-import { isUndefined } from 'util';
 
 class FPConfig extends Component {
     constructor(props) {
@@ -24,26 +23,34 @@ class FPConfig extends Component {
     componentDidMount() {
         if(_get(this.props,'history.location.state.storeId','') == '') {
             this.props.history.push('/posList')
+        } 
+        else {
+            let data = {
+                id: _get(this.props,'history.location.state.terminalId','')
+            }
+            let url = '/Payment/FreedomPay/Config/Get'
+            this.props.dispatch(getFreedomPayConfig('', data,url))
         }
+
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.isSuccess) {
-            debugger
-            this.setState({ disableSave: false })
-            this.handleCancel()
-            this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
-            setTimeout(() => {
-                this.props.dispatch(showMessage({ text: '', isSuccess: true }));
-
+        if(nextProps.type == 'SUCCESS_ADD_FP_CONFIG') {
+            if(nextProps.status == 200) {
+                this.setState({ disableSave: false })
+                this.handleCancel()
+                this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
+                setTimeout(() => {
+                    this.props.dispatch(showMessage({ text: '', isSuccess: true }));
+    
+                }, 1000)
+            } else {
+                this.setState({ disableSave: false })
+                this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
+                setTimeout(() => {
+                    this.props.dispatch(showMessage({ text: '', isSuccess: true }));
             }, 1000)
-        } else {
-            debugger
-            this.setState({ disableSave: false })
-            this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
-            setTimeout(() => {
-                this.props.dispatch(showMessage({ text: '', isSuccess: true }));
-            }, 1000)
+            }
         }
     }
 
@@ -139,22 +146,13 @@ class FPConfig extends Component {
 
 const mapStateToProps = state => {
     const {posTerminalReducer} = state
-    const {status, type, saveFPConfig} = posTerminalReducer
-    let isSuccess = true 
-    if(type == 'SUCCESS_ADD_FP_CONFIG') {
-        if(status == 200) {
-            isSuccess = true
-        }
-    } else if(type == 'SUCCESS_ADD_FP_CONFIG') {
-        if(status == 400) {
-            isSuccess = false
-        }
-    }
+    const {status, type, saveFPConfig, fpConfigData} = posTerminalReducer
+    
     return {
         status,
         type,
         saveFPConfig,
-        isSuccess
+        fpConfigData
     } 
 }
 

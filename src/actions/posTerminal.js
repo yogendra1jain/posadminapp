@@ -176,3 +176,36 @@ export const addFreedomPayConfig = (subreddit, data, url) => dispatch =>
         wrapperActionType: 'ADD_FP_CONFIG',
         redirect: 'follow'
     }));
+
+const initGetFPConfig = (subreddit) => ({
+    type: POS_TERMINAL.INIT_GET_FP_CONFIG,
+    subreddit
+});
+
+const successGetFPConfig = (subreddit, json, status) => ({
+    type: POS_TERMINAL.SUCCESS_GET_FP_CONFIG,
+    subreddit,
+    data: json,
+    status: status,
+    receivedAt: Date.now()
+})
+
+const failGetFPConfig = (subreddit, err, errCode) => ({
+    type: POS_TERMINAL.FAIL_GET_FP_CONFIG,
+    subreddit,
+    error: err,
+    errorCode: errCode
+})
+
+export const getFreedomPayConfig = (subreddit, data, url) => dispatch =>
+    dispatch(dynamicActionWrapper({
+        path: POS_TERMINAL.POS_TERMINAL_URL + url,
+        method: 'POST',
+        body: data,
+        initCb: initGetFPConfig,
+        successCb: successGetFPConfig,
+        failureCb: failGetFPConfig,
+        subreddit,
+        wrapperActionType: 'GET_FP_CONFIG',
+        redirect: 'follow'
+    }));
