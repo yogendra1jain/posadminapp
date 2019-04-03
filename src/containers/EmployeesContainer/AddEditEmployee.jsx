@@ -17,6 +17,7 @@ import { saveNewEmployee } from '../../actions/employees';
 import AddEditComp from './components/AddEditComp.jsx';
 
 /* Component Imports */
+import SaveButton from '../../components/common/SaveButton.jsx'
 
 const styles = theme => ({
     button: {
@@ -38,15 +39,29 @@ class AddEditEmployee extends React.Component {
         }
     }
     saveEmployee = (values) => {
+
         let saveUrl = `/Customer/Create`;
         if (values.id) {
             saveUrl = `/Customer/Update`;
         }
         let data = { ...values };
         _set(data, 'retailerId', localStorage.getItem('retailerID'));
-        let store = _find(_get(this.props, 'storeList', []), {'value': data.employeeStoreId});
+        let store = _find(_get(this.props, 'storeList', []), { 'value': data.employeeStoreId });
         _set(data, 'billingAddress', _get(store, 'address', {}));
         _set(data, 'employee', true);
+        _set(data, 'employeePurchaseLimit', {
+            currencyCode: '$',
+            amount: parseInt(values.amount)
+        });
+
+        let limitRenewalDates = _get(values, 'limitRenewalDates', '').split(',').map(item => {
+            return parseInt(item);
+        })
+        _set(data, 'limitRenewalDates', limitRenewalDates);
+
+        if (data.amount)
+            delete data.amount;
+
         console.log('values to save for employee', data);
         this.props.dispatch(saveNewEmployee('', saveUrl, data))
             .then((data) => {
@@ -77,7 +92,7 @@ class AddEditEmployee extends React.Component {
                 <div className='box-conversion-container'>
                     <form onSubmit={handleSubmit(this.saveEmployee)}>
                         <div className="form-btn-group">
-                            <Button type="submit" variant="raised">SAVE</Button>
+                            <Button type="submit" variant="raised" className="btn-info">SAVE</Button>
                         </div>
 
                         <div className='box-conversion-container'>

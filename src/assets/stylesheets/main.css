@@ -1392,9 +1392,9 @@ table .d-iflex [class^="IntegrationReactSelect-root-"]{
     border: 0;
     height: auto;
     display: flex;
-    background: transparent;
+    background: transparent !important;;
     align-items: center;
-    padding: 2px 0 2px;
+    padding: 2px 0 2px !important;;
 }
 .table-custom {
     overflow:auto !important;
