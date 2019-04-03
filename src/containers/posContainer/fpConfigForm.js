@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import SaveButton from '../../components/common/SaveButton';
 import _set from 'lodash/set';
+import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
 import { Formik } from 'formik';
 import Row from "react-bootstrap/lib/Row";
 import { GenericInput } from '../../components/common/TextValidation.jsx';
-import _get from 'lodash/get';
 import {addFreedomPayConfig, getFreedomPayConfig} from '../../actions/posTerminal'
 import {connect} from 'react-redux';
 import showMessage from '../../actions/toastAction';
@@ -15,6 +16,7 @@ class FPConfig extends Component {
         this.state = {
             disableSave: false
         }
+        this.isUpdate = false
         this.freedomPayInfo = {}
         this.updatedFreedomPayInfo = {}
         this.createHandler = this.createHandler.bind(this);
@@ -52,6 +54,14 @@ class FPConfig extends Component {
             }, 1000)
             }
         }
+
+        if(nextProps.type == "SUCCESS_GET_FP_CONFIG") {
+            if(nextProps.status == 200) {
+                this.isUpdate = true
+                this.freedomPayInfo = this.props.fpConfigdata
+                this.forceUpdate()
+            }
+        }
     }
 
     handleInputChange = (e, props) => {
@@ -62,8 +72,7 @@ class FPConfig extends Component {
     createHandler() {
         this.setState({ disableSave: true })
         let data = _get(this,'freedomPayInfo',{})
-        _set(data,'freedomPayStoreId', _get(this.props.history,'location.state.storeId',''))
-        _set(data, 'freedomPayTerminalId',_get(this.props.history,'location.state.terminalId',''))
+        _set(data, 'posTerminalId',_get(this.props.history,'location.state.terminalId',''))
         let url = "/Payment/FreedomPay/Config/Save"
         this.props.dispatch(addFreedomPayConfig('',data, url))
     }
@@ -101,6 +110,24 @@ class FPConfig extends Component {
                                     />
                                 </div>
                                 <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">FP Terminal Id</label>
+                                    <GenericInput
+                                        htmlFor="freedomPayTerminalId" displayName="FP Terminal Id" type="text"
+                                        inputName="freedomPayTerminalId" defaultValue={_get(this.freedomPayInfo, 'freedomPayTerminalId', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
+                                        className="text-input error"
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-4 form-d">
+                                    <label className="control-label">FP Store Id</label>
+                                    <GenericInput
+                                        htmlFor="freedomPayStoreId" displayName="FP Store Id" type="text"
+                                        inputName="freedomPayStoreId" defaultValue={_get(this.freedomPayInfo, 'freedomPayStoreId', '')}
+                                        onChange={(event) => this.handleInputChange(event, props)} errorCheck={true}
+                                        className="text-input error"
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">FP Client URL</label>
                                     <GenericInput
                                         htmlFor="freedomPayClientUrl" displayName="FP Client URL" type="text"
@@ -131,7 +158,8 @@ class FPConfig extends Component {
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        <SaveButton buttonDisplayText={'Create'} Class_Name={"btn-info"} disabled={this.state.disableSave} handlerSearch={() => this.createHandler()} /> 
+                                        
+                                        <SaveButton buttonDisplayText={this.isUpdate ? 'Update' : 'Create'} Class_Name={"btn-info"} disabled={this.state.disableSave} handlerSearch={() => this.createHandler()} /> 
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
                                     </div>
                                 </div>
@@ -146,13 +174,13 @@ class FPConfig extends Component {
 
 const mapStateToProps = state => {
     const {posTerminalReducer} = state
-    const {status, type, saveFPConfig, fpConfigData} = posTerminalReducer
+    const {status, type, saveFPConfig, fpConfigdata} = posTerminalReducer
     
     return {
         status,
         type,
         saveFPConfig,
-        fpConfigData
+        fpConfigdata
     } 
 }
 
