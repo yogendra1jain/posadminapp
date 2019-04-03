@@ -124,42 +124,43 @@ class AddEditComp extends React.Component {
         const { classes, initialValues } = this.props;
         return (
             <div className='row' style={{ marginTop: '25px' }}>
-                <div className="col-sm-12" style={{ marginLeft: 0 }}>
-                    <div className="col-sm-4" style={{ marginTop: '-25px' }}>
+                <div className="col-sm-12" style={{ marginLeft: 0 }} className="">
+                    <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
                         <Field name={`employeeStoreId`} placeholder="store" id={`employeeStoreId`} hideLabel={false} options={_get(this.props, 'storeList', [])} label={'Store *'} component={ReactSelectWrapper} />
                     </div>
-                    <div className="col-sm-4" style={{ marginTop: '-25px' }}>
+                    <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
                         <Field name={`isEmpPayEnabled`} placeholder="Employee Pay Enabled" id={`isEmpPayEnabled`} hideLabel={false} options={ActiveFlags} label={'Employee Pay Enabled *'} component={ReactSelectWrapper} />
                     </div>
-                    <div className="col-sm-4" style={{ marginTop: '-25px' }}>
+                    <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
                         <Field name={`active`} placeholder="Active" id={`active`} hideLabel={false} options={ActiveFlags} label={'Active *'} component={ReactSelectWrapper} />
                     </div>
                 </div>
-                <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '10px' }}>
+                <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
 
                     <div className="col-sm-6" >
                         <Field name={`email`} placeholder="email" id={`email`} hideLabel={false} label={'email *'} component={TextFieldInput} />
                     </div>
                     <div className="col-sm-6">
-                        <Field name={`employeeDiscount`} placeholder="Discount" type="number" parse={value => parseFloat(value, 10)} id={`employeeDiscount`} hideLabel={false} label={'Discount *'} component={TextFieldInput} />
+                        <Field name={`employeeDiscount`} placeholder="Discount" type="number" parse={value => parseFloat(value, 20)} id={`employeeDiscount`} hideLabel={false} label={'Discount *'} component={TextFieldInput} />
                     </div>
+                </div>
+                <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
                     <div className="col-sm-6">
                         <Field name={`employeeId`} placeholder="Employee Id" id={`employeeId`} hideLabel={false} label={'Employee Id *'} component={TextFieldInput} />
                     </div>
-
                 </div>
                 <FormSection name={`phoneNumber`}>
-                    <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '10px' }}>
+                    <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
                         <div className="col-sm-6">
-                            <Field name={`countryCode`} type="number" parse={value => parseInt(value, 10)} placeholder="Country Code" id={`countryCode`} hideLabel={false} label={'countryCode *'} component={TextFieldInput} />
+                            <Field name={`countryCode`} type="number" parse={value => parseInt(value, 20)} placeholder="Country Code" id={`countryCode`} hideLabel={false} label={'countryCode *'} component={TextFieldInput} />
                         </div>
                         <div className="col-sm-6">
-                            <Field name={`phoneNumber`} type="number" parse={value => parseInt(value, 10)} placeholder="Phone Number" id={`phoneNumber`} hideLabel={false} label={'phoneNumber *'} component={TextFieldInput} />
+                            <Field name={`phoneNumber`} type="number" parse={value => parseInt(value, 20)} placeholder="Phone Number" id={`phoneNumber`} hideLabel={false} label={'phoneNumber *'} component={TextFieldInput} />
                         </div>
                     </div>
                 </FormSection>
                 <FormSection name={`customer`}>
-                    <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '10px' }}>
+                    <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
                         <div className="col-sm-6" >
                             <Field name={`firstName`} id={`firstName`} placeholder="firstName" hideLabel={false} label='First Name *' component={TextFieldInput} />
                         </div>
@@ -169,7 +170,7 @@ class AddEditComp extends React.Component {
                     </div>
                 </FormSection>
 
-                <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '10px' }}>
+                <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
                     <div className="col-sm-6">
                         <Field name={`amount`} id={`amount`} type={`number`} placeholder="PurchaseLimit" hideLabel={false} label='Purchase Limit *' component={TextFieldInput} />
                     </div>
