@@ -175,30 +175,36 @@ class PosList extends Component {
         }
     }
 
-    onSave() {
+    getTerminals = () => {
+        // following call is for getting updated list of terminals
+        let reqBody = {
+            id: this.selectedStore.stores
+        }
+        let listurl = '/Terminal/ByStoreId';
+        this.props.dispatch(fetchPosTerminalList(this.props.posTerminalReducer, listurl, reqBody));
+        this.selectRowProp.selected = '';
+        this.open = false;
+    }
 
+    onSave() {
         const { dispatch, posTerminalReducer, posListData, storesReducer } = this.props;
         console.log('Poslist data: ', posListData);
+
         let url = '';
         let data = {}
+
         if (this.isUpdate) {
-            console.log(this.posInfo, 'this.posInfo')
             url = "/Terminal/Update"
             data = this.posInfo
             // following call is for updating terminal
             dispatch(fetchPosTerminalData(posTerminalReducer, data, url)).then(resp => {
-                // following call is for getting updated list of terminals
-                let reqBody = {
-                    id: this.selectedStore.stores
-                }
-                let listurl = '/Terminal/ByStoreId';
-                dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
-                this.selectRowProp.selected = '';
-                this.open = false;
+                // Get list of terminals from server
+                this.getTerminals();
+            }).catch(err => {
+                console.log('Error while getting terminal list', err);
             });
         } else {
 
-            console.log('Index: ', _findIndex(posListData, pos => pos.name === _get(this.posInfo, 'name', '')));
             if (_findIndex(posListData, pos => pos.name === _get(this.posInfo, 'name', '')) === -1) {
                 if (_get(this.posInfo, 'name', '') === '') {
 
@@ -209,16 +215,21 @@ class PosList extends Component {
                     data.storeId = _get(this.selectedStore, 'stores', '');
                     data.name = _get(this.posInfo, 'name', '');
                     data.active = this.posInfo.active ? true : false;
-                    dispatch(fetchPosTerminalData(posTerminalReducer, data, url));
+                    dispatch(fetchPosTerminalData(posTerminalReducer, data, url)).then(resp => {
+                        // Get list of terminals from server
+                        this.getTerminals();
+                    }).catch(err => {
+                        console.log('Error while getting terminal list', err);
+                    });
                     this.forceUpdate();
-                    if (this.props.status === 200) {
-                        console.log(this.selectedStore.stores, 'this.selectedStore.stores')
-                        let reqBody = {
-                            id: this.selectedStore.stores
-                        }
-                        let listurl = '/Terminal/ByStoreId';
-                        dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
-                    }
+                    // if (this.props.status === 200) {
+                    //     console.log(this.selectedStore.stores, 'this.selectedStore.stores')
+                    //     let reqBody = {
+                    //         id: this.selectedStore.stores
+                    //     }
+                    //     let listurl = '/Terminal/ByStoreId';
+                    //     dispatch(fetchPosTerminalList(posTerminalReducer, listurl, reqBody));
+                    // }
                 }
             } else {
                 this.posInfo = {};
@@ -234,11 +245,11 @@ class PosList extends Component {
         dispatch(fetchPosTerminalList(posTerminalReducer, url));
     }
     componentDidMount() {
-        if(_get(this.props,'history.location.state.storeId','') !== '') {
-            this.selectedStore.stores = _get(this.props,'history.location.state.storeId','')
+        if (_get(this.props, 'history.location.state.storeId', '') !== '') {
+            this.selectedStore.stores = _get(this.props, 'history.location.state.storeId', '')
             const { dispatch, posTerminalReducer } = this.props;
             let reqBody = {
-                id: _get(this.props,'history.location.state.storeId','')
+                id: _get(this.props, 'history.location.state.storeId', '')
             }
             let url = '/Terminal/ByStoreId';
             dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
@@ -540,7 +551,7 @@ const mapStateToProps = state => {
     let { type, posListData, posSaveData, posStatusData } = posTerminalReducer || '';
     let { storeData } = storesReducer || {};
     let { retailerId, userId } = userRolesReducer['userRolesData'] ? userRolesReducer['userRolesData'] : {};
-    
+
     return {
         status,
         isFetching,
