@@ -1,6 +1,6 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
-import SampleEmployeeUpload from '../../../assets/SampleCSV/sampleEmployeeUpload.ods';
+import SampleEmployeeUpload from '../../../assets/SampleCSV/sampleEmployeeUpload.csv';
 
 export default (props) => {
     return (
