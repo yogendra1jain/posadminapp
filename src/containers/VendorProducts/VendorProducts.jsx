@@ -174,14 +174,29 @@ class VendorProductsContainer extends React.Component {
     }
 
     handleVendorChange = (id, name) => {
-        _set(this.selectedVendor, name, id);
-        let vendorProdUrl = `/VendorProduct/GetByVendorId`;
-        let reqObj = {
-            id: id,
+        if(id == null)  {
+            this.productLists = []
+            this.selectedVendor = {}
+            this.forceUpdate()
+        } else {
+            _set(this.selectedVendor, name, id);
+            let vendorProdUrl = `/VendorProduct/GetByVendorId`;
+            let reqObj = {
+                id: id,
+            }
+            this.setState({ isVendorSelected: true }, () => {
+                this.fetchVendorProducts(vendorProdUrl, reqObj);
+            });
+        } 
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.vendorProductsList !==  this.props.vendorProductsList) {
+            if(this.state.isVendorSelected) {
+                this.productLists = this.props.vendorProductsList
+                this.forceUpdate()
+            }
         }
-        this.setState({ isVendorSelected: true }, () => {
-            this.fetchVendorProducts(vendorProdUrl, reqObj);
-        });
     }
     
     render() {
@@ -197,11 +212,12 @@ class VendorProductsContainer extends React.Component {
             </div>);
         }
 
-        let { vendorProductsList, vendorList } = this.props;
-        let productLists = [];
-        if(this.state.isVendorSelected) {
-            productLists = vendorProductsList;
-        }
+        // let { vendorProductsList } = this.props;
+        // this.productLists = [];
+        // if(this.state.isVendorSelected) {
+        //     this.productLists = vendorProductsList;
+        //     this.forceUpdate()
+        // }
         return (
             <div className="">
                 <div className='panel-container'>
@@ -229,7 +245,7 @@ class VendorProductsContainer extends React.Component {
                     
                     <div>
                         <BootstrapTable
-                            data={productLists}
+                            data={this.productLists}
                             options={options}
                             selectRow={this.selectRowProp}
                             striped hover
