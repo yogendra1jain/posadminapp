@@ -15,12 +15,10 @@ class FPConfig extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            disableSave: false
+            fpConfigValues: {},
+            disableSave: false,
+            isUpdate: false
         }
-        this.isUpdate = false
-        this.freedomPayInfo = {}
-        this.updatedFreedomPayInfo = {}
-        this.createHandler = this.createHandler.bind(this);
     }
 
     componentDidMount() {
@@ -33,7 +31,6 @@ class FPConfig extends Component {
             }
             let url = '/Payment/FreedomPay/Config/Get'
             this.props.dispatch(getFreedomPayConfig('', data, url)).then(resp => {
-                debugger;
                 this.isUpdate = true
                 this.setState({
                     fpConfigValues: {
@@ -47,39 +44,11 @@ class FPConfig extends Component {
                 })
 
             }).catch(err => {
-                debugger;
+                console.log('Error while getting data of fpconfig ', err);
             })
         }
 
     }
-
-    // componentWillReceiveProps(nextProps) {
-    //     if(nextProps.type == 'SUCCESS_ADD_FP_CONFIG') {
-    //         if(nextProps.status == 200) {
-    //             this.setState({ disableSave: false })
-    //             this.handleCancel()
-    //             this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
-    //             setTimeout(() => {
-    //                 this.props.dispatch(showMessage({ text: '', isSuccess: true }));
-
-    //             }, 1000)
-    //         } else {
-    //             this.setState({ disableSave: false })
-    //             this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
-    //             setTimeout(() => {
-    //                 this.props.dispatch(showMessage({ text: '', isSuccess: true }));
-    //         }, 1000)
-    //         }
-    //     }
-
-    //     if(nextProps.type == "SUCCESS_GET_FP_CONFIG") {
-    //         if(nextProps.status == 200) {
-    //             this.isUpdate = true
-    //             this.freedomPayInfo = this.props.fpConfigdata
-    //             this.forceUpdate()
-    //         }
-    //     }
-    // }
 
     handleInputChange = (e, props) => {
         this.setState({
@@ -91,7 +60,6 @@ class FPConfig extends Component {
     }
 
     createHandler() {
-
         this.setState({ disableSave: true })
         let data = _get(this, 'state.fpConfigValues', {})
         _set(data, 'posTerminalId', _get(this.props.history, 'location.state.terminalId', ''))
@@ -128,12 +96,12 @@ class FPConfig extends Component {
 
         return (
             <Formik
-                initialValues={this.updatedFreedomPayInfo}
+                initialValues={this.state.fpConfigValues}
                 handleChange={this.props.handleChange}
                 handleBlur={this.props.handleBlur}
                 enableReinitialize={true}
                 onSubmit={() => { }}
-                values={this.freedomPayInfo}
+                values={this.state.fpConfigValues}
                 render={(props) => {
 
                     return (
@@ -197,7 +165,7 @@ class FPConfig extends Component {
                             <Row>
                                 <div className="col-sm-12">
                                     <div className="form-btn-group">
-                                        <SaveButton buttonDisplayText={this.isUpdate ? 'Update' : 'Create'} Class_Name={"btn-info"} disabled={this.state.disableSave} handlerSearch={() => this.createHandler()} />
+                                        <SaveButton buttonDisplayText={this.state.isUpdate ? 'Update' : 'Create'} Class_Name={"btn-info"} disabled={this.state.disableSave} handlerSearch={() => this.createHandler()} />
                                         <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
                                     </div>
                                 </div>
@@ -207,19 +175,6 @@ class FPConfig extends Component {
                 }}
             />
         )
-    }
-}
-
-const mapStateToProps = state => {
-    const { posTerminalReducer } = state
-    const { status, type, saveFPConfig, fpConfigdata } = posTerminalReducer
-    debugger
-
-    return {
-        status,
-        type,
-        saveFPConfig,
-        fpConfigdata
     }
 }
 
