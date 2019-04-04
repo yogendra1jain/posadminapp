@@ -12,11 +12,9 @@ class AddEditVendor extends Component {
     render() {
         const { handleSubmit } = this.props
         return (
-            <div className="d-flex">
-                <form onSubmit={handleSubmit(this.handleAddCustomer)}>
-                    <AddEditVendorComponent />
-                </form>
-            </div>
+            <form onSubmit={handleSubmit(this.handleAddCustomer)}>
+                <AddEditVendorComponent />
+            </form>
         )
     }
 } 

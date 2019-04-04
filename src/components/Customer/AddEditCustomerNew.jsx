@@ -1,7 +1,7 @@
 import React from 'react';
 import Redirect from "react-router/Redirect";
 import "bootstrap/dist/css/bootstrap.css";
-import SaveButton from '../../components/common/SaveButton.jsx'
+import SaveButton from '../../components/common/SaveButton'
 import { fetchStore } from '../../actions/store';
 import AutoComplete from '../../components/Elements/AutoComplete.jsx';
 import connect from 'react-redux/lib/connect/connect';

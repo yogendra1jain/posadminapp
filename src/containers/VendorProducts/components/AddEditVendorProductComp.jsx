@@ -15,6 +15,7 @@ import { TextFieldInput, ReactSelectWrapper } from '../../../components/common/M
 import Alert from 'react-s-alert';
 import FormControl from 'material-ui/Form/FormControl';
 
+import {clearSelectedProduct} from '../../../actions/products'; 
 /* Component Imports */
 
 const styles = theme => ({
@@ -64,6 +65,10 @@ class AddEditVendorProductComp extends React.Component {
             })
     }
 
+    componentWillUnmount() {
+        this.props.dispatch(clearSelectedProduct('CLEAR_SELECTED_PRODUCT'))
+    }
+
     handleBlur = () => {
         let formValue = _get(this.props, 'AddEditVendorProduct');
         console.log('form values', formValue);
@@ -90,7 +95,6 @@ class AddEditVendorProductComp extends React.Component {
     }
 
     render() {
-        const { classes, initialValues } = this.props;
         return (
             <React.Fragment>
                 <div className='row mt-21'>

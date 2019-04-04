@@ -31,7 +31,6 @@ class FPConfig extends Component {
             }
             let url = '/Payment/FreedomPay/Config/Get'
             this.props.dispatch(getFreedomPayConfig('', data, url)).then(resp => {
-                this.isUpdate = true
                 this.setState({
                     fpConfigValues: {
                         freedomPayClientEnvironment: _get(resp, 'freedomPayClientEnvironment'),
@@ -40,7 +39,8 @@ class FPConfig extends Component {
                         freedomPayClientUrl: _get(resp, 'freedomPayClientUrl'),
                         merchantReferenceCode: _get(resp, 'merchantReferenceCode'),
                         freedomPayWorkstationId: _get(resp, 'freedomPayWorkstationId'),
-                    }
+                    },
+                    isUpdate: true
                 })
 
             }).catch(err => {
