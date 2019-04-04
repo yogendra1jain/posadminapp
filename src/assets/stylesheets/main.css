@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Karla:400,700');
 @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
-html{
+/* html{
     font-size: 62.5%;
-}
+} */
 body{
     font-family: 'Karla', sans-serif!important;
     font-size: 1rem;
@@ -34,6 +34,14 @@ body{
 }
 .align-center{
     align-items: center;
+}
+.card{
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    min-height: 50px;
+    padding: 20px;
 }
 .ml-50{
     margin-left: 50px; 
@@ -3509,4 +3517,24 @@ input.login-number.form-control {
 }
 .normal-dropdowns .Select-placeholder,.normal-dropdowns .Select-value-label{
     padding: 0 30px 0 10px !important;
+}
+
+
+/* Dashboard Styles */
+
+.dashboard-table-margin{
+    margin: 10px 25px;
+}
+
+.dashboard .card-title{
+    font-size: 1.3em;
+    font-weight: bold;
+    color: rgba(0,0,0,0.6)
+}
+.dashboard .card-value{
+    font-size: 3em;
+    font-weight: bold;
+}
+.dashboard .payment-method-pie svg{
+    width: 100%;
 }
