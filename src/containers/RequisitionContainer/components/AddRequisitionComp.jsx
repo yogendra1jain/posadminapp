@@ -111,73 +111,88 @@ class AddRequisitionForm extends React.PureComponent {
         const { selProd } = this.state;
 
         return (
-            <div className="row" style={{ height: '250px' }}>
+            <div className="row mt-21" style={{ height: '250px' }}>
                 <div className="col-sm-12">
 
                     <div className="signinForm">
                         <form onSubmit={handleSubmit(this.submitRequisition)}>
-                            <div className='box-conversion-row'>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <label>Vendor Product</label>
+                                    <Field
+                                        name={`vendorProductId`}
+                                        options={_get(this.props, 'vendorProductsList', [])}
+                                        disabled={false}
+                                        onChange={(e) => this.handleChange(e)}
+                                        component={ReactSelectWrapper}
+                                    />
+                                </div>
+                                <div className="col-sm-4">
+                                    <label>Store</label>
+                                    <Field
+                                        name={`storeId`}
+                                        options={_get(this.props, 'storeList', [])}
+                                        disabled={false}
+                                        component={ReactSelectWrapper}
+                                    />
+                                </div>
+                                <div className="col-sm-4">
+                                    <label>Quantity</label>
+                                    <Field
+                                        name={`quantity`}
+                                        disabled={false}
+                                        component={TextFieldInput}
+                                        type={"number"}
+                                        parse={value => parseInt(value, 10)}
+                                    /></div>
+                            </div>
+                            {/* <div className='box-conversion-row'> 
                                 <div className='box-conversion-item'>
                                     <span className='box-conversion-data' style={{ width: '100px' }}>
-                                        <Field
-                                            name={`vendorProductId`}
-                                            options={_get(this.props, 'vendorProductsList', [])}
-                                            disabled={false}
-                                            onChange={(e) => this.handleChange(e)}
-                                            component={ReactSelectWrapper}
-                                        />
+                                        <span className='box-conversion-title'></span>
+
                                     </span>
-                                    <span className='box-conversion-title'>Vendor Product</span>
+
                                 </div>
                                 <div className='box-conversion-item'>
                                     <span className='box-conversion-data' style={{ width: '100px' }}>
-                                        <Field
-                                            name={`storeId`}
-                                            options={_get(this.props, 'storeList', [])}
-                                            disabled={false}
-                                            component={ReactSelectWrapper}
-                                        />
+
                                     </span>
                                     <span className='box-conversion-title'>Store</span>
                                 </div>
                                 <div className='box-conversion-item'>
                                     <span className='box-conversion-data'>
-                                        <Field
-                                            name={`quantity`}
-                                            disabled={false}
-                                            component={TextFieldInput}
-                                            type={"number"}
-                                            parse={value => parseInt(value, 10)}
-                                        />
+
                                     </span>
                                     <span className='box-conversion-title'>Quantity</span>
                                 </div>
                             </div>
-                            <div className='box-conversion-container'>
+                            */}
+                            <div className='box-conversion-container mt-21'>
                                 <div className='box-conversion-row'>
                                     <div className='box-conversion-item'>
                                         <span className='box-conversion-data'>{selProd.productName}</span>
-                                        <span className='box-conversion-title'>POS Product</span>
+                                        <label>POS Product</label>
                                     </div>
                                     <div className='box-conversion-item'>
                                         <span className='box-conversion-data'>{selProd.vendorName}</span>
-                                        <span className='box-conversion-title'>Vendor</span>
+                                        <label>Vendor</label>
                                     </div>
                                     <div className='box-conversion-item'>
                                         <span className='box-conversion-data'>{selProd.sku}</span>
-                                        <span className='box-conversion-title'>SKU</span>
+                                        <label>SKU</label>
                                     </div>
                                     <div className='box-conversion-item'>
                                         <span className='box-conversion-data'>{selProd.defaultOrderQty}</span>
-                                        <span className='box-conversion-title'>Default Order Qty</span>
+                                        <label>Default Order Qty</label>
                                     </div>
                                     <div className='box-conversion-item'>
                                         <span className='box-conversion-data'>{_get(selProd, 'price.currency', '') + _get(selProd, 'price.price', '')}</span>
-                                        <span className='box-conversion-title'>Price</span>
+                                        <label>Price</label>
                                     </div>
                                 </div>
                             </div>
-                            <div className="btn-parent-full pt-50px">
+                            <div className="btn-parent-full mt-21">
                                 <Button className={classes.buttonLogin} type='submit' variant="contained" color='primary' >{'Save'}</Button>
                             </div>
                         </form>
