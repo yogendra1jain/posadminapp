@@ -1,5 +1,5 @@
 import { APPLICATION_BFF_URL } from '../../helpers/urlConstants';
-import { postData } from '../../actions/postAction';
+import { postData } from '../../actions/Common/postAction';
 import _get from 'lodash/get';
 import showMessage from '../../actions/toastAction';
 

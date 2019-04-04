@@ -1,5 +1,5 @@
+import dynamicActionWrapper from '../actionHelper';
 
-import dynamicActionWrapper from './actionHelper';
 
 export const request = (subreddit, constants) => {
     console.log(constants, "constants")
@@ -29,13 +29,11 @@ export const receiveError = (subreddit, err, errCode, reject, constants) => {
 };
 
 
-export const postData = (url, data, subreddit, constants, method, uploadConfig) => dispatch => {
+export const getData = (url, subreddit, constants) => dispatch => {
     return new Promise((resolve, reject) => {
         dispatch(dynamicActionWrapper({
             path: url,
-            method: method || 'post',
-            body: data,
-            uploadConfig,
+            method: 'get',
             initCb: request,
             successCb: receive,
             failureCb: receiveError,
