@@ -52,7 +52,8 @@ class VendorProductsContainer extends React.Component {
             // selected : this.selectedIds,
         }
         this.method = 'POST';
-        this.vendorList = []
+        this.vendorList = [];
+        this.selectedIds = []
     }
     showAlert(error, msg) {
         if (error) {
@@ -211,21 +212,14 @@ class VendorProductsContainer extends React.Component {
                 </div>
             </div>);
         }
-
-        // let { vendorProductsList } = this.props;
-        // this.productLists = [];
-        // if(this.state.isVendorSelected) {
-        //     this.productLists = vendorProductsList;
-        //     this.forceUpdate()
-        // }
         return (
             <div className="">
                 <div className='panel-container'>
                     <span className='panel-heading'>Vendor Products</span>
 
                     <div>
-                        <SaveButton  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
-                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
+                        <SaveButton disabled={this.selectedIds.length < 1}  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
+                        <SaveButton  disabled={_isEmpty(this.selectedVendor)} Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
                     </div>
                 </div>
 

@@ -13,7 +13,7 @@ import { showMessage } from '../../../actions/common';
 import { fetchRetailerProducts, fetchExistingPOSProductsForVendor } from '../../../actions/products';
 import { TextFieldInput, ReactSelectWrapper } from '../../../components/common/MaterialUiComponents';
 import Alert from 'react-s-alert';
-
+import {clearSelectedProduct} from '../../../actions/products'; 
 /* Component Imports */
 
 const styles = theme => ({
@@ -63,6 +63,10 @@ class AddEditVendorProductComp extends React.Component {
             })
     }
 
+    componentWillUnmount() {
+        this.props.dispatch(clearSelectedProduct('CLEAR_SELECTED_PRODUCT'))
+    }
+
     handleBlur = () => {
         let formValue = _get(this.props, 'AddEditVendorProduct');
         console.log('form values', formValue);
@@ -89,7 +93,6 @@ class AddEditVendorProductComp extends React.Component {
     }
 
     render() {
-        const { classes, initialValues } = this.props;
         return (
             <div className='row'>
                 <div className="col-sm-12" style={{ marginLeft: 0 }}>

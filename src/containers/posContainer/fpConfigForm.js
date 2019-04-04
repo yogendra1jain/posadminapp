@@ -30,12 +30,7 @@ class FPConfig extends Component {
             }
             let url = '/Payment/FreedomPay/Config/Get'
             this.props.dispatch(getFreedomPayConfig('', data, url)).then(resp => {
-                if(_isEmpty(resp)) {
-                    this.setState({ isUpdate: false })
-                } else {
-                    this.setState({fpConfigValues: resp, isUpdate: true})
-                }
-
+                this.setState({fpConfigValues: resp, isUpdate: true})
             }).catch(err => {
 
             })

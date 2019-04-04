@@ -506,3 +506,7 @@ export const fetchProductsFromCache = (subreddit, url, data) => dispatch => {
         }));
     })
 }
+
+export const clearSelectedProduct = (type) => ({
+   type
+})

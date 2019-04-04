@@ -14,6 +14,7 @@ import asyncValidate from './validate';
 import { vendorProductSave } from '../../../actions/products';
 import { showMessage } from '../../../actions/common';
 import AddEditVendorProductComp from '../components/AddEditVendorProductComp.jsx';
+import SaveButton from '../../../components/common/SaveButton'
 
 /* Component Imports */
 
@@ -63,6 +64,10 @@ class AddEditVendorProduct extends React.Component {
 
     }
 
+    handleCancel = () => {
+        this.props.history.push('/vendorproducts')
+    }
+
     render() {
         const { handleSubmit, initialValues } = this.props
         return (
@@ -77,7 +82,9 @@ class AddEditVendorProduct extends React.Component {
                             {...this.props}
                         />
                         <div className="row" style={{ marginTop: '10px', marginLeft: '10px' }}>
-                            <Button type="submit" variant="raised">SAVE</Button>
+                            {/* <Button type="submit" variant="raised">SAVE</Button> */}
+                            <SaveButton type="submit" buttonDisplayText={'Save'} Class_Name="btn-info m-r-10" />
+                            <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
                         </div>
                     </form>
                 </div>

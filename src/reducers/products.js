@@ -305,6 +305,17 @@ const productData = (state = {
         selectedVendorProduct: action.data,
         lastUpdated: action.receivedAt
       });
+
+    case 'CLEAR_SELECTED_PRODUCT':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
+        selectedVendorProduct: {},
+        lastUpdated: action.receivedAt
+      });
+      
     case REQUEST_PRODUCTS_FROM_CACHE:
       return Object.assign({}, state, {
         isFetching: true,

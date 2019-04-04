@@ -335,8 +335,6 @@ class AddEditVendorNew extends React.Component {
                                         className="text-input error"
                                     />
                                 </div>
-                                <div className="col-sm-6 col-md-4 form-d"></div>
-                                <div className="col-sm-6 col-md-4 form-d"></div>
                                 <div className="col-sm-6 col-md-4 form-d">
                                     <label className="control-label">Email</label>
                                     <GenericInput
