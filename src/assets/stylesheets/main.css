@@ -2603,7 +2603,7 @@ input[type="radio"], input[type="checkbox"]{vertical-align: sub}
 .table-custom th, .table-custom td{position: relative;}
 .table-custom td{padding: 4px 12px 15px 12px!important;}
 .custom-input{position:relative;}
-.custom-input .text-input.error{position:absolute; bottom:-14px;left:0; height:auto;}
+/* .custom-input .text-input.error{position:absolute; bottom:-14px;left:0; height:auto;} */
 .login-block .custom-input .text-input.error{position:absolute; bottom:-35px;left:0; height:auto;}
 .wrap-block{overflow-x: auto; background-color:#fff;}
 .bottom-space{margin-bottom:150px;}
@@ -3509,4 +3509,9 @@ input.login-number.form-control {
 }
 .normal-dropdowns .Select-placeholder,.normal-dropdowns .Select-value-label{
     padding: 0 30px 0 10px !important;
+}
+
+label { 
+    font-size: 14px;
+    margin-top: 5px;
 }

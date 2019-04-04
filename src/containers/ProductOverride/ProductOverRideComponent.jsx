@@ -6,7 +6,7 @@ import _get from 'lodash/get';
 import _set from 'lodash/set';
 import SaveButton from '../../components/common/SaveButton';
 import Checkbox from '@material-ui/core/Checkbox';
-import {saveProductOverride} from '../../actions/poductOverride';
+import { saveProductOverride } from '../../actions/poductOverride';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from 'react-s-alert';
 import Redirect from "react-router/Redirect";
@@ -46,18 +46,18 @@ class ProductOverRideComponent extends Component {
     handleChangeInput = (e, index, type) => {
         let value = _get(e, 'target.value', '');
         let selectedProducts = _cloneDeep(this.state.selectedProducts);
-        if(type == 'costPrice') {
+        if (type == 'costPrice') {
             _set(selectedProducts[index], 'costPrice', value);
-        } else if(type == 'salePrice') {
+        } else if (type == 'salePrice') {
             _set(selectedProducts[index], 'salePrice', value);
         }
-        this.setState({selectedProducts});
+        this.setState({ selectedProducts });
     }
 
     handleCheckBoxChange = (index) => {
         let selectedProducts = _cloneDeep(this.state.selectedProducts);
         _set(selectedProducts[index], 'active', !selectedProducts[index].active)
-        this.setState({selectedProducts})
+        this.setState({ selectedProducts })
     }
 
     handleProductOverride = (index) => {
@@ -82,36 +82,36 @@ class ProductOverRideComponent extends Component {
     }
 
     mapPropsWithState = () => {
-        if(this._isMounted) {
-            if(!_isEmpty(this.props.selectedProducts)) {
-                if(Array.isArray(this.props.selectedProducts)) {
-                    this.setState({ selectedProducts: this.props.selectedProducts})
+        if (this._isMounted) {
+            if (!_isEmpty(this.props.selectedProducts)) {
+                if (Array.isArray(this.props.selectedProducts)) {
+                    this.setState({ selectedProducts: this.props.selectedProducts })
                 }
             }
 
-            if(this.props.selectedStoreId !== '') {
-                this.setState({storeId: this.props.selectedStoreId})
+            if (this.props.selectedStoreId !== '') {
+                this.setState({ storeId: this.props.selectedStoreId })
             }
         }
     }
 
     handleCancel = () => {
-        this.props.history.push('/storeProducts'); 
+        this.props.history.push('/storeProducts');
     }
 
     componentDidMount() {
         this._isMounted = true
         this.mapPropsWithState();
-        if(_isEmpty(this.props.selectedProducts)) {
+        if (_isEmpty(this.props.selectedProducts)) {
             this.props.history.push('/storeProducts')
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.type == 'RECEIVE_PRODUCT_OVERRIDE') {
-            if(nextProps.status == 200) {
+        if (nextProps.type == 'RECEIVE_PRODUCT_OVERRIDE') {
+            if (nextProps.status == 200) {
                 this.showAlert(false, 'Product Overrided Successfully!');
-            } else if(nextProps.status !== 200) {
+            } else if (nextProps.status !== 200) {
                 this.showAlert(true, 'Some Error Occured!');
             }
         }
@@ -121,7 +121,7 @@ class ProductOverRideComponent extends Component {
         let showSelectedProducts = () => {
             let rows = []
             if (!_isEmpty(this.state.selectedProducts)) {
-                _get(this.state,'selectedProducts', []).map((product, index) => {
+                _get(this.state, 'selectedProducts', []).map((product, index) => {
                     rows.push(
                         <div className={'box-conversion-row'} style={{ border: 'solid 1px #ddd' }}>
                             <div className='box-conversion-item'>
@@ -136,18 +136,19 @@ class ProductOverRideComponent extends Component {
                             <div className='box-conversion-item'>
                                 <input style={{ width: '100px' }} className='box-conversion-data' onChange={(e) => this.handleChangeInput(e, index, 'salePrice')} value={product.salePrice} />
                             </div>
-                            <div className='box-conversion-item'>
+                            <div className='box-conversion-item' style={{ 'align-items': 'flex-start' }}>
                                 <Checkbox
                                     checked={product.active}
                                     onChange={() => this.handleCheckBoxChange(index)}
                                     value="active"
                                 />
                             </div>
-                            <div>
-                                {this.state.clickedSaveButton == index &&   this.props.isFetching ? <CircularProgress disableShrink/> : 
-                                    <SaveButton buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={()=>this.handleProductOverride(index)} />
+                            <div className='box-conversion-item'>
+                                {this.state.clickedSaveButton == index && this.props.isFetching ? <CircularProgress disableShrink /> :
+                                    <SaveButton buttonDisplayText={'Save'} Class_Name={"btn-info"} handlerSearch={() => this.handleProductOverride(index)} />
                                 }
                             </div>
+
                         </div>
                     )
                 })
@@ -160,22 +161,23 @@ class ProductOverRideComponent extends Component {
                             <SaveButton buttonDisplayText={'Close'} Class_Name={"btn-info"} handlerSearch={this.handleCancel} />
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-sm-2">
-                            <span>Product Name</span>
+                    <div className="box-conversion-row">
+                        <div className="box-conversion-item">
+                            <label className='box-conversion-data'>Product Name</label>
                         </div>
-                        <div className="col-sm-2">
-                            <span>SKU</span>
+                        <div className="box-conversion-item">
+                            <label className='box-conversion-data'>SKU</label>
                         </div>
-                        <div className="col-sm-2">
-                            <span>Cost Price</span>
+                        <div className="box-conversion-item">
+                            <label className='box-conversion-data'>Cost Price</label>
                         </div>
-                        <div className="col-sm-2">
-                            <span>Sale Price</span>
+                        <div className="box-conversion-item">
+                            <label className='box-conversion-data'>Sale Price</label>
                         </div>
-                        <div>
-                            <span>Active</span>
+                        <div className='box-conversion-item'>
+                            <label className='box-conversion-data'>Active</label>
                         </div>
+                        <div className='box-conversion-item'></div>
                     </div>
                     {rows}
                 </div>
