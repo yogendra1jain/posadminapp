@@ -52,7 +52,8 @@ class VendorProductsContainer extends React.Component {
             // selected : this.selectedIds,
         }
         this.method = 'POST';
-        this.vendorList = []
+        this.vendorList = [];
+        this.selectedIds = []
     }
     showAlert(error, msg) {
         if (error) {
@@ -174,14 +175,29 @@ class VendorProductsContainer extends React.Component {
     }
 
     handleVendorChange = (id, name) => {
-        _set(this.selectedVendor, name, id);
-        let vendorProdUrl = `/VendorProduct/GetByVendorId`;
-        let reqObj = {
-            id: id,
+        if(id == null)  {
+            this.productLists = []
+            this.selectedVendor = {}
+            this.forceUpdate()
+        } else {
+            _set(this.selectedVendor, name, id);
+            let vendorProdUrl = `/VendorProduct/GetByVendorId`;
+            let reqObj = {
+                id: id,
+            }
+            this.setState({ isVendorSelected: true }, () => {
+                this.fetchVendorProducts(vendorProdUrl, reqObj);
+            });
+        } 
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.vendorProductsList !==  this.props.vendorProductsList) {
+            if(this.state.isVendorSelected) {
+                this.productLists = this.props.vendorProductsList
+                this.forceUpdate()
+            }
         }
-        this.setState({ isVendorSelected: true }, () => {
-            this.fetchVendorProducts(vendorProdUrl, reqObj);
-        });
     }
     
     render() {
@@ -196,20 +212,14 @@ class VendorProductsContainer extends React.Component {
                 </div>
             </div>);
         }
-
-        let { vendorProductsList, vendorList } = this.props;
-        let productLists = [];
-        if(this.state.isVendorSelected) {
-            productLists = vendorProductsList;
-        }
         return (
             <div className="">
                 <div className='panel-container'>
                     <span className='panel-heading'>Vendor Products</span>
 
                     <div>
-                        <SaveButton  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
-                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
+                        <SaveButton disabled={this.selectedIds.length < 1}  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
+                        <SaveButton  disabled={_isEmpty(this.selectedVendor)} Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
                     </div>
                 </div>
 
@@ -229,7 +239,7 @@ class VendorProductsContainer extends React.Component {
                     
                     <div>
                         <BootstrapTable
-                            data={productLists}
+                            data={this.productLists}
                             options={options}
                             selectRow={this.selectRowProp}
                             striped hover

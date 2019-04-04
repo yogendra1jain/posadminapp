@@ -204,7 +204,7 @@ const successGetFPConfig = (subreddit, json, status, resolve) => {
 }
 
 const failGetFPConfig = (subreddit, err, errCode, reject) => {
-    reject(errCode);
+    reject(err);
     return ({
         type: POS_TERMINAL.FAIL_GET_FP_CONFIG,
         subreddit,

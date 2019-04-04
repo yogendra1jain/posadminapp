@@ -319,9 +319,9 @@ class EditRequisition extends React.Component {
                     {
                         this.props.handleCancel &&
                         <div className="form-btn-group">
-                            <SaveButton disabled={this.state.selectedRows.length < 1} Class_Name="btn-info" buttonDisplayText={'Save All'} handlerSearch={() => this.props.handleSubmitHandler('', true)} />
+                            <SaveButton  Class_Name="btn-info" buttonDisplayText={'Save All'} handlerSearch={() => this.props.handleSubmitHandler('', true)} />
 
-                            <SaveButton disabled={this.state.selectedRows.length < 1} Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.props.handleCancel()} />
+                            <SaveButton Class_Name="m-r-10" buttonDisplayText={'Cancel'} handlerSearch={() => this.props.handleCancel()} />
 
                             
                         </div>

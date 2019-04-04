@@ -1,4 +1,4 @@
-import dynamicActionWrapper from './actionHelper';
+import dynamicActionWrapper from '../actionHelper';
 
 
 export const request = (subreddit, constants) => {

@@ -124,37 +124,37 @@ class ResetPassword extends Component {
                 return (
                     <div>
                         <Row className="d-flex">
-                        <div className="col-sm-6 col-md-4 form-d">
-                            <label className="control-label">New Password</label>
-                            <GenericInput
-                                htmlFor="newPassword" displayName="New Password" type="text"
-                                inputName="newPassword" defaultValue={_get(this.passwordInfo, 'newPassword', '')}
-                                onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                type="password"
-                                className="text-input error"
-                            />
-                        </div>
-                        <div className="col-sm-6 col-md-4 form-d">
-                            <label className="control-label">Confirm Password</label>
-                            <GenericInput
-                                htmlFor="confirmPassword" displayName="Confirm Password" type="text"
-                                inputName="confirmPassword" defaultValue={_get(this.passwordInfo, 'confirmPassword', '')}
-                                onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
-                                className="text-input error"
-                                type="password"
-                            />
-                            {this.state.errorMsg == '' ? '' : 
-                            <span style={{color: 'red'}}>{this.state.errorMsg}</span>}
-                        </div>
-                        </Row>
-                        <Row>
-                            <div className="col-sm-12">
+                            <div className="col-sm-6 col-md-4 form-d">
+                                <label className="control-label">New Password</label>
+                                <GenericInput
+                                    htmlFor="newPassword" displayName="New Password" type="text"
+                                    inputName="newPassword" defaultValue={_get(this.passwordInfo, 'newPassword', '')}
+                                    onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                    type="password"
+                                    className="text-input error"
+                                />
+                            </div>
+                            <div className="col-sm-6 col-md-4 form-d">
+                                <label className="control-label">Confirm Password</label>
+                                <GenericInput
+                                    htmlFor="confirmPassword" displayName="Confirm Password" type="text"
+                                    inputName="confirmPassword" defaultValue={_get(this.passwordInfo, 'confirmPassword', '')}
+                                    onChange={(event) => this.handleInputChange(event, props)} errorCheck={false}
+                                    className="text-input error"
+                                    type="password"
+                                />
+                                {this.state.errorMsg == '' ? '' : 
+                                <span style={{color: 'red'}}>{this.state.errorMsg}</span>}
+                            </div>
+                            <div className="col-sm-6 col-md-4" style={{marginTop: "22px"}}>
                                 <div className="form-btn-group">
-                                    <SaveButton disabled={this.state.isError} buttonDisplayText={'Reset Password'} Class_Name={"btn-info"} handlerSearch={this.handleChangePassword} />
+                                    <SaveButton disabled={this.state.isError} buttonDisplayText={'Reset Password'} Class_Name="btn-info m-r-10" handlerSearch={this.handleChangePassword} />
                                     <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
-
                                 </div>
                             </div>
+                        </Row>
+                        <Row>
+                            
                         </Row>
                     </div>
                 )

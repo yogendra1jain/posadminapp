@@ -7,7 +7,7 @@ import customerReducer, { customerData as customersReducer } from './customer';
 import vendorReducer, { vendorData as vendorsReducer } from './vendor';
 import productReducer, { productData as productsReducer } from './products';
 import reportReducer, { reportsData as reportsReducer } from './reports';
-import inventoryReducer, {inventoryData as inventoriesReducer } from './inventory';
+import inventoryReducer, { inventoryData as inventoriesReducer } from './inventory';
 import staffReducer, { staffsData as staffsReducer } from './staff';
 import ruleReducer, { rulesData as rulesReducer } from './rules';
 import posReducer, { posTerminalData as posTerminalReducer } from './posTerminal';
@@ -19,6 +19,11 @@ import retailerReducer, { retailerData as retailersReducer } from './retailer';
 import commonData from './common';
 import productOverride from './productOverride';
 import rewardPointsRule from './rewardPointsRule';
+
+// ------ Common ----------
+import commonAPIReducerFunc from './Common/commonAPIReducer';
+import commonReducerFunc from './Common/commonStaticReducer';
+//let EarningRules = commonAPIReducerFunc('');
 
 const commonReducer = (state = 'initialState', action) => {
   switch (action.type) {
@@ -34,14 +39,11 @@ const commonReducer1 = (state = 'initialState1', action) => {
   }
 }
 
-
-
-
 const rootReducer = combineReducers({
-  commonReducer,  
-  commonReducer1,  
+  commonReducer,
+  commonReducer1,
   userRoleReducer,
-  userRolesReducer, 
+  userRolesReducer,
   productReducer,
   productsReducer,
   storeReducer,
@@ -72,7 +74,8 @@ const rootReducer = combineReducers({
   retailerReducer,
   retailersReducer,
   productOverride,
-  rewardPointsRule
+  rewardPointsRule,
+  //EarningRules,
 })
 
 export default rootReducer;

@@ -12,37 +12,66 @@ import { DatePicker } from 'material-ui-pickers';
 import Switch from '@material-ui/core/Switch';
 import TextInputIcons from './TextInputIcons.jsx';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Input from 'material-ui/Input/Input';
+import FormHelperText1 from 'material-ui/Form/FormHelperText';
 
 const TextFieldInput = (props) => {
-  let { input, label, multiline = false, rows = 3, hideLabel, autoFocus, fullWidth, meta: { touched, error, pristine }, ...custom } = props;
+  let { input, label, disabled, multiline = false, rows = 3, hideLabel, autoFocus, fullWidth, meta: { touched, error, pristine }, ...custom } = props;
   return (
-    [
-      // <label style={{    display: 'inline-block',
-      // maxWidth: '100%',
-      //  marginB0ttom: '0px',
-      // fontWeight: '000',
-      // color: 'rgba(0, 0, 0, 0.38)'}}>{label}</label>,
-
-      <FormControl key={`${input.id}textform`} fullWidth>
-        <TextField
-          multiline={multiline}
-          rows={rows}
-          key={`${input.id}text`}
-          label={hideLabel ? '' : label}
+    // <label style={{    display: 'inline-block',
+    // maxWidth: '100%',
+    //  marginB0ttom: '0px',
+    // fontWeight: '000',
+    // color: 'rgba(0, 0, 0, 0.38)'}}>{label}</label>,
+    <FormControl
+      className="custom-input"
+      style={{ width: "100%", fontSize: "14px", marginTop: '5px' }}
+    >
+      {/* <InputLabel htmlFor={htmlFor}>{displayName}</InputLabel> */}
+      <React.Fragment>
+        <label style={{ margin: 0 }}>{label}</label>
+        <Input
+          style={{ marginTop: '5px' }}
+          type={"text"}
+          disabled={disabled}
+          label={label}
           placeholder={label}
-          error={touched && error ? true : false}
-          autoFocus={autoFocus}
-          fullWidth
           {...input}
           {...custom}
         />
-        <div key={`${input.id}error`}>{touched && error && <div className="text-input error"><FormHelperText >
-          {error}
-        </FormHelperText>
-        </div>}
+      </React.Fragment>
+
+      {touched && error &&
+        <div className={'text-input error'}>
+          <FormHelperText1>
+            {error}
+          </FormHelperText1>
         </div>
-      </FormControl>]
+      }
+    </FormControl>
+
+    //[ <FormControl key={`${input.id}textform`} fullWidth>
+    //   <TextField
+    //     multiline={multiline}
+    //     rows={rows}
+    //     key={`${input.id}text`}
+    //     label={hideLabel ? '' : label}
+    //     placeholder={label}
+    //     error={touched && error ? true : false}
+    //     autoFocus={autoFocus}
+    //     fullWidth
+    //     {...input}
+    //     {...custom}
+    //   />
+    //   <div key={`${input.id}error`}>{touched && error && <div className="text-input error"><FormHelperText >
+    //     {error}
+    //   </FormHelperText>
+    //   </div>}
+    //   </div>
+    // </FormControl>]
+
   )
+
 }
 
 const SelectFieldInput = ({

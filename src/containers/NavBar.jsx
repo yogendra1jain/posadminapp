@@ -178,6 +178,11 @@ class NavBarComponent extends React.Component {
                                                     <Link onClick={() => this.changeCurrentPath('/purchaseorders')} to={"/purchaseorders"}>Purchase Orders </Link>
                                                 </Panel.Body>
                                             </div>
+                                            <div onClick={() => this.changeCurrentPath(3, 34)} key={34}>
+                                                <Panel.Body className={this.state.activeMenuIndex === 34 && this.state.activeSubMenuIndex === 34 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 34}>
+                                                    <Link onClick={() => this.changeCurrentPath('/requisitions')} to={"/requisitions"}>Requisitions </Link>
+                                                </Panel.Body>
+                                            </div>
                                         </div>
                                     </Panel>
 
