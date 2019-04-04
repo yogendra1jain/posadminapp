@@ -1,6 +1,5 @@
 import axios from 'axios';
 import _isEmpty from 'lodash/isEmpty';
-import generateV1uuid from '../helpers/actionHelper';
 import uuidv1 from 'uuid/v1';
 
 

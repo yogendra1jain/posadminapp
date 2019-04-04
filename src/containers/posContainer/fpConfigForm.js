@@ -9,6 +9,7 @@ import { GenericInput } from '../../components/common/TextValidation.jsx';
 import { addFreedomPayConfig, getFreedomPayConfig } from '../../actions/posTerminal'
 import { connect } from 'react-redux';
 import showMessage from '../../actions/toastAction';
+import genericPostData from '../../Global/DataFetch/genericPostData';
 
 class FPConfig extends Component {
     constructor(props) {
@@ -32,6 +33,7 @@ class FPConfig extends Component {
             }
             let url = '/Payment/FreedomPay/Config/Get'
             this.props.dispatch(getFreedomPayConfig('', data, url)).then(resp => {
+                debugger;
                 this.isUpdate = true
                 this.setState({
                     fpConfigValues: {
@@ -45,7 +47,7 @@ class FPConfig extends Component {
                 })
 
             }).catch(err => {
-
+                debugger;
             })
         }
 
@@ -93,22 +95,24 @@ class FPConfig extends Component {
         this.setState({ disableSave: true })
         let data = _get(this, 'state.fpConfigValues', {})
         _set(data, 'posTerminalId', _get(this.props.history, 'location.state.terminalId', ''))
-        let url = "/Payment/FreedomPay/Config/Save"
+        let url = "/Payment/FreedomPay/Config/Save";
 
-        this.props.dispatch(addFreedomPayConfig('', data, url)).then(resp => {
-            this.setState({ disableSave: false })
-            this.handleCancel();
-            this.props.dispatch(showMessage({ text: 'Successfully Crreated FP Config', isSuccess: true }));
-            setTimeout(() => {
-                this.props.dispatch(showMessage({ text: '', isSuccess: true }));
-            }, 1000)
-        }).catch(err => {
-            this.setState({ disableSave: false })
-            this.props.dispatch(showMessage({ text: 'Some error occured while creating config', isSuccess: false }));
-            setTimeout(() => {
-                this.props.dispatch(showMessage({ text: '', isSuccess: false }));
-            }, 1000)
+        genericPostData({
+            dispatch: this.props.dispatch,
+            reqObj: data,
+            url,
+            identifier: 'FPCongig',
+            successCb: this.handleSuccessAddFP,
+            errorCb: () => this.setState({ disableSave: false })
+            ,
+            successText: "Submited SuccessFully"
         })
+
+
+    }
+    handleSuccessAddFP = resp => {
+        this.setState({ disableSave: false })
+        this.handleCancel();
     }
 
     handleCancel = () => {
