@@ -64,7 +64,7 @@ export default class EditCategoriesDialogue extends React.Component {
                 }
             }
         }
-        else if(this.props.event == 'add'){
+        else if (this.props.event == 'add') {
             if (this.props.level === 0) {
                 reqObj = {
                     name: categoryName,
@@ -131,8 +131,8 @@ export default class EditCategoriesDialogue extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.props.handleClose} color="primary">Disagree</Button>
-                        <Button onClick={this.handleSubmit} color="primary">Agree</Button>
+                        <Button onClick={this.props.handleClose} color="primary">Cancel</Button>
+                        <Button onClick={this.handleSubmit} color="primary">Submit</Button>
                     </DialogActions>
                 </Dialog>
             </div>

@@ -58,12 +58,12 @@ class ProductContainer extends React.Component {
 
     componentDidMount() {
         if (!_isEmpty(this.props.selectedProduct)) {
-            this.setState({ isUpdating: true})
+            this.setState({ isUpdating: true })
             this.productInfo = this.props.selectedProduct;
             this.method = 'POST';
             this.imagePreviewUrl = this.productInfo.image;
-            let category2ReqBody = {id: this.productInfo.category1}
-            let category3ReqBody = {id: this.productInfo.category2}
+            let category2ReqBody = { id: this.productInfo.category1 }
+            let category3ReqBody = { id: this.productInfo.category2 }
             let url = '/Category/GetChildren'
             this.props.dispatch(fetchLevel2Category('', url, category2ReqBody))
             this.props.dispatch(fetchLevel3Category('', url, category3ReqBody))
@@ -334,7 +334,9 @@ class ProductContainer extends React.Component {
                     <div className="col-sm-6 col-md-4 form-d">
                         <label className="control-label">Product Detail</label>
                         <Input
+                            fullWidth
                             name="description"
+                            placeholder="description"
                             multiline
                             label="Description"
                             onChange={this.handleInputChange}
@@ -367,7 +369,7 @@ class ProductContainer extends React.Component {
                             className="text-input error"
                         />
                     </div>
-                    <div className="col-sm-4 col-md-3 form-d">
+                    <div className="col-sm-4 col-md-4 form-d">
                         <label className="control-label">Select Root Cateogry</label>
                         <AutoCompletePosition
                             type="single"
@@ -377,7 +379,7 @@ class ProductContainer extends React.Component {
                             changeHandler={(id, name) => { this.handleLevel1Category(id, 'category1') }}
                         />
                     </div>
-                    <div className="col-sm-4 col-md-3 form-d">
+                    <div className="col-sm-4 col-md-4 form-d">
                         <label className="control-label">Select Sub Cateogry</label>
                         <AutoCompletePosition
                             type="single"
@@ -387,7 +389,7 @@ class ProductContainer extends React.Component {
                             changeHandler={(id, name) => { this.handleLevel2Category(id, 'category2') }}
                         />
                     </div>
-                    <div className="col-sm-4 col-md-3 form-d">
+                    <div className="col-sm-4 col-md-4 form-d">
                         <label className="control-label">Select Leaf Cateogry</label>
                         <AutoCompletePosition
                             type="single"
@@ -406,7 +408,7 @@ class ProductContainer extends React.Component {
                             className="text-input error"
                         />
                     </div>
-                    <div className="col-sm-4 col-md-3 form-d">
+                    <div className="col-sm-4 col-md-4 form-d">
                         <label className="control-label">Is Taxable</label>
                         <Checkbox
                             checked={this.productInfo.isTaxable}
@@ -415,7 +417,7 @@ class ProductContainer extends React.Component {
                             value={_get(this.productInfo, 'isTaxable', '')}
                         />
                     </div>
-                    <div className="col-sm-4 col-md-3 form-d">
+                    <div className="col-sm-4 col-md-4 form-d">
                         <label className="control-label">Active</label>
                         <Checkbox
                             checked={this.productInfo.active}
@@ -424,7 +426,7 @@ class ProductContainer extends React.Component {
                             value={_get(this.productInfo, 'active', '')}
                         />
                     </div>
-                    <div className="col-sm-4 col-md-3 form-d">
+                    <div className="col-sm-4 col-md-4 form-d">
                         <label className="control-label">Is Discountable</label>
                         <Checkbox
                             checked={this.productInfo.discountable}
@@ -456,7 +458,7 @@ class ProductContainer extends React.Component {
                         }
 
                     </div>
-                    
+
                 </Row>
                 <Row>
                     <div className="col-sm-12">

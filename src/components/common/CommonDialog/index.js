@@ -30,7 +30,7 @@ const DialogTitle = withStyles(theme => ({
   const { children, classes, onClose } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
-      <Typography variant="h6">{children}</Typography>
+      <Typography variant="h3">{children}</Typography>
       {onClose ? (
         <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
@@ -41,30 +41,31 @@ const DialogTitle = withStyles(theme => ({
 });
 
 function FormDialog(props) {
-    return (
-        <div className="popup-dialog">
-        {/* <Button onClick={this.handleClickOpen}>Open form dialog</Button> */}
-        <Dialog
-          open={props.open}
-          fullWidth={props.fullWidth}
-          fullScreen={props.fullScreen}
-          scroll={'body'}
-          onClose={props.handleClose}
-          aria-labelledby="responsive-dialog-title"
-        >
-          <DialogTitle id="customized-dialog-title" onClose={props.handleClose}>
-            {props.title}
-          </DialogTitle>
-          <DialogContent>
-            {props.dialogContent}
-          </DialogContent>
-          {/* <DialogActions>
+  return (
+    <div className="popup-dialog">
+      {/* <Button onClick={this.handleClickOpen}>Open form dialog</Button> */}
+      <Dialog
+        maxWidth={'md'}
+        open={props.open}
+        fullWidth={props.fullWidth}
+        fullScreen={props.fullScreen}
+        scroll={'body'}
+        onClose={props.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="customized-dialog-title" onClose={props.handleClose}>
+          {props.title}
+        </DialogTitle>
+        <DialogContent>
+          {props.dialogContent}
+        </DialogContent>
+        {/* <DialogActions>
               {props.dialogActionButtons}
           </DialogActions> */}
-        </Dialog>
-      </div>
-    );
-  }
+      </Dialog>
+    </div >
+  );
+}
 
-  
+
 export default (FormDialog);

@@ -30,6 +30,7 @@ import AddEditPosContainer from './containers/posContainer/addEditPos.jsx';
 import RulesCreateContainer from './containers/RulesContainer/rulesCreateContainer.jsx';
 import "./assets/stylesheets/reset.css";
 import fetchMiddleware from './middlewares/fetchMiddleware.jsx';
+import axiosMiddleWare from './middlewares/axiosMiddleware';
 import Favicon from 'react-favicon';
 
 // import StoreContainer from './containers/StoreContainer.jsx';
@@ -68,21 +69,22 @@ import RewardPointsRule from './containers/RewardPointsRule/RewardPointsRuleCont
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './Global/MaterialUiSettings/theme';
 import AddFreedomPayConfigForm from './containers/posContainer/fpConfigForm';
+import DashboardContainer from "./containers/Dashboard/DashboardContainer";
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'c',
 });
 
+const middleware = [thunk, axiosMiddleWare] //fetchMiddleware
 
-
-const middleware = [thunk, fetchMiddleware]
 if (process.env.NODE_ENV !== 'production') {
   console.log('ENV URL', process.env.REACT_APP_API_HOST);
   middleware.push(createLogger())
 }
+
 let store;
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   store = createStore(
     reducer,
@@ -164,6 +166,8 @@ ReactDom.render(
             <RouteWithLayout layout={MainLayout} exact path='/productOverride' component={ProductOverRideComponent} />
             <RouteWithLayout layout={MainLayout} exact path='/rewardPointsRule' component={RewardPointsRule} />
             <RouteWithLayout layout={MainLayout} exact path='/freedompayconfig' component={AddFreedomPayConfigForm} />
+
+            <RouteWithLayout layout={MainLayout} exact path='/dashboard' component={DashboardContainer} />
           </Switch>
         </Router>
       </Provider>

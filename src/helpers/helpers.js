@@ -1,6 +1,9 @@
 import uuidv1 from 'uuid/v1';
 
 const generateV1uuid = () => uuidv1();
+export {
+    generateV1uuid,
+}
 
 export function toTimestamp(date) {
     let strDate = getFullDate(new Date(date));
@@ -15,10 +18,6 @@ export function getFullDate(date) {
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
     return `${month}/${day}/${year}`
-}
-
-export {
-    generateV1uuid,
 }
 
 export function getRequisitionStatus(status) {

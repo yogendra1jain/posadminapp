@@ -74,17 +74,18 @@ class AddEditVendorProduct extends React.Component {
 
             <div className="d-flex">
                 <div className='panel-container'>
-                    <span className='panel-heading'>{initialValues.id ? 'Update': 'New'} Vendor Product </span>
+                    <span className='panel-heading'>{initialValues.id ? 'Update' : 'New'} Vendor Product </span>
                 </div>
-                <div className='box-conversion-container'>
+                <div className='box-conversion-container' style={{ width: '100%' }}>
                     <form onSubmit={handleSubmit(this.addVendorProduct)}>
                         <AddEditVendorProductComp
                             {...this.props}
                         />
-                        <div className="row" style={{ marginTop: '10px', marginLeft: '10px' }}>
-                            {/* <Button type="submit" variant="raised">SAVE</Button> */}
-                            <SaveButton type="submit" buttonDisplayText={'Save'} Class_Name="btn-info m-r-10" />
-                            <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
+                        <div className="row mt-21">
+                            <div className="col-sm-12">
+                                <SaveButton type="submit" buttonDisplayText={'Save'} Class_Name="btn-info m-r-10" />
+                                <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
+                            </div>
                         </div>
                     </form>
                 </div>
