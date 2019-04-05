@@ -47,7 +47,7 @@ class RequisitionContainer extends PureComponent {
             mode: 'checkbox',
             clickToSelect: false,
             onSelect: this.onRowSelect,
-            // onSelectAll: this.onSelectAll,
+            onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
             // selected : this.selectedIds,
         }
@@ -70,6 +70,29 @@ class RequisitionContainer extends PureComponent {
         this.setState({
             selectedRequisitions,
         });
+    }
+
+    onSelectAll = (isSelected, rows) => {
+        let selectedIds = this.selectedIds
+        let selectedRequisitions = _cloneDeep(this.state.selectedRequisitions)
+        if(isSelected) {
+            rows.map(row => {
+                selectedIds.push(row.id)
+                selectedRequisitions.push(row)
+            })
+        } else {
+            rows.map(row => {
+                let index = _findIndex(selectedRequisitions, { 'id': row.id });
+                if (index !== -1) {
+                    selectedRequisitions.splice(index, 1);
+                }
+                _pull(selectedIds, row.id)
+            })
+        } 
+        this.setState({
+            selectedRequisitions
+        })
+        this.selectedIds = selectedIds
     }
 
     handleChangeInput = (e, index, proposedQuantity) => {
