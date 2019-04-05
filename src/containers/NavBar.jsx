@@ -133,7 +133,6 @@ class NavBarComponent extends React.Component {
                                         </div>
                                     </Panel>
 
-
                                     <Panel key={2} eventKey={2}>
                                         <Panel.Title toggle>{"Stores"}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
                                         <div>
@@ -240,6 +239,12 @@ class NavBarComponent extends React.Component {
                                                 </Panel.Body>
                                             </div>
                                         </div>
+                                    </Panel>
+                                    <Panel>
+                                        <Panel.Title className={(this.activePath === '/dashboard' ? 'active' : 'inactive')} >
+
+                                            <Link onClick={() => this.changeCurrentPath('/dashboard')} to={"/dashboard"}>Dashboard (Alpha)</Link>
+                                        </Panel.Title>
                                     </Panel>
                                 </div>
                             </Panel.Heading>
