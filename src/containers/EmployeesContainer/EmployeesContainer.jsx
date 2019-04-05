@@ -71,7 +71,7 @@ class EmployeesContainer extends React.Component {
             // selected : this.selectedIds,
         }
         this.method = 'POST';
-        this.storeList = [] 
+        this.storeList = []
     }
 
 
@@ -85,9 +85,9 @@ class EmployeesContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if(!_isEmpty(props.storeList)) {
-            this.storeList = [] 
-            _get(props,'storeList',[]).map(store => {
+        if (!_isEmpty(props.storeList)) {
+            this.storeList = []
+            _get(props, 'storeList', []).map(store => {
                 this.storeList.push({ displayText: store.label, value: store.value });
             })
             this.forceUpdate()
@@ -95,13 +95,13 @@ class EmployeesContainer extends React.Component {
     }
 
     handleChange = (id, type) => {
-        if(id == null) {
-            this.setState({ selectedStore: ''})
-            this.customerList= []
+        if (id == null) {
+            this.setState({ selectedStore: '' })
+            this.customerList = []
             this.forceUpdate()
         } else {
-            if(this.state.isActive == '') {
-                this.setState({ isActive : true})
+            if (this.state.isActive == '') {
+                this.setState({ isActive: true })
             }
             let employeeUrl = `/Employee/ByStore`;
             let reqData = {
@@ -116,17 +116,17 @@ class EmployeesContainer extends React.Component {
     }
 
     handleActiveChange = (id) => {
-        if(id == null) {
-            this.setState({ isActive: ''})
-            this.customerList= []
+        if (id == null) {
+            this.setState({ isActive: '' })
+            this.customerList = []
             this.forceUpdate()
         } else {
             let employeeUrl = `/Employee/ByStore`;
             let reqData = {
-                    storeId: this.state.selectedStore,
-                    active: id,
-                };
-               
+                storeId: this.state.selectedStore,
+                active: id,
+            };
+
             this.setState({
                 isActive: id,
             })
@@ -137,8 +137,8 @@ class EmployeesContainer extends React.Component {
     getEmployees = (url, reqObj) => {
         this.props.dispatch(fetchEmployeesList('', url, reqObj))
             .then((data) => {
-                if(data ==null) {
-                    this.customerList = []    
+                if (data == null) {
+                    this.customerList = []
                 } else {
                     this.customerList = data
                 }
@@ -197,7 +197,7 @@ class EmployeesContainer extends React.Component {
     }
     onDrop = (files) => {
         // this.setState({ files });
-
+        
         let formData;
         let url = '/Upload/Employee';
         if (files.length > 0) {
@@ -269,7 +269,7 @@ class EmployeesContainer extends React.Component {
 
         let { customerList } = this.props;
         let { selectedValue, file } = this.state;
-        if(this.state.selectedStore == '') { 
+        if (this.state.selectedStore == '') {
             this.customerList = []
         }
         console.log(this.storeList, 'this.storeList')
@@ -296,44 +296,44 @@ class EmployeesContainer extends React.Component {
                     <span className='panel-heading'>Employees </span>
                     <div>
                         <SaveButton Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
-                        <SaveButton Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={()=>this.updateEmployee()} />
+                        <SaveButton Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateEmployee()} />
                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
                 <div>
                     <div className="row">
                         <div className="col-sm-6">
-                        <label>Select Store</label>
+                            <label>Select Store</label>
                             <AutoComplete
                                 type="single"
                                 data={this.storeList}
                                 name="store"
                                 value={this.state.selectedStore}
-                                changeHandler={(id) => {this.handleChange(id, 'store')}}
+                                changeHandler={(id) => { this.handleChange(id, 'store') }}
                             />
                         </div>
                         {this.state.selectedStore !== '' ?
-                        <div className="col-sm-6">
-                            <label>Select Active Status</label>
-                            <AutoComplete
-                                type="single"
-                                data={ActiveList}
-                                name="activeFlag"
-                                value={this.state.isActive}
-                                changeHandler={(e) => this.handleActiveChange(e, 'store')}
-                            />
-                        </div> : 
-                        <div className="col-sm-6">
-                            <label>Select Active Status</label>
-                            <AutoComplete
-                                type="single"
-                                disabled
-                                data={ActiveList}
-                                name="activeFlag"
-                                value={this.state.isActive}
-                                changeHandler={(e) => this.handleActiveChange(e, 'store')}
-                            />
-                        </div>}
+                            <div className="col-sm-6">
+                                <label>Select Active Status</label>
+                                <AutoComplete
+                                    type="single"
+                                    data={ActiveList}
+                                    name="activeFlag"
+                                    value={this.state.isActive}
+                                    changeHandler={(e) => this.handleActiveChange(e, 'store')}
+                                />
+                            </div> :
+                            <div className="col-sm-6">
+                                <label>Select Active Status</label>
+                                <AutoComplete
+                                    type="single"
+                                    disabled
+                                    data={ActiveList}
+                                    name="activeFlag"
+                                    value={this.state.isActive}
+                                    changeHandler={(e) => this.handleActiveChange(e, 'store')}
+                                />
+                            </div>}
                     </div>
                     {/* <div className="form-btn-group">
                         <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.addNewEmployee()}>+ Add New</Button>

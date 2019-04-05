@@ -1,14 +1,18 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import SampleEmployeeUpload from '../../../assets/SampleCSV/sampleEmployeeUpload.csv';
+import _get from 'lodash/get';
+import DropzoneArea from '../../../Global/Dropzone/dropzoneArea';
+
 
 export default (props) => {
     return (
         <div>
-            <div className='panel-container'>
-                <span className='panel-heading'>Create Employees In Bulk </span>
+            <a className="font-size-14px" href={SampleEmployeeUpload}>Download Sample</a>
+            {/* <div className='panel-container'>
+                 <span className='panel-heading'>Create Employees In Bulk </span> 
                 <a href={SampleEmployeeUpload}>Download Sample</a>
-            </div>
+            </div> */}
             <div>
                 {/* <div className="row" style={{ marginBottom: '10px' }}>
                     <div className="col-sm-6">
@@ -17,24 +21,34 @@ export default (props) => {
                 </div> */}
                 <div className='box-conversion-container'>
                     <section >
-                        <Dropzone
+                        {/* <Dropzone
                             onDrop={props.onDrop}
                             onFileDialogCancel={props.onCancel}
                         >
                             {({ getRootProps, getInputProps }) => (
                                 <div {...getRootProps()}>
                                     <input {...getInputProps()} />
-                                    <span className="dropzone">Drop files here, or click to select files</span>
+                                    <div className="dropzone">Drop files here, or click to select files</div>
                                 </div>
                             )}
-                        </Dropzone>
+                        </Dropzone> */}
+                        <DropzoneArea
+                            name='employeeBulkUpload'
+                            fieldName='employeeBulkUpload'
+                            progress={_get(props, 'state.employeeBulkUploadFileuploadProgress')}
+                            onDrop={props.onDrop}
+                            avialableFormat="Available File Formats: CSV"
+                            accept={["text/csv"]} //"image/jpg", "image/png", "image/jpeg",
+
+                        // dropzone={_get(props, 'state.photo.name', '') || _get(props, 'state.photolink', '')}
+                        />
                     </section>
                     <aside>
-                        <h4>Files</h4>
-                        <ul>
+                        <h4>File Details:</h4>
+                        <ul className="font-size-14px">
                             <li key={props.file.name}>
                                 {props.file.name} - {props.file.size} bytes
-                </li>
+                            </li>
                         </ul>
                     </aside>
 
