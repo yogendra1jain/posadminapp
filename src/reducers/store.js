@@ -65,7 +65,18 @@ const storesData = (state = {
         storePostData: action.data,
         lastUpdated: action.receivedAt
       });
-      case REQUEST_POS_LOGIN:
+
+    case RECEIVED_STORE_POST_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        addressData: action.error,
+        lastUpdated: action.receivedAt
+      });
+
+    case REQUEST_POS_LOGIN:
       return Object.assign({}, state, {
         isFetching: true,posLogin:[],status:'',
         type: action.type, lastUpdated: action.receivedAt
@@ -110,6 +121,33 @@ const storesData = (state = {
         isFetching: false,
         type: action.type, status: action.status,
         didInvalidate: false, addressData: action.error,
+        lastUpdated: action.receivedAt
+      });
+
+    case 'address_from_zip_init':
+      return Object.assign({}, state, {
+        isFetching: false,
+        addressData: [],
+        status:'',
+        type: action.type, 
+        lastUpdated: action.receivedAt
+      });
+    case 'address_from_zip_success':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        addressData: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case 'address_from_zip_error':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type, 
+        status: action.status,
+        didInvalidate: false, 
+        addressData: action.error,
         lastUpdated: action.receivedAt
       });
 

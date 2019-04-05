@@ -55,14 +55,14 @@ const customerData = (state = {
       });
 
 
-    case CUSTOMER_FORM_REQUEST:
+    case 'save_customer_init':
       return Object.assign({}, state, {
         isFetching: true,
         customerFormData: [],
         type: action.type,
         lastUpdated: action.receivedAt
       });
-    case CUSTOMER_FORM_RECIEVE:
+    case 'save_customer_success':
       return Object.assign({}, state, {
         isFetching: false,
         type: action.type,
@@ -72,7 +72,7 @@ const customerData = (state = {
         selectedStore: [],
         lastUpdated: action.receivedAt
       });
-    case CUSTOMER_FORM_RECIEVE_ERROR:
+    case 'save_customer_error':
       return Object.assign({}, state, {
         isFetching: false,
         type: action.type,

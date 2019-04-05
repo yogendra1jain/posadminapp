@@ -208,7 +208,7 @@ class RequisitionContainer extends PureComponent {
                         <div className='panel-container'>
                             <span className='panel-heading'>Requisition List</span>
                             <div>
-                                <SaveButton disabled={this.state.selectedRequisitions.length < 1} Class_Name={"btn-info"} buttonDisplayText={'New Requisition'} Class_Name="m-r-10" handlerSearch={this.toggleDialog}/>
+                                <SaveButton Class_Name={"btn-info"} buttonDisplayText={'New Requisition'} Class_Name="m-r-10" handlerSearch={this.toggleDialog}/>
                                 <SaveButton disabled={this.state.selectedRequisitions.length < 1} Class_Name={"btn-info"} buttonDisplayText={'Edit'} handlerSearch={this.handleEdit}/>
                             </div>
 
