@@ -47,6 +47,7 @@ class ProductOverRide extends Component {
             onSelect: this.onRowSelect,
             bgColor: '#ffffff',
             selected : this.state.selectedIds,
+            onSelectAll: this.onSelectAll
         }
         this.productList = []
     }
@@ -158,6 +159,28 @@ class ProductOverRide extends Component {
         }
         this.selectRowProp.selected = this.state.selectedIds;
         this.setState({selectedProducts});
+    }
+
+    onSelectAll = (isSelected, rows) => {
+        let selectedIds = this.state.selectedIds
+        let selectedProducts = _cloneDeep(this.state.selectedProducts)
+        if(isSelected) {
+            rows.map(row => {
+                selectedIds.push(row.id)
+                selectedProducts.push(row)
+            })
+        } else {
+            rows.map(row => {
+                let index = _findIndex(selectedProducts, { 'id': row.id });
+                if (index !== -1) {
+                    selectedProducts.splice(index, 1);
+                }
+                _pull(selectedIds, row.id)
+            })
+        } 
+        this.setState({
+            selectedProducts, selectedIds
+        })
     }
 
     handleOverrideForStore = () => {
