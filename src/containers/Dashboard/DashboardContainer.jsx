@@ -10,6 +10,8 @@ import _get from 'lodash/get';
 import HighVelocityChart from './Components/HighVelocityChart';
 import LowVelocityChart from './Components/LowVelocityChart';
 import PaymentMethodsPie from './Components/PaymentMethodsPie';
+import LowInventoryTable from './Components/LowInventoryTable';
+import OutOfStockTable from './Components/OutOfStockTable';
 
 class DashboardContainer extends React.Component {
 
@@ -27,9 +29,10 @@ class DashboardContainer extends React.Component {
                     <span className='panel-heading'>Dashboard</span>
                 </div>
                 <div className='fwidth flex-column'>
-                    <div className='row'>
-                        <div className='col-sm-3'>
-                            <div className='flex-column'>
+
+                    <div className='flex-row dash-1'>
+                        <div className='dash-11'>
+                            <div className='flex-column fheight'>
                                 <div className='card flex-column'>
                                     <span className='card-title'>Order Velocity</span>
                                     <span className='card-value'>500</span>
@@ -44,38 +47,43 @@ class DashboardContainer extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-sm-9'>
-                            <div className='card flex-column'>
+                        <div className='dash-12'>
+                            <div className='card flex-column fheight'>
                                 <span className='card-title'>High Velocity Items</span>
                                 <HighVelocityChart />
                             </div>
                         </div>
                     </div>
 
-                    <div className='row'>
-                        <div className='col-sm-8'>
-                            <div className='card flex-column'>
+
+                    <div className='flex-row dash-2'>
+                        <div className='dash-21'>
+                            <div className='card flex-column fheight'>
                                 <span className='card-title'>Low Velocity Items</span>
                                 <LowVelocityChart/>
                             </div>
                         </div>
-                        <div className='col-sm-4'>
-                            <div className='card flex-column payment-method-pie'>
+                        <div className='dash-22'>
+                            <div className='card flex-column payment-method-pie fheight'>
                                 <span className='card-title'>Payment Methods</span>
                                 <PaymentMethodsPie/>
                             </div>
                         </div>
                     </div>
 
-                    <div className='row'>
-                        <div className='card dashboard-table-margin'>
+
+
+                    <div className='flex-row dash-3'>
+                        <div className='card fwidth'>
                             <span className='card-title'>Low Inventory</span>
+                            <LowInventoryTable/>
                         </div>   
                     </div>
                     
-                    <div className='row'>
-                        <div className='card dashboard-table-margin '>
+                    <div className='flex-row dash-4'>
+                        <div className='card fwidth'>
                             <span className='card-title'>Out Of stock</span>
+                            <OutOfStockTable/>
                         </div>   
                     </div>
                 </div>

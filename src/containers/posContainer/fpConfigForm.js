@@ -71,8 +71,7 @@ class FPConfig extends Component {
             url,
             identifier: 'FPCongig',
             successCb: this.handleSuccessAddFP,
-            errorCb: () => this.setState({ disableSave: false })
-            ,
+            errorCb: () => this.setState({ disableSave: false }),
             successText: "Submited SuccessFully"
         })
 
