@@ -131,7 +131,7 @@ class AddEditStoreContainer extends React.Component {
             url = '/Store/Create';
         }
         let data = {};
-        let zip = this.storeInfo.postalCode.toString();
+        let zip = this.storeInfo.postalCode.toString()
         data.name = this.storeInfo.storeName
         data.retailerId = this.storeInfo.retailerId
         data.address = {}
@@ -178,8 +178,7 @@ class AddEditStoreContainer extends React.Component {
         }
     }
     componentWillReceiveProps(props) {
-        if (props.type === 'RECEIVED_ADDRESS_FROM_ZIP' && this.getAddressFlag) {
-            if(props.status == 200) {
+        if (props.type === 'RECEIVED_ADDRESS_FROM_ZIP') {
                 if (!_isEmpty(props.addressData)) {
                     this.gotAddressData = true;
                     this.getAddressFlag = false;
@@ -191,26 +190,23 @@ class AddEditStoreContainer extends React.Component {
                     _set(this.storeInfo, 'streetAddress1', _get(props.addressData, 'location', ''));
                     _set(this.storeInfo, 'longitude', _get(props.addressData, 'longitude', ''));
                     this.props1.setValues(this.storeInfo);
-                }
-            } else if(props.status == 500) {
-                _set(this.storeInfo, 'city', '');
-                _set(this.storeInfo, 'state', '');
-                _set(this.storeInfo, 'country', '');
-            }
+        } 
+    }else if(props.type == 'RECEIVED_ADDRESS_FROM_ZIP_ERROR') {
+            _set(this.storeInfo, 'city', '');
+            _set(this.storeInfo, 'state', '');
+            _set(this.storeInfo, 'country', '');
         }
-        else if (props.type === 'RECEIVED_STORE_POST') {
-            if(props.status == 200) {
-                this.showAlert(false, 'Store Created Successfully!')
-                this.redirectToSearch = true
-                this.forceUpdate()
-            } else if(props.status !== 200 && props.status !== '') {
-                this.showAlert('Some Error Occured!')
-                this.redirectToSearch = false
-                this.forceUpdate()
-            }
+        if (props.type === 'RECEIVED_STORE_POST') {
+            this.showAlert(false, 'Store Created Successfully!')
+            this.redirectToSearch = true
+            this.forceUpdate()
+        } else if(props.type == 'RECEIVED_STORE_POST_ERROR') {
+            this.showAlert(true, 'Some Error Occured!')
+            this.redirectToSearch = false
+            this.forceUpdate()
         }
 
-        else if (props.type === "RECEIVED_LOGO_UPLOAD_SUCCESS_RESPONSE") {
+        if (props.type === "RECEIVED_LOGO_UPLOAD_SUCCESS_RESPONSE") {
             if (props.fileData && !_isEmpty(props.fileData)) {
                 this.imagePreviewUrl = props.fileData.url;
             } else {

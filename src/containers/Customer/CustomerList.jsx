@@ -29,9 +29,7 @@ const options = {
         text: '5', value: 5
     }, {
         text: '10', value: 10
-    }],
-
-
+    }]
 };
 class StoreListContainer extends React.Component {
     constructor(props) {
@@ -146,17 +144,8 @@ class StoreListContainer extends React.Component {
     }
 
     onSelectAll = (isSelected, rows) => {
-        // if (isSelected) {
-        //     for (let i = 0; i < rows.length; i++) {
-        //         this.selectedIds.push(rows[i].sku)
-        //     }
-        // } else {
-
         this.selectedIds = [];
-        // }
         this.selectRowProp.selected = this.selectedIds;
-
-
         this.forceUpdate();
     }
     addNewStore() {

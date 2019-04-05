@@ -18,6 +18,7 @@ import {
 import Alert from 'react-s-alert';
 import {
     RECEIVE_PRODUCT_DATA,
+    RECEIVE_PRODUCT_DATA_ERROR,
     RECEIVED_DOCUMENT_UPLOAD_SUCCESS_RESPONSE,
     RECEIVE_LEVEL1_CATEGORY_DATA,
     RECEIVE_LEVEL2_CATEGORY_DATA,
@@ -224,16 +225,13 @@ class ProductContainer extends React.Component {
         }
 
         if (nextProps.type === RECEIVE_PRODUCT_DATA) {
-            if (nextProps.status === 200) {
                 this.redirectToSearch = true;
-
                 this.showAlert(false, _get(nextProps.productData, 'message', 'Product Added Successfully'));
-
-            } else {
-                if (nextProps.status !== 200 && nextProps.status !== '')
-                    this.showAlert(true, nextProps.productData.message);
+        } else if (nextProps.type == RECEIVE_PRODUCT_DATA_ERROR) {
+            if (nextProps.status !== 200 && nextProps.status !== '') {
+                this.showAlert(true, 'Some Error Occured!');
                 this.redirectToSearch = false
-            }
+            }  
         }
 
         if (nextProps.type === RECEIVE_LEVEL1_CATEGORY_DATA) {

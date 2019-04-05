@@ -193,7 +193,7 @@ class AddRequisitionForm extends React.PureComponent {
                                 </div>
                             </div>
                             <div className="btn-parent-full mt-21">
-                                <Button className={classes.buttonLogin} type='submit' variant="contained" color='primary' >{'Save'}</Button>
+                                <Button className="btn-info" type='submit'>{'Save'}</Button>
                             </div>
                         </form>
                     </div>

@@ -81,9 +81,9 @@ class AddEditVendorProduct extends React.Component {
                         <AddEditVendorProductComp
                             {...this.props}
                         />
-                        <div className="row mt-21">
+                        <div className="row mt-21">  
                             <div className="col-sm-12">
-                                <SaveButton type="submit" buttonDisplayText={'Save'} Class_Name="btn-info m-r-10" />
+                                <Button type="submit" style={{marginRight: "20px"}} className="btn-info">Save</Button>
                                 <SaveButton buttonDisplayText={'Cancel'} Class_Name={""} handlerSearch={this.handleCancel} />
                             </div>
                         </div>

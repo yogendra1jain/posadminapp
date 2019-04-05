@@ -8,6 +8,7 @@ import _findIndex from 'lodash/findIndex';
 import {
   REQUEST_PRODUCT_DATA,
   RECEIVE_PRODUCT_DATA,
+  RECEIVE_PRODUCT_DATA_ERROR,
   REQUEST_SALE_TRANSACTION_DATA,
   RECEIVE_SALE_TRANSACTION_DATA,
   REQUEST_CUSTOMER_REGISTRATION_DATA,
@@ -127,6 +128,15 @@ const productData = (state = {
         status: action.status,
         selectedProduct: {},
         productSaveData: action.data,
+        lastUpdated: action.receivedAt
+      });
+    
+    case RECEIVE_PRODUCT_DATA_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        didInvalidate: false,
+        status: action.status,
         lastUpdated: action.receivedAt
       });
 

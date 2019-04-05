@@ -132,9 +132,12 @@ class AddEditVendorNew extends React.Component {
             this.updatedStaffInfo = _cloneDeep(this.staffInfo);
         }
         if (_get(props, 'vendorsReducer.type') === 'VENDOR_FORM_RECIEVE') {
-            if (_get(props, 'vendorsReducer.status')) {
-                this.redirectToList = true;
-            }
+            this.showAlert(false, 'Vendor created successfully!')
+            this.redirectToList = true;
+            this.forceUpdate();
+        } else if (_get(props, 'vendorsReducer.type') === 'VENDOR_FORM_RECIEVE_ERROR') {
+            this.showAlert(true, 'Some Error Occured!')
+            this.redirectToList = false;
             this.forceUpdate();
         }
 

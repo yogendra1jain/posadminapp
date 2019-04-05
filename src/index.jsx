@@ -40,7 +40,7 @@ import customerChartsContainer from "./containers/Products/CustomerReports.jsx";
 import inventoryChartsContainer from './containers/Products/InventoryReports.jsx';
 import sessionManageContainer from './containers/SessionContainer/sessionManagementContainer.jsx';
 import CustomerListContainer from './containers/Customer/CustomerList';
-import AddCustomerContainer from './containers/Customer/AddEditCustomer/AddEditCustomer';
+import AddCustomerContainer from './containers/Customer/AddEditCustomer';
 import VendorListContainer from './containers/Vendor/VendorList';
 import AddVendorContainer from './containers/Vendor/AddEditVendor/AddEditVendor';
 import VendorProductsContainer from './containers/VendorProducts/VendorProducts.jsx';
@@ -136,8 +136,8 @@ ReactDom.render(
             <RouteWithLayout layout={MainLayout} exact path="/inventoryReport" component={inventoryChartsContainer} />
             {/* <RouteWithLayout layout={MainLayout} exact path="/rules" component={RulesCreateContainer}/> */}
             <RouteWithLayout layout={MainLayout} exact path="/session" component={sessionManageContainer} />
-            <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer} />
             <RouteWithLayout layout={MainLayout} exact path="/customers" component={CustomerListContainer} />
+            <RouteWithLayout layout={MainLayout} exact path="/customers/add" component={AddCustomerContainer} />
 
             <RouteWithLayout layout={MainLayout} exact path="/categories" component={CategoriesContainer} />
             <RouteWithLayout layout={MainLayout} exact path="/categories/add" component={AddNewCategoryContainer} />

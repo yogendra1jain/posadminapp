@@ -109,11 +109,9 @@ class ProductOverRideComponent extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.type == 'RECEIVE_PRODUCT_OVERRIDE') {
-            if (nextProps.status == 200) {
-                this.showAlert(false, 'Product Overrided Successfully!');
-            } else if (nextProps.status !== 200) {
-                this.showAlert(true, 'Some Error Occured!');
-            }
+            this.showAlert(false, 'Product Overrided Successfully!');
+        } else if (nextProps.type == 'RECEIVE_PRODUCT_OVERRIDE_ERROR') {
+            this.showAlert(true, 'Some Error Occured!');
         }
     }
 

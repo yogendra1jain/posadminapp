@@ -45,27 +45,6 @@ export const uploadDocument = (file, url, subreddit) => (dispatch) => {
         .catch(e => dispatch(receivedDocumentUploadError(subreddit, e)))
 }
 
-// export const uploadDocument = (subreddit, url, data) => dispatch => {
-//     return new Promise((resolve, reject) => {
-//         dispatch(dynamicActionWrapper({
-//             path: PRODUCT_CONSTANT.PRODUCT_MEDIA_URL,
-//             method: 'POST',
-//             formData: data,
-//             isFormData: true,
-//             url,
-//             contentType: "multipart/form-data; boundary=—-WebKitFormBoundary7MA4YWxkTrZu0gW",
-//             initCb: uploadDocumentAction,
-//             successCb: receivedDocumentUploadResponse,
-//             failureCb: receivedDocumentUploadError,
-//             resolve: resolve,
-//             reject: reject,
-//             subreddit,
-//             wrapperActionType: 'FETCH_DOCUMENT_UPLOAD_WRAPPER',
-//             redirect: 'follow'
-//         }));
-//     })
-// }
-
 
 export const requestProductData = subreddit => ({
     type: PRODUCT_CONSTANT.REQUEST_PRODUCT_DATA,
@@ -80,22 +59,12 @@ export const receiveProductData = (subreddit, json, status) => ({
     receivedAt: Date.now()
 })
 
-// export const ProductDataSave  = (data,subreddit,saveProductURL, method) => dispatch => {
-//     dispatch(requestProductData(subreddit));
-//     fetch(saveProductURL , { 
-//       method: method,
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify(data),
-//     })
-//     .then(response => {
-//         status = response.status;
-
-//         return response.json() } 
-//     )
-//     .then(json => dispatch(receiveProductData(subreddit, json, status)))
-// }
+export const receiveProductDataError = (subreddit, error) => ({
+    type: PRODUCT_CONSTANT.RECEIVE_PRODUCT_DATA_ERROR,
+    subreddit,
+    error,
+    receivedAt: Date.now()
+});
 
 export const ProductDataSave = (data, subreddit, saveProductURL, method) => dispatch =>
     dispatch(dynamicActionWrapper({
@@ -104,7 +73,7 @@ export const ProductDataSave = (data, subreddit, saveProductURL, method) => disp
         body: data,
         initCb: requestProductData,
         successCb: receiveProductData,
-        // failureCb: receivePosTerminalStatusError,
+        failureCb: receiveProductDataError,
         subreddit,
         wrapperActionType: 'FETCH_PRODUCT_WRAPPER',
         redirect: 'follow'
