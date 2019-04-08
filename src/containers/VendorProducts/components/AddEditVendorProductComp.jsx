@@ -110,13 +110,13 @@ class AddEditVendorProductComp extends React.Component {
 
                 <div className='row mt-21'>
                     <div className="col-sm-4">
-                        <Field name={`sku`} placeholder="SKU" id={`sku`} hideLabel={true} label={'sku *'} component={TextFieldInput} />
+                        <Field name={`sku`} placeholder="SKU" id={`sku`} hideLabel={true} label={'SKU *'} component={TextFieldInput} />
                     </div>
                     <div className="col-sm-4">
-                        <Field name={`defaultOrderQty`} type="number" parse={value => parseInt(value, 10)} placeholder="Default Order Qty" id={`defaultOrderQty`} hideLabel={true} label={'defaultOrderQty *'} component={TextFieldInput} />
+                        <Field name={`defaultOrderQty`} type="number" parse={value => parseInt(value, 10)} placeholder="Default Order Qty" id={`defaultOrderQty`} hideLabel={true} label={'Default Order Qty *'} component={TextFieldInput} />
                     </div>
                     <div className="col-sm-4">
-                        <Field name={`conversionFactor`} type="number" parse={value => parseInt(value, 10)} placeholder="Conversion Factor" id={`conversionFactor`} hideLabel={true} label={'conversionFactor *'} component={TextFieldInput} />
+                        <Field name={`conversionFactor`} type="number" parse={value => parseInt(value, 10)} placeholder="Conversion Factor" id={`conversionFactor`} hideLabel={true} label={'Conversion Factor *'} component={TextFieldInput} />
                     </div>
                 </div>
 

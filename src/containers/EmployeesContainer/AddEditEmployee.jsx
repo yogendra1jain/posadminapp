@@ -80,6 +80,10 @@ class AddEditEmployee extends React.Component {
 
     }
 
+    handleCancel = () => {
+        this.props.history.push('/employees')
+    }
+
     render() {
         const { handleSubmit, initialValues } = this.props;
 
@@ -92,9 +96,10 @@ class AddEditEmployee extends React.Component {
                 <div className='box-conversion-container'>
                     <form onSubmit={handleSubmit(this.saveEmployee)}>
                         <div className="form-btn-group">
+                            <Button type="button" variant="raised" onClick={this.handleCancel} style={{marginRight: "10px   "}} className="btn-info">CANCEL</Button>
                             <Button type="submit" variant="raised" className="btn-info">SAVE</Button>
-                        </div>
 
+                        </div>
                         <div className='box-conversion-container'>
                             <AddEditComp
                                 initialValues={initialValues}

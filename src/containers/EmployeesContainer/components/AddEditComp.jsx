@@ -119,14 +119,12 @@ class AddEditComp extends React.Component {
     }
 
     render() {
-        console.log(_get(this, 'state.limitRenewalDates', '').split(',').length >= 2, 'bool')
-        console.log(_get(this, 'state.limitRenewalDates', ''))
         const { classes, initialValues } = this.props;
         return (
             <div className='row' style={{ marginTop: '25px' }}>
                 <div className="col-sm-12" style={{ marginLeft: 0 }} className="">
                     <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
-                        <Field name={`employeeStoreId`} placeholder="store" id={`employeeStoreId`} hideLabel={false} options={_get(this.props, 'storeList', [])} label={'Store *'} component={ReactSelectWrapper} />
+                        <Field name={`employeeStoreId`} placeholder="Select Store" id={`employeeStoreId`} hideLabel={false} options={_get(this.props, 'storeList', [])} label={'Store List*'} component={ReactSelectWrapper} />
                     </div>
                     <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
                         <Field name={`isEmpPayEnabled`} placeholder="Employee Pay Enabled" id={`isEmpPayEnabled`} hideLabel={false} options={ActiveFlags} label={'Employee Pay Enabled *'} component={ReactSelectWrapper} />
@@ -138,7 +136,7 @@ class AddEditComp extends React.Component {
                 <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
 
                     <div className="col-sm-6" >
-                        <Field name={`email`} placeholder="email" id={`email`} hideLabel={false} label={'email *'} component={TextFieldInput} />
+                        <Field name={`email`} placeholder="Email" id={`email`} hideLabel={false} label={'Email *'} component={TextFieldInput} />
                     </div>
                     <div className="col-sm-6">
                         <Field name={`employeeDiscount`} placeholder="Discount" type="number" parse={value => parseFloat(value, 20)} id={`employeeDiscount`} hideLabel={false} label={'Discount *'} component={TextFieldInput} />
@@ -152,10 +150,10 @@ class AddEditComp extends React.Component {
                 <FormSection name={`phoneNumber`}>
                     <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
                         <div className="col-sm-6">
-                            <Field name={`countryCode`} type="number" parse={value => parseInt(value, 20)} placeholder="Country Code" id={`countryCode`} hideLabel={false} label={'countryCode *'} component={TextFieldInput} />
+                            <Field name={`countryCode`} type="number" parse={value => parseInt(value, 20)} placeholder="Country Code" id={`countryCode`} hideLabel={false} label={'Country Code *'} component={TextFieldInput} />
                         </div>
                         <div className="col-sm-6">
-                            <Field name={`phoneNumber`} type="number" parse={value => parseInt(value, 20)} placeholder="Phone Number" id={`phoneNumber`} hideLabel={false} label={'phoneNumber *'} component={TextFieldInput} />
+                            <Field name={`phoneNumber`} type="number" parse={value => parseInt(value, 20)} placeholder="Phone Number" id={`phoneNumber`} hideLabel={false} label={'Phone Number *'} component={TextFieldInput} />
                         </div>
                     </div>
                 </FormSection>
@@ -165,7 +163,7 @@ class AddEditComp extends React.Component {
                             <Field name={`firstName`} id={`firstName`} placeholder="firstName" hideLabel={false} label='First Name *' component={TextFieldInput} />
                         </div>
                         <div className="col-sm-6">
-                            <Field name={`lastName`} id={`lastName`} type={"text"} placeholder="Last Name" hideLabel={false} label='lastName *' component={TextFieldInput} />
+                            <Field name={`lastName`} id={`lastName`} type={"text"} placeholder="Last Name" hideLabel={false} label='Last Name *' component={TextFieldInput} />
                         </div>
                     </div>
                 </FormSection>
@@ -187,22 +185,23 @@ class AddEditComp extends React.Component {
                             }}
                             disabled={_get(this, 'state.limitRenewalDates', '').split(',').length >= 2}
                         /> */}
-
-                        <Field
-                            name={`limitRenewalDates`}
-                            id={`limitRenewalDates`}
-                            type={`multi`}
-                            placeholder="Limit Renewal Dates"
-                            hideLabel={false}
-                            label='Limit Renewal Dates *'
-                            value={_get(this, 'state.limitRenewalDates', '')}
-                            data={days}
-                            onChange={(id) => {
-                                this.handleSelectChange(id, "limitRenewalDates")
-                            }}
-                            disabled={_get(this, 'state.limitRenewalDates', '').split(',').length >= 2}
-                            component={AutoCompletePosition}
-                        />
+                        <div style={{marginTop: '30px'}}>
+                            <Field
+                                name={`limitRenewalDates`}
+                                id={`limitRenewalDates`}
+                                type={`multi`}
+                                placeholder="Limit Renewal Dates"
+                                hideLabel={false}
+                                label='Limit Renewal Dates *'
+                                value={_get(this, 'state.limitRenewalDates', '')}
+                                data={days}
+                                onChange={(id) => {
+                                    this.handleSelectChange(id, "limitRenewalDates")
+                                }}
+                                disabled={_get(this, 'state.limitRenewalDates', '').split(',').length >= 2}
+                                component={AutoCompletePosition}
+                            />
+                        </div>
                     </div>
                 </div>
 

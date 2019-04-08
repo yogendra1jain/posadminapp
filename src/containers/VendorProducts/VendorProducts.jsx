@@ -83,7 +83,16 @@ class VendorProductsContainer extends React.Component {
         let vendorProdUrl = `/VendorProduct/GetByRetailerId`;
         this.props.dispatch(getVendorData('', url, reqObj))
         this.fetchVendorProducts(vendorProdUrl, reqObj);
-
+        if(_get(this.props,'history.location.state.id')) {
+            _set(this.selectedVendor, 'vendor', _get(this.props,'history.location.state.id',''))
+            let vendorProdUrl = `/VendorProduct/GetByVendorId`;
+            let reqObj = {
+                id: _get(this.props,'history.location.state.id','')
+            }
+            this.setState({ isVendorSelected: true }, () => {
+                this.fetchVendorProducts(vendorProdUrl, reqObj);
+            });
+        }
     }
 
     componentWillReceiveProps(props) {
@@ -161,7 +170,10 @@ class VendorProductsContainer extends React.Component {
 
     }
     addNewVendorProduct = () => {
-        this.props.history.push('/vendorproducts/add');
+        this.props.history.push({
+            pathname: '/vendorproducts/add',
+            state: {id: _get(this.selectedVendor,'vendor','')}
+        });
     }
     updateVendorProduct = () => {
         if (this.selectedIds.length > 0) {
@@ -169,7 +181,10 @@ class VendorProductsContainer extends React.Component {
             let tempProd = _find(this.props.vendorProductsList, { 'id': prodId });
             const { dispatch } = this.props;
             dispatch(requestVendorProductUpdate('', tempProd));
-            this.props.history.push('/vendorproducts/add');
+            this.props.history.push({
+                pathname: '/vendorproducts/add',
+                state: {id: _get(this.selectedVendor,'vendor','')}
+            });
         }
 
     }

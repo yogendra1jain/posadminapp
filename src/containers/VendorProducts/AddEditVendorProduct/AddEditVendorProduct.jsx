@@ -53,7 +53,7 @@ class AddEditVendorProduct extends React.Component {
                 setTimeout(() => {
                     this.props.dispatch(showMessage({}));
                 }, 1000);
-                this.props.history.push('/vendorproducts')
+                this.handleCancel()
             }, (err) => {
                 console.log('err while saving vendor product', err);
                 this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
@@ -65,7 +65,10 @@ class AddEditVendorProduct extends React.Component {
     }
 
     handleCancel = () => {
-        this.props.history.push('/vendorproducts')
+        this.props.history.push({
+            pathname: '/vendorproducts',
+            state: {id: _get(this.props,'history.location.state.id','')}
+        })
     }
 
     render() {

@@ -159,11 +159,10 @@ class EmployeesContainer extends React.Component {
     onRowSelect = (row, isSelected, e) => {
         isSelected ? this.selectedIds = [(row.id)] : _pull(this.selectedIds, row.id);
         // this.handleAllChecks();        
-        this.selectedStore = row;
+        this.selectedEmployee = row;
         if (isSelected == false) {
-
             this.selectedInfo = {};
-            this.selectedStore = {};
+            this.selectedEmployee = {};
         }
         this.selectRowProp.selected = this.selectedIds;
         this.forceUpdate();
@@ -295,8 +294,8 @@ class EmployeesContainer extends React.Component {
                 <div className='panel-container'>
                     <span className='panel-heading'>Employees </span>
                     <div>
-                        <SaveButton Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
-                        <SaveButton Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateEmployee()} />
+                        <SaveButton disabled={_isEmpty(_get(this.state,'selectedStore'))} Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
+                        <SaveButton disabled={_isEmpty(this.selectedEmployee)} Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateEmployee()} />
                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
