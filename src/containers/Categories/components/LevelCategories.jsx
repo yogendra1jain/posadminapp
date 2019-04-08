@@ -27,9 +27,9 @@ function LevelCategories(props) {
     pannels.push(
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <div className='flex-row align-center justify-space-between fwidth' >
+          <div className='flex-row align-center justify-space-between fwidth'>
             <div className='p-r-10'>
-              {data.name}
+              <label> {data.name}</label>
             </div>
             <div className='flex-row'>
               <div className='p-r-10' onClick={() => props.handleClickOpen(1, data, 'add')}>
