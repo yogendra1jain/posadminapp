@@ -100,6 +100,7 @@ class StoreListContainer extends React.Component {
                     tempStore.state = _get(store.address, 'state', '');
                     tempStore.postalCode = _get(store.address, 'postalCode', '');
                     tempStore.country = _get(store.address, 'country', '');
+                    tempStore.paymentMethods = _get(store, 'paymentMethods', []);
                     this.storeList.push(tempStore);
                 })
                 // this.storeList = props.storeData.stores;

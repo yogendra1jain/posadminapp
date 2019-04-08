@@ -47,6 +47,7 @@ class AddEditStoreContainer extends React.Component {
             this.setState({ isUpdating: true })
             this.storeInfo = this.props.selectedStore;
             _set(this.storeInfo, 'retailerId', localStorage.getItem('retailerID'));
+            _set(this.storeInfo,'paymentMethodsList', _get(this.props,'selectedStore.paymentMethods',[]))
             delete this.storeInfo['displayAddress'];
             this.updatedStoreInfo = _cloneDeep(this.storeInfo);
             // this.imagePreviewUrl = 
@@ -131,7 +132,7 @@ class AddEditStoreContainer extends React.Component {
             url = '/Store/Create';
         }
         let data = {};
-        let zip = this.storeInfo.postalCode.toString()
+        let zip = _get(this.storeInfo,'postalCode',0).toString()
         data.name = this.storeInfo.storeName
         data.retailerId = this.storeInfo.retailerId
         data.address = {}
@@ -142,8 +143,13 @@ class AddEditStoreContainer extends React.Component {
         data.image = this.imagePreviewUrl;
         data.address.country = this.storeInfo.country
         data.address.postalCode = zip
-        // !Hold for now
-        // data.paymentMethods = this.storeInfo.paymentMethodsList
+        let paymentMethodArray = []
+        paymentMethodArray = _get(this.storeInfo,'paymentMethodsList','').split(',')
+        let paymentMethodArrInt = []
+        paymentMethodArray.length > 0 && Array.isArray(paymentMethodArray) && paymentMethodArray.map(paymentMethod => {
+            paymentMethodArrInt.push(Number(paymentMethod))
+        })
+        data.paymentMethods = paymentMethodArrInt
         if (this.state.isUpdating) {
             data.id = this.updatedStoreInfo.id
         }
@@ -216,7 +222,6 @@ class AddEditStoreContainer extends React.Component {
     }
 
     render() {
-        console.log(this.props.paymentMethods, 'this.props.paymentMethods')
         if (this.redirectToSearch) {
             return (
                 <Redirect push to="/stores" />
