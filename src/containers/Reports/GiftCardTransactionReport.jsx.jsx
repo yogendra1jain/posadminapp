@@ -28,7 +28,7 @@ const options = {
     }]
 };
 
-class SaleBypaymentMethod extends React.Component {
+class GiftCardTransactionReport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +36,7 @@ class SaleBypaymentMethod extends React.Component {
             endDate: moment(),
             selectedStore: '',
             storeList: [],
-            saleByPaymentMethodReportData: [],
+            giftCardTransactionData: [],
             isLoading: false,
             error: ''
         }
@@ -69,12 +69,12 @@ class SaleBypaymentMethod extends React.Component {
                 seconds: toTimestamp(_get(this.state,'endDate',0))
             }
         }
-        let url = '/Reports/SalesReport/ByPaymentMethods'
+        let url = '/Reports/GiftCards/Issued/ByStore'
         genericPostData({
             dispatch: this.props.dispatch,
             reqObj,
             url,
-            identifier: 'fetchSaleByPaymentMethod',
+            identifier: 'fetchGiftCardTransactions',
             successCb: this.handleSuccess,
             errorCb: () => this.handleError,
             successText: "Fetched SuccessFully"
@@ -82,10 +82,19 @@ class SaleBypaymentMethod extends React.Component {
     }
 
     handleSuccess = (data) => {
-        this.setState({isLoading: false})
-        if(!_isEmpty(data)) {
-            if(Array.isArray(data)) {
-                this.setState({saleByPaymentMethodReportData: data})
+        this.setState({isLoading: false}) 
+        if(Array.isArray(data)) {
+            if(!_isEmpty(data)) {
+                let giftCardTransactionData = []
+                data.map(data => {
+                    let temp = {}
+                    temp = data.giftCardRedemption
+                    temp.dateTime = moment.utc(_get(data.giftCardRedemption,'paymentTimeStamp.seconds', 0) * 1000).format('DD MM YYYY hh:mm:ss') 
+                    temp.customer = _get(data.customer,'customer.firstName','') + ' ' + _get(data.customer,'customer.lastName','')
+                    giftCardTransactionData.push(temp)
+                    temp.value = _get(data.giftCardRedemption,'value.currencyCode','$') + _get(data.giftCardRedemption,'value.amount',0) 
+                })
+                this.setState({giftCardTransactionData})
             }
         }
         this.props.dispatch(showAlert({text: 'Data Fetched Successfully!', isSuccess: true}))
@@ -112,7 +121,7 @@ class SaleBypaymentMethod extends React.Component {
         return (
             <div className="">
                 <div className='panel-container'>
-                    <span className='panel-heading'>Sale By Payment Method Report</span>
+                    <span className='panel-heading'>Gift Card Transactions Report</span>
                 </div>
                 <div className="react-bs-table-container mb-10">
                     <div className="row">
@@ -174,22 +183,29 @@ class SaleBypaymentMethod extends React.Component {
                     <div>
                         <BootstrapTable
                         height='515'
-                        data={_get(this, 'state.saleByPaymentMethodReportData', [])}
+                        data={_get(this, 'state.giftCardTransactionData', [])}
                         options={options}
                         striped hover
                         pagination={true}
                         exportCSV={true}
                         search={true}
                         searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='100' dataField='paymentMethod' isKey={true}>
-                                Payment Method
+                            <TableHeaderColumn width='100' dataField='transactionId' isKey={true}>
+                                Transaction ID
                             </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='orderCount'>
-                                Order Count
+                            <TableHeaderColumn width='100' dataField='dateTime'>
+                                Time
                             </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='salesTotal'>
-                                Sales Total
+                            <TableHeaderColumn width='100' dataField='customer'>
+                                Customer
                             </TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='value'>
+                                GC value
+                            </TableHeaderColumn>
+                            {/* Terminal Id not available for now will uncomment once it is avalable */}
+                            {/* <TableHeaderColumn width='100' dataField='value'>
+                                Terminal ID
+                            </TableHeaderColumn> */}
                         </BootstrapTable>
                     </div>}
                 </div>
@@ -215,4 +231,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(SaleBypaymentMethod);
+export default connect(mapStateToProps)(GiftCardTransactionReport);

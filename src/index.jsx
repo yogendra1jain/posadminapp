@@ -27,11 +27,9 @@ import AddEditStaffContainer from './containers/Staff/staffContainer.jsx';
 import StaffListContainer from './containers/Staff/staffList.jsx';
 import PosList from './containers/posContainer/posList.jsx';
 import AddEditPosContainer from './containers/posContainer/addEditPos.jsx';
-import RulesCreateContainer from './containers/RulesContainer/rulesCreateContainer.jsx';
 import "./assets/stylesheets/reset.css";
 import fetchMiddleware from './middlewares/fetchMiddleware.jsx';
 import axiosMiddleWare from './middlewares/axiosMiddleware';
-import Favicon from 'react-favicon';
 
 // import StoreContainer from './containers/StoreContainer.jsx';
 import { createGenerateClassName } from '@material-ui/core/styles';
@@ -48,7 +46,8 @@ import EmployeePayrollDeductDetails from './containers/Reports/EmployeePayrollDe
 import EmployeePayrollDeductSummary from './containers/Reports/EmployeePayrollDeductSummary.jsx';
 import EmployeeDiscountReport from './containers/Reports/EmployeeDiscountReport.jsx';
 import EmployeeDetailsReport from './containers/Reports/EmployeeDetailsList.jsx';
-import RrewardPointReport from './containers/Reports/RewardPointReport';
+import RewardPointRedeemptionReport from './containers/Reports/RewardPointRedeemptionReport';
+import GiftCardReport from './containers/Reports/GiftCardTransactionReport.jsx';
 import AddEditVendorProduct from './containers/VendorProducts/AddEditVendorProduct/AddEditVendorProduct.jsx';
 import RequisitionContainer from './containers/RequisitionContainer/RequisitionContainer.jsx';
 import PurchaseOrderContainer from './containers/PurchaseOrders/PurchaseOrderContainer.jsx';
@@ -157,8 +156,8 @@ ReactDom.render(
             <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_summary" component={EmployeePayrollDeductSummary} />
             <RouteWithLayout layout={MainLayout} exact path="/employee_discount_report" component={EmployeeDiscountReport} />
             <RouteWithLayout layout={MainLayout} exact path="/employee_details_report" component={EmployeeDetailsReport} />
-            <RouteWithLayout layout={MainLayout} exact path="/reward_point_report" component={RrewardPointReport} />
-
+            <RouteWithLayout layout={MainLayout} exact path="/reward_point_redeemption_report" component={RewardPointRedeemptionReport} />
+            <RouteWithLayout layout={MainLayout} exact path="/gift_card_report" component={GiftCardReport} />
             <RouteWithLayout layout={MainLayout} exact path="/z_report" component={ZReportContainer} />
             <RouteWithLayout layout={MainLayout} exact path="/employees" component={EmployeesContainer} />
             <RouteWithLayout layout={MainLayout} exact path="/employees/add" component={AddEditEmployee} />

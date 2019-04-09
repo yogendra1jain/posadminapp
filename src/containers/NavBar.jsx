@@ -240,15 +240,26 @@ class NavBarComponent extends React.Component {
                                             </div>
                                             <div onClick={() => this.changeCurrentPath(6, 64)} key={64}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 64 && this.state.activeSubMenuIndex === 64 ? 'active' : 'inActive'}
-                                                    collapsible={this.state.clickedSubIndex !== 63}>
+                                                    collapsible={this.state.clickedSubIndex !== 64}>
                                                     <Link onClick={() => this.changeCurrentPath('/sale_by_payment_method_report')} style={{ textDecoration: "none", color: '#FFF' }} to={"/sale_by_payment_method_report"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Sale By Payment Method Report </Link>
+                                                </Panel.Body>
+                                            </div>
+                                            <div onClick={() => this.changeCurrentPath(6, 65)} key={65}>
+                                                <Panel.Body className={this.state.activeMenuIndex === 65 && this.state.activeSubMenuIndex === 65 ? 'active' : 'inActive'}
+                                                    collapsible={this.state.clickedSubIndex !== 65}>
+                                                    <Link onClick={() => this.changeCurrentPath('/reward_point_redeemption_report')} style={{ textDecoration: "none", color: '#FFF' }} to={"/reward_point_redeemption_report"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Reward Point Redeemption Report</Link>
+                                                </Panel.Body>
+                                            </div>
+                                            <div onClick={() => this.changeCurrentPath(6, 66)} key={66}>
+                                                <Panel.Body className={this.state.activeMenuIndex === 66 && this.state.activeSubMenuIndex === 66 ? 'active' : 'inActive'}
+                                                    collapsible={this.state.clickedSubIndex !== 66}>
+                                                    <Link onClick={() => this.changeCurrentPath('/gift_card_report')} style={{ textDecoration: "none", color: '#FFF' }} to={"/gift_card_report"}><span style={{ fontSize: "36px", color: '#FFF' }} ></span>Gift Card Report</Link>
                                                 </Panel.Body>
                                             </div>
                                         </div>
                                     </Panel>
                                     <Panel>
                                         <Panel.Title className={(this.activePath === '/dashboard' ? 'active' : 'inactive')} >
-
                                             <Link onClick={() => this.changeCurrentPath('/dashboard')} to={"/dashboard"}>Dashboard (Alpha)</Link>
                                         </Panel.Title>
                                     </Panel>
