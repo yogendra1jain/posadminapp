@@ -15,13 +15,16 @@ import LowInventoryTable from './Components/LowInventoryTable';
 import OutOfStockTable from './Components/OutOfStockTable';
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import FromandToCalander from '../../Global/Components/FromandToCalander';
-
+import {toTimestamp} from '../../helpers/helpers';
+import {commonActionCreater} from '../../actions/Common/commonAction';
+import _isEmpty from 'lodash/isEmpty'
 class DashboardContainer extends React.Component {
 
     constructor() {
         super();
         this.state = {
-            storeList: []
+            storeList: [],
+            PaymentMethodsData: []
         }
     }
     componentDidMount() {
@@ -62,7 +65,48 @@ class DashboardContainer extends React.Component {
         this.setState({ [type]: value })
     }
     onStoreSelect = (id) => {
-     this.setState({id})
+     this.setState({selectedStore: id})
+    }
+
+    getReports = () => {
+        let reqObj = {
+            id: _get(this.state,'selectedStore',''),
+            fromTimeStamp : {
+                seconds: toTimestamp(_get(this.state,'startDate',0)) / 1000
+            },
+            toTimestamp: {
+                seconds: toTimestamp(_get(this.state,'endDate',0)) / 1000
+            }
+        }
+        let url = '/Reports/SalesReport/ByPaymentMethods'
+        genericPostData({
+            dispatch: this.props.dispatch,
+            reqObj,
+            url,
+            identifier: 'fetchSaleByPaymentMethod',
+            successCb: this.handlePaymentMethodReportSuccess,
+            errorCb: () => this.handlePaymentMethodReportError,
+            successText: "Fetched SuccessFully"
+        })
+    }
+
+    handlePaymentMethodReportSuccess = (data) => {
+        let pieChartData = []
+        if(!_isEmpty(data.result)) {
+            if(Array.isArray(data.result)) {
+                _get(data,'result',[]).map(data => {
+                    let temp = {}
+                    temp.name = data.paymentMethod
+                    temp.value = data.value
+                    pieChartData.push(temp)
+                  })
+                this.setState({ PaymentMethodsData: pieChartData })
+            }
+        }
+    }
+
+    handlePaymentMethodReportError = (err) => {
+
     }
 
     render() {
@@ -124,7 +168,7 @@ class DashboardContainer extends React.Component {
                         <div className='dash-22'>
                             <div className='card flex-column payment-method-pie fheight'>
                                 <span className='card-title'>Payment Methods</span>
-                                <PaymentMethodsPie />
+                                <PaymentMethodsPie data={_get(this.state,'PaymentMethodsData',[])} />
                             </div>
                         </div>
                     </div>

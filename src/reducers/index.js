@@ -19,12 +19,11 @@ import retailerReducer, { retailerData as retailersReducer } from './retailer';
 import commonData from './common';
 import productOverride from './productOverride';
 import rewardPointsRule from './rewardPointsRule';
-
+import dashboardReducer from './dashboardReducer';
 // ------ Common ----------
 import commonAPIReducerFunc from './Common/commonAPIReducer';
 import commonReducerFunc from './Common/commonStaticReducer';
 //let EarningRules = commonAPIReducerFunc('');
-
 const commonReducer = (state = 'initialState', action) => {
   switch (action.type) {
     default:
@@ -76,6 +75,7 @@ const rootReducer = combineReducers({
   productOverride,
   rewardPointsRule,
   //EarningRules,
+  dashboardReducer
 })
 
 export default rootReducer;

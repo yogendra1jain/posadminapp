@@ -6,7 +6,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import SaveButton from '../../components/common/SaveButton';
 import {getRewardPointRedeemptionRule, getRewardPointEarningRule} from '../../actions/rewardPointsRule';
 import _isEmpty from 'lodash/isEmpty';
-
 class RewardPointsRuleContainer extends Component {
     constructor(props) {
         super(props);
@@ -49,29 +48,29 @@ class RewardPointsRuleContainer extends Component {
     
     componentWillReceiveProps(nextProps) {
         if(nextProps.type == 'SUCCESS_CREATE_RP_EARNING_RULE') {
-            if(nextProps.status == 200) {
+            // if(nextProps.status == 200) {
                 this.showAlert(false, 'Reward points earning rule created successfully!')
                 let reqBody = {
                     id: localStorage.getItem('retailerID')
                 }
                 let earningUrl = '/Rewards/EarningRule/ByRetailer'
                 this.props.dispatch(getRewardPointEarningRule('', earningUrl, reqBody))
-            } else {
-                this.showAlert(false, 'Some error occured!')
-            }
+            // } else {
+                // this.showAlert(false, 'Some error occured!')
+            // }
         }
 
         if(nextProps.type == 'SUCCESS_CREATE_RP_REDEEMPTION_RULE') {
-            if(nextProps.status == 200) {
+            // if(nextProps.status == 200) {
                 this.showAlert(false, 'Reward points redeemption rule created successfully!')
                 let reqBody = {
                     id: localStorage.getItem('retailerID')
                 }
                 let redeemptionUrl = '/Rewards/RedemptionRule/ByRetailer'
                 this.props.dispatch(getRewardPointRedeemptionRule('', redeemptionUrl, reqBody))
-            } else {
-                this.showAlert(false, 'Some error occured!')
-            }
+            // } else {
+            //     this.showAlert(false, 'Some error occured!')
+            // }
         }
 
         if(!_isEmpty(nextProps.rewardPointsEarningRule)) {

@@ -26,7 +26,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const options = {
     paginationPosition: 'top',
     defaultSortName: 'staffName',
-    defaultSortOrder: 'asc',
+    // defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
     sizePerPageList: [{
@@ -40,7 +40,7 @@ class SaleDataReportContainer extends React.Component {
         super(props);
         this.state = {
             startDate: moment(),
-            endDate: moment().add(1, 'days'),
+            endDate: moment(),
             storeId: '',
             storeList: [],
             saleReportData: [],
@@ -65,7 +65,6 @@ class SaleDataReportContainer extends React.Component {
                 html: true
             });
         }
-
     }
 
     componentWillReceiveProps(props) {
@@ -85,24 +84,27 @@ class SaleDataReportContainer extends React.Component {
 
         if (_get(props, 'saleReportData', [])) {
             let saleReport = []
-            if (Array.isArray(props.saleReportData)) {
-                _get(props, 'saleReportData', []).map(report => {
+            if(!_isEmpty(props.saleReportData)) {
+                if (Array.isArray(props.saleReportData)) {
+                    _get(props, 'saleReportData', []).map(report => {
                     let paymentMethod1 = ''
                     let paymentMethod2 = ''
                     let paymentMethod3 = ''
-                    if (_get(report, 'payments.length', '') == 1) {
-                        paymentMethod1 = report.payments[0].paymentMethod
-                    } else if (_get(report, 'payments.length', '') == 2) {
-                        paymentMethod1 = report.payments[0].paymentMethod
-                        paymentMethod2 = report.payments[1].paymentMethod
-                    } else if (_get(report, 'payments.length', '') == 3) {
-                        paymentMethod1 = report.payments[0].paymentMethod
-                        paymentMethod2 = report.payments[1].paymentMethod
-                        paymentMethod3 = report.payments[2].paymentMethod
-                    }
+                    _get(report, 'payments',[]).map(payment => {
+                        let isCash = ('paymentMethod' in  payment)
+                        if(!isCash) {
+                            paymentMethod1 = 'CASH'
+                        }
+                        if(payment.paymentMethod == 1) {
+                            paymentMethod2 = 'CARD - FREEDOM PAY'
+                        }
+                        if(payment.paymentMethod == 2) {
+                            paymentMethod3 = 'GIFT CARD'
+                        }
+                    })
                     let tax
-                    let isTaxExist = !('taxPercentage' in _get(report, 'saleItem', {}))
-                    isTaxExist ? tax = 0 : tax = (_get(report, 'saleItem.itemSubTotal.amount', 0) * _get(report, 'saleItem.taxPercentage', 0)) / 100
+                    let isTaxExist = !('itemTaxPercent' in _get(report, 'saleItem', {}))
+                    isTaxExist ? tax = 0 : tax = (_get(report, 'saleItem.itemSubTotal.amount', 0) * _get(report, 'saleItem.itemTaxPercent', 0)) / 100
                     let isProductExist = !('product' in report)
                     let isMiscExist = !('misc' in _get(report, 'product', {}))
                     let tempStore = {}
@@ -119,17 +121,17 @@ class SaleDataReportContainer extends React.Component {
                     tempStore.group = _get(report, 'group.name', '')
                     tempStore.category = _get(report, 'category.name', '')
                     tempStore.subCategory = _get(report, 'subCategory.name', '')
-                    tempStore.itemType = isProductExist ? 'Gift Card' : isMiscExist ? 'product' : 'Miscellaneous Product'
+                    tempStore.itemType = isProductExist ? 'Gift Card' : isMiscExist ? 'Product' : 'Miscellaneous Product'
                     tempStore.priceRetailUnit = _get(report, 'product.salePrice.price', 0)
                     tempStore.quantity = _get(report, 'saleItem.qty', 1)
                     tempStore.totalRetailSales = _get(report, 'saleItem.itemRegularTotal.amount', 0)
                     tempStore.totalItemDiscount = _get(report, 'saleItem.itemTotalDiscountAmount.amount', 0)
                     tempStore.preTaxSales = _get(report, 'saleItem.itemSubTotal.amount', 0)
-                    tempStore.tax = tax
+                    tempStore.tax = tax.toFixed(2)
                     tempStore.totalSales = _get(report, 'saleItem.itemEffectiveTotal.amount', 0)
-                    tempStore.employeeDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount', 0) * _get(report, 'saleItem.employeeDiscountPercent', 1)) / 100).toFixed(2)
-                    tempStore.itemDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.itemDiscountPercent', 1)) / 100).toFixed(2)
-                    tempStore.cartDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.cartDiscountPercent', 1)) / 100).toFixed(2)
+                    tempStore.employeeDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount', 0) * _get(report, 'saleItem.employeeDiscountPercent', 0)) / 100).toFixed(2)
+                    tempStore.itemDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.itemDiscountPercent', 0)) / 100).toFixed(2)
+                    tempStore.cartDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.cartDiscountPercent', 0)) / 100).toFixed(2)
                     tempStore.costPrice = _get(report, 'product.costPrice.price', 0) * _get(report, 'saleItem.qty', 1)
                     tempStore.paymentMethod1 = paymentMethod1
                     tempStore.paymentMethod2 = paymentMethod2
@@ -140,7 +142,10 @@ class SaleDataReportContainer extends React.Component {
                 })
                 this.setState({ saleReportData: saleReport })
             }
-        }
+        } 
+    }else {
+        this.setState({ saleReportData: [], isLoading: false })
+    }
     }
 
     componentDidMount() {
@@ -157,17 +162,21 @@ class SaleDataReportContainer extends React.Component {
         this.setState({
             startDate: moment(date)
         })
-        // , this.sendDateForGettingData(moment(date), this.state.endDate));
     }
 
     handleSelectChange = (id, name) => {
-        this.setState({ storeId: id })
+        if(id == null) {
+            this.setState({saleReportData: [], storeId: ''})
+        } else {
+            this.setState({ storeId: id })
+        }
     }
 
     handleSubmitReportData = () => {
         this.setState({ isLoading: true })
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
-        let endDate = toTimestamp(_get(this, 'state.endDate', 0))
+        let end = moment(this.state.startDate).add(1, 'days')
+        let endDate = toTimestamp(end)
         console.log(fromDate, 'fromDate', endDate, 'endDate')
         let finalObj = {
             id: this.state.storeId,
@@ -181,19 +190,7 @@ class SaleDataReportContainer extends React.Component {
         this.props.dispatch(fetchSaleReportData('', '/Reports/SalesReport/ByStore', finalObj))
     }
 
-    render() {
-        if (_get(this, 'props.isFetching')) {
-            return (<div className='loader-wrapper-main'>
-                <div className="spinner">
-                    <div className="rect1"></div>
-                    <div className="rect2"></div>
-                    <div className="rect3"></div>
-                    <div className="rect4"></div>
-                    <div className="rect5"></div>
-                </div>
-            </div>);
-        }
-
+    render() {  
         return (
             <div className="">
                 <div className='panel-container'>
@@ -225,7 +222,7 @@ class SaleDataReportContainer extends React.Component {
                         />
                     </div>
                     <div className="col-sm-3 form-btn-group m-t-20">
-                        <SaveButton buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
+                        <SaveButton disabled={this.state.storeId == ''} buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
                         {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}
                     </div>
                 </div>
@@ -257,11 +254,11 @@ class SaleDataReportContainer extends React.Component {
                         </TableHeaderColumn>
                                 {/* <TableHeaderColumn width='100' dataField='time'>Time
                         </TableHeaderColumn> */}
-                                <TableHeaderColumn width='100' dataField='orderId' dataSort>Order Id
+                                <TableHeaderColumn width='200' dataField='orderId' dataSort>Order Id
                         </TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='staffName' dataSort>Staff Name</TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='customerName' dataSort>Customer Name</TableHeaderColumn>
-                                <TableHeaderColumn width='100' dataField='customerId' dataSort>Customer Id</TableHeaderColumn>
+                                <TableHeaderColumn width='200' dataField='customerId' dataSort>Customer Id</TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='employeeCode' dataSort>Employee Code</TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='sku' dataSort>SKU</TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='barCode' dataSort>Barcode</TableHeaderColumn>

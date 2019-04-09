@@ -8,9 +8,6 @@ import _get from 'lodash/get';
 /* Component Imports */
 import DatePicker from 'react-datepicker';
 import AutoComplete from '../../components/Elements/AutoComplete';
-
-
-
 class From extends React.Component {
 
     constructor() {

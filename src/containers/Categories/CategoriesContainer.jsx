@@ -54,7 +54,7 @@ class CategoriesContainer extends React.Component {
           <span className='panel-heading'>Category Management</span>
           <div>
             <SaveButton Class_Name="m-r-10" buttonDisplayText={'Add New Category'} handlerSearch={()=> this.handleClickOpen(0, '', 'add')} />
-            <SaveButton Class_Name="btn-info" buttonDisplayText={'Make new Tree'} handlerSearch={() => this.redirectToAddNew()} />
+            {/* <SaveButton Class_Name="btn-info" buttonDisplayText={'Make new Tree'} handlerSearch={() => this.redirectToAddNew()} /> */}
           </div>
         </div>
         <LevelCategories
