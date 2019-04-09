@@ -38,6 +38,7 @@ class AddEditStoreContainer extends React.Component {
         this.handleBlur = this.handleBlur.bind(this);
         this.handleInputAddressChange = this.handleInputAddressChange.bind(this);
         this.method = 'POST';
+        this.paymentMethodArrInt = []
     }
 
 
@@ -71,6 +72,13 @@ class AddEditStoreContainer extends React.Component {
     }
     handleSelectChange = (id, name) => {
         _set(this.storeInfo, name, id);
+        let paymentMethodArray = []
+        paymentMethodArray = _get(this.storeInfo,'paymentMethodsList','').split(',')
+        let paymentMethodArrInt = []
+        paymentMethodArray.length > 0 && Array.isArray(paymentMethodArray) && paymentMethodArray.map(paymentMethod => {
+            paymentMethodArrInt.push(Number(paymentMethod))
+        })
+        this.paymentMethodArrInt = paymentMethodArrInt
         this.forceUpdate();
     }
 
@@ -143,13 +151,7 @@ class AddEditStoreContainer extends React.Component {
         data.image = this.imagePreviewUrl;
         data.address.country = this.storeInfo.country
         data.address.postalCode = zip
-        let paymentMethodArray = []
-        paymentMethodArray = _get(this.storeInfo,'paymentMethodsList','').split(',')
-        let paymentMethodArrInt = []
-        paymentMethodArray.length > 0 && Array.isArray(paymentMethodArray) && paymentMethodArray.map(paymentMethod => {
-            paymentMethodArrInt.push(Number(paymentMethod))
-        })
-        data.paymentMethods = paymentMethodArrInt
+        data.paymentMethods = this.paymentMethodArrInt
         if (this.state.isUpdating) {
             data.id = this.updatedStoreInfo.id
         }

@@ -75,7 +75,9 @@ const reportsData = (state = {
   empDetailsList: [],
   zReportData: [],
   saleReportData: [],
-  saleByPaymentMethodReport: []
+  saleByPaymentMethodReport: [],
+  rewardPointRedeemptionTransaction: [],
+  giftCardTransactionsData: []
 }, action) => {
   switch (action.type) {
     case REQUEST_SALE_REPORT_DATA:
@@ -427,6 +429,56 @@ const reportsData = (state = {
         status: action.status,
         didInvalidate: false,
         saleByPaymentMethodReport: action.error,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchRewardPointRedeemption_init':
+      return Object.assign({}, state, {
+        isFetching: true,
+        rewardPointRedeemptionTransaction: [],
+        type: action.type,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchRewardPointRedeemption_success':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        rewardPointRedeemptionTransaction: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchRewardPointRedeemption_error':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        rewardPointRedeemptionTransaction: action.error,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchGiftCardTransactions_init':
+      return Object.assign({}, state, {
+        isFetching: true,
+        giftCardTransactionsData: [],
+        type: action.type,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchGiftCardTransactions_success':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        giftCardTransactionsData: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchGiftCardTransactions_error':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        giftCardTransactionsData: action.error,
         lastUpdated: action.receivedAt
       });
     default:

@@ -1,5 +1,4 @@
 import React from 'react';
-import Alert from 'react-s-alert';
 import DatePicker from 'react-datepicker';
 import {connect} from 'react-redux';
 import moment from "moment";
@@ -37,7 +36,7 @@ class RewardPointReport extends React.Component {
             endDate: moment(),
             selectedStore: '',
             storeList: [],
-            saleByPaymentMethodReportData: [],
+            rewardPointRedeemptionData: [],
             isLoading: false,
             error: ''
         }
@@ -75,7 +74,7 @@ class RewardPointReport extends React.Component {
             dispatch: this.props.dispatch,
             reqObj,
             url,
-            identifier: 'fetchSaleByPaymentMethod',
+            identifier: 'fetchRewardPointRedeemption',
             successCb: this.handleSuccess,
             errorCb: () => this.handleError,
             successText: "Fetched SuccessFully"
@@ -83,7 +82,20 @@ class RewardPointReport extends React.Component {
     }
 
     handleSuccess = (data) => {
-        this.setState({ saleByPaymentMethodReportData: data, isLoading: false })
+        this.setState({isLoading: false}) 
+        if(Array.isArray(data)) {
+            if(!_isEmpty(data)) {
+                let rewardPointRedeemptionData = []
+                data.map(data => {
+                    let temp = {}
+                    temp = data.rewardPointRedemption
+                    temp.dateTime = moment.utc(_get(data.rewardPointRedemption,'paymentTimeStamp.seconds', 0) * 1000).format('DD MM YYYY hh:mm:ss') 
+                    temp.customer = _get(data.customer,'customer.firstName','') + ' ' + _get(data.customer,'customer.lastName','')
+                    rewardPointRedeemptionData.push(temp)
+                })
+                this.setState({rewardPointRedeemptionData})
+            }
+        }
         this.props.dispatch(showAlert({text: 'Data Fetched Successfully!', isSuccess: true}))
     }
 
@@ -108,7 +120,7 @@ class RewardPointReport extends React.Component {
         return (
             <div className="">
                 <div className='panel-container'>
-                    <span className='panel-heading'>Sale By Payment Method Report</span>
+                    <span className='panel-heading'>Reward Point Redeemption Report</span>
                 </div>
                 <div className="react-bs-table-container mb-10">
                     <div className="row">
@@ -170,22 +182,29 @@ class RewardPointReport extends React.Component {
                     <div>
                         <BootstrapTable
                         height='515'
-                        data={_get(this, 'state.saleByPaymentMethodReportData', [])}
+                        data={_get(this, 'state.rewardPointRedeemptionData', [])}
                         options={options}
                         striped hover
                         pagination={true}
                         exportCSV={true}
                         search={true}
                         searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='100' dataField='paymentMethod' isKey={true}>
-                                Payment Method
+                            <TableHeaderColumn width='100' dataField='transactionId' isKey={true}>
+                                Transactionn Id
                             </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='orderCount'>
-                                Order Count
+                            <TableHeaderColumn width='100' dataField='dateTime'>
+                                Time
                             </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='salesTotal'>
-                                Sales Total
+                            <TableHeaderColumn width='100' dataField='customer'>
+                                Customer
                             </TableHeaderColumn>
+                            <TableHeaderColumn width='100' dataField='pointsToRedeem'>
+                                Points Redeemed
+                            </TableHeaderColumn>
+                            {/* Terminal Id not available for now will uncomment once it is avalable */}
+                            {/* <TableHeaderColumn width='100' dataField='value'>
+                                Terminal ID
+                            </TableHeaderColumn> */}
                         </BootstrapTable>
                     </div>}
                 </div>
