@@ -73,7 +73,6 @@ class DashboardContainer extends React.Component {
                 </div>
                 <div style={{padding:"20px"}} className="flex-row dash-1 justify-space-between">
                     <FromandToCalander
-                        doNotShowTo ={true}
                         onDateSelect={this.onDateSelect}
                         storeList={this.state.storeList}
                         onStoreSelect={this.onStoreSelect}
