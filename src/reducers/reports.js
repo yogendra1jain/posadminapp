@@ -74,7 +74,8 @@ const reportsData = (state = {
   empDiscountReportData: [],
   empDetailsList: [],
   zReportData: [],
-  saleReportData: []
+  saleReportData: [],
+  saleByPaymentMethodReport: []
 }, action) => {
   switch (action.type) {
     case REQUEST_SALE_REPORT_DATA:
@@ -403,7 +404,31 @@ const reportsData = (state = {
         empDetailsList: action.error,
         lastUpdated: action.receivedAt
       });
-
+    case 'fetchSaleByPaymentMethod_init':
+      return Object.assign({}, state, {
+        isFetching: true,
+        saleByPaymentMethodReport: [],
+        type: action.type,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchSaleByPaymentMethod_success':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        saleByPaymentMethodReport: action.data,
+        lastUpdated: action.receivedAt
+      });
+    case 'fetchSaleByPaymentMethod_error':
+      return Object.assign({}, state, {
+        isFetching: false,
+        type: action.type,
+        status: action.status,
+        didInvalidate: false,
+        saleByPaymentMethodReport: action.error,
+        lastUpdated: action.receivedAt
+      });
     default:
       return state
   }

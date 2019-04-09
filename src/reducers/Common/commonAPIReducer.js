@@ -3,7 +3,6 @@ function commonAPIReducerFunc(identifier) {
     type: '',
     error: '',
     isFetching: false,
-    //didInvalidate: false,
     lookUpData: []
   }, action) => {
 
@@ -21,7 +20,6 @@ function commonAPIReducerFunc(identifier) {
           error: '',
           isFetching: false,
           type: action.type,
-          //didInvalidate: false,
           lookUpData: action.data,
           lastUpdated: action.receivedAt,
         });

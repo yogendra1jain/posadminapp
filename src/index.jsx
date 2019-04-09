@@ -48,6 +48,7 @@ import EmployeePayrollDeductDetails from './containers/Reports/EmployeePayrollDe
 import EmployeePayrollDeductSummary from './containers/Reports/EmployeePayrollDeductSummary.jsx';
 import EmployeeDiscountReport from './containers/Reports/EmployeeDiscountReport.jsx';
 import EmployeeDetailsReport from './containers/Reports/EmployeeDetailsList.jsx';
+import RrewardPointReport from './containers/Reports/RewardPointReport';
 import AddEditVendorProduct from './containers/VendorProducts/AddEditVendorProduct/AddEditVendorProduct.jsx';
 import RequisitionContainer from './containers/RequisitionContainer/RequisitionContainer.jsx';
 import PurchaseOrderContainer from './containers/PurchaseOrders/PurchaseOrderContainer.jsx';
@@ -58,6 +59,7 @@ import ZReportContainer from './containers/Reports/ZReport.jsx';
 import EmployeesContainer from './containers/EmployeesContainer/EmployeesContainer.jsx';
 import AddEditEmployee from './containers/EmployeesContainer/AddEditEmployee.jsx';
 import SaleDataReport from './containers/Reports/SaleDataReport.jsx';
+import SaleByPaymentMethodReport from './containers/Reports/SaleByPaymentMethod';
 import RetailerContainer from './containers/Retailer/RetailerContainer.jsx';
 import AddEditRetailerContainer from './containers/Retailer/AddEditRetailer/AddEditRetailerContainer.jsx'
 import CategoriesContainer from './containers/Categories/CategoriesContainer'
@@ -155,10 +157,13 @@ ReactDom.render(
             <RouteWithLayout layout={MainLayout} exact path="/employee_payroll_deduct_summary" component={EmployeePayrollDeductSummary} />
             <RouteWithLayout layout={MainLayout} exact path="/employee_discount_report" component={EmployeeDiscountReport} />
             <RouteWithLayout layout={MainLayout} exact path="/employee_details_report" component={EmployeeDetailsReport} />
+            <RouteWithLayout layout={MainLayout} exact path="/reward_point_report" component={RrewardPointReport} />
+
             <RouteWithLayout layout={MainLayout} exact path="/z_report" component={ZReportContainer} />
             <RouteWithLayout layout={MainLayout} exact path="/employees" component={EmployeesContainer} />
             <RouteWithLayout layout={MainLayout} exact path="/employees/add" component={AddEditEmployee} />
             <RouteWithLayout layout={MainLayout} exact path="/sale_report" component={SaleDataReport} />
+            <RouteWithLayout layout={MainLayout} exact path="/sale_by_payment_method_report" component={SaleByPaymentMethodReport} />
             <RouteWithLayout layout={MainLayout} exact path="/retailers" component={RetailerContainer} />
             <RouteWithLayout layout={MainLayout} exact path="/retailers/add" component={AddEditRetailerContainer} />
             <RouteWithLayout layout={MainLayout} exact path='/staff/resetPassword' component={ResetPassword} />
