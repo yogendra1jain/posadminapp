@@ -131,8 +131,8 @@ class StoreListContainer extends React.Component {
         }
         let url = '/Store/ByRetailerId'
         dispatch(fetchStore(storesReducer, url, reqBody));
-        let ProductListurl = '/Product/ByRetailerId';
-        dispatch(fetchProductLookupData(productsReducer,ProductListurl, reqBody));
+        // let ProductListurl = '/Product/ByRetailerId';
+        // dispatch(fetchProductLookupData(productsReducer,ProductListurl, reqBody));
     }
     onUpdate() {
         let tempStore = _find(this.storeList, { 'id': this.selectedStore.id });
