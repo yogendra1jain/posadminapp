@@ -51,8 +51,6 @@ class AddEditStoreContainer extends React.Component {
             _set(this.storeInfo,'paymentMethodsList', _get(this.props,'selectedStore.paymentMethods',[]))
             delete this.storeInfo['displayAddress'];
             this.updatedStoreInfo = _cloneDeep(this.storeInfo);
-            // this.imagePreviewUrl = 
-            console.log(this.updatedStoreInfo, 'this.updatedStoreInfo')
             this.method = 'POST';
             this.forceUpdate();
         }
@@ -73,12 +71,12 @@ class AddEditStoreContainer extends React.Component {
     handleSelectChange = (id, name) => {
         _set(this.storeInfo, name, id);
         let paymentMethodArray = []
-        paymentMethodArray = _get(this.storeInfo,'paymentMethodsList','').split(',')
+        paymentMethodArray = id.split(',')
         let paymentMethodArrInt = []
         paymentMethodArray.length > 0 && Array.isArray(paymentMethodArray) && paymentMethodArray.map(paymentMethod => {
             paymentMethodArrInt.push(Number(paymentMethod))
         })
-        this.paymentMethodArrInt = paymentMethodArrInt
+        _set(this.storeInfo, 'paymentMethodsList', paymentMethodArrInt)
         this.forceUpdate();
     }
 
@@ -151,7 +149,7 @@ class AddEditStoreContainer extends React.Component {
         data.image = this.imagePreviewUrl;
         data.address.country = this.storeInfo.country
         data.address.postalCode = zip
-        data.paymentMethods = this.paymentMethodArrInt
+        data.paymentMethods = _get(this.storeInfo,'paymentMethodsList',[])
         if (this.state.isUpdating) {
             data.id = this.updatedStoreInfo.id
         }
@@ -375,11 +373,11 @@ class AddEditStoreContainer extends React.Component {
                                     <AutoCompletePosition
                                         type="multi"
                                         data={_get(this.props, 'paymentMethodsList', [])}
-                                        value={this.storeInfo.paymentMethodsList ? this.storeInfo.paymentMethodsList : ''}
-                                        name="paymentMethodsList"
+                                        value={this.storeInfo.paymentMethods ? this.storeInfo.paymentMethods : ''}
+                                        name="paymentMethods"
                                         placeholder="Select Payment Method"
                                         changeHandler={(id) => {
-                                        this.handleSelectChange(id, "paymentMethodsList")}}
+                                        this.handleSelectChange(id, "paymentMethods")}}
                                     />
                                     </div>
                                 </div>
