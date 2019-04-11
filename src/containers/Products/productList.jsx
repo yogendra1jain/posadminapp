@@ -14,22 +14,14 @@ import _filter from 'lodash/filter'
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
 
-const options = {
-    paginationPosition: 'top',
-    defaultSortName: 'sku',
-    defaultSortOrder: 'desc',
-    clearSearch: true,
-    withFirstAndLast: true,
-    sizePerPageList: [{
-        text: '5', value: 5
-    }, {
-        text: '10', value: 10
-    }]
-};
-
 class ProductListContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            totalSize: 0,
+            page: 1,
+            sizePerPage: 10
+        }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
@@ -43,6 +35,7 @@ class ProductListContainer extends React.Component {
         }
         this.redirectToNewProduct = false;
         this.addNewProduct = this.addNewProduct.bind(this);
+        this.handlePageChange = this.handlePageChange.bind(this)
         this.productList = [];
         this.selectedIds = [];
         this.selectedInfo = {};
@@ -52,8 +45,9 @@ class ProductListContainer extends React.Component {
 
     componentWillReceiveProps(props) {
         if(!_isEmpty(props.productData) && !props.productData.message){
+            this.setState({ totalSize: _get(props,'productData.result.count',0)})
             this.productList = [];
-            props.productData.map(product=>{
+            _get(props,'productData.result.products',[]).map(product=>{
                 let prod = {};
                 prod = product
                 prod.sellingPrice = _get(product,'salePrice.price',0).toFixed(2);
@@ -67,21 +61,31 @@ class ProductListContainer extends React.Component {
     }
 
     componentDidMount(){
+        this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
+    }
+
+    fetchPaginatedProducts = (page, sizePerPage) => {
         const { dispatch, productsReducer } = this.props;
-        let url = '/Product/ByRetailerId';
-        // if(localStorage.getItem('role')==='Admin'){
-        //     url = '/products/'+localStorage.getItem('retailerID');
-        // }else if(localStorage.getItem('role')==='Store Manager'){
-        //     url = '/product/'+localStorage.getItem('storeID');
-        // }
+        let url = '/Product/Paginated/ByRetailerId';
         let reqBody = {
-            id: localStorage.getItem('retailerID')
+            id: localStorage.getItem('retailerID'),
+            page,
+            sizePerPage
         }
         dispatch(fetchProductLookupData(productsReducer,url, reqBody));
     }
+
+    handlePageChange = (page, sizePerPage) => {
+        this.setState({ page, sizePerPage})
+        this.fetchPaginatedProducts(page, sizePerPage)
+    }
+
+    handleSizePerPageChange = (sizePerPage) => {
+        this.fetchPaginatedProducts(1, sizePerPage);
+    }
+
     onUpdate(){
         const {dispatch, productsReducer} = this.props;
-        console.log(this.productList, 'this.productList')
         let selectedProduct = _filter(this.productList, product => {
             return product.id == this.selectedProduct.id
         })
@@ -92,7 +96,6 @@ class ProductListContainer extends React.Component {
 
     onRowSelect = (row, isSelected, e) => {
         isSelected ? this.selectedIds = [(row.sku)] : _pull(this.selectedIds, row.sku);
-        // this.handleAllChecks();        
         this.selectedProduct = row;
         if (isSelected == false) {
 
@@ -104,13 +107,7 @@ class ProductListContainer extends React.Component {
     }
 
     onSelectAll = (isSelected, rows) => {
-        // if (isSelected) {
-        //     for (let i = 0; i < rows.length; i++) {
-        //         this.selectedIds.push(rows[i].sku)
-        //     }
-        // } else {
-            this.selectedIds = [];
-        // }
+        this.selectedIds = [];
         this.selectRowProp.selected = this.selectedIds;
         this.forceUpdate();
     }
@@ -125,6 +122,7 @@ class ProductListContainer extends React.Component {
     handleSelectChange = (id, name) => {
 
     }
+
     render() {
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
@@ -142,6 +140,24 @@ class ProductListContainer extends React.Component {
                 <Redirect push to="/product" />
             )
         }
+
+        const options = {
+            onPageChange: this.handlePageChange,
+            onSizePerPageList: this.handleSizePerPageChange,
+            page: this.state.page,
+            sizePerPage: this.state.sizePerPage,
+            paginationPosition: 'top',
+            defaultSortName: 'sku',
+            defaultSortOrder: 'desc',
+            clearSearch: true,
+            withFirstAndLast: true,
+            // sizePerPageList: [{
+            //     text: '5', value: 5
+            // }, {
+            //     text: '10', value: 10
+            // }]
+        };
+
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
@@ -154,10 +170,19 @@ class ProductListContainer extends React.Component {
                     </div>
                 </div>
                 <div>
-                    <BootstrapTable height='515' data={this.productList} options={options}
+                    <BootstrapTable 
+                        height='515' 
+                        data={this.productList} 
+                        options={options}
+                        fetchInfo={{dataTotalSize: this.state.totalSize}}
                         selectRow={this.selectRowProp}
                         striped hover
-                        pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
+                        remote
+                        pagination={true} 
+                        exportCSV={true} 
+                        search={true} 
+                        searchPlaceholder={'Search'}
+                    >
                         <TableHeaderColumn width='100' dataField='sku' isKey={true} >SKU</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='name' dataSort >
                             Product Name
