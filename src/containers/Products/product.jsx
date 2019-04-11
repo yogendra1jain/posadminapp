@@ -1,7 +1,6 @@
 import React from 'react';
 import Redirect from "react-router/Redirect";
 import SaveButton from '../../components/common/SaveButton.jsx'
-import AutoComplete from '../../components/Elements/AutoComplete.jsx';
 import connect from 'react-redux/lib/connect/connect';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
@@ -27,8 +26,14 @@ import {
 import AutoCompletePosition from '../../components/Elements/AutoCompletePosition';
 import Input from 'material-ui/Input/Input';
 import Checkbox from '@material-ui/core/Checkbox';
+import { WithContext as ReactTags } from 'react-tag-input';
 
-
+const KeyCodes = {
+    tab: 9,
+    comma: 188,
+    enter: 13,
+  };
+const delimiters = [KeyCodes.comma, KeyCodes.enter, KeyCodes.tab];
 
 class ProductContainer extends React.Component {
     constructor(props) {
@@ -38,7 +43,8 @@ class ProductContainer extends React.Component {
             level1Category: [],
             level2Category: [],
             level3Category: [],
-            selectedCategory: ''
+            selectedCategory: '',
+            tags: []
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -54,6 +60,8 @@ class ProductContainer extends React.Component {
         this.hexToBase64 = this.hexToBase64.bind(this);
         this.onSave = this.onSave.bind(this);
         this.method = 'POST';
+        this.handleDeleteTags = this.handleDeleteTags.bind(this);
+        this.handleAddTags = this.handleAddTags.bind(this);
     }
 
 
@@ -63,6 +71,15 @@ class ProductContainer extends React.Component {
             this.productInfo = this.props.selectedProduct;
             this.method = 'POST';
             this.imagePreviewUrl = this.productInfo.image;
+            let tags = []
+            _get(this.props.selectedProduct,'keywords',[]).map(keyword => {
+                let temp ={}
+                temp.id = keyword
+                temp.text = keyword
+                tags.push(temp)
+            })
+            console.log(tags, 'jhjdydyd')
+            this.setState({tags})
             let category2ReqBody = { id: this.productInfo.category1 }
             let category3ReqBody = { id: this.productInfo.category2 }
             let url = '/Category/GetChildren'
@@ -168,6 +185,10 @@ class ProductContainer extends React.Component {
 
     }
     onSave() {
+        let keywords = []
+        _get(this.state,'tags',[]).map(tag => {
+            keywords.push(tag.text)
+        })
         let url = ''
         if (this.state.isUpdating) {
             url = `${process.env.APPLICATION_BFF_URL}/Product/Update`;
@@ -207,9 +228,11 @@ class ProductContainer extends React.Component {
         data.costPrice.price = costPrice
         data.retailerId = localStorage.getItem('retailerID');
         data.image = this.imagePreviewUrl;
+        data.keywords = keywords
         if (this.state.isUpdating) {
             data.id = this.productInfo.id
         }
+        console.log(data, 'ghfhfhhf')
         delete data['price']
         delete data['sellingPrice']
         delete data['cPrice']
@@ -278,6 +301,18 @@ class ProductContainer extends React.Component {
         this.redirectToSearch = true;
         this.forceUpdate();
     }
+
+    handleDeleteTags(i) {
+        const { tags } = this.state;
+        this.setState({
+         tags: tags.filter((tag, index) => index !== i),
+        });
+    }
+ 
+    handleAddTags(tag) {
+        this.setState(state => ({ tags: [...state.tags, tag] }));
+    }
+
     render() {
         if (this.redirectToSearch) {
             return (
@@ -454,9 +489,28 @@ class ProductContainer extends React.Component {
                                 </div>
                             </div>
                         }
-
                     </div>
-
+                    <div className="col-sm-6 col-md-4 form-d">
+                        <label className="control-label">Product Tags</label>
+                        <ReactTags 
+                            classNames={{
+                                tag: 'tag-class',
+                                tagInputField: 'tag-input-field-class',
+                                selected: 'selected-class', 
+                                tagInput: 'tag-input-class',
+                                remove: 'remove-class'
+                            }}
+                            tags={this.state.tags}
+                            // suggestions={this.state.suggestions}
+                            handleDelete={this.handleDeleteTags}
+                            handleAddition={this.handleAddTags}
+                            // handleDrag={this.handleDrag}
+                            placeholder="Enter Tags"
+                            allowDeleteFromEmptyInput	
+                            allowUnique
+                            delimiters={delimiters} 
+                        />
+                    </div>
                 </Row>
                 <Row>
                     <div className="col-sm-12">

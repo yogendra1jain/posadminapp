@@ -185,9 +185,6 @@ em {
     font-size: 15px;
     margin: 0 2px;
 }
-label.control-label{
-    margin: 5px;
-}
 .react-bs-table-container {
     padding: 20px 20px;
     background: #FFF;
@@ -3528,6 +3525,52 @@ label {
 }
 .font-size-14px{
     font-size: 14px;
+}
+
+/* React-Tag_Input-Style */
+.remove-class {
+    font-size: 1.7rem;
+}
+
+.tag-input-field-class {
+    width: 100%;
+    font-size: 14px;
+    padding: 6px 0;
+    margin-top: 5px;
+    border: none;
+    border-bottom: solid 1px #000;
+    box-shadow: none;
+}
+.tag-input-field-class:focus{
+    box-shadow: none;
+    outline:none;
+}
+
+.selected-class {
+    display: flex;
+    flex-wrap: wrap;
+}
+.tag-input-class {
+    width: 100%;
+}
+
+.tag-class {
+    background: #EEE;
+    padding: 0.2rem 0.6rem;
+    font-size: 1.3rem;
+    border-radius: 0.4rem;
+    color: #777;
+    display: flex;
+    align-items: center;
+    margin-right:4px;
+    margin-top:4px;
+    cursor: text !important;
+}
+.tag-class a {
+    margin-left: 3px;
+    margin-top: 2px;
+    color: #777;
+    cursor:pointer;
 }
 
 /* Dashboard Styles */
