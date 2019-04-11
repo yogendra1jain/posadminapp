@@ -1,23 +1,17 @@
 import React, { PureComponent } from 'react';
 import {
-  PieChart, Pie, Sector, Cell, Legend
+  PieChart, Pie, Sector, Tooltip, Cell, Legend
 } from 'recharts';
 import _get from 'lodash/get';
 import _isArray from 'lodash/isArray';
-// const data = [
-//   { name: 'Group A', value: 400 },
-//   { name: 'Group B', value: 300 },
-//   { name: 'Group C', value: 300 },
-//   { name: 'Group D', value: 200 },
-// ];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
-  cx, cy, midAngle, innerRadius, outerRadius, percent, index,
+  cx, cy, midAngle, innerRadius, outerRadius, percent, index, name
 }) => {
-   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -33,7 +27,7 @@ export default class PaymentMethodPie extends PureComponent {
     return (
       <PieChart width={200} height={200}>
         <Pie
-          data={_get(this.props,'data',[])}
+          data={_get(this.props, 'data', [])}
           cx={100}
           cy={100}
           labelLine={false}
@@ -43,9 +37,9 @@ export default class PaymentMethodPie extends PureComponent {
           dataKey="value"
         >
           {
-            _get(this.props,'data',[]).map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+            _get(this.props, 'data', []).map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
           }
-          <Legend />
+          <Tooltip />
         </Pie>
       </PieChart>
     );
