@@ -260,7 +260,7 @@ class NavBarComponent extends React.Component {
                                     </Panel>
                                     <Panel>
                                         <Panel.Title className={(this.activePath === '/dashboard' ? 'active' : 'inactive')} >
-                                            <Link onClick={() => this.changeCurrentPath('/dashboard')} to={"/dashboard"}>Dashboard (Alpha)</Link>
+                                            <Link onClick={() => this.changeCurrentPath('/dashboard')} to={"/dashboard"}>Dashboard</Link>
                                         </Panel.Title>
                                     </Panel>
                                 </div>
