@@ -38,6 +38,8 @@ const commonReducer1 = (state = 'initialState1', action) => {
   }
 }
 
+let dashboardData = commonAPIReducerFunc('GET_DASHBOARD_SALES_DATA')
+
 const rootReducer = combineReducers({
   commonReducer,
   commonReducer1,
@@ -75,7 +77,8 @@ const rootReducer = combineReducers({
   productOverride,
   rewardPointsRule,
   //EarningRules,
-  dashboardReducer
+  dashboardReducer,
+  dashboardData
 })
 
 export default rootReducer;
