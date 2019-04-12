@@ -123,27 +123,38 @@ class StaffListContainer extends React.Component {
     }
 
     componentDidMount(){
-        this.staffList = []
-        const { dispatch, storesReducer } = this.props;
-        let reqBody = {
-            id: localStorage.getItem('retailerID')
-        }
-        let url = '/Store/ByRetailerId'
-        dispatch(fetchStore(storesReducer, url, reqBody));
-        this.selectedStore.stores= _get(this.props,'location.state.id', '')
-        if(this.selectedStore.stores !== '') {
-            this.enableAddNew = true
+        if(localStorage.getItem('role') == 1) {
+            this.staffList = []
+            const { dispatch, storesReducer } = this.props;
+            let reqBody = {
+                id: localStorage.getItem('retailerID')
+            }
+            let url = '/Store/ByRetailerId'
+            dispatch(fetchStore(storesReducer, url, reqBody));
+            this.selectedStore.stores= _get(this.props,'location.state.id', '')
+            if(this.selectedStore.stores !== '') {
+                this.enableAddNew = true
+                this.forceUpdate()
+            }
+            if(this.selectedStore.stores) {
+                const { dispatch, staffsReducer } = this.props;
+                let reqBody = {
+                    id: this.selectedStore.stores
+                }
+                let url = '/Operator/ByStoreId';
+                dispatch(fetchStaffList(staffsReducer, url, reqBody));
+            }
+        } else if(localStorage.getItem('role') == 2) {
+            _set(this.selectedStore,'stores',localStorage.getItem('storeID'))
+            this.enableAddNew = true;
             this.forceUpdate()
-        }
-        if(this.selectedStore.stores) {
             const { dispatch, staffsReducer } = this.props;
             let reqBody = {
-                id: this.selectedStore.stores
+                id: localStorage.getItem('storeID')
             }
             let url = '/Operator/ByStoreId';
             dispatch(fetchStaffList(staffsReducer, url, reqBody));
         }
-
     }
 
     onRowSelect = (row, isSelected, e) => {
@@ -254,6 +265,7 @@ class StaffListContainer extends React.Component {
                 </div>
             </div>);
         }
+        const role = localStorage.getItem('role')
         return (
             <div className="">
                 <div className='panel-container'>
@@ -267,6 +279,7 @@ class StaffListContainer extends React.Component {
 
                 <div>
                     <div className="row">
+                        {role == 1 ? 
                         <div className="col-sm-4">
                             <label>Select Store</label>
                             {
@@ -279,7 +292,12 @@ class StaffListContainer extends React.Component {
                                     changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
                                 /> : null
                             }
+                        </div> : 
+                        <div className='col-md-4'>  
+                            <label>Store Name: <span>{localStorage.getItem('storeName')}
+                            </span></label>
                         </div>
+                        }
                     </div>
                     <div>
                         <BootstrapTable data={this.staffList} options={options}

@@ -124,7 +124,8 @@ class AddEditComp extends React.Component {
             <div className='row' style={{ marginTop: '25px' }}>
                 <div className="col-sm-12" style={{ marginLeft: 0 }} className="">
                     <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
-                        <Field name={`employeeStoreId`} placeholder="Select Store" id={`employeeStoreId`} hideLabel={false} options={_get(this.props, 'storeList', [])} label={'Store List*'} component={ReactSelectWrapper} />
+                        {localStorage.getItem('role') == 1 ? 
+                        <Field name={`employeeStoreId`} placeholder="Select Store" id={`employeeStoreId`} hideLabel={false} options={_get(this.props, 'storeList', [])} label={'Store List*'} component={ReactSelectWrapper} /> : ''}
                     </div>
                     <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
                         <Field name={`isEmpPayEnabled`} placeholder="Employee Pay Enabled" id={`isEmpPayEnabled`} hideLabel={false} options={ActiveFlags} label={'Employee Pay Enabled *'} component={ReactSelectWrapper} />
@@ -150,10 +151,10 @@ class AddEditComp extends React.Component {
                 <FormSection name={`phoneNumber`}>
                     <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
                         <div className="col-sm-6">
-                            <Field name={`countryCode`} type="number" parse={value => parseInt(value, 20)} placeholder="Country Code" id={`countryCode`} hideLabel={false} label={'Country Code *'} component={TextFieldInput} />
+                            <Field name={`countryCode`} type="number" parse={value => parseInt(value)} placeholder="Country Code" id={`countryCode`} hideLabel={false} label={'Country Code *'} component={TextFieldInput} />
                         </div>
                         <div className="col-sm-6">
-                            <Field name={`phoneNumber`} type="number" parse={value => parseInt(value, 20)} placeholder="Phone Number" id={`phoneNumber`} hideLabel={false} label={'Phone Number *'} component={TextFieldInput} />
+                            <Field name={`phoneNumber`} type="number" parse={value => parseInt(value)} placeholder="Phone Number" id={`phoneNumber`} hideLabel={false} label={'Phone Number *'} component={TextFieldInput} />
                         </div>
                     </div>
                 </FormSection>

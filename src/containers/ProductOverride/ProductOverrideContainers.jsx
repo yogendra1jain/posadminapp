@@ -42,16 +42,29 @@ class ProductOverRide extends Component {
     }
 
     componentDidMount() {
-        this.productList = []
-        this.forceUpdate()
-        if(this.props.selectedStoreId) {
-            this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
+        if(localStorage.getItem('role') == 1) {
+            this.productList = []
+            this.forceUpdate()
+            if(this.props.selectedStoreId) {
+                this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
+            }
+            let reqBody = {
+                id: localStorage.getItem('retailerID')
+            }
+            let url = '/Store/ByRetailerId'
+            this.props.dispatch(fetchStore('', url, reqBody));
+        } else if(localStorage.getItem('role') == 2) {
+            let selectedStore = {}
+            selectedStore.store= localStorage.getItem('storeID')
+            this.setState({selectedStore})
+            let url = '/Product/WithOverride/ByStore';
+            let reqBody = {
+                id: localStorage.getItem('storeID'),
+                page: this.state.page,
+                sizePerPage: this.state.sizePerPage
+            }
+            this.props.dispatch(fetchProductData('', url, reqBody));
         }
-        let reqBody = {
-            id: localStorage.getItem('retailerID')
-        }
-        let url = '/Store/ByRetailerId'
-        this.props.dispatch(fetchStore('', url, reqBody));
     }
 
     fetchPaginatedProducts = (page, sizePerPage) => {
@@ -274,6 +287,8 @@ class ProductOverRide extends Component {
         </BootstrapTable>
         }
 
+        const role = localStorage.getItem('role')
+
         return (    
             <div className=''>
                 <div className='panel-container'>
@@ -285,15 +300,22 @@ class ProductOverRide extends Component {
 
                 <div>
                 <div className="row">
-                    <div className="col-sm-4">
-                        <label>Select Store</label>
-                        <AutoComplete
-                        type="single"
-                        data={_get(this.state,'storeList',[])}
-                        name="store"
-                        value={_get(this.state,'selectedStore.store','')} 
-                        changeHandler={(id) => {this.handleSelectChange(id, 'store')}} />
-                    </div>
+                    {
+                        role == 1 ?  
+                        <div className="col-sm-4">
+                            <label>Select Store</label>
+                            <AutoComplete
+                            type="single"
+                            data={_get(this.state,'storeList',[])}
+                            name="store"
+                            value={_get(this.state,'selectedStore.store','')} 
+                            changeHandler={(id) => {this.handleSelectChange(id, 'store')}} />
+                        </div> : 
+                        <div className="col-sm-4">
+                            <label>Store Name: <span>{localStorage.getItem('storeName')}
+                            </span></label>
+                        </div>
+                    }
                 </div>
                 <div>
                     {table}

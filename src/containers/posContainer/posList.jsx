@@ -245,24 +245,36 @@ class PosList extends Component {
         dispatch(fetchPosTerminalList(posTerminalReducer, url));
     }
     componentDidMount() {
-        if (_get(this.props, 'history.location.state.storeId', '') !== '') {
-            this.selectedStore.stores = _get(this.props, 'history.location.state.storeId', '')
+        if(localStorage.getItem('role') == 1) {
+            if (_get(this.props, 'history.location.state.storeId', '') !== '') {
+                this.selectedStore.stores = _get(this.props, 'history.location.state.storeId', '')
+                const { dispatch, posTerminalReducer } = this.props;
+                let reqBody = {
+                    id: _get(this.props, 'history.location.state.storeId', '')
+                }
+                let url = '/Terminal/ByStoreId';
+                dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
+                this.setState({ isStoreSelected: true });
+            }
+            this.posList = []
+            const { dispatch, storesReducer } = this.props;
+            let reqBody = {
+                id: localStorage.getItem('retailerID')
+            }
+            let url = '/Store/ByRetailerId'
+            dispatch(fetchStore(storesReducer, url, reqBody));
+            this.forceUpdate();
+        } else if(localStorage.getItem('role') == 2) {
+            _set(this.selectedStore,'stores', localStorage.getItem('storeID'))
+            this.forceUpdate()
             const { dispatch, posTerminalReducer } = this.props;
             let reqBody = {
-                id: _get(this.props, 'history.location.state.storeId', '')
+                id: localStorage.getItem('storeID')
             }
             let url = '/Terminal/ByStoreId';
             dispatch(fetchPosTerminalList(posTerminalReducer, url, reqBody));
             this.setState({ isStoreSelected: true });
         }
-        this.posList = []
-        const { dispatch, storesReducer } = this.props;
-        let reqBody = {
-            id: localStorage.getItem('retailerID')
-        }
-        let url = '/Store/ByRetailerId'
-        dispatch(fetchStore(storesReducer, url, reqBody));
-        this.forceUpdate();
     }
 
     onRowSelect = (row, isSelected, e) => {
@@ -410,6 +422,7 @@ class PosList extends Component {
                 </div>
             </div>);
         }
+        const role = localStorage.getItem('role')
         return (
             <div className="">
 
@@ -438,6 +451,7 @@ class PosList extends Component {
                 </div>
                 <div>
                     <div className="row">
+                        {role == 1 ? 
                         <div className="col-sm-4">
                             <label className="control-label">Select Store</label>
                             <AutoComplete
@@ -447,7 +461,11 @@ class PosList extends Component {
                                 value={_get(this.selectedStore, 'stores', '')}
                                 changeHandler={(id, name) => { this.handleSelectStoreChange(id, "stores") }}
                             />
-                        </div>
+                        </div> : 
+                         <div className="col-sm-4">
+                            <label className="control-label">Store Name: <span>{localStorage.getItem('storeName')}</span></label>
+                         </div>
+                        }
                     </div>
                     <div>
                         <BootstrapTable

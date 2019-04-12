@@ -149,12 +149,17 @@ class SaleDataReportContainer extends React.Component {
     }
 
     componentDidMount() {
-        const { dispatch, storesReducer } = this.props;
-        let reqBody = {
-            id: localStorage.getItem('retailerID')
+        if(localStorage.getItem('role') == 1) {
+            const { dispatch, storesReducer } = this.props;
+            let reqBody = {
+                id: localStorage.getItem('retailerID')
+            }
+            let url = '/Store/ByRetailerId'
+            dispatch(fetchStore(storesReducer, url, reqBody));
+        } else if(localStorage.getItem('role') == 2) {
+            this.setState({ storeId: localStorage.getItem('storeID')})
         }
-        let url = '/Store/ByRetailerId'
-        dispatch(fetchStore(storesReducer, url, reqBody));
+        
     }
 
     handleChangeStartDate = (date, event) => {
@@ -191,6 +196,7 @@ class SaleDataReportContainer extends React.Component {
     }
 
     render() {  
+        const role = localStorage.getItem('role')
         return (
             <div className="">
                 <div className='panel-container'>
@@ -211,16 +217,24 @@ class SaleDataReportContainer extends React.Component {
                             className="form-control"
                         />
                     </div>
-                    <div className="col-sm-3">
-                        <label>Select Store</label>
-                        <AutoComplete
-                            type="single"
-                            data={this.state.storeList}
-                            name="stores"
-                            value={_get(this.state, 'storeId', '')}
-                            changeHandler={(id) => { this.handleSelectChange(id) }}
-                        />
-                    </div>
+                    {
+                        role == 1 ? 
+                        <div className="col-sm-3">
+                            <label>Select Store</label>
+                            <AutoComplete
+                                type="single"
+                                data={this.state.storeList}
+                                name="stores"
+                                value={_get(this.state, 'storeId', '')}
+                                changeHandler={(id) => { this.handleSelectChange(id) }}
+                            />
+                        </div> : 
+                        <div className="col-sm-3" style={{marginTop: "25px"}}>
+                            <label>Store Name: <span>{localStorage.getItem('storeName')}
+                            </span></label>
+                        </div>
+                    }
+                    
                     <div className="col-sm-3 form-btn-group m-t-20">
                         <SaveButton disabled={this.state.storeId == ''} buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
                         {/* <SaveButton Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew} /> */}

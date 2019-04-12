@@ -150,18 +150,18 @@ class InventoryListContainer extends React.Component {
             });
         }
         if (props.storeData) {
-            if(Array.isArray(props.storeData)) {
-            this.storeList = [];
-            _get(props, 'storeData', []).map(store => {
-                let tempStore = {};
-                tempStore.displayText = store.name;
-                tempStore.value = store.id;
-                this.storeList.push(tempStore);
-            })
-            // this.storeList = props.storeData.stores;
-            this.forceUpdate();
+            if (Array.isArray(props.storeData)) {
+                this.storeList = [];
+                _get(props, 'storeData', []).map(store => {
+                    let tempStore = {};
+                    tempStore.displayText = store.name;
+                    tempStore.value = store.id;
+                    this.storeList.push(tempStore);
+                })
+                // this.storeList = props.storeData.stores;
+                this.forceUpdate();
+            }
         }
-    }
         //    if(!_isEmpty(props.productData)){
         //         this.products = [];
         //         props.productData.map(product=>{
@@ -204,9 +204,9 @@ class InventoryListContainer extends React.Component {
     }
 
     handleSelectChange = (id, name) => {
-        if(id == null) {
+        if (id == null) {
             this.selectedStore = {}
-            this.inventoryList= []
+            this.inventoryList = []
             this.forceUpdate()
         } else {
             this.setState({ isStoreSelected: true })
@@ -222,13 +222,25 @@ class InventoryListContainer extends React.Component {
     }
 
     componentDidMount() {
-        this.inventoryList = []
-        const { dispatch, storesReducer } = this.props;
-        let url = '/Store/ByRetailerId';
-        let reqBody = {
-            id: localStorage.getItem('retailerID')
+        if(localStorage.getItem('role') == 1) {
+            this.inventoryList = []
+            const { dispatch, storesReducer } = this.props;
+            let url = '/Store/ByRetailerId';
+            let reqBody = {
+                id: localStorage.getItem('retailerID')
+            }
+            dispatch(fetchStore(storesReducer, url, reqBody));
+        } else if(localStorage.getItem('role') == 2) {
+            _set(this.selectedStore,'stores',localStorage.getItem('storeID'))
+            this.setState({ isStoreSelected: true })
+            const { dispatch, inventoriesReducer } = this.props;
+            let reqBody = {
+                id: localStorage.getItem('storeID')
+            }
+            let url = '/Inventory/ByStoreId';
+            dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
+            this.forceUpdate();
         }
-        dispatch(fetchStore(storesReducer, url, reqBody));
     }
     onRowSelect = (row, isSelected, e) => {
         if (!this.isAddnew) {
@@ -364,7 +376,7 @@ class InventoryListContainer extends React.Component {
 
 
     render() {
-        if(!this.state.isStoreSelected) {
+        if (!this.state.isStoreSelected) {
             this.inventoryList = []
         }
         if (_get(this, 'props.isFetching')) {
@@ -379,32 +391,35 @@ class InventoryListContainer extends React.Component {
             </div>);
         }
 
+        const role = localStorage.getItem('role')
 
         return (
             <div className="">
-                {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
-                    <div className='panel-container'>
-                        <span className='panel-heading'>Inventory List</span>
-                        <div>
-                            <SaveButton disabled={this.selectedIds.length === 0} Class_Name="m-r-10" buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
-                            <SaveButton disabled={this.selectedIds.length === 0} Class_Name="btn-info" buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
-                        </div>
+                <div className='panel-container'>
+                    <span className='panel-heading'>Inventory List</span>
+                    <div>
+                        <SaveButton disabled={this.selectedIds.length === 0} Class_Name="m-r-10" buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
+                        <SaveButton disabled={this.selectedIds.length === 0} Class_Name="btn-info" buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
                     </div>
+                </div>
                 <div>
                     <div className="row">
-                    <div className="col-sm-4">
-                        <label>Select Store</label>
-                        {/* {
-                            !_isEmpty(this.storeList) ?  */}
-                        <AutoComplete
-                            type="single"
-                            data={this.storeList}
-                            name="stores"
-                            value={_get(this.selectedStore, 'stores', '')}
-                            changeHandler={(id) => { this.handleSelectChange(id, 'stores') }}
-                        />
-                        {/* } */}
-                    </div>
+                        {role == 1 ?
+                            <div className="col-sm-4">
+                                <label>Select Store</label>
+                                <AutoComplete
+                                    type="single"
+                                    data={this.storeList}
+                                    name="stores"
+                                    value={_get(this.selectedStore, 'stores', '')}
+                                    changeHandler={(id) => { this.handleSelectChange(id, 'stores') }}
+                                />
+                            </div> :
+                            <div className='col-md-4'>
+                                <label>Store Name: <span>{localStorage.getItem('storeName')}
+                                </span></label>
+                            </div>
+                        }
                     </div>
                     <div>
                         <BootstrapTable data={this.inventoryList} options={options}
