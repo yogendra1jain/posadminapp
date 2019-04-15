@@ -97,7 +97,9 @@ class LoginContainer extends React.Component {
     }
 
     handleGetStoreData = (data) => {
-        debugger
+        if(_get(data.store,'paymentMethods',[]).findIndex((m) => m == 4)<0){
+            localStorage.setItem('EmployeePayrollDeduct', 'disabled')
+        }
     }
 
     handleGetStoreDataError = (err) => {
@@ -115,17 +117,7 @@ class LoginContainer extends React.Component {
             console.log(decodeToken, 'decoded json data')
             localStorage.setItem('Token',token);  
             localStorage.setItem('role',_get(decodeToken,'Role',0))
-            localStorage.setItem('storeID', _get(decodeToken,'Store.id',''))
-            genericPostData({
-                dispatch: this.props.dispatch,
-                reqObj: {id: localStorage.getItem('storeID')},
-                url: '/Store/AllData',
-                identifier: 'store_data',
-                successCb: (res) => this.handleGetStoreData(res),
-                errorCb: (err) => this.handleGetStoreDataError(err)
-                ,
-                successText: "Fetched Successfully"
-            })
+            
             if(decodeToken.Role == 1) {
                 localStorage.setItem('userName', _get(decodeToken,'RetailerAdmin.person.firstName','') + " " + _get(decodeToken,'RetailerAdmin.person.lastName',''));
                 localStorage.setItem('retailerID', _get(decodeToken, 'Retailer.id', ''));
@@ -136,6 +128,18 @@ class LoginContainer extends React.Component {
                 localStorage.setItem('retailerName',_get(decodeToken,'Retailer.name',''))
                 localStorage.setItem('storeName',_get(decodeToken,'Store.name',''))
                 localStorage.setItem('employeeID', _get(decodeToken,'StoreAdmin.id',''))
+                localStorage.setItem('storeID', _get(decodeToken,'Store.id',''))
+                genericPostData({
+                    dispatch: this.props.dispatch,
+                    reqObj: {id: localStorage.getItem('storeID')},
+                    url: '/Store/AllData',
+                    identifier: 'store_data',
+                    successCb: (res) => this.handleGetStoreData(res),
+                    errorCb: (err) => this.handleGetStoreDataError(err)
+                    ,
+                    successText: "Fetched Successfully"
+                })
+
             }
         } else {
             if (nextProps.status !== 200 && nextProps.status !== '' && nextProps.status !== undefined)

@@ -198,11 +198,16 @@ class NavBarComponent extends React.Component {
                                                     <Link onClick={() => this.changeCurrentPath('/customers')} to={"/customers"}>Customers</Link>
                                                 </Panel.Body>
                                             </div>
+                                            {localStorage.getItem('role') == 2 ? localStorage.getItem('EmployeePayrollDeduct') == 'disabled' ? '' :
                                             <div onClick={() => this.changeCurrentPath(4, 42)} key={42}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 42 && this.state.activeSubMenuIndex === 42 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 42}>
                                                     <Link onClick={() => this.changeCurrentPath('/employees')} to={"/employees"}>Store Customers</Link>
                                                 </Panel.Body>
-                                            </div>
+                                            </div> : <div onClick={() => this.changeCurrentPath(4, 42)} key={42}>
+                                                <Panel.Body className={this.state.activeMenuIndex === 42 && this.state.activeSubMenuIndex === 42 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 42}>
+                                                    <Link onClick={() => this.changeCurrentPath('/employees')} to={"/employees"}>Store Customers</Link>
+                                                </Panel.Body>
+                                            </div>}
                                         </div>
                                     </Panel>
 
@@ -226,12 +231,18 @@ class NavBarComponent extends React.Component {
                                     <Panel key={6} eventKey={6}>
                                         <Panel.Title toggle>{"Reports"}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
                                         <div>
+                                            {localStorage.getItem('role') == 2 ? localStorage.getItem('EmployeePayrollDeduct') == 'disabled' ? '' : 
                                             <div onClick={() => this.changeCurrentPath(6, 61)} key={61}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 61 && this.state.activeSubMenuIndex === 61 ? 'active' : 'inActive'}
                                                     collapsible={this.state.clickedSubIndex !== 61}>
                                                     <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')} to={"/employee_payroll_deduct_details"}>Employee Payroll Deduct Details </Link>
                                                 </Panel.Body>
-                                            </div>
+                                            </div> : <div onClick={() => this.changeCurrentPath(6, 61)} key={61}>
+                                                <Panel.Body className={this.state.activeMenuIndex === 61 && this.state.activeSubMenuIndex === 61 ? 'active' : 'inActive'}
+                                                    collapsible={this.state.clickedSubIndex !== 61}>
+                                                    <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')} to={"/employee_payroll_deduct_details"}>Employee Payroll Deduct Details </Link>
+                                                </Panel.Body>
+                                            </div>}
                                             <div onClick={() => this.changeCurrentPath(6, 62)} key={62}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 62 && this.state.activeSubMenuIndex === 62 ? 'active' : 'inActive'}
                                                     collapsible={this.state.clickedSubIndex !== 62}>
