@@ -1,5 +1,5 @@
 export const EMPLOYEES_URL = `${process.env.APPLICATION_BFF_URL}`
-export const EMPLOYEE_MEDIAL_URL = `${process.env.MEDIA_SERVICE_ADDRESS}`
+export const EMPLOYEE_MEDIAL_URL = `${process.env.APPLICATION_BFF_URL}/Upload/File`
 
 export const REQUEST_EMPLOYEES_LIST = 'REQUEST_EMPLOYEES_LIST';
 export const RECEIVE_EMPLOYEES_LIST = 'RECEIVE_EMPLOYEES_LIST';

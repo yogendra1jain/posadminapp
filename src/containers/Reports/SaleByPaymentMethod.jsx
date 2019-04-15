@@ -17,7 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'orderCount',
+    defaultSortName: 'transactionsCount',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -90,9 +90,9 @@ class SaleBypaymentMethod extends React.Component {
 
     handleSuccess = (data) => {
         this.setState({ isLoading: false })
-        if (!_isEmpty(data)) {
-            if (Array.isArray(data)) {
-                this.setState({ saleByPaymentMethodReportData: data })
+        if (!_isEmpty(data.result)) {
+            if (Array.isArray(data.result)) {
+                this.setState({ saleByPaymentMethodReportData: data.result })
             }
         }
         this.props.dispatch(showAlert({ text: 'Data Fetched Successfully!', isSuccess: true }))
@@ -196,16 +196,18 @@ class SaleBypaymentMethod extends React.Component {
                                 pagination={true}
                                 exportCSV={true}
                                 search={true}
-                                searchPlaceholder={'Search'}>
+                                searchPlaceholder={'Search'}
+                            >
                                 <TableHeaderColumn width='100' dataField='paymentMethod' isKey={true}>
                                     Payment Method
-                            </TableHeaderColumn>
-                                <TableHeaderColumn width='100' dataField='orderCount'>
-                                    Order Count
-                            </TableHeaderColumn>
-                                <TableHeaderColumn width='100' dataField='salesTotal'>
+                                </TableHeaderColumn>
+                                <TableHeaderColumn width='100' dataField='transactionsCount'>
+                                        Order Count
+                                </TableHeaderColumn>
+                                <TableHeaderColumn width='100' 
+                                dataField='value'>
                                     Sales Total
-                            </TableHeaderColumn>
+                                </TableHeaderColumn>
                             </BootstrapTable>
                         </div>}
                 </div>

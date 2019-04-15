@@ -39,6 +39,7 @@ class AddEditEmployee extends React.Component {
         }
     }
     saveEmployee = (values) => {
+        debugger
         let saveUrl = `/Customer/Create`;
         if (values.id) {
             saveUrl = `/Customer/Update`;
@@ -55,9 +56,15 @@ class AddEditEmployee extends React.Component {
         if(localStorage.getItem('role') == 2) {
             _set(data,'employeeStoreId',localStorage.getItem('storeID'))
         }
-        let limitRenewalDates = _get(values, 'limitRenewalDates', '').split(',').map(item => {
-            return parseInt(item);
-        })
+        let limitRenewalDates
+        if(Array.isArray(_get(values,'limitRenewalDates',''))) {
+            limitRenewalDates = _get(values,'limitRenewalDates','')
+        } else {
+            limitRenewalDates = _get(values, 'limitRenewalDates', '').split(',').map(item => {
+                return parseInt(item);
+            })
+        }
+        
         _set(data, 'limitRenewalDates', limitRenewalDates);
 
         if (data.amount)

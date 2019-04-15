@@ -193,6 +193,7 @@ class EmployeesContainer extends React.Component {
         if (_get(this, 'selectedIds.length', 0) > 0) {
             let id = this.selectedIds[0];
             let tempProd = _find(this.props.employeesList, { 'id': id });
+            tempProd.amount = _get(tempProd,'employeePurchaseLimit.amount',0)
             const { dispatch } = this.props;
             dispatch(requestEmployeesUpdate('', tempProd));
             this.props.history.push('/employees/add');
@@ -307,7 +308,7 @@ class EmployeesContainer extends React.Component {
                     <div>
                         <SaveButton disabled={_isEmpty(_get(this.state, 'selectedStore'))} Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
                         <SaveButton disabled={_isEmpty(this.selectedEmployee)} Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateEmployee()} />
-                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
+                        {/* <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} /> */}
                     </div>
                 </div>
                 <div>

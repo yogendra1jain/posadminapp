@@ -2,7 +2,7 @@ export const PRODUCT_LOOKUP_URL = `${process.env.APPLICATION_BFF_URL}`
 export const CUSTOMER_SEARCH_URL = `${process.env.APPLICATION_BFF_URL}/customers/search`
 export const NEW_CUSTOMER_REGISTRATION_URL = `${process.env.APPLICATION_BFF_URL}/customers`
 export const SALE_TRANSACTION_URL = `${process.env.APPLICATION_BFF_URL}/saleTransaction`;
-export const PRODUCT_MEDIA_URL = `${process.env.MEDIA_SERVICE_ADDRESS}`
+export const PRODUCT_MEDIA_URL = `${process.env.APPLICATION_BFF_URL}/Upload/File`
 // "http://13.127.202.129:2003/pos-bff/store/S2/products";
 
 export const REQUEST_PRODUCT_LOOKUP_DATA = 'REQUEST_PRODUCT_LOOKUP_DATA';
