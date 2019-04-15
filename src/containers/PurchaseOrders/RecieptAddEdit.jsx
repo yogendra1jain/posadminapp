@@ -99,6 +99,11 @@ class RecieptAddEdit extends React.Component {
         let data = {}
         data.purchaseOrderId = _get(this, `props.purchaseOrderById.order.id`, '');
         data.requisitions = values;
+        _get(data, 'requisitions', []).map((requistion, index) => {
+            if(!requistion.fulfilledQuantity) {
+                requistion.fulfilledQuantity = requistion.quantity;
+            }
+        })
 
         console.log('data to be saved', data);
         let url = `/PurchaseOrder/Receipt`
