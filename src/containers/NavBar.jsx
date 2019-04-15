@@ -107,7 +107,7 @@ class NavBarComponent extends React.Component {
                 <Redirect push to="/" />
             )
         }
-
+        let role = localStorage.getItem('role')
         return (
             <React.Fragment>
                 <div className="navbar-collapse collapse ">
@@ -119,8 +119,10 @@ class NavBarComponent extends React.Component {
                         <Panel key={10} eventKey={10} >
                             <Panel.Heading>
                                 <div key={10}>
+                                    {role == 1 ? 
                                     <Panel key={1} eventKey={1}>
-                                        <Panel.Title toggle>{"Products"}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
+                                        <Panel.Title toggle>{"Products"}<i className="fa fa-angle-down pull-right">
+                                        </i></Panel.Title>
                                         <div>
                                             <div onClick={() => this.changeCurrentPath(1, 11)} key={11}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 11 && this.state.activeSubMenuIndex === 11 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 11}>
@@ -133,16 +135,17 @@ class NavBarComponent extends React.Component {
                                                 </Panel.Body>
                                             </div>
                                         </div>
-                                    </Panel>
+                                    </Panel> : "" }
 
                                     <Panel key={2} eventKey={2}>
                                         <Panel.Title toggle>{"Stores"}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
                                         <div>
+                                            {role ==1 ? 
                                             <div onClick={() => this.changeCurrentPath(2, 21)} key={21}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 21 && this.state.activeSubMenuIndex === 21 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 21}>
                                                     <Link onClick={() => this.changeCurrentPath('/stores')} to={"/stores"}>Stores </Link>
                                                 </Panel.Body>
-                                            </div>
+                                            </div> : ""}
                                             <div onClick={() => this.changeCurrentPath(2, 22)} key={22}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 22 && this.state.activeSubMenuIndex === 22 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 22}>
                                                     <Link onClick={() => this.changeCurrentPath('/posList')} to={"/posList"}>POS Terminals </Link>
@@ -211,11 +214,12 @@ class NavBarComponent extends React.Component {
                                                     <Link onClick={() => this.changeCurrentPath('/inventories')} to={"/inventories"}>Product Inventory </Link>
                                                 </Panel.Body>
                                             </div>
+                                            {role ==1 ?
                                             <div onClick={() => this.changeCurrentPath(5, 52)} key={52}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 52 && this.state.activeSubMenuIndex === 52 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 52}>
                                                     <Link onClick={() => this.changeCurrentPath('/rewardPointsRule')} to={"/rewardPointsRule"}>Reward Point Rule </Link>
                                                 </Panel.Body>
-                                            </div>
+                                            </div> : ""}
                                         </div>
                                     </Panel>
 
