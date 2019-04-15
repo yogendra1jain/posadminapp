@@ -140,7 +140,7 @@ class SaleDataReportContainer extends React.Component {
                     tempStore.vendorName = _get(report, 'vendor.name', '')
                     saleReport.push(tempStore)
                 })
-                this.setState({ saleReportData: saleReport })
+                this.setState({ saleReportData: saleReport, isLoading: false })
             }
         } 
     }else {
@@ -181,7 +181,6 @@ class SaleDataReportContainer extends React.Component {
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
         let end = moment(this.state.startDate).add(1, 'days')
         let endDate = toTimestamp(end)
-        console.log(fromDate, 'fromDate', endDate, 'endDate')
         let finalObj = {
             id: this.state.storeId,
             fromTimeStamp: {
