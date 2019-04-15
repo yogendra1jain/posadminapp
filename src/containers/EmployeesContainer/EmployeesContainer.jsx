@@ -76,12 +76,22 @@ class EmployeesContainer extends React.Component {
 
 
     componentDidMount() {
-        let reqObj = {
-            id: localStorage.getItem('retailerID'),
+        if(localStorage.getItem('role') == 1) {
+            let reqObj = {
+                id: localStorage.getItem('retailerID'),
+            }
+            let storeUrl = '/Store/ByRetailerId';
+            const { dispatch, storesReducer } = this.props;
+            dispatch(fetchStore(storesReducer, storeUrl, reqObj));
+        } else if (localStorage.getItem('role') == 2) {
+            this.setState({ selectedStore: localStorage.getItem('storeID') })
+            let employeeUrl = `/Employee/ByStore`;
+            let reqData = {
+                storeId: localStorage.getItem('storeID'),
+                active: true
+            };
+            this.getEmployees(employeeUrl, reqData);
         }
-        let storeUrl = '/Store/ByRetailerId';
-        const { dispatch, storesReducer } = this.props;
-        dispatch(fetchStore(storesReducer, storeUrl, reqObj));
     }
 
     componentWillReceiveProps(props) {
@@ -196,7 +206,7 @@ class EmployeesContainer extends React.Component {
     }
     onDrop = (files) => {
         // this.setState({ files });
-        
+
         let formData;
         let url = '/Upload/Employee';
         if (files.length > 0) {
@@ -272,6 +282,7 @@ class EmployeesContainer extends React.Component {
             this.customerList = []
         }
         console.log(this.storeList, 'this.storeList')
+        const role = localStorage.getItem('role')
         return (
             <div className="">
                 <FormDialog
@@ -294,45 +305,65 @@ class EmployeesContainer extends React.Component {
                 <div className='panel-container'>
                     <span className='panel-heading'>Employees </span>
                     <div>
-                        <SaveButton disabled={_isEmpty(_get(this.state,'selectedStore'))} Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
+                        <SaveButton disabled={_isEmpty(_get(this.state, 'selectedStore'))} Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
                         <SaveButton disabled={_isEmpty(this.selectedEmployee)} Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateEmployee()} />
                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
                 <div>
                     <div className="row">
-                        <div className="col-sm-6">
-                            <label>Select Store</label>
-                            <AutoComplete
-                                type="single"
-                                data={this.storeList}
-                                name="store"
-                                value={this.state.selectedStore}
-                                changeHandler={(id) => { this.handleChange(id, 'store') }}
-                            />
-                        </div>
-                        {this.state.selectedStore !== '' ?
+                        {role == 1 ?
+                            <div>
+                                <div className="col-sm-6">
+                                    <label>Select Store</label>
+                                    <AutoComplete
+                                        type="single"
+                                        data={this.storeList}
+                                        name="store"
+                                        value={this.state.selectedStore}
+                                        changeHandler={(id) => { this.handleChange(id, 'store') }}
+                                    />
+                                </div>
+                                this.state.selectedStore !== '' ?
                             <div className="col-sm-6">
-                                <label>Select Active Status</label>
-                                <AutoComplete
-                                    type="single"
-                                    data={ActiveList}
-                                    name="activeFlag"
-                                    value={this.state.isActive}
-                                    changeHandler={(e) => this.handleActiveChange(e, 'store')}
-                                />
+                                    <label>Select Active Status</label>
+                                    <AutoComplete
+                                        type="single"
+                                        data={ActiveList}
+                                        name="activeFlag"
+                                        value={this.state.isActive}
+                                        changeHandler={(e) => this.handleActiveChange(e, 'store')}
+                                    />
+                                </div> :
+                            <div className="col-sm-6">
+                                    <label>Select Active Status</label>
+                                    <AutoComplete
+                                        type="single"
+                                        disabled
+                                        data={ActiveList}
+                                        name="activeFlag"
+                                        value={this.state.isActive}
+                                        changeHandler={(e) => this.handleActiveChange(e, 'store')}
+                                    />
+                                </div>
                             </div> :
-                            <div className="col-sm-6">
-                                <label>Select Active Status</label>
-                                <AutoComplete
-                                    type="single"
-                                    disabled
-                                    data={ActiveList}
-                                    name="activeFlag"
-                                    value={this.state.isActive}
-                                    changeHandler={(e) => this.handleActiveChange(e, 'store')}
-                                />
-                            </div>}
+                            <div>
+                                <div className="col-sm-6">
+                                    <label style={{ marginTop: "25px", fontSize: "17px" }} >Store Name: <span>{localStorage.getItem('storeName')}
+                                    </span></label>
+                                </div>
+                                <div className="col-sm-6">
+                                    <label>Select Active Status</label>
+                                    <AutoComplete
+                                        type="single"
+                                        data={ActiveList}
+                                        name="activeFlag"
+                                        value={this.state.isActive}
+                                        changeHandler={(e) => this.handleActiveChange(e, 'store')}
+                                    />
+                                </div>
+                            </div>
+                        }
                     </div>
                     {/* <div className="form-btn-group">
                         <Button type="button" style={{ marginRight: '10px' }} variant="raised" onClick={() => this.addNewEmployee()}>+ Add New</Button>

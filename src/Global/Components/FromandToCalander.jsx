@@ -29,6 +29,7 @@ class From extends React.Component {
         this.props.onStoreSelect(id);
     }
     render() {
+        const role = localStorage.getItem('role')
         return (
             <React.Fragment>
                 <div>
@@ -57,16 +58,24 @@ class From extends React.Component {
                         className="form-control"
                     />
                 </div>}
-                <div style={{ width: "25%" }}>
-                    <label>Select Store</label>
-                    <AutoComplete
-                        type="single"
-                        data={this.props.storeList}
-                        name="stores"
-                        value={_get(this.state, 'selectedStore', '')}
-                        changeHandler={this.storeSelectHandler}
-                    />
-                </div>
+                {
+                    role == 1 ? 
+                    <div style={{ width: "25%" }}>
+                        <label>Select Store</label>
+                        <AutoComplete
+                            type="single"
+                            data={this.props.storeList}
+                            name="stores"
+                            value={_get(this.state, 'selectedStore', '')}
+                            changeHandler={this.storeSelectHandler}
+                        />
+                    </div> : 
+                    <div style={{ width: "25%", marginTop: "25px" }}>  
+                        <label>Store Name: <span>{localStorage.getItem('storeName')}
+                        </span></label>
+                    </div>
+                }
+                
             </React.Fragment>
 
         );

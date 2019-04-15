@@ -27,11 +27,13 @@ import { findDOMNode } from "react-dom";
 const NavBar = withRouter(props => <NavBarComponent {...props} />);
 
 function CustomPopover({ userName }) {
+    let role = localStorage.getItem('role')
     return (
         <div className="profile-dropup">
-            <a href="">Name: {localStorage.getItem('userName')}</a>
+            <a href="">Name: {role == 1 ? localStorage.getItem('userName') : localStorage.getItem('storeName')}</a>
             <a href=""><span className="iicon"></span>Employee Id: {localStorage.getItem('employeeID')}</a>
-            {localStorage.getItem('retailerID') && <a href=""><span className="iicon"><img src={logouticon} /></span> Logout</a>}
+            <a href=""><span className="iicon"><img src={logouticon} /></span> Logout</a>
+            {/* {localStorage.getItem('retailerID') && <a href=""><span className="iicon"><img src={logouticon} /></span> Logout</a>} */}
         </div>
     );
 }

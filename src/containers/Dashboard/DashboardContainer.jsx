@@ -34,27 +34,31 @@ class DashboardContainer extends React.Component {
         }
     }
     componentDidMount() {
-        genericPostData({
-            url: "/Store/ByRetailerId",
-            reqObj: {
-                id: localStorage.getItem('retailerID')
-            },
-            dispatch: this.props.dispatch,
-            identifier: "getStoreByRetailer_dashboard",
-            successCb: (storeList) => {
-                let storeListArr = storeList.map((store) => {
-                    let displayObj = {
-                        displayText: store.name,
-                        value: store.id
-                    }
-                    return displayObj
-                });
-                this.setState({ storeList: storeListArr });
+        if(localStorage.getItem('role') == 1) {
+            genericPostData({
+                url: "/Store/ByRetailerId",
+                reqObj: {
+                    id: localStorage.getItem('retailerID')
+                },
+                dispatch: this.props.dispatch,
+                identifier: "getStoreByRetailer_dashboard",
+                successCb: (storeList) => {
+                    let storeListArr = storeList.map((store) => {
+                        let displayObj = {
+                            displayText: store.name,
+                            value: store.id
+                        }
+                        return displayObj
+                    });
+                    this.setState({ storeList: storeListArr });
 
-            },
-            errorCb: () => console.log("err is here"),
-            dontShowMessage: true
-        })
+                },
+                errorCb: () => console.log("err is here"),
+                dontShowMessage: true
+            })
+        } else if(localStorage.getItem('role') == 2) {
+            this.setState({ selectedStore: localStorage.getItem('storeID')})
+        }
     }
     onDateSelect = (type, value) => {
         this.setState({ [type]: value })

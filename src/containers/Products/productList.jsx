@@ -65,6 +65,7 @@ class ProductListContainer extends React.Component {
     }
 
     fetchPaginatedProducts = (page, sizePerPage) => {
+        this.setState({ page, sizePerPage})
         const { dispatch, productsReducer } = this.props;
         let url = '/Product/Paginated/ByRetailerId';
         let reqBody = {
@@ -76,7 +77,6 @@ class ProductListContainer extends React.Component {
     }
 
     handlePageChange = (page, sizePerPage) => {
-        this.setState({ page, sizePerPage})
         this.fetchPaginatedProducts(page, sizePerPage)
     }
 
@@ -163,7 +163,7 @@ class ProductListContainer extends React.Component {
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
 
                 <div className='panel-container'>
-                    <span className='panel-heading'>Product List</span>
+                    <span className='panel-heading'>Product Master</span>
                     <div>
                         <SaveButton Class_Name="m-r-10" disabled={this.selectedIds.length===0} buttonDisplayText={'Update Product'} handlerSearch={this.onUpdate}/>
                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Add new'} handlerSearch={this.addNewProduct}/>
@@ -180,8 +180,6 @@ class ProductListContainer extends React.Component {
                         remote
                         pagination={true} 
                         exportCSV={true} 
-                        search={true} 
-                        searchPlaceholder={'Search'}
                     >
                         <TableHeaderColumn width='100' dataField='sku' isKey={true} >SKU</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='name' dataSort >

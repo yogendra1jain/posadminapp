@@ -104,16 +104,21 @@ class LoginContainer extends React.Component {
             let token = nextProps.token;
             let decodeToken = jwtDecode(token);
             console.log(decodeToken, 'decoded json data')
-            localStorage.setItem('Token',token);    
-            // localStorage.setItem('userPin', _get(decodeToken,'Operator.loginPin', ''));
-            localStorage.setItem('userName', _get(decodeToken,'RetailerAdmin.person.firstName','') + " " + _get(decodeToken,'RetailerAdmin.person.lastName',''));
-            localStorage.setItem('retailerID', _get(decodeToken, 'Retailer.id', ''));
-            localStorage.setItem('employeeID', _get(decodeToken, 'RetailerAdmin.id', ''));
-            // localStorage.setItem('role', _get(decodeToken, 'Operator.role', ''));
-            // if (nextProps.user.userInfo.role === 'Store Manager') {
-            //     localStorage.setItem('storeManager', nextProps.user.id)
-            // }
-            localStorage.setItem('storeID', _get(decodeToken, 'Store.id', ''));
+            localStorage.setItem('Token',token);  
+            localStorage.setItem('role',_get(decodeToken,'Role',0))
+            if(decodeToken.Role == 1) {
+                localStorage.setItem('userName', _get(decodeToken,'RetailerAdmin.person.firstName','') + " " + _get(decodeToken,'RetailerAdmin.person.lastName',''));
+                localStorage.setItem('retailerID', _get(decodeToken, 'Retailer.id', ''));
+                localStorage.setItem('employeeID', _get(decodeToken, 'RetailerAdmin.id', ''));
+                localStorage.setItem('storeID', _get(decodeToken, 'Store.id', ''));
+
+            }   else if(decodeToken.Role == 2) {
+                localStorage.setItem('retailerID',_get(decodeToken,'Retailer.id',''))
+                localStorage.setItem('retailerName',_get(decodeToken,'Retailer.name',''))
+                localStorage.setItem('storeName',_get(decodeToken,'Store.name',''))
+                localStorage.setItem('employeeID', _get(decodeToken,'StoreAdmin.id',''))
+                localStorage.setItem('storeID', _get(decodeToken,'StoreAdmin.storeId',''))
+            }
         } else {
             if (nextProps.status !== 200 && nextProps.status !== '' && nextProps.status !== undefined)
                 this.showAlert(true, 'Login Failed.');

@@ -15,22 +15,7 @@ import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
 import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-const options = {
-    paginationPosition: 'top',
-    defaultSortName: 'name',
-    defaultSortOrder: 'asc',
-    clearSearch: true,
-    withFirstAndLast: true,
-    sizePerPageList: [{
-        text: '5', value: 5
-    }, {
-        text: '10', value: 10
-    }]
-};
-
 class ProductOverRide extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -39,8 +24,12 @@ class ProductOverRide extends Component {
             selectedStore: {},
             selectedIds: [],
             isLoading: false,
-            currencyCode: ''
+            currencyCode: '',
+            totalSize: 0,
+            page: 1,
+            sizePerPage: 10
         }
+        this.handlePageChange = this.handlePageChange.bind(this)
         this.selectRowProp = {
             mode: 'checkbox',
             clickToSelect: false,
@@ -53,23 +42,60 @@ class ProductOverRide extends Component {
     }
 
     componentDidMount() {
-        this.productList = []
-        this.forceUpdate()
+        if(localStorage.getItem('role') == 1) {
+            this.productList = []
+            this.forceUpdate()
+            if(this.props.selectedStoreId) {
+                this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
+            }
+            let reqBody = {
+                id: localStorage.getItem('retailerID')
+            }
+            let url = '/Store/ByRetailerId'
+            this.props.dispatch(fetchStore('', url, reqBody));
+        } else if(localStorage.getItem('role') == 2) {
+            let selectedStore = {}
+            selectedStore.store= localStorage.getItem('storeID')
+            this.setState({selectedStore})
+            let url = '/Product/WithOverride/ByStore';
+            let reqBody = {
+                id: localStorage.getItem('storeID'),
+                page: this.state.page,
+                sizePerPage: this.state.sizePerPage
+            }
+            this.props.dispatch(fetchProductData('', url, reqBody));
+        }
+    }
+
+    fetchPaginatedProducts = (page, sizePerPage) => {
+        this.setState({ page, sizePerPage })
+        let reqBody = {}
         if(this.props.selectedStoreId) {
             let selectedStore = {}
             selectedStore.store = this.props.selectedStoreId
             this.setState({ selectedStore, isLoading: true })
-            let url = '/Product/WithOverride/ByStore';
-            let reqBody = {
-                id: this.props.selectedStoreId
+            reqBody = {
+                id: this.props.selectedStoreId,
+                page,
+                sizePerPage
             }
-            this.props.dispatch(fetchProductData('', url, reqBody)); 
+        } else {
+            reqBody = {
+                id: _get(this.state,'selectedStore.store',''),
+                page,
+                sizePerPage
+            }
         }
-        let reqBody = {
-            id: localStorage.getItem('retailerID')
-        }
-        let url = '/Store/ByRetailerId'
-        this.props.dispatch(fetchStore('', url, reqBody));
+        let url = '/Product/WithOverride/ByStore';
+        this.props.dispatch(fetchProductData('', url, reqBody)); 
+    }
+
+    handlePageChange = (page, sizePerPage) => {
+        this.fetchPaginatedProducts(page, sizePerPage)
+    }
+        
+    handleSizePerPageChange = (sizePerPage) => {
+        this.fetchPaginatedProducts(1, sizePerPage);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -87,9 +113,10 @@ class ProductOverRide extends Component {
         }
 
         if(!_isEmpty(nextProps.productList)) {
-            if(Array.isArray(nextProps.productList)) {
+            this.setState({ totalSize: nextProps.productList.count})
+            if(Array.isArray(nextProps.productList.storeProducts)) {
                 let productList = []
-                _get(nextProps,'productList', []).map(product => {
+                _get(nextProps,'productList.storeProducts', []).map(product => {
                     let isOverride = ('override' in product)
                     this.setState({ currencyCode: product.currencyCode})
                     let tempStore = {}
@@ -121,7 +148,7 @@ class ProductOverRide extends Component {
                 })
                 this.productList = productList
                 this.forceUpdate()
-                if(nextProps.productList !== this.props.productList) {
+                if(nextProps.productList.storeProducts !== this.props.productList.storeProducts) {
                     this.setState({ isLoading: false })
                 }
             }
@@ -140,7 +167,9 @@ class ProductOverRide extends Component {
             this.setState({ selectedStore })
             let url = '/Product/WithOverride/ByStore';
             let reqBody = {
-                id: id
+                id: id,
+                page: this.state.page,
+                sizePerPage: this.state.sizePerPage
             }
             this.props.dispatch(fetchProductData('', url, reqBody)); 
         }  
@@ -213,16 +242,32 @@ class ProductOverRide extends Component {
                         </div>
                     </div>
         } else {
+            const options = {
+                onPageChange: this.handlePageChange,
+                onSizePerPageList: this.handleSizePerPageChange,
+                page: this.state.page,
+                sizePerPage: this.state.sizePerPage,
+                paginationPosition: 'top',
+                defaultSortName: 'name',
+                defaultSortOrder: 'asc',
+                clearSearch: true,
+                withFirstAndLast: true,
+                // sizePerPageList: [{
+                //     text: '5', value: 5
+                // }, {
+                //     text: '10', value: 10
+                // }]
+            };
             table = <BootstrapTable 
             height='515' 
             data={this.productList && this.productList} 
             options={options}
             selectRow={this.selectRowProp}
             striped hover
+            fetchInfo={{dataTotalSize: this.state.totalSize}}
+            remote
             pagination={true} 
             exportCSV={true} 
-            search={true} 
-            searchPlaceholder={'Search Products'}
         >
             <TableHeaderColumn width='100' dataField='id' isKey={true} hidden={true}>Id
             </TableHeaderColumn>
@@ -241,10 +286,13 @@ class ProductOverRide extends Component {
             <TableHeaderColumn width='100' dataField='isOverriden' dataSort searchable={true} >Is Overriden</TableHeaderColumn>
         </BootstrapTable>
         }
+
+        const role = localStorage.getItem('role')
+
         return (    
             <div className=''>
                 <div className='panel-container'>
-                    <span className='panel-heading'>Product List</span>
+                    <span className='panel-heading'>Product Override</span>
                     <div>
                         <SaveButton disabled={_isEmpty(_get(this.state,'selectedStore', {}))} Class_Name={"btn-info"} buttonDisplayText={'Override for Store'} handlerSearch={this.handleOverrideForStore}/>
                     </div>
@@ -252,15 +300,22 @@ class ProductOverRide extends Component {
 
                 <div>
                 <div className="row">
-                    <div className="col-sm-4">
-                        <label>Select Store</label>
-                        <AutoComplete
-                        type="single"
-                        data={_get(this.state,'storeList',[])}
-                        name="store"
-                        value={_get(this.state,'selectedStore.store','')} 
-                        changeHandler={(id) => {this.handleSelectChange(id, 'store')}} />
-                    </div>
+                    {
+                        role == 1 ?  
+                        <div className="col-sm-4">
+                            <label>Select Store</label>
+                            <AutoComplete
+                            type="single"
+                            data={_get(this.state,'storeList',[])}
+                            name="store"
+                            value={_get(this.state,'selectedStore.store','')} 
+                            changeHandler={(id) => {this.handleSelectChange(id, 'store')}} />
+                        </div> : 
+                        <div className="col-sm-4">
+                            <label>Store Name: <span>{localStorage.getItem('storeName')}
+                            </span></label>
+                        </div>
+                    }
                 </div>
                 <div>
                     {table}

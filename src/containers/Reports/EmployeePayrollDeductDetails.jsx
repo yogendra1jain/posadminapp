@@ -49,7 +49,11 @@ class EmployeePayrollDeductDetails extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchStores();
+        if(localStorage.getItem('role') == 1) {
+            this.fetchStores();
+        } else if(localStorage.getItem('role') == 2) {
+            this.setState({ storeId: localStorage.getItem('storeID')})
+        }
     }
 
     fetchStores = () => {
@@ -117,6 +121,7 @@ class EmployeePayrollDeductDetails extends React.Component {
         }
 
         let { empPayrollDeductDetailsData } = this.props;
+        const role = localStorage.getItem('role')
         return (
             <div className="">
                 <div className='panel-container'>
@@ -152,16 +157,24 @@ class EmployeePayrollDeductDetails extends React.Component {
                                 className="form-control"
                             />
                         </div>
-                        <div className="col-sm-3">
-                            <label>Select Store</label>
-                            <AutoComplete
-                                type="single"
-                                data={this.state.storeList}
-                                name="stores"
-                                value={_get(this.state, 'storeId', '')}
-                                changeHandler={(id) => { this.handleSelectChange(id) }}
-                            />
-                        </div>
+                        {
+                            role == 1 ?
+                                <div className="col-sm-3">
+                                    <label>Select Store</label>
+                                    <AutoComplete
+                                        type="single"
+                                        data={this.state.storeList}
+                                        name="stores"
+                                        value={_get(this.state, 'storeId', '')}
+                                        changeHandler={(id) => { this.handleSelectChange(id) }}
+                                    />
+                                </div> :
+                                <div className="col-sm-3" style={{ marginTop: "25px" }}>
+                                    <label>Store Name: <span>{localStorage.getItem('storeName')}
+                                    </span></label>
+                                </div>
+                        }
+
 
                         <div className="col-sm-3 form-btn-group m-t-20">
                             <SaveButton buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
