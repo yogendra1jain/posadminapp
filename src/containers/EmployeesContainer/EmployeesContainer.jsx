@@ -324,8 +324,7 @@ class EmployeesContainer extends React.Component {
                                         changeHandler={(id) => { this.handleChange(id, 'store') }}
                                     />
                                 </div>
-                                this.state.selectedStore !== '' ?
-                            <div className="col-sm-6">
+                                <div className="col-sm-6">
                                     <label>Select Active Status</label>
                                     <AutoComplete
                                         type="single"
@@ -334,18 +333,7 @@ class EmployeesContainer extends React.Component {
                                         value={this.state.isActive}
                                         changeHandler={(e) => this.handleActiveChange(e, 'store')}
                                     />
-                                </div> :
-                            <div className="col-sm-6">
-                                    <label>Select Active Status</label>
-                                    <AutoComplete
-                                        type="single"
-                                        disabled
-                                        data={ActiveList}
-                                        name="activeFlag"
-                                        value={this.state.isActive}
-                                        changeHandler={(e) => this.handleActiveChange(e, 'store')}
-                                    />
-                                </div>
+                                </div> 
                             </div> :
                             <div>
                                 <div className="col-sm-6">
