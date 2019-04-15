@@ -216,11 +216,11 @@ class DashboardContainer extends React.Component {
                         {
                             _get(this.state, 'PaymentMethodsData').length ?
                                 <div className='dash-22'>
-                                    <div className='card flex-column payment-method-pie fheight'>
+                                    <div className='card flex-column payment-method-pie fheight' style={{position: 'relative'}}>
                                         <span className='card-title'>Payment Methods</span>
                                         <PaymentMethodsPie
                                             data={_get(this.state, 'PaymentMethodsData', [])}
-                                        />
+                                        />  
                                     </div>
                                 </div> : null
                         }
@@ -228,7 +228,7 @@ class DashboardContainer extends React.Component {
 
 
 
-                    <div className='flex-row dash-3'>
+                    {/* <div className='flex-row dash-3'>
                         <div className='card fwidth'>
                             <span className='card-title'>Low Inventory</span>
                             <LowInventoryTable />
@@ -240,7 +240,7 @@ class DashboardContainer extends React.Component {
                             <span className='card-title'>Out Of stock</span>
                             <OutOfStockTable />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );
