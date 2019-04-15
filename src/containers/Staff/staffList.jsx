@@ -276,10 +276,9 @@ class StaffListContainer extends React.Component {
                         <SaveButton disabled={!this.enableAddNew} Class_Name={"btn-info"} buttonDisplayText={'Add new'} handlerSearch={this.addNew}/>
                     </div>
                 </div>
-
                 <div>
+                    {role == 1 ? 
                     <div className="row">
-                        {role == 1 ? 
                         <div className="col-sm-4">
                             <label>Select Store</label>
                             {
@@ -292,25 +291,27 @@ class StaffListContainer extends React.Component {
                                     changeHandler={(id) => {this.handleSelectChange(id, 'stores') }}
                                 /> : null
                             }
-                        </div> : 
+                        </div>
+                    </div> : 
+                    <div className="row">
                         <div className='col-md-4'>  
                             <label>Store Name: <span>{localStorage.getItem('storeName')}
                             </span></label>
                         </div>
-                        }
                     </div>
-                    <div>
-                        <BootstrapTable data={this.staffList} options={options}
-                            selectRow={this.selectRowProp}
-                            striped hover
-                            pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
-                            <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='role' >Role</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='phoneNumber' >Phone</TableHeaderColumn>
-                        </BootstrapTable>
-                    </div>
+                    } 
+                </div>
+                <div>
+                    <BootstrapTable data={this.staffList} options={options}
+                        selectRow={this.selectRowProp}
+                        striped hover
+                        pagination={true} exportCSV={true} search={true} searchPlaceholder={'Search'}>
+                        <TableHeaderColumn width='50' dataField='id' isKey={true} hidden={true}></TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='role' >Role</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='name' >Name</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='email' >Email</TableHeaderColumn>
+                        <TableHeaderColumn width='100' dataField='phoneNumber' >Phone</TableHeaderColumn>
+                    </BootstrapTable>
                 </div>
             </div>
         )
