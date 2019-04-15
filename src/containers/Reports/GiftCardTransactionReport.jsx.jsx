@@ -43,11 +43,15 @@ class GiftCardTransactionReport extends React.Component {
     }
 
     componentDidMount() {
-        let reqBody = {
-            id: localStorage.getItem('retailerID')
+        if(localStorage.getItem('role') == 1) {
+            let reqBody = {
+                id: localStorage.getItem('retailerID')
+            }
+            let url = '/Store/ByRetailerId'
+            this.props.dispatch(fetchStore('', url, reqBody));
+        } else if(localStorage.getItem('role') == 2) {
+            this.setState({ storeId: localStorage.getItem('storeID')})
         }
-        let url = '/Store/ByRetailerId'
-        this.props.dispatch(fetchStore('', url, reqBody));
     }
 
     componentWillReceiveProps(nextProps) {
@@ -117,7 +121,7 @@ class GiftCardTransactionReport extends React.Component {
                 </div>
             </div>);
         }
-
+        const role = localStorage.getItem('role')
         return (
             <div className="">
                 <div className='panel-container'>
@@ -151,16 +155,25 @@ class GiftCardTransactionReport extends React.Component {
                                 className="form-control"
                             />
                         </div>
-                        <div className="col-sm-3">
-                            <label>Select Store</label>
-                            <AutoComplete
-                                type="single"
-                                data={this.state.storeList}
-                                name="stores"
-                                value={_get(this.state, 'selectedStore', '')}
-                                changeHandler={(id) => {this.setState({selectedStore: id})}}
-                            />
-                        </div>
+                        {
+                            role == 1 ? 
+                            <div className="col-sm-3">
+                                <label>Select Store</label>
+                                <AutoComplete
+                                    type="single"
+                                    data={this.state.storeList}
+                                    name="stores"
+                                    value={_get(this.state, 'selectedStore', '')}
+                                    changeHandler={(id) => {this.setState({selectedStore: id})}}
+                                />
+                            </div> : 
+                            <div className="col-sm-3" style={{ marginTop: "25px" }}>
+                                <label>Store Name: 
+                                    <span>{localStorage.getItem('storeName')}</span>
+                                </label>
+                            </div>
+                        }
+                       
                         <div className="col-sm-3 form-btn-group m-t-20">
                             {this.state.isLoading ? 
                                 <CircularProgress color="secondary" /> : 

@@ -159,7 +159,6 @@ class SaleDataReportContainer extends React.Component {
         } else if(localStorage.getItem('role') == 2) {
             this.setState({ storeId: localStorage.getItem('storeID')})
         }
-        
     }
 
     handleChangeStartDate = (date, event) => {
