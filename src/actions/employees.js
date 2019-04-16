@@ -1,6 +1,6 @@
 import * as EMPLOYEES_CONSTANT from '../constants/employees';
 import dynamicActionWrapper from '../helpers/actionHelper';
-// import { generateV1uuid } from '../helpers/helpers';
+import { generateV1uuid } from '../helpers/helpers';
 
 const requestEmployeesList = (subreddit) => ({
     type: EMPLOYEES_CONSTANT.REQUEST_EMPLOYEES_LIST,
@@ -43,52 +43,6 @@ export const fetchEmployeesList = (subreddit, url, data) => dispatch => {
         }));
     })
 }
-
-
-const requestEmployeesCSVUpload = (subreddit) => ({
-    type: EMPLOYEES_CONSTANT.REQUEST_EMPLOYEES_LIST_CSV_UPLOAD,
-    subreddit
-});
-
-const receiveEmployeesCSVUpload = (subreddit, data, status, resolve) => {
-    resolve(data);
-    return ({
-        type: EMPLOYEES_CONSTANT.RECEIVE_EMPLOYEES_LIST_CSV_UPLOAD,
-        subreddit,
-        data,
-        receivedAt: Date.now()
-    });
-}
-const receiveEmployeesCSVUploadError = (subreddit, error, status, reject) => {
-    reject(error)
-    return ({
-        type: EMPLOYEES_CONSTANT.RECEIVE_EMPLOYEES_LIST_CSV_UPLOAD_ERROR,
-        subreddit,
-        error,
-        receivedAt: Date.now()
-    })
-} 
-
-export const uploadEmployeesCSV = (subreddit, url, data) => dispatch => {
-    return new Promise((resolve, reject) => {
-        dispatch(dynamicActionWrapper({
-            path: EMPLOYEES_CONSTANT.EMPLOYEES_URL + url,
-            method: 'POST',
-            formData: data,
-            isFormData: true,
-            // contentType: 'multipart/form-data',
-            initCb: requestEmployeesCSVUpload,
-            successCb: receiveEmployeesCSVUpload,
-            failureCb: receiveEmployeesCSVUploadError,
-            resolve: resolve,
-            reject: reject,
-            subreddit,
-            wrapperActionType: 'FETCH_EMPLOYEE_LIST_WRAPPER',
-            redirect: 'follow'
-        }));
-    })
-}
-
 
 const requestNewEmployee = (subreddit) => ({
     type: EMPLOYEES_CONSTANT.REQUEST_NEW_EMPLOYEE,
@@ -138,3 +92,22 @@ export const requestEmployeesUpdate = (subreddit, data) => ({
     subreddit,
     data: data,
 });
+
+
+//DOcument Upload
+
+export const uploadDocument = (file, url, subreddit, storeId) => (dispatch) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('storeId',storeId)
+    const metaHeaders = {
+        "CorrelationId": generateV1uuid(),
+        "Authorization": `Bearer ${localStorage.getItem('Token')}`
+    };
+
+    return fetch(EMPLOYEES_CONSTANT.EMPLOYEES_URL + url, {
+        headers: metaHeaders,
+        method: 'POST',
+        body: formData
+    })
+}

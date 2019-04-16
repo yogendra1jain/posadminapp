@@ -22,7 +22,7 @@ import { fetchEmployeesList } from '../../actions/employees';
 import { fetchStore } from '../../actions/store';
 import FormDialog from '../../components/common/CommonDialog/index';
 import AutoComplete from '../../components/Elements/AutoComplete';
-import { uploadEmployeesCSV, requestEmployeesUpdate } from '../../actions/employees';
+import { uploadEmployeesCSV, uploadDocument, requestEmployeesUpdate } from '../../actions/employees';
 import FileUploadComp from './components/FileUploadComp.jsx';
 
 const options = {
@@ -206,40 +206,30 @@ class EmployeesContainer extends React.Component {
         });
     }
     onDrop = (files) => {
-        // this.setState({ files });
-
-        let formData;
         let url = '/Upload/Employee';
         if (files.length > 0) {
             this.setState({ file: files[0] })
-            formData = new FormData();
-            formData.append('file', files[0])
-            // formData.append('mediaType', 'customer')
-            // formData.append('mediaType', 'customer');
-            // formData.append('mediaTypeId', '123');
-            // formData.append('companyId', `${process.env.DEFAULT_COMPANY_ID}`);
-            formData.append('storeId', `${this.state.selectedStore}`);
-            this.props.dispatch(uploadEmployeesCSV('', url, formData))
-                .then((data) => {
-                    console.log('csv data saved successfully.', data);
-                    let employeeUrl = `/Employee/ByStore`;
-                    let reqData = {
-                        storeId: this.state.selectedStore,
-                        active: this.state.isActive,
-                    };
-                    this.getEmployees(employeeUrl, reqData);
-                    this.toggleDialog();
-                    this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
-                    setTimeout(() => {
-                        this.props.dispatch(showMessage({}));
-                    }, 3000);
-                }, (err) => {
-                    console.log('err while saving csv data', err);
+            this.props.dispatch(uploadDocument(files[0], url, '', this.state.selectedStore))
+                .then(data => {
+                    if(data.status == 200) {
+                        let employeeUrl = `/Employee/ByStore`;
+                        let reqData = {
+                            storeId: this.state.selectedStore,
+                            active: this.state.isActive,
+                        };
+                        this.getEmployees(employeeUrl, reqData);
+                        this.toggleDialog();
+                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
+                        setTimeout(() => {
+                            this.props.dispatch(showMessage({}));
+                        }, 3000);
+                    }
+                })
+                .catch(err => {
                     this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
                     setTimeout(() => {
                         this.props.dispatch(showMessage({}));
                     }, 5000);
-
                 })
         }
     }
@@ -308,7 +298,7 @@ class EmployeesContainer extends React.Component {
                     <div>
                         <SaveButton disabled={_isEmpty(_get(this.state, 'selectedStore'))} Class_Name="m-r-10" buttonDisplayText={'Add New'} handlerSearch={() => this.addNewEmployee()} />
                         <SaveButton disabled={_isEmpty(this.selectedEmployee)} Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateEmployee()} />
-                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
+                        <SaveButton disabled={_isEmpty(_get(this.state, 'selectedStore'))} Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
                 <div>
