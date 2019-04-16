@@ -103,7 +103,6 @@ class LoginContainer extends React.Component {
     }
 
     handleGetStoreDataError = (err) => {
-        debugger
     }
 
     componentWillReceiveProps(nextProps) {

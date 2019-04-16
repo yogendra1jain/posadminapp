@@ -39,7 +39,6 @@ class AddEditEmployee extends React.Component {
         }
     }
     saveEmployee = (values) => {
-        debugger
         let saveUrl = `/Customer/Create`;
         if (values.id) {
             saveUrl = `/Customer/Update`;
