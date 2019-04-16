@@ -26,14 +26,13 @@ import Overlay from 'react-bootstrap/lib/Overlay';
 import { findDOMNode } from "react-dom";
 const NavBar = withRouter(props => <NavBarComponent {...props} />);
 
-function CustomPopover({ userName }) {
+function CustomPopover(props) {
     let role = localStorage.getItem('role')
     return (
         <div className="profile-dropup">
             <a href="">Name: {role == 1 ? localStorage.getItem('userName') : localStorage.getItem('storeName')}</a>
             <a href=""><span className="iicon"></span>Employee Id: {localStorage.getItem('employeeID')}</a>
-            <a href=""><span className="iicon"><img src={logouticon} /></span> Logout</a>
-            {/* {localStorage.getItem('retailerID') && <a href=""><span className="iicon"><img src={logouticon} /></span> Logout</a>} */}
+            <a onClick={props.onLogout} href=""><span className="iicon"><img src={logouticon} /></span> Logout </a>
         </div>
     );
 }
