@@ -68,13 +68,16 @@ class DashboardContainer extends React.Component {
     }
 
     getReports = () => {
+        let endD = _get(this.state, 'endDate', 0)
+        endD.endOf('day')
+        let endDate = new Date(endD)
         let reqObj = {
             id: _get(this.state, 'selectedStore', ''),
             fromTimeStamp: {
                 seconds: toTimestamp(_get(this.state, 'startDate', 0)) / 1000
             },
             toTimestamp: {
-                seconds: toTimestamp(_get(this.state, 'endDate', 0)) / 1000
+                seconds: parseInt(endDate / 1000)
             }
         }
 

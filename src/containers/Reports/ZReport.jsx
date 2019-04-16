@@ -48,7 +48,7 @@ class ZReportContainer extends React.Component {
         super(props);
         this.state = {
             startDate: moment(),
-            endDate: moment().add(1, 'days'),
+            endDate: moment(),
             storeId: '',
             storeList: [],
             printClicked: false
@@ -88,14 +88,6 @@ class ZReportContainer extends React.Component {
         this.setState({
             startDate: moment(date)
         })
-        // , this.sendDateForGettingData(moment(date), this.state.endDate));
-    }
-
-    handleChangeEndDate = (date) => {
-        this.setState({
-            endDate: moment(date)
-        })
-        // , this.sendDateForGettingData(this.state.startDate, moment(date)));
     }
 
     handleSelectChange = (id, name) => {
@@ -103,9 +95,19 @@ class ZReportContainer extends React.Component {
     }
 
     handleSubmitReportData = () => {
+        let endD = moment(_get(this.state,'endDate',0))
+        endD.endOf('day');
+        let endDate = new Date(endD); 
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
-        let endDate = toTimestamp(_get(this, 'state.endDate', 0))
-        let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate / 1000 }, toTimestamp: { seconds: endDate / 1000 } }
+        let reqBody = { 
+            id: this.state.storeId, 
+            fromTimestamp: { 
+                seconds: fromDate / 1000 
+            }, 
+            toTimestamp: { 
+                seconds: parseInt(endDate / 1000) 
+            } 
+        }
         let url = `/Reports/ZReport/ByStore`;
         this.props.dispatch(fetchZReportData('', url, reqBody))
             .then((data) => {

@@ -33,7 +33,7 @@ class SaleBypaymentMethod extends React.Component {
         super(props);
         this.state = {
             startDate: moment(),
-            endDate: moment(),
+            endDate: moment().add(1, 'days'),
             selectedStore: '',
             storeList: [],
             saleByPaymentMethodReportData: [],
@@ -67,13 +67,16 @@ class SaleBypaymentMethod extends React.Component {
 
     handleSubmitReportData = () => {
         this.setState({ isLoading: true })
+        let endDate = moment(_get(this.state,'endDate',0))
+        endDate.endOf('day');
+        let endDateEndTime = new Date(endDate);
         let reqObj = {
             id: _get(this.state, 'selectedStore', ''),
             fromTimeStamp: {
                 seconds: toTimestamp(_get(this.state, 'startDate', 0)) / 1000
             },
             toTimestamp: {
-                seconds: toTimestamp(_get(this.state, 'endDate', 0)) / 1000
+                seconds: parseInt(endDateEndTime / 1000)
             }
         }
         let url = '/Reports/SalesReport/ByPaymentMethods'
@@ -133,6 +136,7 @@ class SaleBypaymentMethod extends React.Component {
                                 selectsStart
                                 showYearDropdown={true}
                                 startDate={this.state.startDate}
+                                endDate={this.state.endDate}
                                 onSelect={(date) => { this.setState({ startDate: date }) }}
                                 className="form-control"
                             />
@@ -146,6 +150,7 @@ class SaleBypaymentMethod extends React.Component {
                                 selectsStart
                                 showYearDropdown={true}
                                 startDate={this.state.startDate}
+                                endDate={this.state.endDate}
                                 onSelect={(date) => { this.setState({ endDate: date }) }}
                                 className="form-control"
                             />

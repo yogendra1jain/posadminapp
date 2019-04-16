@@ -80,14 +80,12 @@ class EmployeePayrollDeductDetails extends React.Component {
         this.setState({
             startDate: moment(date)
         })
-        // , this.sendDateForGettingData(moment(date), this.state.endDate));
     }
 
     handleChangeEndDate = (date) => {
         this.setState({
             endDate: moment(date)
         })
-        // , this.sendDateForGettingData(this.state.startDate, moment(date)));
     }
 
     handleSelectChange = (id, name) => {
@@ -96,8 +94,18 @@ class EmployeePayrollDeductDetails extends React.Component {
 
     handleSubmitReportData = () => {
         let fromDate = toTimestamp(_get(this, 'state.startDate', 0))
-        let endDate = toTimestamp(_get(this, 'state.endDate', 0))
-        let reqBody = { id: this.state.storeId, fromTimestamp: { seconds: fromDate / 1000 }, toTimestamp: { seconds: endDate / 1000 } }
+        let endDate = moment(_get(this, 'state.endDate', 0))
+        endDate.endOf('day');
+        let endDateEndTime = new Date(endDate);
+        let reqBody = { 
+            id: this.state.storeId, 
+            fromTimestamp: { 
+                seconds: fromDate / 1000 
+            }, 
+            toTimestamp: { 
+                seconds: parseInt(endDateEndTime / 1000) 
+            } 
+        }
         let url = `/Reports/EmployeePayrollDeduct/ByStore`;
         this.props.dispatch(fetchEmpPayrollDeductDetails('', url, reqBody))
             .then((data) => {
