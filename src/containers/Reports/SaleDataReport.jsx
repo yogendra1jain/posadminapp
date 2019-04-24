@@ -82,71 +82,6 @@ class SaleDataReportContainer extends React.Component {
                 this.setState({ storeList })
             }
         }
-
-        if (_get(props, 'saleReportData', [])) {
-            let saleReport = []
-            if(!_isEmpty(props.saleReportData)) {
-                if (Array.isArray(props.saleReportData)) {
-                    _get(props, 'saleReportData', []).map(report => {
-                    let paymentMethod1 = ''
-                    let paymentMethod2 = ''
-                    let paymentMethod3 = ''
-                    _get(report, 'payments',[]).map(payment => {
-                        let isCash = ('paymentMethod' in  payment)
-                        if(!isCash) {
-                            paymentMethod1 = 'CASH'
-                        }
-                        if(payment.paymentMethod == 1) {
-                            paymentMethod2 = 'CARD - FREEDOM PAY'
-                        }
-                        if(payment.paymentMethod == 2) {
-                            paymentMethod3 = 'GIFT CARD'
-                        }
-                    })
-                    let tax
-                    let isTaxExist = !('itemTaxPercent' in _get(report, 'saleItem', {}))
-                    isTaxExist ? tax = 0 : tax = (_get(report, 'saleItem.itemSubTotal.amount', 0) * _get(report, 'saleItem.itemTaxPercent', 0)) / 100
-                    let isProductExist = !('product' in report)
-                    let isMiscExist = !('misc' in _get(report, 'product', {}))
-                    let tempStore = {}
-                    tempStore.date = moment.utc(_get(report, 'saleTransactionDetail.saleTimeStamp.seconds', 0) * 1000).format("DD-MMM-YYYY hh:mm:ss")
-                    tempStore.orderId = _get(report, 'saleTransactionDetail.id', '')
-                    tempStore.staffName = _get(report, 'staff.person.firstName', '') + ' ' + _get(report, 'staff.person.lastName', '')
-                    tempStore.customerName = _get(report, 'customer.customer.firstName', '') + ' ' + _get(report, 'customer.customer.lastName', '')
-                    tempStore.customerId = _get(report, 'customer.id', '')
-                    tempStore.employeeCode = _get(report, 'customer.employeeId', '')
-                    tempStore.sku = _get(report, 'product.sku', '')
-                    tempStore.barCode = _get(report, 'product.upcCode', '')
-                    tempStore.productName = _get(report, 'product.name', '')
-                    tempStore.staffNote = _get(report, 'saleTransactionDetail.saleComment', '')
-                    tempStore.group = _get(report, 'group.name', '')
-                    tempStore.category = _get(report, 'category.name', '')
-                    tempStore.subCategory = _get(report, 'subCategory.name', '')
-                    tempStore.itemType = isProductExist ? 'Gift Card' : isMiscExist ? 'Product' : 'Miscellaneous Product'
-                    tempStore.priceRetailUnit = _get(report, 'product.salePrice.price', 0)
-                    tempStore.quantity = _get(report, 'saleItem.qty', 1)
-                    tempStore.totalRetailSales = _get(report, 'saleItem.itemRegularTotal.amount', 0)
-                    tempStore.totalItemDiscount = _get(report, 'saleItem.itemTotalDiscountAmount.amount', 0)
-                    tempStore.preTaxSales = _get(report, 'saleItem.itemSubTotal.amount', 0)
-                    tempStore.tax = tax.toFixed(2)
-                    tempStore.totalSales = _get(report, 'saleItem.itemEffectiveTotal.amount', 0)
-                    tempStore.employeeDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount', 0) * _get(report, 'saleItem.employeeDiscountPercent', 0)) / 100).toFixed(2)
-                    tempStore.itemDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.itemDiscountPercent', 0)) / 100).toFixed(2)
-                    tempStore.cartDiscountAmount = ((_get(report, 'saleItem.itemRegularTotal.amount') * _get(report, 'saleItem.cartDiscountPercent', 0)) / 100).toFixed(2)
-                    tempStore.costPrice = _get(report, 'product.costPrice.price', 0) * _get(report, 'saleItem.qty', 1)
-                    tempStore.paymentMethod1 = paymentMethod1
-                    tempStore.paymentMethod2 = paymentMethod2
-                    tempStore.paymentMethod3 = paymentMethod3
-                    tempStore.itemVendorNo = _get(report, 'vendorProduct.sku', '')
-                    tempStore.vendorName = _get(report, 'vendor.name', '')
-                    saleReport.push(tempStore)
-                })
-                this.setState({ saleReportData: saleReport, isLoading: false })
-            }
-        } 
-    }else {
-        this.setState({ saleReportData: [], isLoading: false })
-    }
     }
 
     componentDidMount() {
@@ -163,7 +98,6 @@ class SaleDataReportContainer extends React.Component {
     }
 
     handleChangeStartDate = (date, event) => {
-        console.log('date in start change date', date, 'event', event, 'target', event.target);
         this.setState({
             startDate: moment(date)
         })
