@@ -204,14 +204,10 @@ class SaleDataReportContainer extends React.Component {
     }
 
     handleSuccess = (data) => {
-        debugger
         if(data !== null) {
-            debugger
             let saleReport = []
             if(!_isEmpty(data)) {
-                debugger
                 if (Array.isArray(data)) {
-                    debugger
                     data.map(report => {
                         let paymentMethod1 = ''
                         let paymentMethod2 = ''
@@ -231,8 +227,19 @@ class SaleDataReportContainer extends React.Component {
                         let tax
                         let isTaxExist = !('itemTaxPercent' in _get(report, 'saleItem', {}))
                         isTaxExist ? tax = 0 : tax = (_get(report, 'saleItem.itemSubTotal.amount', 0) * _get(report, 'saleItem.itemTaxPercent', 0)) / 100
-                        let isProductExist = !('product' in report)
-                        let isMiscExist = !('misc' in _get(report, 'product', {}))
+                        let isSaleTypeExist = _get(report,'saleItem.saleType')
+                        let isProduct = false
+                        let isGiftCard = false
+                        if(isSaleTypeExist)     {
+                           if(_get(report,'saleItem.saleType',0) == 1) {
+                            isGiftCard = true
+                           } else if(_get(report,'saleItem.saleType',0) == 0) {
+                            isProduct = true 
+                           }
+                        } else {
+                            isProduct = true
+                        }
+                        let isMiscDoesNotExist = !('misc' in _get(report, 'product', {}))
                         let tempStore = {}
                         tempStore.date = moment.utc(_get(report, 'saleTransactionDetail.saleTimeStamp.seconds', 0) * 1000).format("DD-MMM-YYYY hh:mm:ss")
                         tempStore.orderId = _get(report, 'saleTransactionDetail.id', '')
@@ -242,12 +249,12 @@ class SaleDataReportContainer extends React.Component {
                         tempStore.employeeCode = _get(report, 'customer.employeeId', '')
                         tempStore.sku = _get(report, 'product.sku', '')
                         tempStore.barCode = _get(report, 'product.upcCode', '')
-                        tempStore.productName = _get(report, 'product.name', '')
+                        tempStore.productName = isProduct ? _get(report, 'saleItem.product.name', '') : 'Gift Card'
                         tempStore.staffNote = _get(report, 'saleTransactionDetail.saleComment', '')
                         tempStore.group = _get(report, 'group.name', '')
                         tempStore.category = _get(report, 'category.name', '')
                         tempStore.subCategory = _get(report, 'subCategory.name', '')
-                        tempStore.itemType = isProductExist ? 'Gift Card' : isMiscExist ? 'Product' : 'Miscellaneous Product'
+                        tempStore.itemType = isGiftCard ? 'Gift Card' : isMiscDoesNotExist ? 'Product' : 'Miscellaneous Product'
                         tempStore.priceRetailUnit = _get(report, 'product.salePrice.price', 0)
                         tempStore.quantity = _get(report, 'saleItem.qty', 1)
                         tempStore.totalRetailSales = _get(report, 'saleItem.itemRegularTotal.amount', 0)
