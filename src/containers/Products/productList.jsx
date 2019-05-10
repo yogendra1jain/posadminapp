@@ -13,6 +13,7 @@ import _pull from 'lodash/pull';
 import _filter from 'lodash/filter'
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
+import DineroInit from '../../Global/Components/DineroInit'
 
 class ProductListContainer extends React.Component {
     constructor(props) {
@@ -50,8 +51,8 @@ class ProductListContainer extends React.Component {
             _get(props,'productData.result.products',[]).map(product=>{
                 let prod = {};
                 prod = product
-                prod.sellingPrice = _get(product,'salePrice.price',0).toFixed(2);
-                prod.cPrice = _get(product,'costPrice.price',0).toFixed(2);
+                prod.sellingPrice = DineroInit(_get(product,'salePrice.amount',0)).toFormat('$0,0.00');
+                prod.cPrice = DineroInit(_get(product,'costPrice.amount',0)).toFormat('$0,0.00');
                 prod.currencyCode = _get(product,'salePrice.currencyCode','');
                 this.productList.push(prod);
             });

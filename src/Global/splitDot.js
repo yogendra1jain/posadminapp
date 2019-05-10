@@ -16,7 +16,7 @@ let splitDot = (num) => {
         } else {
             c = b[0] + '00'
         }
-        return c
+        return parseInt(c)
     }
     else {
         return ''

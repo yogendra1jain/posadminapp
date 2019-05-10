@@ -27,6 +27,8 @@ import AutoCompletePosition from '../../components/Elements/AutoCompletePosition
 import Input from 'material-ui/Input/Input';
 import Checkbox from '@material-ui/core/Checkbox';
 import { WithContext as ReactTags } from 'react-tag-input';
+import DineroInit from '../../Global/Components/DineroInit.js';
+import SplitDot from '../../Global/splitDot' 
 
 const KeyCodes = {
     tab: 9,
@@ -69,6 +71,8 @@ class ProductContainer extends React.Component {
         if (!_isEmpty(this.props.selectedProduct)) {
             this.setState({ isUpdating: true })
             this.productInfo = this.props.selectedProduct;
+            _set(this.productInfo,'sellingPrice', DineroInit(_get(this.props, 'selectedProduct.salePrice.amount', 0)).toUnit())
+            _set(this.productInfo,'cPrice',  DineroInit(_get(this.props, 'selectedProduct.costPrice.amount', 0)).toUnit())
             this.method = 'POST';
             this.imagePreviewUrl = this.productInfo.image;
             let tags = []
@@ -221,11 +225,11 @@ class ProductContainer extends React.Component {
         let salePrice = parseFloat(this.productInfo.sellingPrice)
         let costPrice = parseFloat(this.productInfo.cPrice)
         data.salePrice = {}
-        data.salePrice.currencyCode = '$'
-        data.salePrice.price = salePrice
+        data.salePrice.currency = 'USD'
+        data.salePrice.amount = SplitDot(salePrice)
         data.costPrice = {}
-        data.costPrice.currencyCode = '$'
-        data.costPrice.price = costPrice
+        data.costPrice.currency = 'USD'
+        data.costPrice.amount = SplitDot(costPrice)
         data.retailerId = localStorage.getItem('retailerID');
         data.image = this.imagePreviewUrl;
         data.keywords = keywords
