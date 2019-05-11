@@ -143,7 +143,6 @@ class SaleDataReportContainer extends React.Component {
         if(data !== null && !_isEmpty(data) && Array.isArray(data)) {
             let saleReport = []
             data.map(report => {
-                debugger
                 let paymentMethod1 = ''
                 let paymentMethod2 = ''
                 let paymentMethod3 = ''
