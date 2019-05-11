@@ -14,8 +14,9 @@ import { fetchRetailerProducts, fetchExistingPOSProductsForVendor } from '../../
 import { TextFieldInput, ReactSelectWrapper } from '../../../components/common/MaterialUiComponents';
 import Alert from 'react-s-alert';
 import FormControl from 'material-ui/Form/FormControl';
+import { clearSelectedProduct } from '../../../actions/products';
+let regex = /^\d*[\.\d]{1,3}$/;
 
-import {clearSelectedProduct} from '../../../actions/products'; 
 /* Component Imports */
 
 const styles = theme => ({
@@ -116,7 +117,7 @@ class AddEditVendorProductComp extends React.Component {
                         <Field name={`defaultOrderQty`} type="number" parse={value => parseInt(value, 10)} placeholder="Default Order Qty" id={`defaultOrderQty`} hideLabel={true} label={'Default Order Qty *'} component={TextFieldInput} />
                     </div>
                     <div className="col-sm-4">
-                        <Field name={`conversionFactor`} type="number" parse={value => parseInt(value, 10)} placeholder="Conversion Factor" id={`conversionFactor`} hideLabel={true} label={'Conversion Factor *'} component={TextFieldInput} />
+                        <Field name={`conversionFactor`} type="number" placeholder="Conversion Factor" id={`conversionFactor`} hideLabel={true} label={'Conversion Factor *'} component={TextFieldInput} />
                     </div>
                 </div>
 
@@ -124,10 +125,17 @@ class AddEditVendorProductComp extends React.Component {
                     <div className="row mt-21">
                         <div className="col-sm-4">
                             <label style={{ fontSize: "14px", marginTop: '5px' }}>Currency</label>
-                            <Field name={`currencyCode`} id={`currencyCode`} placeholder="Currency" hideLabel={true} label='Currency *' options={CurrencyData} component={ReactSelectWrapper} />
+                            <Field name={`currency`} id={`currency`} placeholder="Currency" hideLabel={true} label='Currency *' options={CurrencyData} component={ReactSelectWrapper} />
                         </div>
                         <div className="col-sm-4">
-                            <Field name={`price`} id={`price`} type={"number"} parse={value => parseInt(value, 10)} placeholder="Amount" hideLabel={true} label='Amount *' component={TextFieldInput} />
+                            <Field
+                                name={`amount`}
+                                id={`price`}
+                                type={"number"}
+                                placeholder="Amount"
+                                hideLabel={true}
+                                label='Amount *'
+                                component={TextFieldInput} />
                         </div>
                     </div>
                 </FormSection>

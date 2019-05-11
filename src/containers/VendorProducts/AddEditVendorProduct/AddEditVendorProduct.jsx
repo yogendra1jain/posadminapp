@@ -15,6 +15,8 @@ import { vendorProductSave } from '../../../actions/products';
 import { showMessage } from '../../../actions/common';
 import AddEditVendorProductComp from '../components/AddEditVendorProductComp.jsx';
 import SaveButton from '../../../components/common/SaveButton'
+import splitDot from '../../../Global/splitDot';
+import DineroInit from '../../../Global/Components/DineroInit';
 
 /* Component Imports */
 
@@ -42,7 +44,7 @@ class AddEditVendorProduct extends React.Component {
         let saveUrl = `/VendorProduct/Save`;
         let data = { ...values };
 
-        _set(data, 'price.price', Number(_get(data, 'price.price')));
+        _set(data, 'price.amount', splitDot(_get(data, 'price.amount')));
         _set(data, 'defaultOrderQty', Number(_get(data, 'defaultOrderQty')));
         _set(data, 'conversionFactor', Number(_get(data, 'conversionFactor')));
         _set(data, 'retailerId', localStorage.getItem('retailerID'));
@@ -110,7 +112,8 @@ const mapStateToProps = state => {
 
     let initialValues = {}
     if (!_isEmpty(selectedVendorProduct)) {
-        initialValues = { ...selectedVendorProduct }
+        initialValues = { ...selectedVendorProduct};
+        // _set(initialValues,'price.amount', )
     }
 
     return {
