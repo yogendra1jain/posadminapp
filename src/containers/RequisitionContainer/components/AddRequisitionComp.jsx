@@ -19,6 +19,7 @@ import { ReactSelectWrapper, TextFieldInput } from '../../../components/common/M
 import { fetchVendorProducts, fetchProductsFromCache, updateVendorProductsList, updateVendorsList } from '../../../actions/products';
 import { getVendorData } from '../../../actions/vendor';
 import { showMessage } from '../../../actions/common';
+import DineroInit from '../../../Global/Components/DineroInit';
 
 class AddRequisitionForm extends React.PureComponent {
     constructor(props) {
@@ -187,7 +188,7 @@ class AddRequisitionForm extends React.PureComponent {
                                         <label>Default Order Qty</label>
                                     </div>
                                     <div className='box-conversion-item'>
-                                        <span className='box-conversion-data'>{_get(selProd, 'price.currency', '') + _get(selProd, 'price.price', '')}</span>
+                                        <span className='box-conversion-data'>{DineroInit(_get(selProd, 'price.amount', '')).toFormat('$0,0.00')}</span>
                                         <label>Price</label>
                                     </div>
                                 </div>

@@ -23,6 +23,7 @@ import { fetchVendorProducts, requestVendorProductUpdate, fetchProductsFromCache
 import { getVendorData } from '../../actions/vendor';
 import { showMessage } from '../../actions/common';
 import AutoComplete from '../../components/Elements/AutoComplete';
+import DineroInit from '../../Global/Components/DineroInit'
 
 const options = {
     paginationPosition: 'top',
@@ -210,6 +211,7 @@ class VendorProductsContainer extends React.Component {
         if(prevProps.vendorProductsList !==  this.props.vendorProductsList) {
             if(this.state.isVendorSelected) {
                 this.productLists = this.props.vendorProductsList
+                
                 this.forceUpdate()
             }
         }
@@ -303,9 +305,11 @@ const mapStateToProps = (state, ownProps) => {
                 }
             )
         })
-    }
+    }   
     !_isEmpty(vendorProductsData) && _isArray(vendorProductsData) && vendorProductsData.map((data, index) => {
-        let price = `${_get(data, 'price.currencyCode', '')} ${_get(data, 'price.price', 0)}`;
+        console.log(data,"data-------------")
+
+        let price = `${DineroInit(_get(data, 'price.amount', 0)).toFormat('$0,0.00')}`;
 
         vendorProductsList.push(
             {

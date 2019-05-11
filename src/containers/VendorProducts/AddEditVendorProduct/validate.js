@@ -13,8 +13,8 @@ var schema = yup.object().shape({
     defaultOrderQty: yup.number().required('Required'),
     conversionFactor: yup.number().required('Required'),
     price: yup.object().shape({
-        currencyCode: yup.string().required(),
-        price: yup.number().required(),
+        currency: yup.string().required(),
+        amount: yup.number().required(),
     }),
 });
 const asyncValidate = values => {

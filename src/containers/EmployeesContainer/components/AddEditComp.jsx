@@ -124,8 +124,8 @@ class AddEditComp extends React.Component {
             <div className='row' style={{ marginTop: '25px' }}>
                 <div className="col-sm-12" style={{ marginLeft: 0 }} className="">
                     <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
-                        {localStorage.getItem('role') == 1 ? 
-                        <Field name={`employeeStoreId`} placeholder="Select Store" id={`employeeStoreId`} hideLabel={false} options={_get(this.props, 'storeList', [])} label={'Store List*'} component={ReactSelectWrapper} /> : ''}
+                        {localStorage.getItem('role') == 1 ?
+                            <Field name={`employeeStoreId`} placeholder="Select Store" id={`employeeStoreId`} hideLabel={false} options={_get(this.props, 'storeList', [])} label={'Store List*'} component={ReactSelectWrapper} /> : ''}
                     </div>
                     <div className="col-sm-4 normal-dropdowns" style={{ marginTop: '-25px' }}>
                         <Field name={`isEmpPayEnabled`} placeholder="Employee Pay Enabled" id={`isEmpPayEnabled`} hideLabel={false} options={ActiveFlags} label={'Employee Pay Enabled *'} component={ReactSelectWrapper} />
@@ -171,7 +171,14 @@ class AddEditComp extends React.Component {
 
                 <div className="col-sm-12" style={{ marginLeft: 0, marginTop: '20px' }}>
                     <div className="col-sm-6">
-                        <Field name={`amount`} id={`amount`} type={`number`} placeholder="PurchaseLimit" hideLabel={false} label='Purchase Limit *' component={TextFieldInput} />
+                        <Field
+                            name={`amount`}
+                            id={`amount`}
+                            type={`number`}
+                            placeholder="PurchaseLimit"
+                            hideLabel={false}
+                            label='Purchase Limit *'
+                            component={TextFieldInput} />
                     </div>
                     <div className="col-sm-6">
                         {/* <label className="control-label">Select Limit Renewal Dates</label>
@@ -186,7 +193,7 @@ class AddEditComp extends React.Component {
                             }}
                             disabled={_get(this, 'state.limitRenewalDates', '').split(',').length >= 2}
                         /> */}
-                        <div style={{marginTop: '30px'}}>
+                        <div style={{ marginTop: '30px' }}>
                             <Field
                                 name={`limitRenewalDates`}
                                 id={`limitRenewalDates`}

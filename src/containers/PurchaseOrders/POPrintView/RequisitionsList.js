@@ -17,6 +17,7 @@ import { getVendorData } from '../../../actions/vendor';
 import { fetchStore } from '../../../actions/store';
 /* Component Imports */
 import SaveButton from '../../../components/common/SaveButton';
+import DineroInit from '../../../Global/Components/DineroInit';
 
 const styles = theme => ({
     button: {
@@ -162,7 +163,7 @@ class EditRequisition extends React.Component {
             let prod = _find(_get(this.state, 'cachedProducts', []), {
                 'id': data.posProductId
             });
-            let Total = _get(prod,'salePrice.price',0) * data.quantity
+            let Total = _get(prod,'salePrice.amount',0) * data.quantity
             subTotal += Total
             rows.push(
                 <tr>
@@ -173,8 +174,8 @@ class EditRequisition extends React.Component {
                             <td>{_get(data,'quantity','')}</td> :
                             <td>{data.proposedQuantity ? data.proposedQuantity : data.quantity}</td>
                     }
-                    <td>{_get(prod,'salePrice.price',0).toFixed(2)}</td>
-                    <td>{Total.toFixed(2)}</td>
+                    <td>{DineroInit(_get(prod,'salePrice.amount',0)).toFormat('$0,0.00')}</td>
+                    <td>{DineroInit(Total).toFormat('$0,0.00')}</td>
                 </tr>
             )
         })
@@ -197,7 +198,7 @@ class EditRequisition extends React.Component {
                                 {rows}
                             </tbody>
                         </table>
-                        <label style={{float: "right", fontSize: "20px"}}>SubTotal: <span>{subTotal.toFixed(2)}</span></label>
+                        <label style={{float: "right", fontSize: "20px"}}>SubTotal: <span>{DineroInit(subTotal).toFormat('$0,0.00')}</span></label>
                     </div>
                 </div>
             </div>
