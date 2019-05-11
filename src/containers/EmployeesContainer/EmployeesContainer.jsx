@@ -24,6 +24,8 @@ import FormDialog from '../../components/common/CommonDialog/index';
 import AutoComplete from '../../components/Elements/AutoComplete';
 import { uploadEmployeesCSV, uploadDocument, requestEmployeesUpdate } from '../../actions/employees';
 import FileUploadComp from './components/FileUploadComp.jsx';
+import DineroInit from '../../Global/Components/DineroInit';
+
 
 const options = {
     paginationPosition: 'top',
@@ -193,7 +195,7 @@ class EmployeesContainer extends React.Component {
         if (_get(this, 'selectedIds.length', 0) > 0) {
             let id = this.selectedIds[0];
             let tempProd = _find(this.props.employeesList, { 'id': id });
-            tempProd.amount = _get(tempProd,'employeePurchaseLimit.amount',0)
+            tempProd.amount = DineroInit(_get(tempProd,'employeePurchaseLimit.amount',0)).toUnit(2)
             const { dispatch } = this.props;
             dispatch(requestEmployeesUpdate('', tempProd));
             this.props.history.push('/employees/add');
@@ -398,11 +400,13 @@ const mapStateToProps = state => {
     })
     _isArray(employeesList) && !_isEmpty(employeesList) && employeesList.map((data, index) => {
         let tempObj = data;
+
         tempObj.name = `${_get(data, 'customer.firstName', '')} ${_get(data, 'customer.lastName', '')}`;
         tempObj.phone = `${_get(data, 'phoneNumber.countryCode', '')}+ ${_get(data, 'phoneNumber.phoneNumber', '')}`;
         customerList.push(
             tempObj
         )
+        console.log(tempObj,"dfdf");
     })
     return {
         storeList,

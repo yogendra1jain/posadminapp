@@ -145,9 +145,6 @@ const mapStateToProps = state => {
             }
         )
     })
-    _set(initialValues,'employeePurchaseLimit.amount',DineroInit(_get(initialValues,'employeePurchaseLimit.amount',0)).toUnit(2));
-    console.log(initialValues,"initialValuesinitialValuesinitialValues")
-
     return {
         initialValues,
         storeList
