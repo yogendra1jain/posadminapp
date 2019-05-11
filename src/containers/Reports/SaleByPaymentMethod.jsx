@@ -14,6 +14,7 @@ import { toTimestamp } from '../../helpers/helpers';
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import showAlert from '../../actions/toastAction';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DineroInit from '../../Global/Components/DineroInit';
 
 const options = {
     paginationPosition: 'top',
@@ -95,7 +96,14 @@ class SaleBypaymentMethod extends React.Component {
         this.setState({ isLoading: false })
         if (!_isEmpty(data.result)) {
             if (Array.isArray(data.result)) {
-                this.setState({ saleByPaymentMethodReportData: data.result })
+                let saleByPaymentMethodReportData = []
+                _get(data, 'result',[]).map(data => {
+                    let tempStore = {}
+                    tempStore = data
+                    tempStore.value = DineroInit(_get(data,'value.amount',0)).toFormat('$0,0.00')
+                    saleByPaymentMethodReportData.push(tempStore)
+                })
+                this.setState({ saleByPaymentMethodReportData })
             }
         }
         this.props.dispatch(showAlert({ text: 'Data Fetched Successfully!', isSuccess: true }))
