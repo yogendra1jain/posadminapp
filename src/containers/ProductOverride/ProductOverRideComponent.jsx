@@ -10,6 +10,7 @@ import { saveProductOverride } from '../../actions/poductOverride';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from 'react-s-alert';
 import Redirect from "react-router/Redirect";
+import splitDot from '../../Global/splitDot';
 
 class ProductOverRideComponent extends Component {
     constructor(props) {
@@ -67,12 +68,12 @@ class ProductOverRideComponent extends Component {
             storeId: this.state.storeId,
             productId: productToSave.id,
             costPrice: {
-                currencyCode: "$",
-                price: parseFloat(productToSave.costPrice)
+                curreny: "USD",
+                amount: splitDot(productToSave.costPrice)
             },
             salePrice: {
-                currencyCode: "$",
-                price: parseFloat(productToSave.salePrice)
+                currency: "USD",
+                amount: splitDot(productToSave.salePrice)
             },
             active: productToSave.active
         }
