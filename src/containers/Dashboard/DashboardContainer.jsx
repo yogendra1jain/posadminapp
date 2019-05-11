@@ -18,7 +18,9 @@ import genericPostData from '../../Global/DataFetch/genericPostData';
 import FromandToCalander from '../../Global/Components/FromandToCalander';
 import { toTimestamp } from '../../helpers/helpers';
 import { commonActionCreater } from '../../actions/Common/commonAction';
-import _isEmpty from 'lodash/isEmpty'
+import _isEmpty from 'lodash/isEmpty';
+import DineroInit from '../../Global/Components/DineroInit';
+
 class DashboardContainer extends React.Component {
 
     constructor() {
@@ -109,11 +111,12 @@ class DashboardContainer extends React.Component {
     handlePaymentMethodReportSuccess = (data) => {
         let pieChartData = []
         if (!_isEmpty(data.result)) {
+            console.log(data.result,"data.resultdata.resultdata.result")
             if (Array.isArray(data.result)) {
                 _get(data, 'result', []).map(data => {
                     let temp = {}
                     temp.name = data.paymentMethod
-                    temp.value = data.value
+                    temp.value = data.value.amount
                     pieChartData.push(temp)
                 })
                 this.setState({ PaymentMethodsData: pieChartData })
@@ -180,7 +183,7 @@ class DashboardContainer extends React.Component {
                                     _get(this.state, 'saleAmount.amount', false) ?
                                         <div className='card flex-column'>
                                             <span className='card-title'>Amount Of Sales</span>
-                                            <span className='card-value'>{_get(this.state, 'saleAmount.currencyCode')} {_get(this.state, 'saleAmount.amount')}</span>
+                                            <span className='card-value'>{DineroInit(_get(this.state, 'saleAmount.amount')).toFormat('$0,0.00')}</span>
                                         </div> : null
                                 }
                                 {
