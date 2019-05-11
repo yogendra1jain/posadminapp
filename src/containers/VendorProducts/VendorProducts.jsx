@@ -181,6 +181,7 @@ class VendorProductsContainer extends React.Component {
             let prodId = this.selectedIds[0];
             let tempProd = _find(this.props.vendorProductsList, { 'id': prodId });
             const { dispatch } = this.props;
+            _set(tempProd,'price.amount',DineroInit(_get(tempProd,'price.amount')).toUnit(2));
             dispatch(requestVendorProductUpdate('', tempProd));
             this.props.history.push({
                 pathname: '/vendorproducts/add',

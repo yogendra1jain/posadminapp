@@ -113,8 +113,7 @@ const mapStateToProps = state => {
     let initialValues = {}
     if (!_isEmpty(selectedVendorProduct)) {
         initialValues = { ...selectedVendorProduct};
-        // _set(initialValues,'price.amount', )
-    }
+        }
 
     return {
         initialValues,
