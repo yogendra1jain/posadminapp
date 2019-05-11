@@ -18,6 +18,8 @@ import AddEditComp from './components/AddEditComp.jsx';
 
 /* Component Imports */
 import SaveButton from '../../components/common/SaveButton.jsx'
+import DineroInit from '../../Global/Components/DineroInit';
+import splitDot from '../../Global/splitDot';
 
 const styles = theme => ({
     button: {
@@ -49,8 +51,8 @@ class AddEditEmployee extends React.Component {
         _set(data, 'billingAddress', _get(store, 'address', {}));
         _set(data, 'employee', true);
         _set(data, 'employeePurchaseLimit', {
-            currencyCode: '$',
-            amount: parseInt(values.amount)
+            currency: 'USD',
+            amount: splitDot(values.amount)
         });
         if(localStorage.getItem('role') == 2) {
             _set(data,'employeeStoreId',localStorage.getItem('storeID'))
@@ -143,7 +145,8 @@ const mapStateToProps = state => {
             }
         )
     })
-
+    _set(initialValues,'employeePurchaseLimit.amount',DineroInit(_get(initialValues,'employeePurchaseLimit.amount',0)).toUnit(2));
+    console.log(initialValues,"initialValuesinitialValuesinitialValues")
 
     return {
         initialValues,
