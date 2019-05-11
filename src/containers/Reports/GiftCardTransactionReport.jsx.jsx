@@ -14,10 +14,10 @@ import {toTimestamp} from '../../helpers/helpers';
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import showAlert from '../../actions/toastAction';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DineroInit from '../../Global/Components/DineroInit';
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'orderCount',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -95,11 +95,11 @@ class GiftCardTransactionReport extends React.Component {
                 let giftCardTransactionData = []
                 data.map(data => {
                     let temp = {}
-                    temp = data.giftCardRedemption
-                    temp.dateTime = moment.utc(_get(data.giftCardRedemption,'paymentTimeStamp.seconds', 0) * 1000).format('DD MM YYYY hh:mm:ss') 
-                    temp.customer = _get(data.customer,'customer.firstName','') + ' ' + _get(data.customer,'customer.lastName','')
+                    temp.transactionId = data.id
+                    temp.dateTime = moment.utc(_get(data,'createdOn.seconds', 0) * 1000).format('DD/MM/YYYY hh:mm:ss') 
+                    // temp.customer = _get(data.customer,'customer.firstName','') + ' ' + _get(data.customer,'customer.lastName','')
+                    temp.value = DineroInit(_get(data,'value.amount',0)).toFormat('$0,0.00')
                     giftCardTransactionData.push(temp)
-                    temp.value = _get(data.giftCardRedemption,'value.currencyCode','$') + _get(data.giftCardRedemption,'value.amount',0) 
                 })
                 this.setState({giftCardTransactionData})
             }
@@ -212,9 +212,9 @@ class GiftCardTransactionReport extends React.Component {
                             <TableHeaderColumn width='100' dataField='dateTime'>
                                 Time
                             </TableHeaderColumn>
-                            <TableHeaderColumn width='100' dataField='customer'>
+                            {/* <TableHeaderColumn width='100' dataField='customer'>
                                 Customer
-                            </TableHeaderColumn>
+                            </TableHeaderColumn> */}
                             <TableHeaderColumn width='100' dataField='value'>
                                 GC value
                             </TableHeaderColumn>

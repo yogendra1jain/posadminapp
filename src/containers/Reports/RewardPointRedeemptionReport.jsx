@@ -14,10 +14,11 @@ import { toTimestamp } from '../../helpers/helpers';
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import showAlert from '../../actions/toastAction';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DineroInit from '../../Global/Components/DineroInit';
 
 const options = {
     paginationPosition: 'top',
-    defaultSortName: 'orderCount',
+    // defaultSortName: 'orderCount',
     defaultSortOrder: 'asc',
     clearSearch: true,
     withFirstAndLast: true,
@@ -99,9 +100,10 @@ class RewardPointReport extends React.Component {
                 data.map(data => {
                     let temp = {}
                     temp = data.rewardPointRedemption
-                    temp.dateTime = moment.utc(_get(data.rewardPointRedemption, 'paymentTimeStamp.seconds', 0) * 1000).format('DD MM YYYY hh:mm:ss')
+                    temp.dateTime = moment.unix(_get(data.rewardPointRedemption, 'paymentTimeStamp.seconds', 0) * 1000).format('DD MM YYYY hh:mm:ss')
                     temp.customer = _get(data.customer, 'customer.firstName', '') + ' ' + _get(data.customer, 'customer.lastName', '')
                     rewardPointRedeemptionData.push(temp)
+                    temp.pointsToRedeem = DineroInit(_get(data,'rewardPointRedemption.value.amount',0)).toFormat('$0,0.00')
                 })
                 this.setState({ rewardPointRedeemptionData })
             }
