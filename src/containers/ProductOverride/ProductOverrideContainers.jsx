@@ -15,6 +15,7 @@ import BootstrapTable from 'react-bootstrap-table/lib/BootstrapTable';
 import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DineroInit from '../../Global/Components/DineroInit';
 class ProductOverRide extends Component {
     constructor(props) {
         super(props);
@@ -131,15 +132,15 @@ class ProductOverRide extends Component {
                     tempStore.upcCode = _get(product.product, 'upcCode','')
                     if(isOverride) {
                         tempStore.isOverriden = 'Yes'
-                        tempStore.salePrice = _get(product.override,'salePrice.price', '')
-                        tempStore.costPrice = _get(product.override,'costPrice.price', '')
+                        tempStore.salePrice = DineroInit(_get(product.override,'salePrice.amount', '')).toUnit(2);
+                        tempStore.costPrice = DineroInit(_get(product.override,'costPrice.amount', '')).toUnit(2);
                         tempStore.active = _get(product.override,'active', false || false)
                         tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
 
                     } else {
                         tempStore.isOverriden = 'No'
-                        tempStore.salePrice = _get(product.product,'salePrice.price', '')
-                        tempStore.costPrice = _get(product.product,'costPrice.price', '')
+                        tempStore.salePrice =  DineroInit(_get(product.product,'salePrice.amount', '')).toUnit(2);
+                        tempStore.costPrice = DineroInit(_get(product.product,'costPrice.amount', '')).toUnit(2);
                         tempStore.active = _get(product.product,'active', false)
                         tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
 
