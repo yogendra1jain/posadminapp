@@ -8,6 +8,8 @@ import {getRewardPointRedeemptionRule, getRewardPointEarningRule} from '../../ac
 import _isEmpty from 'lodash/isEmpty';
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import showMessage from '../../actions/toastAction';
+import splitDot from '../../Global/splitDot';
+import DineroInit from '../../Global/Components/DineroInit';
 class RewardPointsRuleContainer extends Component {
     constructor(props) {
         super(props);
@@ -62,7 +64,7 @@ class RewardPointsRuleContainer extends Component {
         let url = '/Rewards/EarningRule/Create'
         let reqObj = {
             retailerId : localStorage.getItem('retailerID'),
-            minimumSaleAmount : parseFloat(this.state.minSaleAmountEarning),
+            minimumSaleAmount : {currency:'USD',amount:splitDot(this.state.minSaleAmountEarning)},
             earningMultiplier : parseFloat(this.state.earningMultiplier)
         }
         genericPostData({
@@ -103,7 +105,7 @@ class RewardPointsRuleContainer extends Component {
         if(!_isEmpty(data.earningRule)) {
             let earningRule =  data.earningRule
             this.setState({
-                minSaleAmountEarning: earningRule.minimumSaleAmount,
+                minSaleAmountEarning:DineroInit(earningRule.minimumSaleAmount.amount).toUnit(2),
                 earningMultiplier: earningRule.earningMultiplier
             })
         }
@@ -117,7 +119,7 @@ class RewardPointsRuleContainer extends Component {
         let url = '/Rewards/RedemptionRule/Create'
         let reqObj = {
             retailerId : localStorage.getItem('retailerID'),
-            minimumSaleAmount : parseFloat(this.state.minSaleAmountRedeemption),
+            minimumSaleAmount : {currency:'USD',amount:splitDot(this.state.minSaleAmountRedeemption)},
             redemptionMultiplier : parseFloat(this.state.redeemptionMultiplier)
         }
         genericPostData({
@@ -158,7 +160,7 @@ class RewardPointsRuleContainer extends Component {
         if(!_isEmpty(data.redemptionRule)) {
             let redemptionRule =  data.redemptionRule
             this.setState({
-                minSaleAmountRedeemption: redemptionRule.minimumSaleAmount,
+                minSaleAmountRedeemption:DineroInit(redemptionRule.minimumSaleAmount.amount).toUnit(2),
                 redeemptionMultiplier: redemptionRule.redemptionMultiplier
             }) 
         }
