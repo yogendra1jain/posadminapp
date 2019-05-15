@@ -13,9 +13,9 @@ export default (props) => {
                 <div className='box-conversion-container'>
                     <section >
                         <DropzoneArea
-                            name='inventoryBulkUpload'
-                            fieldName='inventoryBulkUpload'
-                            progress={_get(props, 'state.inventoryBulkUploadFileuploadProgress')}
+                            name='productBulkUpload'
+                            fieldName='productBulkUpload'
+                            progress={_get(props, 'state.productBulkUploadFileuploadProgress')}
                             onDrop={props.onDrop}
                             avialableFormat="Available File Formats: CSV"
                             accept={["text/csv"]} //"image/jpg", "image/png", "image/jpeg",
