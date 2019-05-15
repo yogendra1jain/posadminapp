@@ -72,6 +72,7 @@ import theme from './Global/MaterialUiSettings/theme';
 import AddFreedomPayConfigForm from './containers/posContainer/fpConfigForm';
 import DashboardContainer from "./containers/Dashboard/DashboardContainer";
 import TestingTable from './containers/TestingTable/TestingTable';
+import HotProductContainer from './containers/HotProduct/HotProductContainer';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -174,6 +175,8 @@ ReactDom.render(
 
             <RouteWithLayout layout={MainLayout} exact path='/dashboard' component={DashboardContainer} />
             <RouteWithLayout layout={MainLayout} exact path='/test-table' component={TestingTable} />
+            
+            <RouteWithLayout layout={MainLayout} exact path='/HotProduct' component={HotProductContainer} />
 
           </Switch>
         </Router>
