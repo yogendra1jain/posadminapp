@@ -13,12 +13,16 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 import { fetchInventoryLookupData, invetoryUpdate } from '../../actions/inventory';
 import 'react-drawer/lib/react-drawer.css';
 import ReactDrawer from 'react-drawer';
+import FormDialog from '../../components/common/CommonDialog/index';
 import { fetchProductLookupData } from '../../actions/products';
 import Alert from 'react-s-alert';
 import AddEditInventory from './AddEditInventory.jsx';
 import AdjustInventoryQuantity from './AdjustInventoryQuantity.jsx';
 import _pull from 'lodash/pull';
 import AutoComplete from '../../components/Elements/AutoComplete';
+import FileUploadComp from './FileUploadComp';
+import uploadDocument from '../../actions/Common/uploadDocument';
+import { showMessage } from '../../actions/common';
 
 const ProsuctsData = [
     {
@@ -67,7 +71,9 @@ class InventoryListContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isStoreSelected: false
+            isStoreSelected: false,
+            openDialog: false,
+            file: {},
         }
         this.selectRowProp = {
             mode: 'radio',
@@ -146,7 +152,7 @@ class InventoryListContainer extends React.Component {
         if (!_isEmpty(props.storeData) && this.isAdmin) {
             this.storeList = [];
             props.storeData.stores.map((store, index) => {
-                this.storeList.push({ displayText: store.storeName, value: store.id });
+                this.storeList.push({ displayText: store.storeName, value: store.id, code: store.code });
             });
         }
         if (props.storeData) {
@@ -156,6 +162,7 @@ class InventoryListContainer extends React.Component {
                     let tempStore = {};
                     tempStore.displayText = store.name;
                     tempStore.value = store.id;
+                    tempStore.code = store.code
                     this.storeList.push(tempStore);
                 })
                 // this.storeList = props.storeData.stores;
@@ -339,16 +346,6 @@ class InventoryListContainer extends React.Component {
         }
     }
 
-    // handleSelectChange(id, name) {
-    //     _set(this.selectedStore, name, id);
-    //     if (name === 'store') {
-    //         const { dispatch, productsReducer } = this.props;
-    //         dispatch(fetchProductLookupData(productsReducer));
-    //     }
-    //     this.forceUpdate();
-    //     console.log(this.selectedStore.stores, 'this.selectedStore.stores')
-    // }
-
     handleInputChange(event) {
         _set(this.selectedInventory, event.target.name, event.target.value);
         this.forceUpdate();
@@ -373,7 +370,42 @@ class InventoryListContainer extends React.Component {
         this.forceUpdate();
     }
 
+    toggleDialog = () => {
+        this.setState({
+            openDialog: !this.state.openDialog,
+        });
+    }
 
+    onDrop = (files) => {
+        let url = '/Upload/ImportAll';
+        if (files.length > 0) {
+            const selectedStore = _find(this.storeList,['value',_get(this.selectedStore,'stores','')])
+            const storeCode = _get(selectedStore,'code','')
+            this.setState({ file: files[0] })
+            this.props.dispatch(uploadDocument(files[0], url, '', _get(this.selectedStore,'stores',''), storeCode, 'Inventory'))
+                .then(data => {
+                    if(data.status == 200) {
+                        const { dispatch, inventoriesReducer } = this.props;
+                        let reqBody = {
+                            id: _get(this.selectedStore,'stores','')
+                        }
+                        let url = '/Inventory/ByStoreId';
+                        dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
+                        this.toggleDialog();
+                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
+                        setTimeout(() => {
+                            this.props.dispatch(showMessage({}));
+                        }, 3000);
+                    }
+                })
+                .catch(err => {
+                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
+                    setTimeout(() => {
+                        this.props.dispatch(showMessage({}));
+                    }, 5000);
+                })
+        }
+    }
 
     render() {
         if (!this.state.isStoreSelected) {
@@ -395,11 +427,25 @@ class InventoryListContainer extends React.Component {
 
         return (
             <div className="">
+                <FormDialog
+                    open={this.state.openDialog}
+                    handleClose={this.toggleDialog}
+                    title={'Upload CSV'}
+                    fullScreen={false}
+                    fullWidth={true}
+                    dialogContent={
+                        <FileUploadComp
+                            onDrop={this.onDrop}
+                            file={this.state.file}
+                        />
+                    }
+                />
                 <div className='panel-container'>
                     <span className='panel-heading'>Inventory List</span>
                     <div>
                         <SaveButton disabled={this.selectedIds.length === 0} Class_Name="m-r-10" buttonDisplayText={'Edit'} handlerSearch={() => this.adjustQuantity()} />
-                        <SaveButton disabled={this.selectedIds.length === 0} Class_Name="btn-info" buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
+                        <SaveButton disabled={this.selectedIds.length === 0} Class_Name="m-r-10 btn-info" buttonDisplayText={'Adjust Inventory'} handlerSearch={this.onUpdate} />
+                        <SaveButton disabled={_isEmpty(this.selectedStore)} Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
                 <div>
