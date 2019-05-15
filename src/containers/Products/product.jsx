@@ -220,7 +220,7 @@ class ProductContainer extends React.Component {
         else {
             _set(data, 'discountable', false)
         }
-        _set(data, 'upcCode', Number(_get(data, 'upcCode', '0')))
+        _set(data, 'upcCode', _get(data, 'upcCode', '0'))
         console.log(data, 'data is here')
         let salePrice = parseFloat(this.productInfo.sellingPrice)
         let costPrice = parseFloat(this.productInfo.cPrice)
