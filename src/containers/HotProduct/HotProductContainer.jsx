@@ -22,6 +22,7 @@ import SearchResult from './Component/SearchResult'
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import AutoComplete from '../../components/Elements/AutoComplete';
 import ConfirmationDialog from './Component/ConfirmationDialog';
+import PaginationComp from './Component/Pagination';
 
 
 
@@ -56,7 +57,8 @@ class HotProductContainer extends React.Component {
             storeList: [],
             selectedStore: {},
             offset: 0,
-            limit: 10
+            limit: 10,
+            current: 1
         }
         this.draggedHotProductList = []
     }
@@ -106,7 +108,7 @@ class HotProductContainer extends React.Component {
         this.setState({ hotProducts: _get(data, 'products', []) })
     }
 
-    searchProduct = (value)=>{
+    searchProduct = (value) => {
         let reqObj = {
             "text": value,
             "offset": this.state.offset,
@@ -124,23 +126,25 @@ class HotProductContainer extends React.Component {
             reqObj,
             identifier: 'HOT_PRODUCT_SEARCH',
             dontShowMessage: true,
-            successCb: this.hotProductSearchResult
+            successCb: this.spResult
         })
     }
     handleKeyPress = (e, value) => {
         if (e.charCode == 13) {
+            this.setState({ searchText: value });
             this.searchProduct(value);
         }
     }
 
-    hotProductSearchResult = (data) => {
+    spResult = (data) => {
         console.log(data, "datadatadata");
         if (_get(data, 'products', []).length == 0) {
             this.setState({ open: true, message: 'No Product Found' });
         }
-        this.setState({ searchResult: _get(data, 'products', []) })
+        this.setState({ total: data.total, searchResult: _get(data, 'products', []) })
     }
     handleSearchChange = (value) => {
+        this.setState({ searchText: value });
         this.searchProduct(value);
 
     }
@@ -181,6 +185,22 @@ class HotProductContainer extends React.Component {
     aClicked = () => {
         this.setState({ showBar: false })
     }
+
+    //pagination action start here
+    onShowSizeChange = (current, pageSize) => {
+        this.state.offset = ((current - 1) * pageSize)
+        this.state.limit = pageSize;
+        this.searchProduct(this.state.searchText);
+        this.setState({ offset: this.state.offset, limit: this.state.limit, current: current })
+
+    }
+    onPageChange = (current, pageSize) => {
+        this.state.offset = ((current - 1) * pageSize)
+        this.state.limit = pageSize;
+        this.searchProduct(this.state.searchText);
+        this.setState({ offset: this.state.offset, limit: this.state.limit, current: current })
+    }
+    //pagination action end here
     render() {
         let { classes } = this.props
         return (
@@ -223,10 +243,22 @@ class HotProductContainer extends React.Component {
                 <div class="row content">
 
                     <div class="col-sm-6">
-                        <SearchResult
-                            searchResult={this.state.searchResult}
-                            addToHotProductList={this.addToHotProductList}
-                        />
+                        <div style={{maxHeight:'450px', overflowY:'scroll'}}>
+                            <SearchResult
+                                searchResult={this.state.searchResult}
+                                addToHotProductList={this.addToHotProductList}
+                            />
+                        </div>
+
+                        <div style={{padding:'7px',fontSize:'1.4rem'}}>
+                            <PaginationComp
+                                current={this.state.current}
+                                onShowSizeChange={this.onShowSizeChange}
+                                onChange={this.onPageChange}
+                                total={this.state.total}
+                            />
+                        </div>
+
                     </div>
 
                     <div class="col-sm-6">
