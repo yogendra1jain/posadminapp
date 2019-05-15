@@ -118,33 +118,33 @@ class NavBarComponent extends React.Component {
                         <Panel key={10} eventKey={10} >
                             <Panel.Heading>
                                 <div key={10}>
-                                    {role == 1 ? 
-                                    <Panel key={1} eventKey={1}>
-                                        <Panel.Title toggle>{"Products"}<i className="fa fa-angle-down pull-right">
-                                        </i></Panel.Title>
-                                        <div>
-                                            <div onClick={() => this.changeCurrentPath(1, 11)} key={11}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 11 && this.state.activeSubMenuIndex === 11 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 11}>
-                                                    <Link onClick={() => this.changeCurrentPath('/products')} to={"/products"}>Product Master </Link>
-                                                </Panel.Body>
+                                    {role == 1 ?
+                                        <Panel key={1} eventKey={1}>
+                                            <Panel.Title toggle>{"Products"}<i className="fa fa-angle-down pull-right">
+                                            </i></Panel.Title>
+                                            <div>
+                                                <div onClick={() => this.changeCurrentPath(1, 11)} key={11}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 11 && this.state.activeSubMenuIndex === 11 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 11}>
+                                                        <Link onClick={() => this.changeCurrentPath('/products')} to={"/products"}>Product Master </Link>
+                                                    </Panel.Body>
+                                                </div>
+                                                <div onClick={() => this.changeCurrentPath(1, 12)} key={12}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 12 && this.state.activeSubMenuIndex === 12 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 12}>
+                                                        <Link onClick={() => this.changeCurrentPath('/categories')} to={"/categories"}>Categories</Link>
+                                                    </Panel.Body>
+                                                </div>
                                             </div>
-                                            <div onClick={() => this.changeCurrentPath(1, 12)} key={12}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 12 && this.state.activeSubMenuIndex === 12 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 12}>
-                                                    <Link onClick={() => this.changeCurrentPath('/categories')} to={"/categories"}>Categories</Link>
-                                                </Panel.Body>
-                                            </div>
-                                        </div>
-                                    </Panel> : "" }
+                                        </Panel> : ""}
 
                                     <Panel key={2} eventKey={2}>
                                         <Panel.Title toggle>{"Stores"}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
                                         <div>
-                                            {role ==1 ? 
-                                            <div onClick={() => this.changeCurrentPath(2, 21)} key={21}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 21 && this.state.activeSubMenuIndex === 21 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 21}>
-                                                    <Link onClick={() => this.changeCurrentPath('/stores')} to={"/stores"}>Stores </Link>
-                                                </Panel.Body>
-                                            </div> : ""}
+                                            {role == 1 ?
+                                                <div onClick={() => this.changeCurrentPath(2, 21)} key={21}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 21 && this.state.activeSubMenuIndex === 21 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 21}>
+                                                        <Link onClick={() => this.changeCurrentPath('/stores')} to={"/stores"}>Stores </Link>
+                                                    </Panel.Body>
+                                                </div> : ""}
                                             <div onClick={() => this.changeCurrentPath(2, 22)} key={22}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 22 && this.state.activeSubMenuIndex === 22 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 22}>
                                                     <Link onClick={() => this.changeCurrentPath('/posList')} to={"/posList"}>POS Terminals </Link>
@@ -158,6 +158,11 @@ class NavBarComponent extends React.Component {
                                             <div onClick={() => this.changeCurrentPath(2, 24)} key={24}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 24 && this.state.activeSubMenuIndex === 24 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 24}>
                                                     <Link onClick={() => this.changeCurrentPath('/storeProducts')} to={"/storeProducts"}>Product Override </Link>
+                                                </Panel.Body>
+                                            </div>
+                                            <div onClick={() => this.changeCurrentPath(2, 25)} key={25}>
+                                                <Panel.Body className={this.state.activeMenuIndex === 25 && this.state.activeSubMenuIndex === 25 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 25}>
+                                                    <Link onClick={() => this.changeCurrentPath('/HotProduct')} to={"/HotProduct"}>Hot Products</Link>
                                                 </Panel.Body>
                                             </div>
                                         </div>
@@ -198,15 +203,15 @@ class NavBarComponent extends React.Component {
                                                 </Panel.Body>
                                             </div>
                                             {localStorage.getItem('role') == 2 ? localStorage.getItem('EmployeePayrollDeduct') == 'disabled' ? '' :
-                                            <div onClick={() => this.changeCurrentPath(4, 42)} key={42}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 42 && this.state.activeSubMenuIndex === 42 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 42}>
-                                                    <Link onClick={() => this.changeCurrentPath('/employees')} to={"/employees"}>Store Customers</Link>
-                                                </Panel.Body>
-                                            </div> : <div onClick={() => this.changeCurrentPath(4, 42)} key={42}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 42 && this.state.activeSubMenuIndex === 42 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 42}>
-                                                    <Link onClick={() => this.changeCurrentPath('/employees')} to={"/employees"}>Store Customers</Link>
-                                                </Panel.Body>
-                                            </div>}
+                                                <div onClick={() => this.changeCurrentPath(4, 42)} key={42}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 42 && this.state.activeSubMenuIndex === 42 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 42}>
+                                                        <Link onClick={() => this.changeCurrentPath('/employees')} to={"/employees"}>Store Customers</Link>
+                                                    </Panel.Body>
+                                                </div> : <div onClick={() => this.changeCurrentPath(4, 42)} key={42}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 42 && this.state.activeSubMenuIndex === 42 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 42}>
+                                                        <Link onClick={() => this.changeCurrentPath('/employees')} to={"/employees"}>Store Customers</Link>
+                                                    </Panel.Body>
+                                                </div>}
                                         </div>
                                     </Panel>
 
@@ -218,30 +223,30 @@ class NavBarComponent extends React.Component {
                                                     <Link onClick={() => this.changeCurrentPath('/inventories')} to={"/inventories"}>Product Inventory </Link>
                                                 </Panel.Body>
                                             </div>
-                                            {role ==1 ?
-                                            <div onClick={() => this.changeCurrentPath(5, 52)} key={52}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 52 && this.state.activeSubMenuIndex === 52 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 52}>
-                                                    <Link onClick={() => this.changeCurrentPath('/rewardPointsRule')} to={"/rewardPointsRule"}>Reward Point Rule </Link>
-                                                </Panel.Body>
-                                            </div> : ""}
+                                            {role == 1 ?
+                                                <div onClick={() => this.changeCurrentPath(5, 52)} key={52}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 52 && this.state.activeSubMenuIndex === 52 ? 'active' : 'inActive'} collapsible={this.state.clickedSubIndex !== 52}>
+                                                        <Link onClick={() => this.changeCurrentPath('/rewardPointsRule')} to={"/rewardPointsRule"}>Reward Point Rule </Link>
+                                                    </Panel.Body>
+                                                </div> : ""}
                                         </div>
                                     </Panel>
 
                                     <Panel key={6} eventKey={6}>
                                         <Panel.Title toggle>{"Reports"}<i className="fa fa-angle-down pull-right"></i></Panel.Title>
                                         <div>
-                                            {localStorage.getItem('role') == 2 ? localStorage.getItem('EmployeePayrollDeduct') == 'disabled' ? '' : 
-                                            <div onClick={() => this.changeCurrentPath(6, 61)} key={61}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 61 && this.state.activeSubMenuIndex === 61 ? 'active' : 'inActive'}
-                                                    collapsible={this.state.clickedSubIndex !== 61}>
-                                                    <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')} to={"/employee_payroll_deduct_details"}>Employee Payroll Deduct Details </Link>
-                                                </Panel.Body>
-                                            </div> : <div onClick={() => this.changeCurrentPath(6, 61)} key={61}>
-                                                <Panel.Body className={this.state.activeMenuIndex === 61 && this.state.activeSubMenuIndex === 61 ? 'active' : 'inActive'}
-                                                    collapsible={this.state.clickedSubIndex !== 61}>
-                                                    <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')} to={"/employee_payroll_deduct_details"}>Employee Payroll Deduct Details </Link>
-                                                </Panel.Body>
-                                            </div>}
+                                            {localStorage.getItem('role') == 2 ? localStorage.getItem('EmployeePayrollDeduct') == 'disabled' ? '' :
+                                                <div onClick={() => this.changeCurrentPath(6, 61)} key={61}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 61 && this.state.activeSubMenuIndex === 61 ? 'active' : 'inActive'}
+                                                        collapsible={this.state.clickedSubIndex !== 61}>
+                                                        <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')} to={"/employee_payroll_deduct_details"}>Employee Payroll Deduct Details </Link>
+                                                    </Panel.Body>
+                                                </div> : <div onClick={() => this.changeCurrentPath(6, 61)} key={61}>
+                                                    <Panel.Body className={this.state.activeMenuIndex === 61 && this.state.activeSubMenuIndex === 61 ? 'active' : 'inActive'}
+                                                        collapsible={this.state.clickedSubIndex !== 61}>
+                                                        <Link onClick={() => this.changeCurrentPath('/employee_payroll_deduct_details')} to={"/employee_payroll_deduct_details"}>Employee Payroll Deduct Details </Link>
+                                                    </Panel.Body>
+                                                </div>}
                                             <div onClick={() => this.changeCurrentPath(6, 62)} key={62}>
                                                 <Panel.Body className={this.state.activeMenuIndex === 62 && this.state.activeSubMenuIndex === 62 ? 'active' : 'inActive'}
                                                     collapsible={this.state.clickedSubIndex !== 62}>
