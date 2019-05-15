@@ -21,6 +21,7 @@ import SearchResult from './Component/SearchResult'
 //Data imports
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import AutoComplete from '../../components/Elements/AutoComplete';
+import ConfirmationDialog from './Component/ConfirmationDialog';
 
 
 
@@ -53,21 +54,15 @@ class HotProductContainer extends React.Component {
             searchResult: [],
             hotProducts: [],
             storeList: [],
-            selectedStore: {}
+            selectedStore: {},
+            offset: 0,
+            limit: 10
         }
         this.draggedHotProductList = []
     }
 
     componentDidMount() {
         let reqObj = { retailerId: localStorage.getItem('retailerID') }
-        genericPostData({
-            url: '/HotProducts/ByRetailer/Get',
-            dispatch: this.props.dispatch,
-            reqObj,
-            identifier: 'HOT_PRODUCT_GET',
-            dontShowMessage: true,
-            successCb: this.hotProductGetResult
-        });
         genericPostData({
             url: '/Store/ByRetailerId',
             dispatch: this.props.dispatch,
@@ -97,34 +92,52 @@ class HotProductContainer extends React.Component {
             let selectedStore = _find(this.state.storeList, { value: id })
             this.setState({ selectedStore, showBar: true })
         }
+        genericPostData({
+            url: '/HotProducts/ByStore/Get',
+            dispatch: this.props.dispatch,
+            reqObj: { id },
+            identifier: 'HOT_PRODUCT_GET',
+            dontShowMessage: true,
+            successCb: this.hotProductGetResult
+        });
     }
     hotProductGetResult = (data) => {
         debugger;
         this.setState({ hotProducts: _get(data, 'products', []) })
     }
-    handleKeyPress = (event) => {
-        let reqObj = {
-            id: localStorage.getItem('retailerID'),
-            page: 1,
-            sizePerPage: 10
-
+    handleKeyPress = (e, value) => {
+        if (e.charCode == 13) {
+            this.setState({ searchInput: value })
+            let reqObj = {
+                "text": value,
+                "offset": this.state.offset,
+                "limit": this.state.limit,
+                "filters": [
+                    {
+                        "field": "retailerId.keyword",
+                        "value": localStorage.getItem('retailerID')
+                    }
+                ]
+            }
+            genericPostData({
+                url: '/Search/Products',
+                dispatch: this.props.dispatch,
+                reqObj,
+                identifier: 'HOT_PRODUCT_SEARCH',
+                dontShowMessage: true,
+                successCb: this.hotProductSearchResult
+            })
         }
-        genericPostData({
-            url: '/Product/Paginated/ByRetailerId',
-            dispatch: this.props.dispatch,
-            reqObj,
-            identifier: 'HOT_PRODUCT_SEARCH',
-            dontShowMessage: true,
-            successCb: this.hotProductSearchResult
-        })
     }
 
     hotProductSearchResult = (data) => {
         console.log(data, "datadatadata");
-        this.setState({ searchResult: _get(data, 'result.products') })
+        if (_get(data, 'products', []).length == 0) {
+            this.setState({ open: true, message: 'No Product Found' });
+        }
+        this.setState({ searchResult: _get(data, 'products', []) })
     }
     handleSearchChange = (event) => {
-
     }
 
     draggedHotProductListSaveFun = (hotProducts) => {
@@ -134,7 +147,7 @@ class HotProductContainer extends React.Component {
         debugger;
         //check wheather product already added or not
         if (_find(this.state.hotProducts, { id: product.id })) {
-            this.setState({ open: true });
+            this.setState({ open: true, message: 'Product Already In The List' });
             return;
         }
 
@@ -145,8 +158,8 @@ class HotProductContainer extends React.Component {
         this.setState({ hotProducts, searchResult })
     }
     handleSaveHotProducts = () => {
-        let productIds = this.draggedHotProductList.map((hl) => hl.id)
-        let reqObj = { storeId: '31d5952e-619f-4b02-9fd8-0f620e1fa222', productIds };
+        let productIds = this.state.hotProducts.map((hl) => hl.id)
+        let reqObj = { storeId: _get(this.state, 'selectedStore.value'), productIds };
         genericPostData({
             dispatch: this.props.dispatch,
             reqObj,
@@ -154,6 +167,11 @@ class HotProductContainer extends React.Component {
             identifier: 'HOT_PRODUCTS_SAVE',
             successCb: (data) => { debugger; }
         })
+    }
+    confirmDelete = ()=>{
+        this.state.hotProducts = []
+        this.setState({hotProducts:this.state.hotProducts,diaOpen:false});
+        this.handleSaveHotProducts();
     }
     aClicked = () => {
         this.setState({ showBar: false })
@@ -190,7 +208,7 @@ class HotProductContainer extends React.Component {
                             Save Hot Products
                         <SaveIcon className={classes.rightIcon} />
                         </Button>
-                        <Button disabled={!this.state.showBar}
+                        <Button onClick={()=>this.setState({diaOpen:true})} disabled={!this.state.showBar}
                             variant="contained" color="primary" className={classes.button}>
                             Delete All
                          <DeleteIcon className={classes.rightIcon} />
@@ -226,7 +244,14 @@ class HotProductContainer extends React.Component {
                             root: classes.failure
                         }
                     }}
-                    message={<span id="message-id">Product Already In The List </span>}
+                    message={<span id="message-id">{this.state.message}</span>}
+                />
+                <ConfirmationDialog
+                open={this.state.diaOpen}
+                handleClose={()=>this.setState({diaOpen:false})}
+                handleSubmit = {this.confirmDelete}
+                text = {'Are You sure You want to delete all the hot products'}
+                title="Confirmation"
                 />
             </div>
         );
