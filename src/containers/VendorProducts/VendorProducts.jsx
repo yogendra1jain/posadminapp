@@ -24,6 +24,9 @@ import { getVendorData } from '../../actions/vendor';
 import { showMessage } from '../../actions/common';
 import AutoComplete from '../../components/Elements/AutoComplete';
 import DineroInit from '../../Global/Components/DineroInit'
+import FormDialog from '../../components/common/CommonDialog/index';
+import FileUploadComp from './FileUploadComp';
+import uploadDocument from '../../actions/Common/uploadDocument';
 
 const options = {
     paginationPosition: 'top',
@@ -43,7 +46,11 @@ class VendorProductsContainer extends React.Component {
     constructor(props) {
         super(props);
         this.selectedVendor = {};
-        this.state = { isVendorSelected: false };
+        this.state = { 
+            isVendorSelected: false,
+            openDialog: false,
+            file: {}
+        };
         this.selectRowProp = {
             mode: 'radio',
             clickToSelect: false,
@@ -217,6 +224,42 @@ class VendorProductsContainer extends React.Component {
             }
         }
     }
+
+    toggleDialog = () => {
+        this.setState({
+            openDialog: !this.state.openDialog,
+        });
+    }
+
+    onDrop = (files) => {
+        let url = '/Upload/ImportAll';
+        if (files.length > 0) {
+            this.setState({ file: files[0] })
+            this.props.dispatch(uploadDocument(files[0], url, '', '', '', 'VendorProducts'))
+                .then(data => {
+                    if(data.status == 200) {
+                        let reqObj = {
+                            id: localStorage.getItem('retailerID')
+                        }
+                        let url = `/Vendor/ByRetailerId`;
+                        let vendorProdUrl = `/VendorProduct/GetByRetailerId`;
+                        this.props.dispatch(getVendorData('', url, reqObj))
+                        this.fetchVendorProducts(vendorProdUrl, reqObj);
+                        this.toggleDialog();
+                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
+                        setTimeout(() => {
+                            this.props.dispatch(showMessage({}));
+                        }, 3000);
+                    }
+                })
+                .catch(err => {
+                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
+                    setTimeout(() => {
+                        this.props.dispatch(showMessage({}));
+                    }, 5000);
+                })
+        }
+    }
     
     render() {
         if (_get(this, 'props.isFetching')) {
@@ -232,12 +275,26 @@ class VendorProductsContainer extends React.Component {
         }
         return (
             <div className="">
+                <FormDialog
+                    open={this.state.openDialog}
+                    handleClose={this.toggleDialog}
+                    title={'Upload CSV'}
+                    fullScreen={false}
+                    fullWidth={true}
+                    dialogContent={
+                        <FileUploadComp
+                            onDrop={this.onDrop}
+                            file={this.state.file}
+                        />
+                    }
+                />
                 <div className='panel-container'>
                     <span className='panel-heading'>Vendor Products</span>
 
                     <div>
                         <SaveButton disabled={this.selectedIds.length < 1}  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
-                        <SaveButton  disabled={_isEmpty(this.selectedVendor)} Class_Name="btn-info" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
+                        <SaveButton  disabled={_isEmpty(this.selectedVendor)} Class_Name="btn-info m-r-10" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
 
