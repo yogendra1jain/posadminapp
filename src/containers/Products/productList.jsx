@@ -14,17 +14,20 @@ import _filter from 'lodash/filter'
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
 import DineroInit from '../../Global/Components/DineroInit'
-
+import FormDialog from '../../components/common/CommonDialog/index';
+import FileUploadComp from './FileUploadComp';
+import uploadDocument from '../../actions/Common/uploadDocument';
+import { showMessage } from '../../actions/common';
 class ProductListContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             totalSize: 0,
             page: 1,
-            sizePerPage: 10
+            sizePerPage: 10,
+            openDialog: false,
+            file: {},
         }
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.selectRowProp = {
             mode: 'radio',
@@ -117,11 +120,34 @@ class ProductListContainer extends React.Component {
         this.forceUpdate();
     }
 
-    handleInputChange() {
-
+    toggleDialog = () => {
+        this.setState({
+            openDialog: !this.state.openDialog,
+        });
     }
-    handleSelectChange = (id, name) => {
 
+    onDrop = (files) => {
+        let url = '/Upload/ImportAll';
+        if (files.length > 0) {
+            this.setState({ file: files[0] })
+            this.props.dispatch(uploadDocument(files[0], url, '', localStorage.getItem('retailerID'),'', 'Products'))
+                .then(data => {
+                    if(data.status == 200) {
+                        this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
+                        this.toggleDialog();
+                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
+                        setTimeout(() => {
+                            this.props.dispatch(showMessage({}));
+                        }, 3000);
+                    }
+                })
+                .catch(err => {
+                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
+                    setTimeout(() => {
+                        this.props.dispatch(showMessage({}));
+                    }, 5000);
+                })
+        }
     }
 
     render() {
@@ -162,12 +188,25 @@ class ProductListContainer extends React.Component {
         return (
             <div className="">
                 {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
-
+                <FormDialog
+                    open={this.state.openDialog}
+                    handleClose={this.toggleDialog}
+                    title={'Upload CSV'}
+                    fullScreen={false}
+                    fullWidth={true}
+                    dialogContent={
+                        <FileUploadComp
+                            onDrop={this.onDrop}
+                            file={this.state.file}
+                        />
+                    }
+                />
                 <div className='panel-container'>
                     <span className='panel-heading'>Product Master</span>
                     <div>
                         <SaveButton Class_Name="m-r-10" disabled={this.selectedIds.length===0} buttonDisplayText={'Update Product'} handlerSearch={this.onUpdate}/>
-                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Add new'} handlerSearch={this.addNewProduct}/>
+                        <SaveButton Class_Name="btn-info m-r-10" buttonDisplayText={'Add new'} handlerSearch={this.addNewProduct}/>
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
                 <div>
