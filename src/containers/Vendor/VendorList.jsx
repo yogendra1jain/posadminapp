@@ -211,7 +211,7 @@ class StoreListContainer extends React.Component {
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
            this.setState({ file: files[0] })
-            this.props.dispatch(uploadDocument(files[0], url, '', _get(this.selectedStore,'stores',''), '', 'Vendors'))
+            this.props.dispatch(uploadDocument(files[0], url, '', '', '', 'Vendors'))
                 .then(data => {
                     if(data.status == 200) {
                         let reqObj = {
