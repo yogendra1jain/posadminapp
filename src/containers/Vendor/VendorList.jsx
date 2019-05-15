@@ -18,7 +18,10 @@ import Alert from 'react-s-alert';
 
 import { fetchStore, fetchPostStore, requestStoreUpdate } from '../../actions/store';
 import { getVendorData, requestVendorUpdate } from '../../actions/vendor';
-
+import FormDialog from '../../components/common/CommonDialog/index';
+import FileUploadComp from './FileUploadComp';
+import uploadDocument from '../../actions/Common/uploadDocument';
+import { showMessage } from '../../actions/common';
 
 const options = {
     paginationPosition: 'top',
@@ -30,12 +33,15 @@ const options = {
         text: '5', value: 5
     }, {
         text: '10', value: 10
-    }],
-
-
+    }]
 };
 class StoreListContainer extends React.Component {
     constructor(props) {
+        super(props);
+        this.state = {
+            openDialog: false,
+            file: {},
+        }
         super(props);
         this.open = false;
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -194,6 +200,41 @@ class StoreListContainer extends React.Component {
     handleSelectChange = (id, name) => {
 
     }
+
+    toggleDialog = () => {
+        this.setState({
+            openDialog: !this.state.openDialog,
+        });
+    }
+
+    onDrop = (files) => {
+        let url = '/Upload/ImportAll';
+        if (files.length > 0) {
+           this.setState({ file: files[0] })
+            this.props.dispatch(uploadDocument(files[0], url, '', _get(this.selectedStore,'stores',''), '', 'Vendors'))
+                .then(data => {
+                    if(data.status == 200) {
+                        let reqObj = {
+                            id: localStorage.getItem('retailerID')
+                        }
+                        let url = `/Vendor/ByRetailerId`;
+                        this.props.dispatch(getVendorData('', url, reqObj))
+                        this.toggleDialog();
+                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
+                        setTimeout(() => {
+                            this.props.dispatch(showMessage({}));
+                        }, 3000);
+                    }
+                })
+                .catch(err => {
+                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
+                    setTimeout(() => {
+                        this.props.dispatch(showMessage({}));
+                    }, 5000);
+                })
+        }
+    }
+
     render() {
         if (this.open) {
             return (
@@ -215,19 +256,29 @@ class StoreListContainer extends React.Component {
         let { vendorList } = this.props
         return (
             <div className="">
+                <FormDialog
+                    open={this.state.openDialog}
+                    handleClose={this.toggleDialog}
+                    title={'Upload CSV'}
+                    fullScreen={false}
+                    fullWidth={true}
+                    dialogContent={
+                        <FileUploadComp
+                            onDrop={this.onDrop}
+                            file={this.state.file}
+                        />
+                    }
+                />
                 <div className='panel-container'>
                     <span className='panel-heading'>Vendor</span>
                     <div>
                         <SaveButton disabled={this.selectedIds.length === 0}    Class_Name='m-r-10' buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name="btn-info" handlerSearch={this.addNewStore} />
+                        <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name="btn-info m-r-10" handlerSearch={this.addNewStore} />
+                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
 
                 <div>
-                    {/* <div className="form-btn-group">
-                        <SaveButton disabled={this.selectedIds.length === 0} buttonDisplayText={'Update'} handlerSearch={this.onUpdate} />
-                        <SaveButton disabled={this.isUpdate} buttonDisplayText={'Add new'} Class_Name={"btn-info"} handlerSearch={this.addNewStore} />
-                    </div> */}
                     <div>
                         <BootstrapTable
                             data={vendorList}
