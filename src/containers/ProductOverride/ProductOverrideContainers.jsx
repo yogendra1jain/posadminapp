@@ -8,6 +8,7 @@ import _set from 'lodash/set';
 import _pull from 'lodash/pull';
 import _isArray from 'lodash/isArray';
 import _cloneDeep from 'lodash/cloneDeep';
+import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 import SaveButton from '../../components/common/SaveButton';
 import AutoComplete from '../../components/Elements/AutoComplete';
@@ -16,6 +17,10 @@ import TableHeaderColumn from 'react-bootstrap-table/lib/TableHeaderColumn';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DineroInit from '../../Global/Components/DineroInit';
+import FormDialog from '../../components/common/CommonDialog/index';
+import FileUploadComp from './FileUploadComp';
+import uploadDocument from '../../actions/Common/uploadDocument';
+import { showMessage } from '../../actions/common';
 class ProductOverRide extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +33,9 @@ class ProductOverRide extends Component {
             currencyCode: '',
             totalSize: 0,
             page: 1,
-            sizePerPage: 10
+            sizePerPage: 10,
+            openDialog: false,
+            file: {}
         }
         this.handlePageChange = this.handlePageChange.bind(this)
         this.selectRowProp = {
@@ -43,6 +50,10 @@ class ProductOverRide extends Component {
     }
 
     componentDidMount() {
+        this.loadInitialData()
+    }
+
+    loadInitialData = () => {
         if(localStorage.getItem('role') == 1) {
             this.productList = []
             this.forceUpdate()
@@ -107,6 +118,7 @@ class ProductOverRide extends Component {
                     let tempStore = {}
                     tempStore.displayText = store.name
                     tempStore.value = store.id
+                    tempStore.code = store.code
                     storeList.push(tempStore)
                 })
                 this.setState({ storeList })               
@@ -227,6 +239,38 @@ class ProductOverRide extends Component {
         } 
     }
 
+    toggleDialog = () => {
+        this.setState({
+            openDialog: !this.state.openDialog,
+        });
+    }
+
+    onDrop = (files) => {
+        let url = '/Upload/ImportAll';
+        if (files.length > 0) {
+            const selectedStore = _find(this.storeList,['value',_get(this.state.selectedStore,'store','')])
+            const storeCode = _get(selectedStore,'code','')
+            this.setState({ file: files[0] })
+            this.props.dispatch(uploadDocument(files[0], url, '', _get(this.state.selectedStore,'store',''), storeCode, 'StoreProductOverride'))
+                .then(data => {
+                    if(data.status == 200) {
+                        this.loadInitialData()
+                        this.toggleDialog();
+                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
+                        setTimeout(() => {
+                            this.props.dispatch(showMessage({}));
+                        }, 3000);
+                    }
+                })
+                .catch(err => {
+                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
+                    setTimeout(() => {
+                        this.props.dispatch(showMessage({}));
+                    }, 5000);
+                })
+        }
+    }
+
     render() {
         if(_isEmpty(this.state.selectedStore)) {
             this.productList = []
@@ -292,10 +336,24 @@ class ProductOverRide extends Component {
 
         return (    
             <div className=''>
+                <FormDialog
+                    open={this.state.openDialog}
+                    handleClose={this.toggleDialog}
+                    title={'Upload CSV'}
+                    fullScreen={false}
+                    fullWidth={true}
+                    dialogContent={
+                        <FileUploadComp
+                            onDrop={this.onDrop}
+                            file={this.state.file}
+                        />
+                    }
+                />
                 <div className='panel-container'>
                     <span className='panel-heading'>Product Override</span>
                     <div>
-                        <SaveButton disabled={_isEmpty(_get(this.state,'selectedStore', {}))} Class_Name={"btn-info"} buttonDisplayText={'Override for Store'} handlerSearch={this.handleOverrideForStore}/>
+                        <SaveButton disabled={_isEmpty(_get(this.state,'selectedStore', {}))} Class_Name="btn-info m-r-10" buttonDisplayText={'Override for Store'} handlerSearch={this.handleOverrideForStore}/>
+                        <SaveButton disabled={_isEmpty(_get(this.state,'selectedStore',{}))} Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
 
