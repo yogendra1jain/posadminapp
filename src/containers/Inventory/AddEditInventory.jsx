@@ -71,7 +71,7 @@ class AddEditInventoryContainer extends React.Component {
 
         if (!_isEmpty(props.productData)) {
             this.products = [];
-            props.productData.map(product => {
+            _get(props,'productData',[]).map(product => {
                 this.products.push({ displayText: product.name, value: product.id })
 
             });
