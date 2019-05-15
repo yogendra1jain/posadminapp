@@ -250,18 +250,18 @@ class HotProductContainer extends React.Component {
                             />
                         </div>
 
-                        <div style={{padding:'7px',fontSize:'1.4rem'}}>
+                       {this.state.total>0 ?<div style={{padding:'7px',fontSize:'1.4rem'}}>
                             <PaginationComp
                                 current={this.state.current}
                                 onShowSizeChange={this.onShowSizeChange}
                                 onChange={this.onPageChange}
                                 total={this.state.total}
                             />
-                        </div>
+                        </div>:null}
 
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-6"  style={{maxHeight:'450px', overflowY:'scroll'}}>
                         <HotProducts
                             draggedHotProductListSaveFun={this.draggedHotProductListSaveFun}
                             hotProducts={this.state.hotProducts}
