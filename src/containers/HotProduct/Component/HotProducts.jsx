@@ -49,7 +49,6 @@ class HotProducts extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        debugger;
         this.setState({ hotProducts: nextProps.hotProducts })
     }
 
@@ -117,10 +116,10 @@ class HotProducts extends Component {
                                                                 <span className='hot-product-summary-title'>SKU</span>
                                                                 <span className='hot-product-summary-money'>{hotProduct.sku}</span>
                                                             </div>
-                                                            <div className='hot-product-each-detail flex-column align-center'>
+                                                            {/* <div className='hot-product-each-detail flex-column align-center'>
                                                                 <span className='hot-product-summary-title'>Price</span>
                                                                 <span className='hot-product-summary-money'>{DineroInit(_get(hotProduct, 'salePrice.amount')).toFormat('$0,0.00')}</span>
-                                                            </div>
+                                                            </div> */}
                                                             <div className='hot-product-each-detail flex-column align-center'>
                                                                 <DeleteIcons
                                                                     onClick={() => this.handleDelete(hotProduct, index)}
