@@ -56,7 +56,7 @@ class ProductListContainer extends React.Component {
                 prod = product
                 prod.sellingPrice = DineroInit(_get(product,'salePrice.amount',0)).toFormat('$0,0.00');
                 prod.cPrice = DineroInit(_get(product,'costPrice.amount',0)).toFormat('$0,0.00');
-                prod.currencyCode = _get(product,'salePrice.currencyCode','');
+                prod.currencyCode = _get(product,'salePrice.','');
                 this.productList.push(prod);
             });
             this.forceUpdate();
@@ -225,7 +225,6 @@ class ProductListContainer extends React.Component {
                         <TableHeaderColumn width='150' dataField='name' dataSort >
                             Product Name
                         </TableHeaderColumn>
-                        <TableHeaderColumn width='50' dataField='currencyCode' >Currency Code</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='cPrice' dataSort searchable={true} >Cost Price</TableHeaderColumn>
                         <TableHeaderColumn width='100' dataField='sellingPrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
                         <TableHeaderColumn width='300' dataField='description' >Details</TableHeaderColumn>
