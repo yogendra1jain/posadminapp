@@ -73,7 +73,6 @@ class HotProductContainer extends React.Component {
         })
     };
     stById = (data) => {
-        debugger;
         let storeList = data.map(store => {
             let tempStore = {};
             tempStore.displayText = store.name;
@@ -83,7 +82,6 @@ class HotProductContainer extends React.Component {
         this.setState({ storeList })
     }
     handleSelectChange = (id, name) => {
-        debugger;
         if (id == null) {
             this.selectedStore = {}
             this.inventoryList = []
@@ -102,7 +100,6 @@ class HotProductContainer extends React.Component {
         });
     }
     hotProductGetResult = (data) => {
-        debugger;
         this.setState({ hotProducts: _get(data, 'products', []) })
     }
     handleKeyPress = (e, value) => {
@@ -114,7 +111,7 @@ class HotProductContainer extends React.Component {
                 "limit": this.state.limit,
                 "filters": [
                     {
-                        "field": "retailerId.keyword",
+                        "field": "retailerId",
                         "value": localStorage.getItem('retailerID')
                     }
                 ]
@@ -144,7 +141,6 @@ class HotProductContainer extends React.Component {
         this.setState({ hotProducts })
     }
     addToHotProductList = (product, index) => {
-        debugger;
         //check wheather product already added or not
         if (_find(this.state.hotProducts, { id: product.id })) {
             this.setState({ open: true, message: 'Product Already In The List' });
