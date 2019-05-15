@@ -184,13 +184,10 @@ class ProductListContainer extends React.Component {
     }
 
     handleSearchChange = (searchText) => {
-        debugger
         if(searchText == '') {
             this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
         }
-        if(searchText.length >= 3) {
-            this.searchProduct(searchText)
-        }
+        this.searchProduct(searchText)
     }
 
     handleProductSearchResult = (data) => {
@@ -272,7 +269,7 @@ class ProductListContainer extends React.Component {
                 <SearchBar
                     handleKeyPress={this.handleKeyPress}
                     placeholder="Search Products"                    
-                    onChange={this.handleSearchChange}
+                    handleChange={this.handleSearchChange}
                 />
                 <div>
                     <BootstrapTable 
