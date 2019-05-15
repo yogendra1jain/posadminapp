@@ -105,28 +105,31 @@ class HotProductContainer extends React.Component {
         debugger;
         this.setState({ hotProducts: _get(data, 'products', []) })
     }
+
+    searchProduct = (value)=>{
+        let reqObj = {
+            "text": value,
+            "offset": this.state.offset,
+            "limit": this.state.limit,
+            "filters": [
+                {
+                    "field": "retailerId.keyword",
+                    "value": localStorage.getItem('retailerID')
+                }
+            ]
+        }
+        genericPostData({
+            url: '/Search/Products',
+            dispatch: this.props.dispatch,
+            reqObj,
+            identifier: 'HOT_PRODUCT_SEARCH',
+            dontShowMessage: true,
+            successCb: this.hotProductSearchResult
+        })
+    }
     handleKeyPress = (e, value) => {
         if (e.charCode == 13) {
-            this.setState({ searchInput: value })
-            let reqObj = {
-                "text": value,
-                "offset": this.state.offset,
-                "limit": this.state.limit,
-                "filters": [
-                    {
-                        "field": "retailerId.keyword",
-                        "value": localStorage.getItem('retailerID')
-                    }
-                ]
-            }
-            genericPostData({
-                url: '/Search/Products',
-                dispatch: this.props.dispatch,
-                reqObj,
-                identifier: 'HOT_PRODUCT_SEARCH',
-                dontShowMessage: true,
-                successCb: this.hotProductSearchResult
-            })
+            this.searchProduct(value);
         }
     }
 
@@ -137,7 +140,9 @@ class HotProductContainer extends React.Component {
         }
         this.setState({ searchResult: _get(data, 'products', []) })
     }
-    handleSearchChange = (event) => {
+    handleSearchChange = (value) => {
+        this.searchProduct(value);
+
     }
 
     draggedHotProductListSaveFun = (hotProducts) => {
@@ -168,9 +173,9 @@ class HotProductContainer extends React.Component {
             successCb: (data) => { debugger; }
         })
     }
-    confirmDelete = ()=>{
+    confirmDelete = () => {
         this.state.hotProducts = []
-        this.setState({hotProducts:this.state.hotProducts,diaOpen:false});
+        this.setState({ hotProducts: this.state.hotProducts, diaOpen: false });
         this.handleSaveHotProducts();
     }
     aClicked = () => {
@@ -185,7 +190,7 @@ class HotProductContainer extends React.Component {
                         <SearchBar
                             handleKeyPress={this.handleKeyPress}
                             placeholder={`Search Products For ${_get(this.state, 'selectedStore.displayText', '')}`}
-                            onChange={this.handleSearchChange}
+                            handleChange={this.handleSearchChange}
                         />
                         <a onClick={this.aClicked} style={{ fontSize: '1.6rem' }}>
                             <span>{_get(this.state, 'selectedStore.displayText', '')}</span>
@@ -208,7 +213,7 @@ class HotProductContainer extends React.Component {
                             Save Hot Products
                         <SaveIcon className={classes.rightIcon} />
                         </Button>
-                        <Button onClick={()=>this.setState({diaOpen:true})} disabled={!this.state.showBar}
+                        <Button onClick={() => this.setState({ diaOpen: true })} disabled={!this.state.showBar}
                             variant="contained" color="primary" className={classes.button}>
                             Delete All
                          <DeleteIcon className={classes.rightIcon} />
@@ -247,11 +252,11 @@ class HotProductContainer extends React.Component {
                     message={<span id="message-id">{this.state.message}</span>}
                 />
                 <ConfirmationDialog
-                open={this.state.diaOpen}
-                handleClose={()=>this.setState({diaOpen:false})}
-                handleSubmit = {this.confirmDelete}
-                text = {'Are You sure You want to delete all the hot products'}
-                title="Confirmation"
+                    open={this.state.diaOpen}
+                    handleClose={() => this.setState({ diaOpen: false })}
+                    handleSubmit={this.confirmDelete}
+                    text={'Are You sure You want to delete all the hot products'}
+                    title="Confirmation"
                 />
             </div>
         );
