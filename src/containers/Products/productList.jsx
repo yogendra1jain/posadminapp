@@ -18,10 +18,13 @@ import FormDialog from '../../components/common/CommonDialog/index';
 import FileUploadComp from './FileUploadComp';
 import uploadDocument from '../../actions/Common/uploadDocument';
 import { showMessage } from '../../actions/common';
+import genericPostData from '../../Global/DataFetch/genericPostData';
+import SearchBar from '../HotProduct/Component/SearchBar';
 class ProductListContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchedProducts: [],
             totalSize: 0,
             page: 1,
             sizePerPage: 10,
@@ -50,18 +53,25 @@ class ProductListContainer extends React.Component {
     componentWillReceiveProps(props) {
         if(!_isEmpty(props.productData) && !props.productData.message){
             this.setState({ totalSize: _get(props,'productData.result.count',0)})
-            this.productList = [];
-            _get(props,'productData.result.products',[]).map(product=>{
-                let prod = {};
-                prod = product
-                prod.sellingPrice = DineroInit(_get(product,'salePrice.amount',0)).toFormat('$0,0.00');
-                prod.cPrice = DineroInit(_get(product,'costPrice.amount',0)).toFormat('$0,0.00');
-                prod.currencyCode = _get(product,'salePrice.','');
-                this.productList.push(prod);
-            });
-            this.forceUpdate();
+            this.mapProducts(_get(props,'productData.result.products',[]))
         }
-        
+    }
+
+    mapProducts = (productList) => {
+        this.productList = [];
+        productList.map(product=>{
+            let prod = {};
+            prod = product
+            prod.sellingPrice = DineroInit(_get(product,'salePrice.amount',0)).toFormat('$0,0.00');
+            prod.cPrice = DineroInit(_get(product,'costPrice.amount',0)).toFormat('$0,0.00');
+            prod.currencyCode = _get(product,'salePrice.','');
+            this.productList.push(prod);
+        });
+        this.forceUpdate();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+
     }
 
     componentDidMount(){
@@ -150,6 +160,54 @@ class ProductListContainer extends React.Component {
         }
     }
 
+    searchProduct = (value)=>{
+        let reqObj = {
+            "text": value,
+            "offset": (this.state.page - 1) * this.state.sizePerPage,
+            "limit": this.state.sizePerPage,
+            "filters": [
+                {
+                    "field": "retailerId",
+                    "value": localStorage.getItem('retailerID')
+                }
+            ]
+        }
+        genericPostData({
+            url: '/Search/Products',
+            dispatch: this.props.dispatch,
+            reqObj,
+            identifier: 'PRODUCT_SEARCH',
+            dontShowMessage: true,
+            successCb: this.handleProductSearchResult,
+            errorCb: this.handleProductSearchError
+        })
+    }
+
+    handleSearchChange = (searchText) => {
+        debugger
+        if(searchText == '') {
+            this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
+        }
+        if(searchText.length >= 3) {
+            this.searchProduct(searchText)
+        }
+    }
+
+    handleProductSearchResult = (data) => {
+        this.mapProducts(_get(data,'products',[]))
+        this.setState({searchedProducts: data.products, totalSize: data.total })
+    }
+
+    handleProductSearchError = (err) => {
+        console.log(err, 'kghdtdgtdtgt')
+    }
+
+    handleKeyPress = (e, value) => {
+        if (e.charCode == 13) {
+            this.searchProduct(value)
+        }
+    }
+
     render() {
         if (_get(this, 'props.isFetching')) {
             return (<div className='loader-wrapper-main'>
@@ -169,6 +227,8 @@ class ProductListContainer extends React.Component {
         }
 
         const options = {
+            onSearchChange: this.handleSearchChange,
+            onChange: this.onChange,
             onPageChange: this.handlePageChange,
             onSizePerPageList: this.handleSizePerPageChange,
             page: this.state.page,
@@ -209,6 +269,11 @@ class ProductListContainer extends React.Component {
                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
+                <SearchBar
+                    handleKeyPress={this.handleKeyPress}
+                    placeholder="Search Products"                    
+                    onChange={this.handleSearchChange}
+                />
                 <div>
                     <BootstrapTable 
                         height='515' 
@@ -220,6 +285,8 @@ class ProductListContainer extends React.Component {
                         remote
                         pagination={true} 
                         exportCSV={true} 
+                        // search={true}
+                        multiColumnSearch={ true }
                     >
                         <TableHeaderColumn width='100' dataField='sku' isKey={true} >SKU</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='name' dataSort >
