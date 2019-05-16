@@ -17,7 +17,7 @@ const mapData = data => ({
     orderId: get(data, 'saleId', ''),
     totalSales: DineroInit(get(data, 'employeePayDeductAmount.amount', 0)).toFormat('$0,0.00'),
     totalRefund: DineroInit(get(data, 'saleTransactions.totalRefund', 0)).toFormat('$0,0.00'),
-    orderDate: moment.utc(get(data, 'saleTimestamp.seconds', 0)* 1000).format("DD-MMM-YYYY")
+    orderDate: moment(get(data, 'saleTimestamp.seconds', 0)* 1000).format("MM/DD/YYYY h:mm a")
 })
 
 const EmpPayrollDeductDetailsSel = createSelector(
