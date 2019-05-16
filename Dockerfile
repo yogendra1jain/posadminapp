@@ -1,4 +1,4 @@
-FROM node:6.10.3-alpine
+FROM node:8.15.0-alpine
 RUN mkdir -p /pos-admin-ui-app-v2
 CMD mkdir /var/log/applogs
 CMD chmod +777 /var/log/applogs
