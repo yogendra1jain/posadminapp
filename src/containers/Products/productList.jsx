@@ -24,12 +24,13 @@ class ProductListContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchedProducts: [],
+            productList: [],
             totalSize: 0,
             page: 1,
             sizePerPage: 10,
             openDialog: false,
             file: {},
+            searchText: ''
         }
         this.onUpdate = this.onUpdate.bind(this);
         this.selectRowProp = {
@@ -50,11 +51,15 @@ class ProductListContainer extends React.Component {
         this.isAdmin =  localStorage.getItem('role')==='Admin';
     }
 
-    componentWillReceiveProps(props) {
-        if(!_isEmpty(props.productData) && !props.productData.message){
-            this.setState({ totalSize: _get(props,'productData.result.count',0)})
-            this.mapProducts(_get(props,'productData.result.products',[]))
-        }
+    // componentWillReceiveProps(props) {
+    //     if(!_isEmpty(props.productData) && !props.productData.message){
+    //         this.setState({ totalSize: _get(props,'productData.result.count',0)})
+    //         this.mapProducts(_get(props,'productData.result.products',[]))
+    //     }
+    // }
+
+    componentDidMount(){
+        this.searchProduct()
     }
 
     mapProducts = (productList) => {
@@ -70,32 +75,28 @@ class ProductListContainer extends React.Component {
         this.forceUpdate();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-
-    }
-
-    componentDidMount(){
-        this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
-    }
-
-    fetchPaginatedProducts = (page, sizePerPage) => {
-        this.setState({ page, sizePerPage})
-        const { dispatch, productsReducer } = this.props;
-        let url = '/Product/Paginated/ByRetailerId';
-        let reqBody = {
-            id: localStorage.getItem('retailerID'),
-            page,
-            sizePerPage
-        }
-        dispatch(fetchProductLookupData(productsReducer,url, reqBody));
-    }
+    // fetchPaginatedProducts = (page, sizePerPage) => {
+    //     this.setState({ page, sizePerPage})
+    //     const { dispatch, productsReducer } = this.props;
+    //     let url = '/Product/Paginated/ByRetailerId';
+    //     let reqBody = {
+    //         id: localStorage.getItem('retailerID'),
+    //         page,
+    //         sizePerPage
+    //     }
+    //     dispatch(fetchProductLookupData(productsReducer,url, reqBody));
+    // }
 
     handlePageChange = (page, sizePerPage) => {
-        this.fetchPaginatedProducts(page, sizePerPage)
+        this.setState({ page, sizePerPage }, () => {
+            this.searchProduct()
+        })
     }
 
     handleSizePerPageChange = (sizePerPage) => {
-        this.fetchPaginatedProducts(1, sizePerPage);
+        this.setState({page:1,  sizePerPage }, () => {
+            this.searchProduct();
+        })
     }
 
     onUpdate(){
@@ -103,7 +104,6 @@ class ProductListContainer extends React.Component {
         let selectedProduct = _filter(this.productList, product => {
             return product.id == this.selectedProduct.id
         })
-        console.log(selectedProduct, 'selectedProduct')
         dispatch(requestProductUpdate(productsReducer, selectedProduct[0]));
         this.redirectToNewProduct = true;
     }
@@ -160,9 +160,9 @@ class ProductListContainer extends React.Component {
         }
     }
 
-    searchProduct = (value)=>{
+    searchProduct = ()=>{
         let reqObj = {
-            "text": value,
+            "text": this.state.searchText,
             "offset": (this.state.page - 1) * this.state.sizePerPage,
             "limit": this.state.sizePerPage,
             "filters": [
@@ -184,24 +184,35 @@ class ProductListContainer extends React.Component {
     }
 
     handleSearchChange = (searchText) => {
-        if(searchText == '') {
-            this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
-        }
-        this.searchProduct(searchText)
+        this.setState({ searchText })
+    }
+
+    handleSearchbuttonClick = (searchText) => {
+        this.setState({page: 1}, () => {
+            this.searchProduct()
+        })
+    }
+
+    handleClearSearchhBox = () => {
+        this.setState({ searchText: ''}, () => {
+            this.searchProduct()
+        })
     }
 
     handleProductSearchResult = (data) => {
         this.mapProducts(_get(data,'products',[]))
-        this.setState({searchedProducts: data.products, totalSize: data.total })
+        this.setState({productList: data.products, totalSize: data.total })
     }
 
     handleProductSearchError = (err) => {
-        console.log(err, 'kghdtdgtdtgt')
+        this.props.dispatch(showMessage({text: 'No Product Found.', isSuccess: false}))
     }
 
     handleKeyPress = (e, value) => {
         if (e.charCode == 13) {
-            this.searchProduct(value)
+            this.setState({page: 1}, () => {
+                this.searchProduct()
+            })
         }
     }
 
@@ -270,7 +281,11 @@ class ProductListContainer extends React.Component {
                     handleKeyPress={this.handleKeyPress}
                     placeholder="Search Products"                    
                     handleChange={this.handleSearchChange}
+                    handleSearchbuttonClick = {this.handleSearchbuttonClick}
+                    value={this.state.searchText}
+                    onClear={this.handleClearSearchhBox}
                 />
+                <span style={{paddingTop: '20px',fontSize: '1.6em'}}>Result: {this.state.totalSize}</span>
                 <div>
                     <BootstrapTable 
                         height='515' 
