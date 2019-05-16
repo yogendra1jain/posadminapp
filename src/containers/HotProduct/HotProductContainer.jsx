@@ -108,8 +108,8 @@ class HotProductContainer extends React.Component {
     searchProduct = (value) => {
         let reqObj = {
             "text": value,
-            "offset": this.state.offset,
-            "limit": this.state.limit,
+            "offset": 0,
+            "limit": 10,
             "filters": [
                 {
                     "field": "retailerId",
