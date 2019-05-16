@@ -143,6 +143,8 @@ class ProductOverRide extends Component {
                     tempStore.retailerId = _get(product.product, 'retailerId','')
                     tempStore.upcCode = _get(product.product, 'upcCode','')
                     if(isOverride) {
+                        tempStore.salePriceFormat = DineroInit(_get(product.override,'salePrice.amount', '')).toFormat('$0,0.00');
+                        tempStore.costPriceFormat = DineroInit(_get(product.override,'costPrice.amount', '')).toFormat('$0,0.00');
                         tempStore.isOverriden = 'Yes'
                         tempStore.salePrice = DineroInit(_get(product.override,'salePrice.amount', '')).toUnit(2);
                         tempStore.costPrice = DineroInit(_get(product.override,'costPrice.amount', '')).toUnit(2);
@@ -150,6 +152,8 @@ class ProductOverRide extends Component {
                         tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
 
                     } else {
+                        tempStore.salePriceFormat = DineroInit(_get(product.product,'salePrice.amount', '')).toFormat('$0,0.00');
+                        tempStore.costPriceFormat = DineroInit(_get(product.product,'costPrice.amount', '')).toFormat('$0,0.00');
                         tempStore.isOverriden = 'No'
                         tempStore.salePrice =  DineroInit(_get(product.product,'salePrice.amount', '')).toUnit(2);
                         tempStore.costPrice = DineroInit(_get(product.product,'costPrice.amount', '')).toUnit(2);
@@ -322,9 +326,9 @@ class ProductOverRide extends Component {
             <TableHeaderColumn width='100' dataField='sku'>SKU
             </TableHeaderColumn>
 
-            <TableHeaderColumn width='100' dataField='costPrice' dataSort searchable={true} >Cost Price</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='costPriceFormat' dataSort searchable={true} >Cost Price</TableHeaderColumn>
 
-            <TableHeaderColumn width='100' dataField='salePrice' dataSort searchable={true} >Selling Price</TableHeaderColumn>
+            <TableHeaderColumn width='100' dataField='salePriceFormat' dataSort searchable={true} >Selling Price</TableHeaderColumn>
 
             <TableHeaderColumn width='100' dataField='activeStatus' dataSort searchable={true} >Active</TableHeaderColumn>
 
