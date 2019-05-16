@@ -194,7 +194,7 @@ class ProductListContainer extends React.Component {
     }
 
     handleClearSearchhBox = () => {
-        this.setState({ searchText: ''}, () => {
+        this.setState({ page: 1, searchText: ''}, () => {
             this.searchProduct()
         })
     }
