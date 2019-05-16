@@ -172,7 +172,7 @@ class SaleDataReportContainer extends React.Component {
                 }
                 let isMiscDoesNotExist = !('misc' in _get(report, 'product', {}))
                 let tempStore = {}
-                tempStore.date = moment.unix(_get(report, 'saleTransactionDetail.saleTimeStamp.seconds', 0)).format("DD-MMM-YYYY hh:mm:ss")
+                tempStore.date = moment(_get(report, 'saleTransactionDetail.saleTimeStamp.seconds', 0) * 1000).format("MM/DD/YYYY h:mm a")
                 tempStore.orderId = _get(report, 'saleTransactionDetail.id', '')
                 tempStore.staffName = _get(report, 'staff.person.firstName', '') + ' ' + _get(report, 'staff.person.lastName', '')
                 tempStore.customerName = _get(report, 'customer.customer.firstName', '') + ' ' + _get(report, 'customer.customer.lastName', '')
@@ -292,7 +292,7 @@ class SaleDataReportContainer extends React.Component {
                         </TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='staffName' dataSort>Staff Name</TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='customerName' dataSort>Customer Name</TableHeaderColumn>
-                                <TableHeaderColumn width='200' dataField='customerId' dataSort>Customer Id</TableHeaderColumn>
+                                
                                 <TableHeaderColumn width='100' dataField='employeeCode' dataSort>Employee Code</TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='sku' dataSort>SKU</TableHeaderColumn>
                                 <TableHeaderColumn width='100' dataField='barCode' dataSort>Barcode</TableHeaderColumn>
