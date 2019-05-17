@@ -90,6 +90,12 @@ class ZReportContainer extends React.Component {
         })
     }
 
+    handleChangeEndDate = (date) => {
+        this.setState({
+            endDate: moment(date)
+        })
+    }
+
     handleSelectChange = (id, name) => {
         this.setState({ storeId: id })
     }
@@ -178,6 +184,18 @@ class ZReportContainer extends React.Component {
                                 className="form-control"
                             />
                         </div>
+                        <div className="col-sm-3 form-d date-parent">
+                            <label className="control-label">To </label>
+                            <DatePicker
+                                selected={this.state.endDate}
+                                selectsEnd
+                                showYearDropdown={true}
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
+                                onSelect={this.handleChangeEndDate}
+                                className="form-control"
+                            />
+                        </div>
                         {
                             role == 1 ?
                                 <div className="col-sm-3">
@@ -200,13 +218,13 @@ class ZReportContainer extends React.Component {
                             <SaveButton buttonDisplayText={'Submit'} handlerSearch={() => this.handleSubmitReportData()} />
                         </div>
                     </div>
-                </div>
 
                 <ZReportPrintData
                     closeModal={() => this.closeModal()}
                     open={this.state.printClicked}
                     data={this.row}
                 />
+                </div>
 
                 <div>
                     <BootstrapTable

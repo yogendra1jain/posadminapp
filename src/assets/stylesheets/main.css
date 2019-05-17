@@ -4710,6 +4710,11 @@ input.login-number.form-control {
     font-size: 22px;
 }
 
+.product-search {
+    display: flex;
+    align-items: center;
+}
+
 .m-2 {
     margin-left: -2px;
     margin-right: -2px;

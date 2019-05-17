@@ -100,7 +100,7 @@ class RewardPointReport extends React.Component {
                 data.map(data => {
                     let temp = {}
                     temp = data.rewardPointRedemption
-                    temp.dateTime = moment.unix(_get(data.rewardPointRedemption, 'paymentTimeStamp.seconds', 0) * 1000).format('DD MM YYYY hh:mm:ss')
+                    temp.dateTime = moment(_get(data.rewardPointRedemption, 'paymentTimeStamp.seconds', 0) * 1000).format('MM/DD/YYYY h:mm a')
                     temp.customer = _get(data.customer, 'customer.firstName', '') + ' ' + _get(data.customer, 'customer.lastName', '')
                     rewardPointRedeemptionData.push(temp)
                     temp.pointsToRedeem = DineroInit(_get(data,'rewardPointRedemption.value.amount',0)).toFormat('$0,0.00')
