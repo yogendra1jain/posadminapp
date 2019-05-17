@@ -51,15 +51,36 @@ class ProductListContainer extends React.Component {
         this.isAdmin =  localStorage.getItem('role')==='Admin';
     }
 
-    // componentWillReceiveProps(props) {
-    //     if(!_isEmpty(props.productData) && !props.productData.message){
-    //         this.setState({ totalSize: _get(props,'productData.result.count',0)})
-    //         this.mapProducts(_get(props,'productData.result.products',[]))
-    //     }
-    // }
-
     componentDidMount(){
         this.searchProduct()
+    }
+
+    searchProduct = ()=>{
+        let reqObj = {
+            "text": this.state.searchText,
+            "offset": (this.state.page - 1) * this.state.sizePerPage,
+            "limit": this.state.sizePerPage,
+            "filters": [
+                {
+                    "field": "retailerId",
+                    "value": localStorage.getItem('retailerID')
+                }
+            ]
+        }
+        genericPostData({
+            url: '/Search/Products',
+            dispatch: this.props.dispatch,
+            reqObj,
+            identifier: 'PRODUCT_SEARCH',
+            dontShowMessage: true,
+            successCb: this.handleProductSearchResult,
+            errorCb: this.handleProductSearchError
+        })
+    }
+
+    handleProductSearchResult = (data) => {
+        this.mapProducts(_get(data,'products',[]))
+        this.setState({productList: data.products, totalSize: data.total })
     }
 
     mapProducts = (productList) => {
@@ -75,17 +96,9 @@ class ProductListContainer extends React.Component {
         this.forceUpdate();
     }
 
-    // fetchPaginatedProducts = (page, sizePerPage) => {
-    //     this.setState({ page, sizePerPage})
-    //     const { dispatch, productsReducer } = this.props;
-    //     let url = '/Product/Paginated/ByRetailerId';
-    //     let reqBody = {
-    //         id: localStorage.getItem('retailerID'),
-    //         page,
-    //         sizePerPage
-    //     }
-    //     dispatch(fetchProductLookupData(productsReducer,url, reqBody));
-    // }
+    handleProductSearchError = (err) => {
+        this.props.dispatch(showMessage({text: 'No Product Found.', isSuccess: false}))
+    }
 
     handlePageChange = (page, sizePerPage) => {
         this.setState({ page, sizePerPage }, () => {
@@ -97,6 +110,30 @@ class ProductListContainer extends React.Component {
         this.setState({page:1,  sizePerPage }, () => {
             this.searchProduct();
         })
+    }
+
+    handleSearchChange = (searchText) => {
+        this.setState({ searchText })
+    }
+
+    handleSearchbuttonClick = (searchText) => {
+        this.setState({page: 1}, () => {
+            this.searchProduct()
+        })
+    }
+
+    handleClearSearchhBox = () => {
+        this.setState({ page: 1, searchText: ''}, () => {
+            this.searchProduct()
+        })
+    }
+
+    handleKeyPress = (e, value) => {
+        if (e.charCode == 13) {
+            this.setState({page: 1}, () => {
+                this.searchProduct()
+            })
+        }
     }
 
     onUpdate(){
@@ -157,62 +194,6 @@ class ProductListContainer extends React.Component {
                         this.props.dispatch(showMessage({}));
                     }, 5000);
                 })
-        }
-    }
-
-    searchProduct = ()=>{
-        let reqObj = {
-            "text": this.state.searchText,
-            "offset": (this.state.page - 1) * this.state.sizePerPage,
-            "limit": this.state.sizePerPage,
-            "filters": [
-                {
-                    "field": "retailerId",
-                    "value": localStorage.getItem('retailerID')
-                }
-            ]
-        }
-        genericPostData({
-            url: '/Search/Products',
-            dispatch: this.props.dispatch,
-            reqObj,
-            identifier: 'PRODUCT_SEARCH',
-            dontShowMessage: true,
-            successCb: this.handleProductSearchResult,
-            errorCb: this.handleProductSearchError
-        })
-    }
-
-    handleSearchChange = (searchText) => {
-        this.setState({ searchText })
-    }
-
-    handleSearchbuttonClick = (searchText) => {
-        this.setState({page: 1}, () => {
-            this.searchProduct()
-        })
-    }
-
-    handleClearSearchhBox = () => {
-        this.setState({ page: 1, searchText: ''}, () => {
-            this.searchProduct()
-        })
-    }
-
-    handleProductSearchResult = (data) => {
-        this.mapProducts(_get(data,'products',[]))
-        this.setState({productList: data.products, totalSize: data.total })
-    }
-
-    handleProductSearchError = (err) => {
-        this.props.dispatch(showMessage({text: 'No Product Found.', isSuccess: false}))
-    }
-
-    handleKeyPress = (e, value) => {
-        if (e.charCode == 13) {
-            this.setState({page: 1}, () => {
-                this.searchProduct()
-            })
         }
     }
 
@@ -277,15 +258,18 @@ class ProductListContainer extends React.Component {
                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
-                <SearchBar
-                    handleKeyPress={this.handleKeyPress}
-                    placeholder="Search Products"                    
-                    handleChange={this.handleSearchChange}
-                    handleSearchbuttonClick = {this.handleSearchbuttonClick}
-                    value={this.state.searchText}
-                    onClear={this.handleClearSearchhBox}
-                />
-                <span style={{paddingTop: '20px',fontSize: '1.6em'}}>Result: {this.state.totalSize}</span>
+                <div className="product-search">
+                    <SearchBar
+                        handleKeyPress={this.handleKeyPress}
+                        placeholder="Search Products"                    
+                        handleChange={this.handleSearchChange}
+                        handleSearchbuttonClick = {this.handleSearchbuttonClick}
+                        value={this.state.searchText}
+                        onClear={this.handleClearSearchhBox}
+                    />
+                    <span style={{paddingLeft: '120px',fontSize: '1.6em'}}>Result: {this.state.totalSize}</span>
+                </div>
+               
                 <div>
                     <BootstrapTable 
                         height='515' 
