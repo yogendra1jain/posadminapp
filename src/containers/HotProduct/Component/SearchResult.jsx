@@ -37,10 +37,10 @@ class SearchResult extends React.Component {
                                 <span className='hot-product-summary-title'>Price</span>
                                 <span className='hot-product-summary-money'>{DineroInit(_get(product, 'salePrice.amount')).toFormat('$0,0.00')}</span>
                             </div> */}
-                            <div className='hot-product-each-detail-search flex-column align-center'>
+                            <div  className='hot-product-each-detail-search-icon flex-column align-center justify-center'>
                                 <ArrowForwardIos
                                     onClick={() => this.props.addToHotProductList(product,index)}
-                                    style={{ color: '#ff000096', fontSize: '3em' }} />
+                                    style={{  color: '#ff000096', fontSize: '2em' }} />
                             </div>
                         </div>
                     </div>

@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Karla:400,700');
-@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+/* @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'); */
 
 /* html{
     font-size: 62.5%;
 } */
 body {
     font-family: 'Karla', sans-serif !important;
-    font-size: 1rem;
+    font-size: 1rem !important;
     background-color: #e8eef1;
 }
 
 .react-bs-table-bordered {
-    font-size: 1.4rem;
+     font-size: 1rem !important;
 }
 
 .fwidth {
@@ -5103,16 +5103,29 @@ label {
 }
 
 .hot-product-each-detail {
-    width:25%
+    width:40%
+
+}
+.hot-product-each-detail-icon {
+    width:10%
+
+}
+.hot-product-each-detail-icon{
+    width:10%
 
 }
 .hot-product-each-detail-search {
-    width:33%
+    width:45%
+
+}
+.hot-product-each-detail-search-icon{
+    width:10%
 
 }
 .hot-product-summary-money {
     font-size: 1.4em;
     color: rgba(0, 0, 0, 0.8);
+    text-align: center
 }
 .hot-product-cardShadow {
     background: #fff;
