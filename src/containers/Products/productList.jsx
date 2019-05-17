@@ -79,7 +79,11 @@ class ProductListContainer extends React.Component {
     }
 
     handleProductSearchResult = (data) => {
-        this.mapProducts(_get(data,'products',[]))
+        if(_isEmpty(data)) {
+            this.props.dispatch(showMessage({text: 'No Product Found', isSuccess: false}))
+        } else {
+            this.mapProducts(_get(data,'products',[]))
+        }
         this.setState({productList: data.products, totalSize: data.total })
     }
 
@@ -97,7 +101,7 @@ class ProductListContainer extends React.Component {
     }
 
     handleProductSearchError = (err) => {
-        this.props.dispatch(showMessage({text: 'No Product Found.', isSuccess: false}))
+        this.props.dispatch(showMessage({text: err, isSuccess: false}))
     }
 
     handlePageChange = (page, sizePerPage) => {
