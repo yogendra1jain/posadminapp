@@ -97,7 +97,13 @@ class ProductOverRideComponent extends Component {
     }
 
     handleCancel = () => {
-        this.props.history.push('/storeProducts');
+        this.props.history.push({
+            pathname: '/storeProducts',
+            state: {
+                storeId: _get(this.props,'selectedStoreId',''),
+                searchText: _get(this.props,'searchText','')
+            }
+        });
     }
 
     componentDidMount() {
@@ -110,7 +116,7 @@ class ProductOverRideComponent extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.type == 'RECEIVE_PRODUCT_OVERRIDE') {
-            this.showAlert(false, 'Product Overrided Successfully!');
+            this.showAlert(false, 'Product Overridden Successfully!');
         } else if (nextProps.type == 'RECEIVE_PRODUCT_OVERRIDE_ERROR') {
             this.showAlert(true, 'Some Error Occured!');
         }
@@ -194,7 +200,7 @@ class ProductOverRideComponent extends Component {
 const mapStateToProps = state => {
     const { productOverride } = state
     const { productOverrideData, status, type, isFetching, error } = productOverride
-    const { selectedProducts, selectedStoreId } = productOverrideData
+    const { selectedProducts, selectedStoreId, searchText } = productOverrideData
 
     return {
         selectedProducts,
@@ -202,7 +208,8 @@ const mapStateToProps = state => {
         status,
         type,
         isFetching,
-        error
+        error,
+        searchText
     }
 }
 

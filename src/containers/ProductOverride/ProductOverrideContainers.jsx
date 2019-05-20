@@ -21,6 +21,8 @@ import FormDialog from '../../components/common/CommonDialog/index';
 import FileUploadComp from './FileUploadComp';
 import uploadDocument from '../../actions/Common/uploadDocument';
 import { showMessage } from '../../actions/common';
+import SearchBar from '../HotProduct/Component/SearchBar';
+import genericPostData from '../../Global/DataFetch/genericPostData';
 class ProductOverRide extends Component {
     constructor(props) {
         super(props);
@@ -30,12 +32,13 @@ class ProductOverRide extends Component {
             selectedStore: {},
             selectedIds: [],
             isLoading: false,
-            currencyCode: '',
             totalSize: 0,
             page: 1,
             sizePerPage: 10,
             openDialog: false,
-            file: {}
+            file: {},
+            showStoreDropdown: true,
+            searchText:''
         }
         this.handlePageChange = this.handlePageChange.bind(this)
         this.selectRowProp = {
@@ -50,15 +53,19 @@ class ProductOverRide extends Component {
     }
 
     componentDidMount() {
-        this.loadInitialData()
+        this.fetchStoreByRole()
     }
 
-    loadInitialData = () => {
+    fetchStoreByRole = () => {
         if(localStorage.getItem('role') == 1) {
             this.productList = []
             this.forceUpdate()
-            if(this.props.selectedStoreId) {
-                this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
+            if(!_isEmpty(this.props.history.location.state)) {
+                let selectedStore = {}
+                selectedStore.store = _get(this.props.history,'location.state.storeId','')
+                this.setState({ searchText: _get(this.props.history,'location.state.searchText',''), selectedStore, showStoreDropdown: false},() => {
+                    this.searchProduct()
+                })
             }
             let reqBody = {
                 id: localStorage.getItem('retailerID')
@@ -68,46 +75,121 @@ class ProductOverRide extends Component {
         } else if(localStorage.getItem('role') == 2) {
             let selectedStore = {}
             selectedStore.store= localStorage.getItem('storeID')
-            this.setState({selectedStore})
-            let url = '/Product/WithOverride/ByStore';
-            let reqBody = {
-                id: localStorage.getItem('storeID'),
-                page: this.state.page,
-                sizePerPage: this.state.sizePerPage
-            }
-            this.props.dispatch(fetchProductData('', url, reqBody));
+            this.setState({selectedStore}, () =>  {
+                this.searchProduct()
+            })
         }
     }
 
-    fetchPaginatedProducts = (page, sizePerPage) => {
-        this.setState({ page, sizePerPage })
-        let reqBody = {}
-        if(this.props.selectedStoreId) {
-            let selectedStore = {}
-            selectedStore.store = this.props.selectedStoreId
-            this.setState({ selectedStore, isLoading: true })
-            reqBody = {
-                id: this.props.selectedStoreId,
-                page,
-                sizePerPage
-            }
-        } else {
-            reqBody = {
-                id: _get(this.state,'selectedStore.store',''),
-                page,
-                sizePerPage
+    searchProduct = ()=>{
+        console.log(this.state.selectedStore, 'inside search product')
+        let reqObj = {
+            "storeId": _get(this.state.selectedStore,'store',''),
+            "request": {
+                "text": this.state.searchText,
+                "offset": (this.state.page - 1) * this.state.sizePerPage,
+                "limit": this.state.sizePerPage,
+                "filters": [
+                    {
+                        "field": "retailerId",
+                        "value": localStorage.getItem('retailerID')
+                    }
+                ]
             }
         }
-        let url = '/Product/WithOverride/ByStore';
-        this.props.dispatch(fetchProductData('', url, reqBody)); 
+        genericPostData({
+            url: '/Search/ProductOverrides',
+            dispatch: this.props.dispatch,
+            reqObj,
+            identifier: 'PRODUCT_OVERRIDE_SEARCH',
+            dontShowMessage: true,
+            successCb: this.handleProductSearchResult,
+            errorCb: this.handleProductSearchError
+        })
+    }
+
+    handleProductSearchResult = (data) => {
+        if(_isEmpty(data)) {
+            this.props.dispatch(showMessage({text: 'No Product Found', isSuccess: false}))
+        } else {
+            this.setState({ isLoading: false })
+            this.mapProducts(_get(data,'products',[]))
+        }
+        this.setState({productList: data.products, totalSize: data.total })
+    }
+
+    mapProducts = (data) => {
+        if(Array.isArray(data)) {
+            let productList = []
+            data && data.map(product => {
+                let isOverride = _get(product,'override',false)
+                let isActive = _get(product,'active', false)
+                
+                let tempStore = {}
+                tempStore.id = _get(product, 'id','');
+                tempStore.name = _get(product, 'name', '');
+                tempStore.sku = _get(product, 'sku', '');
+                tempStore.category1 = _get(product, 'category1','')
+                tempStore.category2 = _get(product, 'category2','')
+                tempStore.category3 = _get(product, 'category3','')
+                tempStore.description = _get(product, 'description','')
+                tempStore.retailerId = _get(product, 'retailerId','')
+                tempStore.upcCode = _get(product, 'upcCode','')
+                tempStore.salePriceFormat = DineroInit(_get(product,'salePrice.amount',0)).toFormat('$0,0.00')
+                tempStore.salePrice = DineroInit(_get(product,'salePrice.amount',0)).toUnit(2);
+                tempStore.costPriceFormat = DineroInit(_get(product,'costPrice.amount',0)).toFormat('$0,0.00')
+                tempStore.costPrice = DineroInit(_get(product,'costPrice.amount',0)).toUnit(2)
+                productList.push(tempStore)
+                tempStore.isOverriden = isOverride ? 'Yes' : 'No'
+                tempStore.active = isActive
+                tempStore.activeStatus = isActive ? 'Active' : 'Inactive' 
+            })
+            this.productList = productList
+            this.forceUpdate()
+            if(data !== data) {
+                this.setState({ isLoading: false })
+            }
+        }
+    }
+
+    handleProductSearchError = (err) => {
+        this.props.dispatch(showMessage({text: err, isSuccess: false}))
     }
 
     handlePageChange = (page, sizePerPage) => {
-        this.fetchPaginatedProducts(page, sizePerPage)
+        this.setState({ page, sizePerPage }, () => {
+            this.searchProduct()
+        })
     }
-        
+
     handleSizePerPageChange = (sizePerPage) => {
-        this.fetchPaginatedProducts(1, sizePerPage);
+        this.setState({page:1,  sizePerPage }, () => {
+            this.searchProduct();
+        })
+    }
+
+    handleSearchChange = (searchText) => {
+        this.setState({ searchText })
+    }
+
+    handleSearchbuttonClick = (searchText) => {
+        this.setState({page: 1}, () => {
+            this.searchProduct()
+        })
+    }
+
+    handleClearSearchhBox = () => {
+        this.setState({ page: 1, searchText: ''}, () => {
+            this.searchProduct()
+        })
+    }
+
+    handleKeyPress = (e, value) => {
+        if (e.charCode == 13) {
+            this.setState({page: 1}, () => {
+                this.searchProduct()
+            })
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -124,52 +206,6 @@ class ProductOverRide extends Component {
                 this.setState({ storeList })               
             }
         }
-
-        if(!_isEmpty(nextProps.productList)) {
-            this.setState({ totalSize: nextProps.productList.count})
-            if(Array.isArray(nextProps.productList.storeProducts)) {
-                let productList = []
-                _get(nextProps,'productList.storeProducts', []).map(product => {
-                    let isOverride = ('override' in product)
-                    this.setState({ currencyCode: product.currencyCode})
-                    let tempStore = {}
-                    tempStore.id = _get(product.product, 'id','');
-                    tempStore.name = _get(product.product, 'name', '');
-                    tempStore.sku = _get(product.product, 'sku', '');
-                    tempStore.category1 = _get(product.product, 'category1','')
-                    tempStore.category2 = _get(product.product, 'category2','')
-                    tempStore.category3 = _get(product.product, 'category3','')
-                    tempStore.description = _get(product.product, 'description','')
-                    tempStore.retailerId = _get(product.product, 'retailerId','')
-                    tempStore.upcCode = _get(product.product, 'upcCode','')
-                    if(isOverride) {
-                        tempStore.salePriceFormat = DineroInit(_get(product.override,'salePrice.amount', '')).toFormat('$0,0.00');
-                        tempStore.costPriceFormat = DineroInit(_get(product.override,'costPrice.amount', '')).toFormat('$0,0.00');
-                        tempStore.isOverriden = 'Yes'
-                        tempStore.salePrice = DineroInit(_get(product.override,'salePrice.amount', '')).toUnit(2);
-                        tempStore.costPrice = DineroInit(_get(product.override,'costPrice.amount', '')).toUnit(2);
-                        tempStore.active = _get(product.override,'active', false || false)
-                        tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
-
-                    } else {
-                        tempStore.salePriceFormat = DineroInit(_get(product.product,'salePrice.amount', '')).toFormat('$0,0.00');
-                        tempStore.costPriceFormat = DineroInit(_get(product.product,'costPrice.amount', '')).toFormat('$0,0.00');
-                        tempStore.isOverriden = 'No'
-                        tempStore.salePrice =  DineroInit(_get(product.product,'salePrice.amount', '')).toUnit(2);
-                        tempStore.costPrice = DineroInit(_get(product.product,'costPrice.amount', '')).toUnit(2);
-                        tempStore.active = _get(product.product,'active', false)
-                        tempStore.activeStatus = tempStore.active ? 'Active' : 'Inactive' 
-
-                    }
-                    productList.push(tempStore)
-                })
-                this.productList = productList
-                this.forceUpdate()
-                if(nextProps.productList.storeProducts !== this.props.productList.storeProducts) {
-                    this.setState({ isLoading: false })
-                }
-            }
-        }
     }
 
     handleSelectChange = (id, name) => {
@@ -178,17 +214,11 @@ class ProductOverRide extends Component {
             this.productList= []
             this.forceUpdate()
         } else {
-            this.setState({ isLoading: true })
             let selectedStore = {}
             _set(selectedStore, name, id)
-            this.setState({ selectedStore })
-            let url = '/Product/WithOverride/ByStore';
-            let reqBody = {
-                id: id,
-                page: this.state.page,
-                sizePerPage: this.state.sizePerPage
-            }
-            this.props.dispatch(fetchProductData('', url, reqBody)); 
+            this.setState({ showStoreDropdown: false, isLoading: true, selectedStore }, () => {
+                this.searchProduct()
+            })
         }  
     }
 
@@ -234,7 +264,8 @@ class ProductOverRide extends Component {
             let data = {
                 selectedProducts: this.state.selectedProducts,
                 selectedStoreId: this.state.selectedStore.store,
-                selectedIds: this.state.selectedIds
+                selectedIds: this.state.selectedIds,
+                searchText: this.state.searchText
             }
             this.props.dispatch(sendSelectedProducts(data))
             this.props.history.push('/productOverride')
@@ -258,7 +289,7 @@ class ProductOverRide extends Component {
             this.props.dispatch(uploadDocument(files[0], url, '', _get(this.state.selectedStore,'store',''), storeCode, 'StoreProductOverride'))
                 .then(data => {
                     if(data.status == 200) {
-                        this.loadInitialData()
+                        this.fetchStoreByRole()
                         this.toggleDialog();
                         this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
                         setTimeout(() => {
@@ -273,6 +304,22 @@ class ProductOverRide extends Component {
                     }, 5000);
                 })
         }
+    }
+
+    getSelectedStoreName = () => {
+        let storeId = ''
+        if(_isEmpty(this.state.selectedStore)) {
+            storeId = _get(this.props,'selectedStoreId','')
+        } else {
+            storeId = _get(this.state,'selectedStore.id','')
+        }
+        let selectedStore = _find(this.state.storeList, 'value', storeId)
+        let selectedStoreName = _get(selectedStore,'displayText','')
+        return selectedStoreName
+    }
+
+    storeNameClicked = () => {
+        this.setState({ showStoreDropdown: true})
     }
 
     render() {
@@ -363,22 +410,41 @@ class ProductOverRide extends Component {
 
                 <div>
                 <div className="row">
-                    {
+                    {this.state.showStoreDropdown ? 
                         role == 1 ?  
-                        <div className="col-sm-4">
-                            <label>Select Store</label>
-                            <AutoComplete
-                            type="single"
-                            data={_get(this.state,'storeList',[])}
-                            name="store"
-                            value={_get(this.state,'selectedStore.store','')} 
-                            changeHandler={(id) => {this.handleSelectChange(id, 'store')}} />
-                        </div> : 
-                        <div className="col-sm-4">
-                            <label>Store Name: <span>{localStorage.getItem('storeName')}
-                            </span></label>
+                            <div className="col-sm-4">
+                                <label>Select Store</label>
+                                <AutoComplete
+                                type="single"
+                                data={_get(this.state,'storeList',[])}
+                                name="store"
+                                value={_get(this.state,'selectedStore.store','')} 
+                                changeHandler={(id) => {this.handleSelectChange(id, 'store')}} />
+                            </div> : 
+                            <div className="col-sm-4">
+                                <label>Store Name: <span>{localStorage.getItem('storeName')}
+                                </span></label>
+                            </div> : 
+                        <div style={{marginLeft: '20px'}}>
+                            <div>
+                                <div className="product-search">
+                                    <SearchBar
+                                        handleKeyPress={this.handleKeyPress}
+                                        placeholder="Search Products"                    
+                                        handleChange={this.handleSearchChange}
+                                        handleSearchbuttonClick = {this.handleSearchbuttonClick}
+                                        value={this.state.searchText}
+                                        onClear={this.handleClearSearchhBox}
+                                    />
+                                    <span style={{paddingLeft: '120px',fontSize: '1.6em'}}>Result: {this.state.totalSize}</span>
+                                </div>
+                            </div>
+                            <a onClick={this.storeNameClicked} style={{ fontSize: '1.6rem' }}>
+                                <span>{this.getSelectedStoreName()}</span>
+                            </a>
                         </div>
                     }
+                        
                 </div>
                 <div>
                     {table}
@@ -394,12 +460,13 @@ const mapStateToProps = state => {
     let {productData} = productsReducer || [];
     const {storeData} = storesReducer || {}
     const { productOverrideData, productList, isFetching } = productOverride
-    const { selectedProducts, selectedStoreId, selectedIds } = productOverrideData
+    const { selectedProducts, selectedStoreId, selectedIds, searchText } = productOverrideData
 
     return {
         productData,
         storeData,
         selectedProducts,
+        searchText,
         selectedStoreId,
         selectedIds,
         productList,
