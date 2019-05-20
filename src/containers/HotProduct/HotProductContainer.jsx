@@ -127,7 +127,6 @@ class HotProductContainer extends React.Component {
         })
     }
     handleKeyPress = (e, value) => {
-        debugger;
         if (e.charCode == 13) {
             this.setState({ searchInput: value })
             let reqObj = {
@@ -205,7 +204,6 @@ class HotProductContainer extends React.Component {
     }
     onPageChange = (current, pageSize) => {
         this.state.offset = ((current - 1) * pageSize);
-        debugger;
         this.state.limit = pageSize;
         console.log(this.state.searchText,"this.state.searchTextthis.state.searchText")
         this.searchProduct(this.state.searchText);
