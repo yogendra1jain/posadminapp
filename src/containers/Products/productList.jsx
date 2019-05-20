@@ -275,7 +275,7 @@ class ProductListContainer extends React.Component {
                 <div className='panel-container'>
                     <span className='panel-heading'>Product Master</span>
                     <div>
-                        <SaveButton Class_Name="m-r-10" disabled={this.selectedIds.length===0} buttonDisplayText={'Update Product'} handlerSearch={this.onUpdate}/>
+                        <SaveButton Class_Name="m-r-10" disabled={this.selectedIds.length===0 ||this.selectedIds.length > 1} buttonDisplayText={'Update Product'} handlerSearch={this.onUpdate}/>
                         <SaveButton Class_Name="btn-info m-r-10" buttonDisplayText={'Add new'} handlerSearch={this.addNewProduct}/>
                         <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
