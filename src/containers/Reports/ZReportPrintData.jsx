@@ -3,7 +3,7 @@ import _get from 'lodash/get';
 import Modal from 'react-bootstrap/lib/Modal';
 import SaveButton from "../../components/common/SaveButton.jsx";
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import ZReportPrintView from './ZReportPrintView.jsx';
+import ZReportPrintView from './ZReportPrintView';
 import ReactToPrint from "react-to-print";
 
 class ZReportPrintData extends React.Component {
@@ -37,7 +37,7 @@ class ZReportPrintData extends React.Component {
 
 
     render() {
-
+        console.log(this.props.data, 'this.props.data')
         return (
             <div>
                 <Modal show={this.props.open} className='modal-invoice' style={{marginTop:'70px'}}>

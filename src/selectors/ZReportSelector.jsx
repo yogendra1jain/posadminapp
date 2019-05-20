@@ -29,8 +29,15 @@ const mapData = data => ({
     taxAmount: DineroInit(get(data, 'shift.taxAmount',0)).toFormat('$0,0.00'),
     totalSalesAmount: DineroInit(get(data, 'shift.totalSalesAmount',0)).toFormat('$0,0.00'),
     preTaxSalesAmount: DineroInit(get(data, 'shift.preTaxSalesAmount',0)).toFormat('$0,0.00'),
-    
-
+    totalDiscountAmount: DineroInit(get(data,'shift.totalDiscountAmount',0)).toFormat('$0,0.00'),
+    cashRefundAmount: DineroInit(get(data,'shift.cashRefundAmount',0)).toFormat('$0,0.00'),
+    cardRefundAmount: DineroInit(get(data,'shift.cardRefundAmount',0)).toFormat('$0,0.00'),
+    giftCardRefundAmount: DineroInit(get(data,'shift.giftCardRefundAmount',0)).toFormat('$0,0.00'),
+    employeeDeductSalesAmount: DineroInit(get(data,'shift.employeeDeductSalesAmount',0)).toFormat('$0,0.00'),
+    costCenterChargeSalesAmount: DineroInit(get(data,'shift.costCenterChargeSalesAmount',0)).toFormat('$0,0.00'),
+    loyaltySalesAmount: DineroInit(get(data,'shift.loyaltySalesAmount',0)).toFormat('$0,0.00'),
+    decliningBalanceSalesAmount: DineroInit(get(data,'shift.decliningBalanceSalesAmount',0)).toFormat('$0,0.00'),
+    giftCardSalesAmount: DineroInit(get(data,'shift.giftCardSalesAmount',0)).toFormat('$0,0.00'),
 })
 
 
