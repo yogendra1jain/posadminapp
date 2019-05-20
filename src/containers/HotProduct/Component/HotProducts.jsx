@@ -104,7 +104,7 @@ class HotProducts extends Component {
                                                 <div className='hot-product-container fwidth flex-column'>
                                                     <div className='hot-product-cardShadow flex-column flex-wrap'>
                                                         <div className='hot-product-summary-area flex-row flex-wrap fwidth'>
-                                                            <div className='hot-product-each-detail flex-column align-center'>
+                                                            <div className='hot-product-each-detail-icon flex-column align-center'>
                                                                 <span className='hot-product-summary-title'>Index</span>
                                                                 <span className='hot-product-summary-money'>{index+1}</span>
                                                             </div>
@@ -120,10 +120,10 @@ class HotProducts extends Component {
                                                                 <span className='hot-product-summary-title'>Price</span>
                                                                 <span className='hot-product-summary-money'>{DineroInit(_get(hotProduct, 'salePrice.amount')).toFormat('$0,0.00')}</span>
                                                             </div> */}
-                                                            <div className='hot-product-each-detail flex-column align-center'>
+                                                            <div className='hot-product-each-detail-icon flex-column align-center justify-center'>
                                                                 <DeleteIcons
                                                                     onClick={() => this.handleDelete(hotProduct, index)}
-                                                                    style={{ color: '#ff000096', fontSize: '3em' }} />
+                                                                    style={{ color: '#ff000096', fontSize: '2em',justifyContent:'center' }} />
                                                             </div>
                                                         </div>
                                                     </div>

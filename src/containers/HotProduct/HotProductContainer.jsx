@@ -31,6 +31,7 @@ import PaginationComp from './Component/Pagination';
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
+        fontSize:'1em !important'
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
