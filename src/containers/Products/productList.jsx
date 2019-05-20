@@ -11,6 +11,8 @@ import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import _pull from 'lodash/pull';
 import _filter from 'lodash/filter'
+import _cloneDeep from 'lodash/cloneDeep';
+import _findIndex from 'lodash/findIndex';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
 import DineroInit from '../../Global/Components/DineroInit'
@@ -34,12 +36,12 @@ class ProductListContainer extends React.Component {
         }
         this.onUpdate = this.onUpdate.bind(this);
         this.selectRowProp = {
-            mode: 'radio',
+            mode: 'checkbox',
             clickToSelect: false,
             onSelect: this.onRowSelect,
-            // onSelectAll: this.onSelectAll,
             bgColor: '#ffffff',
-            // selected : this.selectedIds,
+            selected : this.state.selectedIds,
+            onSelectAll: this.onSelectAll
         }
         this.redirectToNewProduct = false;
         this.addNewProduct = this.addNewProduct.bind(this);
@@ -47,7 +49,7 @@ class ProductListContainer extends React.Component {
         this.productList = [];
         this.selectedIds = [];
         this.selectedInfo = {};
-        this.selectedProduct = {};
+        this.selectedProduct = [];
         this.isAdmin =  localStorage.getItem('role')==='Admin';
     }
 
@@ -143,29 +145,51 @@ class ProductListContainer extends React.Component {
     onUpdate(){
         const {dispatch, productsReducer} = this.props;
         let selectedProduct = _filter(this.productList, product => {
-            return product.id == this.selectedProduct.id
+            return product.id == this.selectedProduct[0].id
         })
         dispatch(requestProductUpdate(productsReducer, selectedProduct[0]));
         this.redirectToNewProduct = true;
     }
 
     onRowSelect = (row, isSelected, e) => {
-        isSelected ? this.selectedIds = [(row.sku)] : _pull(this.selectedIds, row.sku);
-        this.selectedProduct = row;
-        if (isSelected == false) {
-
-            this.selectedInfo = {};
-            this.selectedProduct = {};
+        isSelected ? this.selectedIds.push(row.id) : _pull(this.selectedIds, row.id);
+        let selectedProducts = _cloneDeep(this.selectedProduct);
+        if (isSelected) {
+            selectedProducts.push(row)
+        } else {
+            let index = _findIndex(selectedProducts, { 'id': row.id });
+            if (index !== -1) {
+                selectedProducts.splice(index, 1);
+            }
         }
-        this.selectRowProp.selected = this.selectedIds;
-        this.forceUpdate();
+        this.selectRowProp.selected = this.state.selectedIds;
+        this.selectedProduct = selectedProducts;
+        this.forceUpdate()
+        console.log(this.selectedIds, 'this.selectedIds')
     }
 
     onSelectAll = (isSelected, rows) => {
-        this.selectedIds = [];
-        this.selectRowProp.selected = this.selectedIds;
-        this.forceUpdate();
+        let selectedIds = this.selectedIds
+        let selectedProducts = _cloneDeep(this.selectedProduct)
+        if(isSelected) {
+            rows.map(row => {
+                selectedIds.push(row.id)
+                selectedProducts.push(row)
+            })
+        } else {
+            rows.map(row => {
+                let index = _findIndex(selectedProducts, { 'id': row.id });
+                if (index !== -1) {
+                    selectedProducts.splice(index, 1);
+                }
+                _pull(selectedIds, row.id)
+            })
+        } 
+        this.selectedProduct = selectedProducts
+        this.selectedIds = selectedIds
+        this.forceUpdate()
     }
+
     addNewProduct() {
         this.redirectToNewProduct = true;
         this.forceUpdate();
@@ -231,16 +255,10 @@ class ProductListContainer extends React.Component {
             defaultSortOrder: 'desc',
             clearSearch: true,
             withFirstAndLast: true,
-            // sizePerPageList: [{
-            //     text: '5', value: 5
-            // }, {
-            //     text: '10', value: 10
-            // }]
         };
 
         return (
             <div className="">
-                {/* <span className="glyphicon glyphicon-remove drawer-close" onClick={this.closeDrawer}></span> */}
                 <FormDialog
                     open={this.state.openDialog}
                     handleClose={this.toggleDialog}
