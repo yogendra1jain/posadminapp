@@ -17,8 +17,7 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 import { fetchProductLookupData, requestProductUpdate } from '../../actions/products';
 import DineroInit from '../../Global/Components/DineroInit'
 import FormDialog from '../../components/common/CommonDialog/index';
-import FileUploadComp from './FileUploadComp';
-import uploadDocument from '../../actions/Common/uploadDocument';
+import FileUploadComp from '../../Global/Components/FileUploadComp';
 import { showMessage } from '../../actions/common';
 import genericPostData from '../../Global/DataFetch/genericPostData';
 import SearchBar from '../HotProduct/Component/SearchBar';
@@ -32,7 +31,10 @@ class ProductListContainer extends React.Component {
             sizePerPage: 10,
             openDialog: false,
             file: {},
-            searchText: ''
+            searchText: '',
+            showSuccess: false,
+            successLines: '',
+            successText: ''
         }
         this.onUpdate = this.onUpdate.bind(this);
         this.selectRowProp = {
@@ -201,27 +203,36 @@ class ProductListContainer extends React.Component {
         });
     }
 
+    csvUploadSuccess = (data) => {
+        this.setState({ showSuccess: true, 
+            successLines: _get(data,'successLines',''),
+            errorLines: _get(data,'errorLines',[]),
+            successText: 'Uploaded Successfully!'
+        })
+    }
+
+    csvUploadError = (err) => {
+        console.log(err)
+    }
+
     onDrop = (files) => {
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
             this.setState({ file: files[0] })
-            this.props.dispatch(uploadDocument(files[0], url, '', localStorage.getItem('retailerID'),'', 'Products'))
-                .then(data => {
-                    if(data.status == 200) {
-                        this.fetchPaginatedProducts(this.state.page, this.state.sizePerPage)
-                        this.toggleDialog();
-                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
-                        setTimeout(() => {
-                            this.props.dispatch(showMessage({}));
-                        }, 3000);
-                    }
-                })
-                .catch(err => {
-                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
-                    setTimeout(() => {
-                        this.props.dispatch(showMessage({}));
-                    }, 5000);
-                })
+            const formData = new FormData();
+            formData.append('file', files[0]);
+            formData.append('retailerId', localStorage.getItem('retailerID'))
+            formData.append('createdBy', localStorage.getItem('userName'))
+            formData.append('entity', 'Products')
+            genericPostData({
+                dispatch: this.props.dispatch,
+                reqObj: formData,
+                url,
+                successText: this.state.successText,
+                identifier: 'product_csv_upload',
+                successCb: this.csvUploadSuccess,
+                errorCb: () => this.csvUploadError,
+            })
         }
     }
 
@@ -269,6 +280,10 @@ class ProductListContainer extends React.Component {
                         <FileUploadComp
                             onDrop={this.onDrop}
                             file={this.state.file}
+                            showSuccess={this.state.showSuccess}
+                            successLines={this.state.successLines}
+                            errorLines={this.state.errorLines}
+                            entity="Product"
                         />
                     }
                 />

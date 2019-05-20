@@ -1,6 +1,6 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
-import SampleEmployeeUpload from '../../../assets/SampleCSV/sampleEmployeeUpload.csv';
+import SampleEmployeeUpload from '../../../assets/SampleCSV/employeeTemplate.csv';
 import _get from 'lodash/get';
 import DropzoneArea from '../../../Global/Dropzone/dropzoneArea';
 

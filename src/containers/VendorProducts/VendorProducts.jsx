@@ -25,8 +25,8 @@ import { showMessage } from '../../actions/common';
 import AutoComplete from '../../components/Elements/AutoComplete';
 import DineroInit from '../../Global/Components/DineroInit'
 import FormDialog from '../../components/common/CommonDialog/index';
-import FileUploadComp from './FileUploadComp';
-import uploadDocument from '../../actions/Common/uploadDocument';
+import FileUploadComp from '../../Global/Components/FileUploadComp';
+import genericPostData from '../../Global/DataFetch/genericPostData';
 
 const options = {
     paginationPosition: 'top',
@@ -49,7 +49,10 @@ class VendorProductsContainer extends React.Component {
         this.state = { 
             isVendorSelected: false,
             openDialog: false,
-            file: {}
+            file: {},
+            showSuccess: false,
+            successLines: '',
+            successText: ''
         };
         this.selectRowProp = {
             mode: 'radio',
@@ -231,33 +234,37 @@ class VendorProductsContainer extends React.Component {
         });
     }
 
+    csvUploadSuccess = (data) => {
+        this.setState({ showSuccess: true, 
+            successLines: _get(data,'successLines',''),
+            errorLines: _get(data,'errorLines',[]),
+            successText: 'Uploaded Successfully!'
+        })
+    }
+
+    csvUploadError = (err) => {
+        console.log(err)
+    }
+
+
     onDrop = (files) => {
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
             this.setState({ file: files[0] })
-            this.props.dispatch(uploadDocument(files[0], url, '', '', '', 'VendorProducts'))
-                .then(data => {
-                    if(data.status == 200) {
-                        let reqObj = {
-                            id: localStorage.getItem('retailerID')
-                        }
-                        let url = `/Vendor/ByRetailerId`;
-                        let vendorProdUrl = `/VendorProduct/GetByRetailerId`;
-                        this.props.dispatch(getVendorData('', url, reqObj))
-                        this.fetchVendorProducts(vendorProdUrl, reqObj);
-                        this.toggleDialog();
-                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
-                        setTimeout(() => {
-                            this.props.dispatch(showMessage({}));
-                        }, 3000);
-                    }
-                })
-                .catch(err => {
-                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
-                    setTimeout(() => {
-                        this.props.dispatch(showMessage({}));
-                    }, 5000);
-                })
+            const formData = new FormData();
+            formData.append('file', files[0]);
+            formData.append('retailerId', localStorage.getItem('retailerID'))
+            formData.append('createdBy', localStorage.getItem('userName'))
+            formData.append('entity', 'VendorProducts')
+            genericPostData({
+                dispatch: this.props.dispatch,
+                reqObj: formData,
+                url,
+                successText: this.state.successText,
+                identifier: 'vendor_product_csv_upload',
+                successCb: this.csvUploadSuccess,
+                errorCb: () => this.csvUploadError,
+            })
         }
     }
     
@@ -285,6 +292,10 @@ class VendorProductsContainer extends React.Component {
                         <FileUploadComp
                             onDrop={this.onDrop}
                             file={this.state.file}
+                            showSuccess={this.state.showSuccess}
+                            successLines={this.state.successLines}
+                            errorLines={this.state.errorLines}
+                            entity="VendorProducts"
                         />
                     }
                 />
@@ -294,7 +305,7 @@ class VendorProductsContainer extends React.Component {
                     <div>
                         <SaveButton disabled={this.selectedIds.length < 1}  Class_Name="m-r-10" buttonDisplayText={'Update'} handlerSearch={() => this.updateVendorProduct()} />
                         <SaveButton  disabled={_isEmpty(this.selectedVendor)} Class_Name="btn-info m-r-10" buttonDisplayText={'Add New'} handlerSearch={this.addNewVendorProduct} />
-                        <SaveButton Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
+                        <SaveButton disabled={_isEmpty(this.selectedVendor.vendor)} Class_Name="btn-info" buttonDisplayText={'Bulk Upload'} handlerSearch={() => this.toggleDialog()} />
                     </div>
                 </div>
 

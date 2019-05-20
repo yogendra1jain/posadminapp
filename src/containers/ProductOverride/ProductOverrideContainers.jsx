@@ -18,7 +18,7 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DineroInit from '../../Global/Components/DineroInit';
 import FormDialog from '../../components/common/CommonDialog/index';
-import FileUploadComp from './FileUploadComp';
+import FileUploadComp from '../../Global/Components/FileUploadComp';
 import uploadDocument from '../../actions/Common/uploadDocument';
 import { showMessage } from '../../actions/common';
 import SearchBar from '../HotProduct/Component/SearchBar';
@@ -38,7 +38,10 @@ class ProductOverRide extends Component {
             openDialog: false,
             file: {},
             showStoreDropdown: true,
-            searchText:''
+            searchText:'',
+            showSuccess: false,
+            successLines: '',
+            successText: ''
         }
         this.handlePageChange = this.handlePageChange.bind(this)
         this.selectRowProp = {
@@ -280,29 +283,36 @@ class ProductOverRide extends Component {
         });
     }
 
+    csvUploadSuccess = (data) => {
+        this.setState({ showSuccess: true, 
+            successLines: _get(data,'successLines',''),
+            errorLines: _get(data,'errorLines',[]),
+            successText: 'Uploaded Successfully!'
+        })
+    }
+
+    csvUploadError = (err) => {
+        console.log(err)
+    }
+
     onDrop = (files) => {
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
-            const selectedStore = _find(this.storeList,['value',_get(this.state.selectedStore,'store','')])
-            const storeCode = _get(selectedStore,'code','')
             this.setState({ file: files[0] })
-            this.props.dispatch(uploadDocument(files[0], url, '', _get(this.state.selectedStore,'store',''), storeCode, 'StoreProductOverride'))
-                .then(data => {
-                    if(data.status == 200) {
-                        this.fetchStoreByRole()
-                        this.toggleDialog();
-                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
-                        setTimeout(() => {
-                            this.props.dispatch(showMessage({}));
-                        }, 3000);
-                    }
-                })
-                .catch(err => {
-                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
-                    setTimeout(() => {
-                        this.props.dispatch(showMessage({}));
-                    }, 5000);
-                })
+            const formData = new FormData();
+            formData.append('file', files[0]);
+            formData.append('storeId', _get(this.state.selectedStore,'store',''))
+            formData.append('createdBy', localStorage.getItem('userName'))
+            formData.append('entity', 'StoreProductOverride')
+            genericPostData({
+                dispatch: this.props.dispatch,
+                reqObj: formData,
+                url,
+                successText: this.state.successText,
+                identifier: 'product_override_csv_upload',
+                successCb: this.csvUploadSuccess,
+                errorCb: () => this.csvUploadError,
+            })
         }
     }
 
@@ -397,6 +407,10 @@ class ProductOverRide extends Component {
                         <FileUploadComp
                             onDrop={this.onDrop}
                             file={this.state.file}
+                            showSuccess={this.state.showSuccess}
+                            successLines={this.state.successLines}
+                            errorLines={this.state.errorLines}
+                            entity="StoreProductOverride"
                         />
                     }
                 />

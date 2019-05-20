@@ -20,9 +20,9 @@ import AddEditInventory from './AddEditInventory.jsx';
 import AdjustInventoryQuantity from './AdjustInventoryQuantity.jsx';
 import _pull from 'lodash/pull';
 import AutoComplete from '../../components/Elements/AutoComplete';
-import FileUploadComp from './FileUploadComp';
-import uploadDocument from '../../actions/Common/uploadDocument';
+import FileUploadComp from '../../Global/Components/FileUploadComp';
 import { showMessage } from '../../actions/common';
+import genericPostData from '../../Global/DataFetch/genericPostData';
 
 const ProsuctsData = [
     {
@@ -74,6 +74,9 @@ class InventoryListContainer extends React.Component {
             isStoreSelected: false,
             openDialog: false,
             file: {},
+            showSuccess: false,
+            successLines: '',
+            successText: ''
         }
         this.selectRowProp = {
             mode: 'radio',
@@ -376,34 +379,36 @@ class InventoryListContainer extends React.Component {
         });
     }
 
+    csvUploadSuccess = (data) => {
+        this.setState({ showSuccess: true, 
+            successLines: _get(data,'successLines',''),
+            errorLines: _get(data,'errorLines',[]),
+            successText: 'Uploaded Successfully!'
+        })
+    }
+
+    csvUploadError = (err) => {
+        console.log(err)
+    }
+
     onDrop = (files) => {
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
-            const selectedStore = _find(this.storeList,['value',_get(this.selectedStore,'stores','')])
-            const storeCode = _get(selectedStore,'code','')
             this.setState({ file: files[0] })
-            this.props.dispatch(uploadDocument(files[0], url, '', _get(this.selectedStore,'stores',''), storeCode, 'Inventory'))
-                .then(data => {
-                    if(data.status == 200) {
-                        const { dispatch, inventoriesReducer } = this.props;
-                        let reqBody = {
-                            id: _get(this.selectedStore,'stores','')
-                        }
-                        let url = '/Inventory/ByStoreId';
-                        dispatch(fetchInventoryLookupData(inventoriesReducer, url, reqBody));
-                        this.toggleDialog();
-                        this.props.dispatch(showMessage({ text: `File Uploaded successfully.`, isSuccess: true }));
-                        setTimeout(() => {
-                            this.props.dispatch(showMessage({}));
-                        }, 3000);
-                    }
-                })
-                .catch(err => {
-                    this.props.dispatch(showMessage({ text: `${JSON.stringify(err)}`, isSuccess: false }));
-                    setTimeout(() => {
-                        this.props.dispatch(showMessage({}));
-                    }, 5000);
-                })
+            const formData = new FormData();
+            formData.append('file', files[0]);
+            formData.append('storeId', _get(this.selectedStore,'stores',''))
+            formData.append('createdBy', localStorage.getItem('userName'))
+            formData.append('entity', 'Inventory')
+            genericPostData({
+                dispatch: this.props.dispatch,
+                reqObj: formData,
+                url,
+                successText: this.state.successText,
+                identifier: 'inventory_csv_upload',
+                successCb: this.csvUploadSuccess,
+                errorCb: () => this.csvUploadError,
+            })
         }
     }
 
@@ -437,6 +442,10 @@ class InventoryListContainer extends React.Component {
                         <FileUploadComp
                             onDrop={this.onDrop}
                             file={this.state.file}
+                            showSuccess={this.state.showSuccess}
+                            successLines={this.state.successLines}
+                            errorLines={this.state.errorLines}
+                            entity="Inventory"
                         />
                     }
                 />
