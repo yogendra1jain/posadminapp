@@ -51,8 +51,10 @@ class VendorProductsContainer extends React.Component {
             openDialog: false,
             file: {},
             showSuccess: false,
-            successLines: '',
-            successText: ''
+            successLines: 0,
+            successText: '',
+            isLoading: false,
+            isError: false,
         };
         this.selectRowProp = {
             mode: 'radio',
@@ -87,6 +89,10 @@ class VendorProductsContainer extends React.Component {
     }
 
     componentDidMount() {
+        this.loadVendorProducts()
+    }
+
+    loadVendorProducts = () => {
         let reqObj = {
             id: localStorage.getItem('retailerID')
         }
@@ -231,23 +237,35 @@ class VendorProductsContainer extends React.Component {
     toggleDialog = () => {
         this.setState({
             openDialog: !this.state.openDialog,
+            successLines: 0,
+            errorLines: []
         });
     }
 
     csvUploadSuccess = (data) => {
         this.setState({ showSuccess: true, 
-            successLines: _get(data,'successLines',''),
+            successLines: _get(data,'successLines',0),
             errorLines: _get(data,'errorLines',[]),
-            successText: 'Uploaded Successfully!'
+            successText: 'Uploaded Successfully!',
+            isLoading: false
+        }, () => {
+            let vendorProdUrl = `/VendorProduct/GetByVendorId`;
+            let reqObj = {
+                id: this.selectedVendor.vendor,
+            }
+            this.setState({ isVendorSelected: true }, () => {
+                this.fetchVendorProducts(vendorProdUrl, reqObj);
+            });
         })
     }
 
     csvUploadError = (err) => {
-        console.log(err)
+        this.setState({ isLoading: false, isError: true })
     }
 
 
     onDrop = (files) => {
+        this.setState({ isLoading: true })
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
             this.setState({ file: files[0] })
@@ -263,7 +281,7 @@ class VendorProductsContainer extends React.Component {
                 successText: this.state.successText,
                 identifier: 'vendor_product_csv_upload',
                 successCb: this.csvUploadSuccess,
-                errorCb: () => this.csvUploadError,
+                errorCb: this.csvUploadError,
             })
         }
     }
@@ -296,6 +314,8 @@ class VendorProductsContainer extends React.Component {
                             successLines={this.state.successLines}
                             errorLines={this.state.errorLines}
                             entity="VendorProducts"
+                            isLoading={this.state.isLoading}
+                            isError={this.state.isError}
                         />
                     }
                 />

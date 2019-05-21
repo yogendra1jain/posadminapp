@@ -8,6 +8,7 @@ import SampleVendorProductsUpload from '../../assets/SampleCSV/vendorProductsTem
 import _get from 'lodash/get';
 import DropzoneArea from '../Dropzone/dropzoneArea';
 import _isEmpty from 'lodash/isEmpty';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default (props) => {
     let SampleFile
@@ -30,7 +31,11 @@ export default (props) => {
         case 'Customers':
             SampleFile = SampleCustomerUpload
         break;
+        case 'Customers':
+            SampleFile = SampleCustomerUpload
+        break;
     }
+
     return (
         <div>
             <a className="font-size-14px" href={SampleFile}>Download Sample</a>
@@ -47,29 +52,50 @@ export default (props) => {
                         />
                     </section>
                     <aside>
-                        <h4>File Details:</h4>
-                        <ul className="font-size-14px">
-                            <li key={props.file.name}>
-                                {props.file.name} - {props.file.size} bytes
-                            </li>
-                        </ul>
+                        <h4>File Details: 
+                            <span>  {props.file.name} - {props.file.size} bytes</span>
+                        </h4>
                     </aside>
-                    {props.showSuccess ? 
-                    <aside>
-                        <div>Success Lines: <span>{props.successLines}</span></div>
-                        {!_isEmpty(props.errorLines) ? 
-                        <ul>
-                        {props.errorLines.map(error => {
-                            return (
-                                <li>
-                                    <div>Error Line: <span>{error.line}</span></div>
-                                    <div>Error Message: <span>{error.errorMessage}</span></div>
-                                </li>
-                            )
-                        })}
-                        </ul> : ''
-                        }
-                    </aside> : ''
+
+
+                    {
+                        props.isLoading ? <CircularProgress color="secondary" /> :
+                        props.isError ? '' : 
+                        <aside>
+                            {
+                                props.successLines > 0 ? 
+                                    <div style={{color: 'green'}}>
+                                        {props.successLines} {props.successLines > 1 ? 'documents ' : 'document'} updated successfully.
+                                    </div>
+                                : ''
+                            }
+                            {
+                                !_isEmpty(props.errorLines) ? 
+                                <div>
+                                    <span style={{color: 'red'}}>
+                                        There {props.errorLines.length > 1 ? 'are ' : 'is '}{props.errorLines.length} {props.errorLines.length > 1 ? 'errors' : 'error'} in the file.
+                                    </span>
+                                    <br />
+                                    <span><b>Error Details: </b></span>
+                                    <ul>
+                                        {
+                                            props.errorLines.map(error => {
+                                                return (
+                                                    <li>
+                                                        <div>Line: 
+                                                            <span>  {error.line}</span>
+                                                        </div>
+                                                        <div>Error Message: 
+                                                            <span>  {error.errorMessage}</span>
+                                                        </div>
+                                                    </li>
+                                                )
+                                            })
+                                        }
+                                    </ul>
+                                </div> : ''
+                            }
+                        </aside> 
                     }
                 </div>
             </div>

@@ -32,8 +32,9 @@ class ProductListContainer extends React.Component {
             openDialog: false,
             file: {},
             searchText: '',
-            showSuccess: false,
-            successLines: '',
+            isLoading: false,
+            isError: false,
+            successLines: 0,
             successText: ''
         }
         this.onUpdate = this.onUpdate.bind(this);
@@ -200,22 +201,29 @@ class ProductListContainer extends React.Component {
     toggleDialog = () => {
         this.setState({
             openDialog: !this.state.openDialog,
+            successLines: 0,
+            errorLines: []
         });
     }
 
     csvUploadSuccess = (data) => {
-        this.setState({ showSuccess: true, 
-            successLines: _get(data,'successLines',''),
+        this.setState({ 
+            successLines: _get(data,'successLines',0),
             errorLines: _get(data,'errorLines',[]),
-            successText: 'Uploaded Successfully!'
+            successText: 'Uploaded Successfully!',
+            page: 1,
+            isLoading: false
+        }, () => {
+            this.searchProduct()
         })
     }
 
     csvUploadError = (err) => {
-        console.log(err)
+        this.setState({ isLoading: false, isError: true })
     }
 
     onDrop = (files) => {
+        this.setState({ isLoading: true })
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
             this.setState({ file: files[0] })
@@ -231,7 +239,7 @@ class ProductListContainer extends React.Component {
                 successText: this.state.successText,
                 identifier: 'product_csv_upload',
                 successCb: this.csvUploadSuccess,
-                errorCb: () => this.csvUploadError,
+                errorCb: this.csvUploadError,
             })
         }
     }
@@ -280,7 +288,8 @@ class ProductListContainer extends React.Component {
                         <FileUploadComp
                             onDrop={this.onDrop}
                             file={this.state.file}
-                            showSuccess={this.state.showSuccess}
+                            isLoading={this.state.isLoading}
+                            isError={this.state.isError}
                             successLines={this.state.successLines}
                             errorLines={this.state.errorLines}
                             entity="Product"

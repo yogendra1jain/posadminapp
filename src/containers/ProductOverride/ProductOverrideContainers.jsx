@@ -40,8 +40,10 @@ class ProductOverRide extends Component {
             showStoreDropdown: true,
             searchText:'',
             showSuccess: false,
-            successLines: '',
-            successText: ''
+            successLines: 0,
+            successText: '',
+            isLoading: false,
+            isError: false,
         }
         this.handlePageChange = this.handlePageChange.bind(this)
         this.selectRowProp = {
@@ -280,22 +282,29 @@ class ProductOverRide extends Component {
     toggleDialog = () => {
         this.setState({
             openDialog: !this.state.openDialog,
+            successLines: 0,
+            errorLines: []
         });
     }
 
     csvUploadSuccess = (data) => {
         this.setState({ showSuccess: true, 
-            successLines: _get(data,'successLines',''),
+            successLines: _get(data,'successLines',0),
             errorLines: _get(data,'errorLines',[]),
-            successText: 'Uploaded Successfully!'
+            successText: 'Uploaded Successfully!',
+            isLoading: false,
+            page: 1
+        }, () => {
+            this.searchProduct()
         })
     }
 
     csvUploadError = (err) => {
-        console.log(err)
+        this.setState({ isLoading: false, isError: true })
     }
 
     onDrop = (files) => {
+        this.setState({ isLoading: true })
         let url = '/Upload/ImportAll';
         if (files.length > 0) {
             this.setState({ file: files[0] })
@@ -311,7 +320,7 @@ class ProductOverRide extends Component {
                 successText: this.state.successText,
                 identifier: 'product_override_csv_upload',
                 successCb: this.csvUploadSuccess,
-                errorCb: () => this.csvUploadError,
+                errorCb: this.csvUploadError,
             })
         }
     }
@@ -411,6 +420,8 @@ class ProductOverRide extends Component {
                             successLines={this.state.successLines}
                             errorLines={this.state.errorLines}
                             entity="StoreProductOverride"
+                            isLoading={this.state.isLoading}
+                            isError={this.state.isError}
                         />
                     }
                 />
