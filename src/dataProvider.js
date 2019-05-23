@@ -12,6 +12,7 @@ import {
 import {
     stringify
 } from 'query-string';
+
 const options = {
     headers: new Headers({
         Accept: 'application/json',
@@ -27,7 +28,6 @@ const API_URL = 'http://13.126.59.19:20029/api';
  * @returns {Object} { url, options } The HTTP request parameters
  */
 const convertDataProviderRequestToHTTP = (type, resource, params) => {
-    debugger;
     switch (type) {
         case GET_LIST: {
             const {
@@ -58,14 +58,14 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         }
         case GET_ONE:
             const reqBody = {
-              id:params.id
+              id: params.id
             }
             return {
                 url: `${API_URL}/Product/Get`,
-                    options: {
-                        method: 'POST',
-                        body: JSON.stringify(reqBody)
-                    },
+                options: {
+                    method: 'POST',
+                    body: JSON.stringify(reqBody)
+                },
             };
 
         case GET_MANY: {
@@ -135,7 +135,6 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
  * @returns {Object} Data Provider response
  */
 const convertHTTPResponseToDataProvider = (response, type, resource, params) => {
-    debugger;
     const {
         headers,
         json

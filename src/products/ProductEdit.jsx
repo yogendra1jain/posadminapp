@@ -67,8 +67,7 @@ let ProductEdit = props => (
             <TextInput source="name" options={{ fullWidth: true }} />
             <TextInput source="sku" options={{ fullWidth: true }} />
             <TextInput source="description" />
-
-
+            <NumberInput source="salePrice.amount" />
         </SimpleForm>
     </Edit>
 );
