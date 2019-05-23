@@ -12,7 +12,14 @@ import {
 import {
     stringify
 } from 'query-string';
-
+import {
+    convertProductListHTTPResponseToDataProvider,
+    convertProductListDataProviderRequestToHTTP
+} from './product';
+import {
+    convertCategoryListDataProviderRequestToHTTP,
+    convertCategoryListHTTPResponseToDataProvider
+} from './category';
 const options = {
     headers: new Headers({
         Accept: 'application/json',
@@ -28,37 +35,31 @@ const API_URL = 'http://13.126.59.19:20029/api';
  * @returns {Object} { url, options } The HTTP request parameters
  */
 const convertDataProviderRequestToHTTP = (type, resource, params) => {
+<<<<<<< HEAD:src/dataProvider.js
+=======
+
+>>>>>>> 541b019be0829e2843ff613bbcc3a4d18ad5f556:src/DataProvider/index.js
     switch (type) {
         case GET_LIST: {
-            const {
-                page,
-                perPage
-            } = params.pagination;
-            const {
-                field,
-                order
-            } = params.sort;
+            if (resource == 'Products') {
+                return convertProductListDataProviderRequestToHTTP(type, resource, params)
+            } else if (resource == "Level1ByRetailerId") {
+                debugger;
+                return convertCategoryListDataProviderRequestToHTTP(type, resource, params)
 
-            const reqBody = {
-                filters: [{
-                    field: 'retailerId',
-                    value: localStorage.getItem('retailerId')
-                }],
-                limit: perPage,
-                offset: (page - 1) * perPage,
-                text: ''
+            } else if (resource == "GetChildren") {
+                debugger;
+                return convertCategoryListDataProviderRequestToHTTP(type, resource, params)
+
             }
-            return {
-                url: `${API_URL}/Search/${resource}`,
-                options: {
-                    method: 'POST',
-                    body: JSON.stringify(reqBody)
-                },
-            };
         }
         case GET_ONE:
             const reqBody = {
+<<<<<<< HEAD:src/dataProvider.js
               id: params.id
+=======
+                id: params.id
+>>>>>>> 541b019be0829e2843ff613bbcc3a4d18ad5f556:src/DataProvider/index.js
             }
             return {
                 url: `${API_URL}/Product/Get`,
@@ -69,13 +70,16 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
             };
 
         case GET_MANY: {
-            const query = {
-                filter: JSON.stringify({
-                    id: params.ids
-                }),
-            };
+            debugger;
+            let reqObj = {
+                id: params.ids[0]
+            }
             return {
-                url: `${API_URL}/${resource}?${stringify(query)}`
+                url: `${API_URL}/Category/Get`,
+                options: {
+                    method: 'POST',
+                    body: JSON.stringify(reqObj)
+                },
             };
         }
         case GET_MANY_REFERENCE: {
@@ -135,27 +139,47 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
  * @returns {Object} Data Provider response
  */
 const convertHTTPResponseToDataProvider = (response, type, resource, params) => {
+<<<<<<< HEAD:src/dataProvider.js
+=======
+
+>>>>>>> 541b019be0829e2843ff613bbcc3a4d18ad5f556:src/DataProvider/index.js
     const {
         headers,
         json
     } = response;
     switch (type) {
         case GET_LIST:
-            return {
-                data: json.products.map(x => x),
-                    total: json.total,
-            };
-        case CREATE:
-            return {
-                data: {
-                    ...params.data,
-                    id: json.id
+            if (resource == 'Products') {
+                return convertProductListHTTPResponseToDataProvider(response, type, resource, params)
+            } else if (resource = "Level1ByRetailerId") {
+                debugger;
+                let a = convertCategoryListHTTPResponseToDataProvider(response, type, resource, params);
+                return a;
+            } else if (resource == "GetChildren") {
+                debugger;
+                let a = convertCategoryListHTTPResponseToDataProvider(response, type, resource, params);
+                return a;
+            }
+            case CREATE:
+                return {
+                    data: {
+                        ...params.data,
+                        id: json.id
+                    }
+                };
+            case GET_MANY: {
+                let arr = [];
+                arr.push(json);
+                debugger;
+                return {
+                    data: arr
                 }
-            };
-        default:
-            return {
-                data: json
-            };
+            }
+
+            default:
+                return {
+                    data: json
+                };
     }
 };
 

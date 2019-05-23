@@ -43,12 +43,22 @@ import {
     DateInput,
     Edit,
     TextInput,
+    LongTextInput,
     NumberInput,
     ReferenceInput,
     SelectInput,
     SimpleForm,
+    FormDataConsumer,
+    Query,
+    Loading,
+    Error
 } from 'react-admin';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { CustomerPriceInput } from './CustomPriceInput';
+import dineroObj from '../Global/Conversion/dineroObj';
+import splitDotWithInt from '../Global/Conversion/splitDotWithInt';
+// import axiosFetcher from '../Global/DataFetcher/axiosFetcher';
+import CategoryInput from './CategoryInput';
 
 
 const OrderTitle = translate(({ record, translate }) => (
@@ -60,6 +70,60 @@ const OrderTitle = translate(({ record, translate }) => (
 const editStyles = {
     root: { alignItems: 'flex-start' },
 };
+class ProductEdit extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { choices: [] };
+    }
+    componentDidMount() {
+    }
+    getL2Category = ({ formData, ...rest }) => {
+        // axiosFetcher({
+        //     method: 'POST',
+        //     url: 'Customer/Create',
+        //     reqObj: values,
+        //     successCb: this.handleAddCustomerSuccess,
+        //     errorCb: this.handleAddCustomerError
+        // })
+        return (<Query type="GET_ONE" resource="Category/GetChildren" payload={{ id: formData.category1 }}>
+            {({ data, loading, error }) =>
+                loading ? <Loading />
+                    : error ? <Error />
+                        : <div>User {data.username}</div>
+            }
+        </Query>
+        )
+    }
+    fetchCategory = ({ data, loading, error })=> {
+        debugger;
+        console.log(data, loading, error)
+        return (
+            loading ? <Loading />
+                : error ? <Error />
+                    : <div>User {data.username}</div>
+        )
+    }
+    render() {
+        console.log(this.props);
+        return (
+            <Edit title={<OrderTitle />}     {...this.props}>
+                <SimpleForm>
+                    <TextInput source="name" options={{ fullWidth: true }} />
+                    <TextInput source="sku" options={{ fullWidth: true }} />
+                    <LongTextInput source="description" />
+                    <NumberInput label="Cost Price" format={v => dineroObj(v).toUnit(2)} parse={v => splitDotWithInt(v)} source={'costPrice.amount'} />
+                    <NumberInput label="Pos Price" format={v => dineroObj(v).toUnit(2)} parse={v => splitDotWithInt(v)} source={'salePrice.amount'} />
+                    {/* <ReferenceInput source="category1" reference="Level1ByRetailerId">
+                        <SelectInput source="name" />
+                    </ReferenceInput> */}
+                    {/* <Query type="GET_LIST" resource="Level1ByRetailerId" payload={{ id: localStorage.getItem('retailerId') }}>
+                        {this.fetchCategory }
+                    </Query> */}
+                    <CategoryInput source={'category1'} />
+                    {/* <FormDataConsumer>
+                        {this.getL2Category}
+                    </FormDataConsumer> */}
+                    <SelectInput source="category3" options={{ fullWidth: true }} />
 
 let ProductEdit = props => (
     <Edit title={<OrderTitle />}     {...props}>
@@ -72,4 +136,4 @@ let ProductEdit = props => (
     </Edit>
 );
 ProductEdit = withStyles(editStyles)(ProductEdit);
-export  {ProductEdit};
+export { ProductEdit };
