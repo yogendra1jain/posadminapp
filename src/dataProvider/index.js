@@ -41,12 +41,12 @@ import {
 } from './Customer/create';
 
 const options = {
-    headers: new Headers({
-        Accept: 'application/json',
-    }),
+  headers: new Headers({
+    Accept: "application/json"
+  })
 };
 
-const API_URL = 'http://13.126.59.19:20029/api';
+const API_URL = "http://13.126.59.19:20029/api";
 
 /**
  * @param {String} type One of the constants appearing at the top of this file, e.g. 'UPDATE'
@@ -77,7 +77,19 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
             } else if (resource == '/Reference/GetZipCodeData') {
                 debugger;
                 return convertGetZipCodeDataProviderRequestToHTTP(type,resource,params)
-            } else {
+            } 
+            else if (resource == "IMAGE") {
+              const formData = new FormData();
+              formData.append("file", params.file);
+              return {
+                url: `${API_URL}/Upload/File`,
+                options: {
+                  method: "POST",
+                  body: formData
+                }
+              };
+            }
+            else if(resource == "Products") {
                 const reqBody = {
                     id: params.id
                   }
@@ -103,27 +115,7 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
                 },
             };
         }
-        case GET_MANY_REFERENCE: {
-            const {
-                page,
-                perPage
-            } = params.pagination;
-            const {
-                field,
-                order
-            } = params.sort;
-            const query = {
-                sort: JSON.stringify([field, order]),
-                range: JSON.stringify([(page - 1) * perPage, (page * perPage) - 1]),
-                filter: JSON.stringify({
-                    ...params.filter,
-                    [params.target]: params.id
-                }),
-            };
-            return {
-                url: `${API_URL}/${resource}?${stringify(query)}`
-            };
-        }
+
         case UPDATE:
             if(resource == "Customers") {
                 return convertCustomerEditDataProviderRequestToHTTP(type, resource, params)
@@ -220,20 +212,20 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
  * @param {Object} payload Request parameters. Depends on the request type
  * @returns {Promise} the Promise for response
  */
-const dataProvider = (type, resource, params) => {
-    const {
-        fetchJson
-    } = fetchUtils;
-    const {
-        url,
-        options
-    } = convertDataProviderRequestToHTTP(type, resource, params);
-    options.headers = new Headers({
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-    })
-    return fetchJson(url, options)
-        .then(response => convertHTTPResponseToDataProvider(response, type, resource, params));
+const dataProvider = async (type, resource, params) => {
+  const { fetchJson } = fetchUtils;
+  const { url, options } = convertDataProviderRequestToHTTP(
+    type,
+    resource,
+    params
+  );
+  options.headers = new Headers({
+    Accept: "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`
+  });
+  return fetchJson(url, options).then(response =>
+    convertHTTPResponseToDataProvider(response, type, resource, params)
+  );
 };
 
 export default dataProvider;
