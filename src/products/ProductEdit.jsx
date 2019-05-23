@@ -58,7 +58,7 @@ import { CustomerPriceInput } from './CustomPriceInput';
 import dineroObj from '../Global/Conversion/dineroObj';
 import splitDotWithInt from '../Global/Conversion/splitDotWithInt';
 // import axiosFetcher from '../Global/DataFetcher/axiosFetcher';
-import CategoryInput from './CategoryInput';
+import CategoryInput from './CategoryInput.jsx';
 
 
 const OrderTitle = translate(({ record, translate }) => (
