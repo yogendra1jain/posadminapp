@@ -113,18 +113,7 @@ class ProductEdit extends React.Component {
                     <LongTextInput source="description" />
                     <NumberInput label="Cost Price" format={v => dineroObj(v).toUnit(2)} parse={v => splitDotWithInt(v)} source={'costPrice.amount'} />
                     <NumberInput label="Pos Price" format={v => dineroObj(v).toUnit(2)} parse={v => splitDotWithInt(v)} source={'salePrice.amount'} />
-                    {/* <ReferenceInput source="category1" reference="Level1ByRetailerId">
-                        <SelectInput source="name" />
-                    </ReferenceInput> */}
-                    {/* <Query type="GET_LIST" resource="Level1ByRetailerId" payload={{ id: localStorage.getItem('retailerId') }}>
-                        {this.fetchCategory }
-                    </Query> */}
                     <CategoryInput source={'category1'} />
-                    {/* <FormDataConsumer>
-                        {this.getL2Category}
-                    </FormDataConsumer> */}
-                    <SelectInput source="category3" options={{ fullWidth: true }} />
-
                 </SimpleForm>
             </Edit>
         )
