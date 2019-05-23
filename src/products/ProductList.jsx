@@ -1,7 +1,14 @@
 
-import { TextField, BooleanField, ReferenceField, DateField, NumberField, Datagrid, List, } from 'react-admin';
+import { TextField, 
+    BooleanField, 
+    ReferenceField, 
+    DateField, 
+    NumberField, 
+    Datagrid, 
+    List, } from 'react-admin';
 import React from 'react';
 import { DineroPrice } from './DineroPrice';
+
 export const ProductList = props => (
     <List {...props}>
         <Datagrid rowClick="edit">

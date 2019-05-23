@@ -2,10 +2,7 @@
 import { AUTH_LOGIN } from 'react-admin';
 import jwtDecode from 'jwt-decode';
 
-
-
-
-  const authProvider = (type, params) => {
+const authProvider = (type, params) => {
     if (type === AUTH_LOGIN) {
         const { username, password } = params;
         const request = new Request('http://13.126.59.19:20029/api/login/admin-login', {

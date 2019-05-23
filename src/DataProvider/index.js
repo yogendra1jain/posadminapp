@@ -35,7 +35,10 @@ const API_URL = 'http://13.126.59.19:20029/api';
  * @returns {Object} { url, options } The HTTP request parameters
  */
 const convertDataProviderRequestToHTTP = (type, resource, params) => {
+<<<<<<< HEAD:src/dataProvider.js
+=======
 
+>>>>>>> 541b019be0829e2843ff613bbcc3a4d18ad5f556:src/DataProvider/index.js
     switch (type) {
         case GET_LIST: {
             if (resource == 'Products') {
@@ -52,14 +55,18 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         }
         case GET_ONE:
             const reqBody = {
+<<<<<<< HEAD:src/dataProvider.js
+              id: params.id
+=======
                 id: params.id
+>>>>>>> 541b019be0829e2843ff613bbcc3a4d18ad5f556:src/DataProvider/index.js
             }
             return {
                 url: `${API_URL}/Product/Get`,
-                    options: {
-                        method: 'POST',
-                        body: JSON.stringify(reqBody)
-                    },
+                options: {
+                    method: 'POST',
+                    body: JSON.stringify(reqBody)
+                },
             };
 
         case GET_MANY: {
@@ -132,7 +139,6 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
  * @returns {Object} Data Provider response
  */
 const convertHTTPResponseToDataProvider = (response, type, resource, params) => {
-
     const {
         headers,
         json

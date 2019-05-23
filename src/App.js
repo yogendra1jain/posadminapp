@@ -2,16 +2,9 @@
 import React from 'react';
 import { Admin, Resource,ListGuesser, } from 'react-admin';
 
-import jsonServerProvider from 'ra-data-json-server';
-import { PostList } from './posts';
-import { UserList } from './users';
-import { PostEdit } from './editPost';
 import authProvider from './authProvider';
 import dataProvider from './DataProvider';
 import products from './products';
-
-
-// const dataProvider = jsonServerProvider('http://jsonplaceholder.typicode.com');
 
 const App = () => (
   <div>
