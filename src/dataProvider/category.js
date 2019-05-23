@@ -1,7 +1,6 @@
 const API_URL = 'http://13.126.59.19:20029/api';
 
 const convertCategoryListDataProviderRequestToHTTP = (type, resource, params) => {
-    debugger;
     // const {
     //     page,
     //     perPage
@@ -23,7 +22,6 @@ const convertCategoryListDataProviderRequestToHTTP = (type, resource, params) =>
 }
 
 const convertCategoryListHTTPResponseToDataProvider = (response,type, resource, params) => {
-    debugger;
     const {
         headers,
         json

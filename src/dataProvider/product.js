@@ -33,7 +33,7 @@ const convertProductListHTTPResponseToDataProvider = (response,type, resource, p
         json
     } = response;
     return {
-        data: json.products.map(x => x),
+        data: json.products,
         total: json.total,
     };
 }

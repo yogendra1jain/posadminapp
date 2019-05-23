@@ -7,19 +7,39 @@ import {
     UPDATE,
     DELETE,
     fetchUtils,
-
 } from 'react-admin';
+
 import {
     stringify
 } from 'query-string';
+
 import {
-    convertProductListHTTPResponseToDataProvider,
-    convertProductListDataProviderRequestToHTTP
+    convertProductListDataProviderRequestToHTTP,
+    convertProductListHTTPResponseToDataProvider    
 } from './product';
+
 import {
     convertCategoryListDataProviderRequestToHTTP,
     convertCategoryListHTTPResponseToDataProvider
 } from './category';
+
+import {
+    convertCustomerListDataProviderRequestToHTTP,
+    convertCustomerListHTTPResponseToDataProvider
+} from './Customer/getList';
+
+import {
+    convertGetCustomerByIdDataProviderRequestToHTTP, convertGetZipCodeDataProviderRequestToHTTP
+} from './Customer/getById';
+
+import {
+    convertCustomerEditDataProviderRequestToHTTP
+} from './Customer/edit';
+
+import {
+    convertCustomerCreateDataProviderRequestToHTTP
+} from './Customer/create';
+
 const options = {
     headers: new Headers({
         Accept: 'application/json',
@@ -35,34 +55,43 @@ const API_URL = 'http://13.126.59.19:20029/api';
  * @returns {Object} { url, options } The HTTP request parameters
  */
 const convertDataProviderRequestToHTTP = (type, resource, params) => {
+    debugger
     switch (type) {
         case GET_LIST: {
             if (resource == 'Products') {
                 return convertProductListDataProviderRequestToHTTP(type, resource, params)
             } else if (resource == "Level1ByRetailerId") {
-                debugger;
                 return convertCategoryListDataProviderRequestToHTTP(type, resource, params)
 
             } else if (resource == "GetChildren") {
-                debugger;
                 return convertCategoryListDataProviderRequestToHTTP(type, resource, params)
 
+            } else if (resource == "Customers") {
+                return convertCustomerListDataProviderRequestToHTTP(type, resource, params)
             }
         }
+
         case GET_ONE:
-            const reqBody = {
-              id: params.id
+            if (resource == 'Customers') {
+                return convertGetCustomerByIdDataProviderRequestToHTTP(type, resource, params)
+            } else if (resource == '/Reference/GetZipCodeData') {
+                debugger;
+                return convertGetZipCodeDataProviderRequestToHTTP(type,resource,params)
+            } else {
+                const reqBody = {
+                    id: params.id
+                  }
+                  return {
+                      url: `${API_URL}/Product/Get`,
+                      options: {
+                          method: 'POST',
+                          body: JSON.stringify(reqBody)
+                      },
+                  };
             }
-            return {
-                url: `${API_URL}/Product/Get`,
-                options: {
-                    method: 'POST',
-                    body: JSON.stringify(reqBody)
-                },
-            };
 
         case GET_MANY: {
-            debugger;
+            
             let reqObj = {
                 id: params.ids[0]
             }
@@ -96,6 +125,9 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
             };
         }
         case UPDATE:
+            if(resource == "Customers") {
+                return convertCustomerEditDataProviderRequestToHTTP(type, resource, params)
+            }
             return {
                 url: `${API_URL}/${resource}/${params.id}`,
                     options: {
@@ -103,7 +135,11 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
                         body: JSON.stringify(params.data)
                     },
             };
+
         case CREATE:
+            if(resource == "Customers") {
+                return convertCustomerCreateDataProviderRequestToHTTP(type, resource, params)
+            }
             return {
                 url: `${API_URL}/${resource}`,
                     options: {
@@ -111,6 +147,7 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
                         body: JSON.stringify(params.data)
                     },
             };
+
         case DELETE:
             return {
                 url: `${API_URL}/${resource}/${params.id}`,
@@ -130,9 +167,9 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
  * @param {Object} params The Data Provider request params, depending on the type
  * @returns {Object} Data Provider response
  */
+
 const convertHTTPResponseToDataProvider = (response, type, resource, params) => {
     const {
-        headers,
         json
     } = response;
     switch (type) {
@@ -140,34 +177,40 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
             if (resource == 'Products') {
                 return convertProductListHTTPResponseToDataProvider(response, type, resource, params)
             } else if (resource = "Level1ByRetailerId") {
-                debugger;
                 let a = convertCategoryListHTTPResponseToDataProvider(response, type, resource, params);
                 return a;
             } else if (resource == "GetChildren") {
-                debugger;
                 let a = convertCategoryListHTTPResponseToDataProvider(response, type, resource, params);
                 return a;
-            }
-            case CREATE:
-                return {
-                    data: {
-                        ...params.data,
-                        id: json.id
-                    }
-                };
-            case GET_MANY: {
-                let arr = [];
-                arr.push(json);
-                debugger;
-                return {
-                    data: arr
-                }
+            } else if (resource == 'Customers') {
+                let a = convertCustomerListHTTPResponseToDataProvider(response, type, params);
+                return a;
             }
 
-            default:
-                return {
-                    data: json
-                };
+        case CREATE:
+            return {
+                data: {
+                    ...params.data,
+                    id: json.id
+                }
+            };
+            
+        case GET_MANY: {
+            let arr = [];
+            arr.push(json);
+            ;
+            return {
+                data: arr
+            }
+        }
+
+        default:
+                if (json.id == null) {
+                    json.id = "uuid";
+                  }
+            return {
+                data: json
+            };
     }
 };
 

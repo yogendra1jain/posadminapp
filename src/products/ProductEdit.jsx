@@ -95,7 +95,6 @@ class ProductEdit extends React.Component {
         )
     }
     fetchCategory = ({ data, loading, error })=> {
-        debugger;
         console.log(data, loading, error)
         return (
             loading ? <Loading />
