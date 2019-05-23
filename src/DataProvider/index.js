@@ -55,11 +55,7 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         }
         case GET_ONE:
             const reqBody = {
-<<<<<<< HEAD:src/dataProvider.js
               id: params.id
-=======
-                id: params.id
->>>>>>> 541b019be0829e2843ff613bbcc3a4d18ad5f556:src/DataProvider/index.js
             }
             return {
                 url: `${API_URL}/Product/Get`,
