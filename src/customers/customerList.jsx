@@ -7,7 +7,7 @@ import { TextField,
    EditButton
 } from 'react-admin';
 import React from 'react';
-import { FullNameField } from '../global/FullNameField';
+import { FullNameField } from '../global/components/FullNameField';
 
 const CustomerFilter = (props) => {
     return (

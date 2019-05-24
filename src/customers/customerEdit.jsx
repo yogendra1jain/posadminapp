@@ -1,15 +1,12 @@
 import { TextInput,
     NumberInput,
     Edit,
-    SimpleForm,
-    Query, 
-    Loading, 
-    FormDataConsumer
+    SimpleForm
 } from 'react-admin';
 import React from 'react';
 import ZipCodeInput from '../global/components/ZipCodeInput';
 
- const CustomerTitle = ({ record }) => {
+const CustomerTitle = ({ record }) => {
     return (
         <span>
             Customer {record ? `${record.customer.firstName} ${record.customer.lastName}` : ''}
@@ -25,7 +22,7 @@ export const CustomerEdit = props => (
             <TextInput label="Email" source="email" />
             <TextInput label="Address Line 1" source="billingAddress.addressLine1" />
             <TextInput label="Address Line 2" source="billingAddress.addressLine2" />
-            <ZipCodeInput/>
+            <ZipCodeInput source="billingAddress.postalCode" />
             <TextInput label="City" source="billingAddress.city" />
             <TextInput label="State" source="billingAddress.state" />
             <TextInput label="Country" source="billingAddress.country" />

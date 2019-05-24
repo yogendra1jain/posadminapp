@@ -88,9 +88,18 @@ const ReqBodyGuesser = (obj) => {
             const formData = new FormData();
             formData.append("file", params.file);
             return formObjectMaker(url, formData);
-            
+
+        //For Stores ******************************************************************************************
+        case 'Store/ByRetailerId':
+            return reqObjMaker(url, { id: retailerId })
+        case 'Store/Get':
+            return reqObjMaker(url, params)
         default:
             break;
+
+        //For PaymentMethods ******************************************************************************************
+        case 'Store/AvailablePaymentMethods':
+            return reqObjMaker(url, {})
     }
 }
 

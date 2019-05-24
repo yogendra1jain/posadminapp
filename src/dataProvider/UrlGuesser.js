@@ -52,6 +52,18 @@ const UrlGuesser = (obj) => {
         case 'IMAGE/GET_ONE':
             return 'Upload/File'
 
+        //For Stores ******************************************************************************************
+        case 'Store/GET_LIST':
+            return 'Store/ByRetailerId'
+        
+        case 'Store/GET_ONE':
+            return 'Store/Get'
+
+        //For PaymentMethods ******************************************************************************************
+        case 'PaymentMethods/GET_MANY':
+            debugger
+            return 'Store/AvailablePaymentMethods'
+
         default:
             break;
     }

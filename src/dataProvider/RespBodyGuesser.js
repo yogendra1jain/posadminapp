@@ -76,6 +76,18 @@ const ResBodyGuesser = (obj) => {
         case 'Upload/File':
             return
 
+        //For Stores ******************************************************************************************
+        case 'Store/ByRetailerId':
+            return {
+                data: json,
+                total: json.length,
+            };
+        case 'Store/Get':
+            return (url, params)
+
+        //For PaymentMethods ******************************************************************************************
+        case 'Store/AvailablePaymentMethods':
+            return (url, params)
         default:
             if (json.id == null) {
                 json.id = "uuid";
