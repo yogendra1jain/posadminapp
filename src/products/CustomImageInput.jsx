@@ -13,7 +13,6 @@ const CustomImageInput = ({ record }) => (
     {({ formData, dispatch, ...rest }) => (
       <Query type="GET_ONE" resource="IMAGE" payload={{ file: record.rawFile }}>
         {({ data, loading, error }) => {
-          debugger;
           if (loading) {
             return <LinearProgress />;
           }
@@ -22,7 +21,6 @@ const CustomImageInput = ({ record }) => (
           }
           //   saveFetchedUrl(data.url)
           if (data.url != record.newImage) {
-            debugger;
             record.newImage = data.url;
             // dispatch(change(REDUX_FORM_NAME, "image", data.url));
           }

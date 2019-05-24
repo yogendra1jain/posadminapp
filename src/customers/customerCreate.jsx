@@ -4,16 +4,17 @@ import { Create,
     TextInput,
     NumberInput
 } from 'react-admin';
+import ZipCodeInput from '../global/components/ZipCodeInput';
 
 export const CustomerCreate = props => (
     <Create {...props}>
-        <SimpleForm>
+        <SimpleForm redirect="list">
             <TextInput label="First Name" source="customer.firstName" />
             <TextInput label="Last Name" source="customer.lastName" />
             <TextInput label="Email" source="email" />
             <TextInput label="Address Line 1" source="billingAddress.addressLine1" />
             <TextInput label="Address Line 2" source="billingAddress.addressLine2" />
-            <TextInput label="Zipcode" source="billingAddress.postalCode" />
+            <ZipCodeInput/>
             <TextInput label="City" source="billingAddress.city" />
             <TextInput label="State" source="billingAddress.state" />
             <TextInput label="Country" source="billingAddress.country" />

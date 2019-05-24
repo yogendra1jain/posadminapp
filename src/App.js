@@ -10,8 +10,7 @@ import customers from './customers';
 const App = () => (
     <div>
       <Admin dataProvider={dataProvider} authProvider={authProvider}>
-        <Resource name="Products" {...products} />
-        <Resource name="Level1ByRetailerId" />
+        <Resource name="Search/Products" {...products} options={{label:'Product List'}} />
         <Resource name="Customers" {...customers} />
       </Admin>
     </div>

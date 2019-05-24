@@ -1,5 +1,5 @@
 import React from 'react';
-import dineroObj from '../Global/Conversion/dineroObj';
+import dineroObj from '../global/conversion/DineroObj';
 import _get from 'lodash/get'
 
 export const DineroPrice = (props)=>{

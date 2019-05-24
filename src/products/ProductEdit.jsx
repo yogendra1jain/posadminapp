@@ -58,9 +58,8 @@ import {
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { CustomerPriceInput } from "./CustomPriceInput";
-import dineroObj from "../Global/Conversion/dineroObj";
-import splitDotWithInt from "../Global/Conversion/splitDotWithInt";
-// import axiosFetcher from '../Global/DataFetcher/axiosFetcher';
+import dineroObj from "../global/conversion/DineroObj";
+import splitDotWithInt from "../global/conversion/SplitDotWithInt";
 import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
 
@@ -69,6 +68,13 @@ const OrderTitle = translate(({ record, translate }) => (
     {translate("resources.commands.title", { reference: record.reference })}
   </span>
 ));
+const ProductTitle = ({ record }) => {
+  return (
+      <span>
+          Edit {record ? `${record.name}`:null}
+      </span>
+  )
+};
 
 const editStyles = {
   root: { alignItems: "flex-start" }
@@ -108,7 +114,6 @@ class ProductEdit extends React.Component {
     );
   };
   fetchCategory = ({ data, loading, error }) => {
-    debugger;
     console.log(data, loading, error);
     return loading ? (
       <Loading />
@@ -122,14 +127,13 @@ class ProductEdit extends React.Component {
   //     this.setState({url})
   //   }
   saveFetchedUrl = url => {
-    debugger;
     this.state.url = url;
   };
   formDataRenderProp = () => {};
   render() {
     console.log(this.props);
     return (
-      <Edit title={<OrderTitle />} {...this.props}>
+      <Edit title={<ProductTitle />} {...this.props}>
         <SimpleForm>
           <TextInput source="name" options={{ fullWidth: true }} />
           <TextInput source="sku" options={{ fullWidth: true }} />

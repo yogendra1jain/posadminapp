@@ -1,11 +1,11 @@
 
 import React from 'react';
-import dineroObj from '../Global/Conversion/dineroObj';
+import dineroObj from '../global/conversion/DineroObj';
 import _get from 'lodash/get'
 import {
  NumberInput
 } from 'react-admin';
-import splitDotWithInt from '../Global/Conversion/splitDotWithInt';
+import splitDotWithInt from '../global/conversion/SplitDotWithInt';
 
 const CustomerPriceInput = (props)=>{
     const { record,source,resource } = props;

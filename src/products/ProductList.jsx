@@ -5,9 +5,16 @@ import { TextField,
 } from 'react-admin';
 import React from 'react';
 import { DineroPrice } from './DineroPrice';
+const ProductListTitle = ({ record }) => {
+    return (
+        <span>
+            Product List
+        </span>
+    )
+};
 
 export const ProductList = props => (
-    <List {...props}>
+    <List {...props} title={<ProductListTitle/>}>
         <Datagrid rowClick="edit">
             <TextField source="sku" />
             <TextField source="name" />
