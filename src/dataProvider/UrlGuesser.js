@@ -18,6 +18,8 @@ const UrlGuesser = (obj) => {
             return ''
         case 'Search/Products/DELETE_MANY':
             return ''
+        case 'Search/Products/GET_MANY':
+            return 'Product/GetByIds'
 
         //For Category ******************************************************************************************
         case 'Level1ByRetailerId/GET_LIST':
@@ -52,6 +54,34 @@ const UrlGuesser = (obj) => {
         case 'IMAGE/GET_ONE':
             return 'Upload/File'
 
+        //For Vendors ******************************************************************************************
+        case 'vendors/GET_LIST':
+            return 'Vendor/ByRetailerId'
+        case 'vendors/GET_ONE':
+            return 'Vendor/Get'
+        case 'vendors/CREATE':
+            return 'Vendor/Create'
+        case 'vendors/UPDATE':
+            return 'Vendor/Update'
+        case 'vendors/DELETE':
+            return ''
+        case 'vendors/DELETE_MANY':
+            return ''
+        //For Vendors Products ******************************************************************************************
+        case 'VendorProduct/GetByRetailerId/GET_LIST':
+            return 'VendorProduct/GetByRetailerId'
+        case 'VendorProduct/GetByRetailerId/GET_ONE':
+            return 'VendorProduct/Get'
+        case 'vendors/CREATE':
+            return 'Vendor/Create'
+        case 'vendors/UPDATE':
+            return 'Vendor/Update'
+        case 'vendors/DELETE':
+            return ''
+        case 'vendors/DELETE_MANY':
+            return ''
+        case 'vendors/GET_MANY':
+            return 'Vendor/GetByIds'
         default:
             break;
     }

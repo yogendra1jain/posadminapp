@@ -37,6 +37,7 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
  * @returns {Promise} the Promise for response
  */
 const dataProvider = async (type, resource, params) => {
+    debugger;
     const { fetchJson } = fetchUtils;
     const { url, options } = convertDataProviderRequestToHTTP(
         type,

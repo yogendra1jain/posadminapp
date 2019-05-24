@@ -57,6 +57,8 @@ const ReqBodyGuesser = (obj) => {
             return 'Search/Products'
         case 'Search/Products/GET_ONE':
             return ''
+        case 'Product/GetByIds':
+            return reqObjMaker(url, params)
 
         //For Category ******************************************************************************************
         case 'Category/Level1ByRetailerId':
@@ -88,7 +90,28 @@ const ReqBodyGuesser = (obj) => {
             const formData = new FormData();
             formData.append("file", params.file);
             return formObjectMaker(url, formData);
-            
+
+        //For Vendors ******************************************************************************************
+        case 'Vendor/ByRetailerId':
+            debugger;
+            return reqObjMaker(url, { id: retailerId })
+        case 'Vendor/Get':
+            return reqObjMaker(url, params)
+        case 'Vendor/Update':
+            return reqObjMaker(url, params.data)
+        case 'Vendor/Create':
+            reqBody = params.data
+            reqBody.retailerId = retailerId
+            return reqObjMaker(url, params.data)
+        case 'Vendor/GetByIds':
+            return reqObjMaker(url, params)
+        //For Vendors Products ******************************************************************************************
+        case 'VendorProduct/GetByRetailerId':
+            return reqObjMaker(url, { id: retailerId })
+        case 'VendorProduct/Get':
+            return reqObjMaker(url, params)
+
+
         default:
             break;
     }

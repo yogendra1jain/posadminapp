@@ -7,7 +7,7 @@ const ResBodyGuesser = (obj) => {
     } = obj;
 
     let { json } = response
-    if (type == 'CREATE' ||type=='UPDATE' ) {
+    if (type == 'CREATE' || type == 'UPDATE') {
         return {
             data: {
                 ...params.data,
@@ -19,6 +19,12 @@ const ResBodyGuesser = (obj) => {
         if (json.id == null) {
             json.id = "uuid";
         }
+        return {
+            data: json
+        };
+    }
+    if (type == 'GET_MANY') {
+
         return {
             data: json
         };
@@ -75,7 +81,19 @@ const ResBodyGuesser = (obj) => {
         //For Image ******************************************************************************************
         case 'Upload/File':
             return
-
+        //For Vendors ******************************************************************************************
+        case 'Vendor/ByRetailerId':
+            return {
+                data: json,
+                total: json.length,
+            };
+        case 'VendorProduct/GetByRetailerId':
+            console.log(json, 'json')
+            let newJson = json.splice(0, 10)
+            return {
+                data: newJson,
+                total: 10,
+            };
         default:
             if (json.id == null) {
                 json.id = "uuid";
@@ -83,6 +101,7 @@ const ResBodyGuesser = (obj) => {
             return {
                 data: json
             };
+
     }
 }
 
