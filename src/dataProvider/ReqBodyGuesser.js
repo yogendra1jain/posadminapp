@@ -1,6 +1,7 @@
 import {
     APPLICATION_BFF_URL
 } from "../global/UrlConstants";
+import _get from 'lodash/get';
 
 const reqObjMaker = (url, reqBody) => {
     return {
@@ -44,7 +45,7 @@ const ReqBodyGuesser = (obj) => {
                 }],
                 limit: perPage,
                 offset: (page - 1) * perPage,
-                text: ''
+                text: _get(params, 'filter.text', '')
             }
             return reqObjMaker(url, reqBody);
         case 'Product/Get':
@@ -115,7 +116,8 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { id: retailerId })
         case 'VendorProduct/Get':
             return reqObjMaker(url, params)
-
+        case 'VendorProduct/Save':
+        return reqObjMaker(url, params.data)
 
         default:
             break;
