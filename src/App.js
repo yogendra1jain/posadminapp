@@ -17,7 +17,7 @@ const App = () => (
       <Resource name="Store" {...stores} />
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors}  options={{ label: 'Vendor List' }} />
-      <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} edit={EditGuesser}  options={{ label: 'Vendor Product List' }} />
+      <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts}   options={{ label: 'Vendor Product List' }} />
     </Admin>
   </div>
 );

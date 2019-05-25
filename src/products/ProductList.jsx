@@ -1,7 +1,10 @@
 
-import { TextField, 
-    Datagrid, 
-    List 
+import {
+    TextField,
+    Datagrid,
+    List,
+    Filter,
+    TextInput
 } from 'react-admin';
 import React from 'react';
 import { DineroPrice } from './DineroPrice';
@@ -12,9 +15,16 @@ const ProductListTitle = ({ record }) => {
         </span>
     )
 };
+const ProductFilter = (props) => {
+    return (
+        <Filter {...props}>
+            <TextInput label="Search" source="text" alwaysOn />
+        </Filter>
+    )
+};
 
 export const ProductList = props => (
-    <List {...props} title={<ProductListTitle/>}>
+    <List {...props} title={<ProductListTitle />}  filters={<ProductFilter/>}>
         <Datagrid rowClick="edit">
             <TextField source="sku" />
             <TextField source="name" />
