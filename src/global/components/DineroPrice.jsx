@@ -1,8 +1,10 @@
 import React from 'react';
-import dineroObj from '../global/conversion/DineroObj';
+import dineroObj from '../conversion/DineroObj';
 import _get from 'lodash/get'
 
-export const DineroPrice = (props)=>{
+const DineroPrice = (props)=>{
     const { record, source, resource } = props;
     return <span>{dineroObj(_get(record,source,0)).toFormat('$0,0.00')}</span>
 }
+
+export default DineroPrice;
