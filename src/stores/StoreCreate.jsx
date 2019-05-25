@@ -1,5 +1,5 @@
 import { TextInput,
-    Edit,
+    Create,
     SimpleForm,
     SelectArrayInput,
     Loading,
@@ -11,11 +11,9 @@ import _get from 'lodash/get';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 
-const StoreEditTitle = ({ record }) => {
+const StoreCreateTitle = ({ record }) => {
     return (
-        <span>
-            Store {record ? `${record.name}` : ''}
-        </span>
+        <span>Create Store</span>
     )
 };
 
@@ -27,7 +25,7 @@ const StoreEditTitle = ({ record }) => {
 // }
 
 const PaymentMethods = ({ record = {} }) => {
-    return <Query type="GET_ONE" resource="PaymentMethods" payload={{}}>
+    return  <Query type="GET_MANY" resource="PaymentMethods" payload={{}}>
         {({ data, loading, error }) => {
             if (loading) { return <Loading />; }
             if (error) { return <p>Some Error Occured!</p>; }
@@ -39,7 +37,7 @@ const PaymentMethods = ({ record = {} }) => {
 }
 
 export const StoreCreate = props => (
-    <Edit title={<StoreEditTitle />} {...props}>
+    <Create title={<StoreCreateTitle />} {...props}>
         <SimpleForm>
             <TextInput label="Store Name" source="name" />
             <TextInput label="Address Line 1" source="address.addressLine1" />
@@ -50,5 +48,5 @@ export const StoreCreate = props => (
             <TextInput label="Country" source="address.country" />
             <PaymentMethods />
         </SimpleForm>
-    </Edit>
+    </Create>
 );
