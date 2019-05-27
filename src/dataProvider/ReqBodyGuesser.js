@@ -3,9 +3,9 @@ import {
 } from "../global/UrlConstants";
 import _get from 'lodash/get';
 
-const reqObjMaker = (url, reqBody) => {
+const reqObjMaker = (url, reqBody, mock) => {
     return {
-        url: `${APPLICATION_BFF_URL}${url}`,
+        url: mock ? `${mock}${url}` : `${APPLICATION_BFF_URL}${url}`,
         options: {
             body: JSON.stringify(reqBody),
             method: 'POST'
@@ -30,7 +30,7 @@ const ReqBodyGuesser = (obj) => {
     } = obj;
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
-    if (type == 'GET') {
+    if (type == 'GET_ONE') {
         return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
         return reqObjMaker(url, params.data)
@@ -142,8 +142,13 @@ const ReqBodyGuesser = (obj) => {
         //For Employee ******************************************************************************************
         case 'Employee/ByStore':
             return reqObjMaker(url, {
-                active: true, storeId: "90fcee1b-fef3-4af7-a686-80159751d127"
+                active: true, storeId: "90fce   e1b-fef3-4af7-a686-80159751d127"
             })
+        //For Package Pending ******************************************************************************************
+        case 'incomingpackage':
+        debugger;
+            return { url: "http://demo6234876.mockable.io/incomingpackage",options:{} }
+
     }
 }
 
