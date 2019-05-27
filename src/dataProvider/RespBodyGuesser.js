@@ -1,3 +1,4 @@
+import _get from 'lodash/get';
 const ResBodyGuesser = (obj) => {
     const {
         response,
@@ -37,8 +38,8 @@ const ResBodyGuesser = (obj) => {
         // For Products ******************************************************************************************
         case 'Search/Products':
             return {
-                data: json.products,
-                total: json.total,
+                data: _get(json,'products',[]),
+                total: json.total||0,
             };
         case 'Product/Get':
             return (url, params)
@@ -111,6 +112,12 @@ const ResBodyGuesser = (obj) => {
                 total: 10,
             };
 
+        //For Employee ******************************************************************************************
+        case 'Employee/ByStore':
+            return {
+                data: json,
+                total: json.length,
+            };
         default:
             if (json.id == null) {
                 json.id = "uuid";

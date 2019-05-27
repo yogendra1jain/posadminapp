@@ -45,7 +45,7 @@ const ReqBodyGuesser = (obj) => {
                 }],
                 limit: perPage,
                 offset: (page - 1) * perPage,
-                text: _get(params, 'filter.text', '')
+                text: _get(params, 'filter.q', '')
             }
             return reqObjMaker(url, reqBody);
         case 'Product/Get':
@@ -117,7 +117,7 @@ const ReqBodyGuesser = (obj) => {
         case 'VendorProduct/Get':
             return reqObjMaker(url, params)
         case 'VendorProduct/Save':
-        return reqObjMaker(url, params.data)
+            return reqObjMaker(url, params.data)
 
         default:
             break;
@@ -125,6 +125,12 @@ const ReqBodyGuesser = (obj) => {
         //For PaymentMethods ******************************************************************************************
         case 'Store/AvailablePaymentMethods':
             return reqObjMaker(url, {})
+
+        //For Employee ******************************************************************************************
+        case 'Employee/ByStore':
+            return reqObjMaker(url, {
+                active: true, storeId: "90fcee1b-fef3-4af7-a686-80159751d127"
+            })
     }
 }
 

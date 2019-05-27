@@ -9,6 +9,7 @@ import customers from './customers';
 import vendors from './vendors';
 import vendorProducts from './vendorProducts'
 import stores from './stores';
+import employees from './employees'
 const App = () => (
   <div>
     <Admin dataProvider={dataProvider} authProvider={authProvider}>
@@ -18,6 +19,8 @@ const App = () => (
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors}  options={{ label: 'Vendor List' }} />
       <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts}   options={{ label: 'Vendor Product List' }} />
+      <Resource name="employees"  {...employees}   options={{ label: 'Employees' }} />
+
     </Admin>
   </div>
 );

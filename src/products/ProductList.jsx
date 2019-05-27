@@ -18,7 +18,7 @@ const ProductListTitle = ({ record }) => {
 const ProductFilter = (props) => {
     return (
         <Filter {...props}>
-            <TextInput label="Search" source="text" alwaysOn />
+            <TextInput label="Search" source="q" alwaysOn />
         </Filter>
     )
 };
