@@ -23,7 +23,6 @@ const formObjectMaker = (url, reqBody) => {
 }
 
 const ReqBodyGuesser = (obj) => {
-    debugger
     const {
         params,
         url,
@@ -31,7 +30,7 @@ const ReqBodyGuesser = (obj) => {
     } = obj;
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
-    if(type == 'GET') {
+    if(type == 'GET_ONE') {
         return reqObjMaker(url, params)
     } else if(type == 'UPDATE') {
         return reqObjMaker(url, params.data)
@@ -131,8 +130,21 @@ const ReqBodyGuesser = (obj) => {
         case 'VendorProduct/Get':
             return reqObjMaker(url, params)
         case 'VendorProduct/Save':
-        return reqObjMaker(url, params.data)
+            return reqObjMaker(url, params.data)
 
+        //For Strains ******************************************************************************************
+        case 'Get/Strain/RetailerId/Paginated':
+            reqBody.id = retailerId
+            reqBody.page = params.pagination.page
+            reqBody.sizePerPage = params.pagination.perPage
+            return reqObjMaker(url, reqBody)
+            
+        case 'Add/Strain':
+            reqBody = {
+                ...params.data,
+                retailerId
+            }
+            return reqObjMaker(url, reqBody)
         default:
             break;
 

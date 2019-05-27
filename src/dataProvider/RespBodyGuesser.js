@@ -1,5 +1,7 @@
+import _get from  'lodash/get'
+import _isEmpty from 'lodash/isEmpty';
+
 const ResBodyGuesser = (obj) => {
-    debugger
     const {
         response,
         url,
@@ -110,7 +112,13 @@ const ResBodyGuesser = (obj) => {
                 data: newJson,
                 total: 10,
             };
-
+        
+        //For Strains ******************************************************************************************
+        case 'Get/Strain/RetailerId/Paginated':
+            return {
+                data: _get(json,'result.strains',[]),
+                total: _get(json,'result.count',0),
+            };
         default:
             if (json.id == null) {
                 json.id = "uuid";

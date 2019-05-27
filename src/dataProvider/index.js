@@ -26,7 +26,6 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
  */
 
 const convertHTTPResponseToDataProvider = (response, type, resource, params) => {
-    debugger
     let url = UrlGuesser({ type, resource });
     return ResBodyGuesser({ response, params, url, type })
 };

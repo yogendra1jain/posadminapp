@@ -9,11 +9,14 @@ import customers from './customers';
 import vendors from './vendors';
 import vendorProducts from './vendorProducts'
 import stores from './stores';
+import strains from './strains';
+
 const App = () => (
   <div>
     <Admin dataProvider={dataProvider} authProvider={authProvider}>
       <Resource name="Search/Products" {...products} options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
+      <Resource name="Strain" {...strains} />
       <Resource name="Store" {...stores} />
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors}  options={{ label: 'Vendor List' }} />

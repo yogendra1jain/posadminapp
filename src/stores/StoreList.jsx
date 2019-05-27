@@ -1,6 +1,7 @@
 import { TextField, 
     Datagrid, 
-    List
+    List,
+    EditButton
  } from 'react-admin';
 import React from 'react';
 import {AddressField} from '../global/components/AddressField';
@@ -10,6 +11,7 @@ export const StoreList = props => (
         <Datagrid rowClick="edit">
             <TextField source="name" />
             <AddressField />
+            <EditButton />
         </Datagrid>
     </List>
 );

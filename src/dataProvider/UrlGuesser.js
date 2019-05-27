@@ -1,5 +1,4 @@
 const UrlGuesser = (obj) => {
-    debugger
     const {
         resource,
         type
@@ -99,6 +98,16 @@ const UrlGuesser = (obj) => {
             return ''
         case 'VendorProduct/GetByRetailerId/DELETE_MANY':
             return ''
+
+        //For Strains ******************************************************************************************
+        case 'Strain/GET_LIST':
+            return 'Get/Strain/RetailerId/Paginated'
+        case 'Strain/CREATE':
+            return 'Add/Strain'
+        case 'Strain/GET_ONE':
+            return 'Get/Strain/StrainId';
+        case 'Strain/UPDATE':
+            return 'Update/Strain'
         default:
             break;
     }
