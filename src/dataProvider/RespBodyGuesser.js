@@ -157,6 +157,17 @@ const ResBodyGuesser = (obj) => {
             return {
 
             }
+
+
+
+        //For Package       ******************************************************************************************
+        case 'Package/Get/ByRetailer':
+            return {
+                data: _get(json,'result.packages',[]),
+                total: _get(json,'result.count',0)
+            }
+
+
         default:
             if (json.id == null) {
                 json.id = "uuid";

@@ -145,8 +145,7 @@ const ReqBodyGuesser = (obj) => {
                 retailerId
             }
             return reqObjMaker(url, reqBody)
-        default:
-            break;
+        
 
         //For PaymentMethods ******************************************************************************************
         // case 'Store/AvailablePaymentMethods':
@@ -161,6 +160,13 @@ const ReqBodyGuesser = (obj) => {
         case 'incomingpackage':
         debugger;
             return { url: "http://demo6234876.mockable.io/incomingpackage",options:{} }
+
+            
+        //For Package       ******************************************************************************************
+        case 'Package/Get/ByRetailer':
+            return reqObjMaker(url, {id: retailerId})
+        default:
+            break;
 
     }
 }
