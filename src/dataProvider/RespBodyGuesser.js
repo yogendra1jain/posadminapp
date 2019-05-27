@@ -1,4 +1,4 @@
-import _get from  'lodash/get'
+import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty';
 
 const ResBodyGuesser = (obj) => {
@@ -21,12 +21,15 @@ const ResBodyGuesser = (obj) => {
         }
     }
     if (type == 'GET_ONE') {
+        //unused code to be removed
+        debugger;
         if (json.id == null) {
             json.id = "uuid";
         }
         return {
             data: json
         };
+
     }
     if (type == 'GET_MANY') {
 
@@ -40,8 +43,8 @@ const ResBodyGuesser = (obj) => {
         // For Products ******************************************************************************************
         case 'Search/Products':
             return {
-                data: json.products,
-                total: json.total,
+                data: _get(json, 'products', []),
+                total: json.total || 0,
             };
         case 'Product/Get':
             return (url, params)
@@ -104,6 +107,24 @@ const ResBodyGuesser = (obj) => {
                 data: json,
                 total: json.length,
             };
+
+        //For Stores ******************************************************************************************
+        case 'Store/ByRetailerId':
+            return {
+                data: json,
+                total: json.length,
+            };
+        case 'Store/Get':
+            return (url, params)
+        //For PaymentMethods ******************************************************************************************
+        // case 'Store/AvailablePaymentMethods':
+        //     return (url, params)
+        //For Vendors ******************************************************************************************
+        case 'Vendor/ByRetailerId':
+            return {
+                data: json,
+                total: json.length,
+            };
         //For Vendor Products ******************************************************************************************
         case 'VendorProduct/GetByRetailerId':
             console.log(json, 'json')
@@ -112,13 +133,30 @@ const ResBodyGuesser = (obj) => {
                 data: newJson,
                 total: 10,
             };
-        
+
         //For Strains ******************************************************************************************
         case 'Get/Strain/RetailerId/Paginated':
             return {
-                data: _get(json,'result.strains',[]),
-                total: _get(json,'result.count',0),
+                data: _get(json, 'result.strains', []),
+                total: _get(json, 'result.count', 0),
             };
+        //For Employee ******************************************************************************************
+        case 'Employee/ByStore':
+            return {
+                data: json,
+                total: json.length,
+            };
+        //For Package Pending ******************************************************************************************
+        case 'incomingpackage':
+            debugger;
+            return {
+                data: json,
+                total: json.length,
+            };
+        case "incomingpackage/getOne":
+            return {
+
+            }
         default:
             if (json.id == null) {
                 json.id = "uuid";

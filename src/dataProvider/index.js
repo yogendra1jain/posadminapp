@@ -37,6 +37,23 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
  * @returns {Promise} the Promise for response
  */
 const dataProvider = async (type, resource, params) => {
+    if (`${resource}/${type}` == "packagePending/GET_ONE") {
+        return {
+            data: {
+                "id": "1AFG1223322",
+                "uId": "1AFG1223322",
+                "manifest": "",
+                "facility": "facility one",
+                "metricProduct": "plants",
+                "productCategory": "Liquit(each)",
+                "quantity": "15 g",
+                "vendor": "xyz",
+                "lastModified": "22-05-2019",
+                "metricApproved": true
+            }
+
+        }
+    }
     const { fetchJson } = fetchUtils;
     const { url, options } = convertDataProviderRequestToHTTP(
         type,

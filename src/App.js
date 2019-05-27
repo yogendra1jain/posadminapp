@@ -9,6 +9,8 @@ import customers from './customers';
 import vendors from './vendors';
 import vendorProducts from './vendorProducts'
 import stores from './stores';
+import employees from './employees';
+import packagepending from './packagePending';
 import strains from './strains';
 
 const App = () => (
@@ -21,6 +23,9 @@ const App = () => (
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors}  options={{ label: 'Vendor List' }} />
       <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts}   options={{ label: 'Vendor Product List' }} />
+      <Resource name="employees"  {...employees}   options={{ label: 'Employees' }} />
+      <Resource name="packagePending"  {...packagepending}  options={{ label: 'Package Pending' }} />
+
     </Admin>
   </div>
 );

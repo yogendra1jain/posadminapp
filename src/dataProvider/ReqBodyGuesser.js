@@ -3,9 +3,9 @@ import {
 } from "../global/UrlConstants";
 import _get from 'lodash/get';
 
-const reqObjMaker = (url, reqBody) => {
+const reqObjMaker = (url, reqBody, mock) => {
     return {
-        url: `${APPLICATION_BFF_URL}${url}`,
+        url: mock ? `${mock}${url}` : `${APPLICATION_BFF_URL}${url}`,
         options: {
             body: JSON.stringify(reqBody),
             method: 'POST'
@@ -30,9 +30,9 @@ const ReqBodyGuesser = (obj) => {
     } = obj;
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
-    if(type == 'GET_ONE') {
+    if (type == 'GET_ONE') {
         return reqObjMaker(url, params)
-    } else if(type == 'UPDATE') {
+    } else if (type == 'UPDATE') {
         return reqObjMaker(url, params.data)
     }
     switch (url) {
@@ -51,7 +51,7 @@ const ReqBodyGuesser = (obj) => {
                 }],
                 limit: perPage,
                 offset: (page - 1) * perPage,
-                text: _get(params, 'filter.text', '')
+                text: _get(params, 'filter.q', '')
             }
             return reqObjMaker(url, reqBody);
         case 'Product/Get':
@@ -106,7 +106,7 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params)
 
         case 'Store/Create':
-            return reqObjMaker(url, {...params.data, retailerId})
+            return reqObjMaker(url, { ...params.data, retailerId })
 
         case 'Store/Update':
             return reqObjMaker(url, params.data)
@@ -151,6 +151,17 @@ const ReqBodyGuesser = (obj) => {
         //For PaymentMethods ******************************************************************************************
         // case 'Store/AvailablePaymentMethods':
         //     return reqObjMaker(url, {})
+
+        //For Employee ******************************************************************************************
+        case 'Employee/ByStore':
+            return reqObjMaker(url, {
+                active: true, storeId: "90fce   e1b-fef3-4af7-a686-80159751d127"
+            })
+        //For Package Pending ******************************************************************************************
+        case 'incomingpackage':
+        debugger;
+            return { url: "http://demo6234876.mockable.io/incomingpackage",options:{} }
+
     }
 }
 
