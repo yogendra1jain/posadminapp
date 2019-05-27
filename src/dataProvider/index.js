@@ -14,7 +14,7 @@ import ResBodyGuesser from './RespBodyGuesser';
  */
 const convertDataProviderRequestToHTTP = (type, resource, params) => {
     let url = UrlGuesser({ type, resource });
-    return ReqBodyGuesser({ params, url })
+    return ReqBodyGuesser({ params, url, type })
 };
 
 /**
@@ -37,7 +37,6 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
  * @returns {Promise} the Promise for response
  */
 const dataProvider = async (type, resource, params) => {
-    debugger;
     const { fetchJson } = fetchUtils;
     const { url, options } = convertDataProviderRequestToHTTP(
         type,

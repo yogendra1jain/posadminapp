@@ -26,17 +26,17 @@ const StoreEditTitle = ({ record }) => {
 //     return source
 // }
 
-const PaymentMethods = ({ record = {} }) => {
-    return <Query type="GET_ONE" resource="PaymentMethods" payload={{}}>
-        {({ data, loading, error }) => {
-            if (loading) { return <Loading />; }
-            if (error) { return <p>Some Error Occured!</p>; }
-            if(!_isEmpty(data)) {
-                return <SelectArrayInput label="Payment Methods" source="paymentMethods" choices={data} />
-            }
-        }}
-    </Query>
-}
+// const PaymentMethods = ({ record = {} }) => {
+//     return <Query type="GET_ONE" resource="PaymentMethods" payload={{}}>
+//         {({ data, loading, error }) => {
+//             if (loading) { return <Loading />; }
+//             if (error) { return <p>Some Error Occured!</p>; }
+//             if(!_isEmpty(data)) {
+//                 return <SelectArrayInput label="Payment Methods" source="paymentMethods" choices={data} />
+//             }
+//         }}
+//     </Query>
+// }
 
 export const StoreEdit = props => (
     <Edit title={<StoreEditTitle />} {...props}>
@@ -48,7 +48,7 @@ export const StoreEdit = props => (
             <TextInput label="City" source="address.city" />
             <TextInput label="State" source="address.state" />
             <TextInput label="Country" source="address.country" />
-            <PaymentMethods />
+            {/* <PaymentMethods /> */}
         </SimpleForm>
     </Edit>
 );

@@ -93,10 +93,9 @@ const ResBodyGuesser = (obj) => {
             };
         case 'Store/Get':
             return (url, params)
-
         //For PaymentMethods ******************************************************************************************
-        case 'Store/AvailablePaymentMethods':
-            return (url, params)
+        // case 'Store/AvailablePaymentMethods':
+        //     return (url, params)
         //For Vendors ******************************************************************************************
         case 'Vendor/ByRetailerId':
             return {

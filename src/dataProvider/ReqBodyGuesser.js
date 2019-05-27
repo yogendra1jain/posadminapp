@@ -25,10 +25,16 @@ const formObjectMaker = (url, reqBody) => {
 const ReqBodyGuesser = (obj) => {
     const {
         params,
-        url
+        url,
+        type
     } = obj;
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
+    if (type == 'GET') {
+        return reqObjMaker(url, params)
+    } else if (type == 'UPDATE') {
+        return reqObjMaker(url, params.data)
+    }
     switch (url) {
         // For Products ******************************************************************************************
         case 'Search/Products':
@@ -95,11 +101,18 @@ const ReqBodyGuesser = (obj) => {
         //For Stores ******************************************************************************************
         case 'Store/ByRetailerId':
             return reqObjMaker(url, { id: retailerId })
+
         case 'Store/Get':
             return reqObjMaker(url, params)
+
+        case 'Store/Create':
+            return reqObjMaker(url, { ...params.data, retailerId })
+
+        case 'Store/Update':
+            return reqObjMaker(url, params.data)
+
         //For Vendors ******************************************************************************************
         case 'Vendor/ByRetailerId':
-            debugger;
             return reqObjMaker(url, { id: retailerId })
         case 'Vendor/Get':
             return reqObjMaker(url, params)
@@ -123,8 +136,8 @@ const ReqBodyGuesser = (obj) => {
             break;
 
         //For PaymentMethods ******************************************************************************************
-        case 'Store/AvailablePaymentMethods':
-            return reqObjMaker(url, {})
+        // case 'Store/AvailablePaymentMethods':
+        //     return reqObjMaker(url, {})
 
         //For Employee ******************************************************************************************
         case 'Employee/ByStore':

@@ -7,7 +7,7 @@ import {
     TextInput
 } from 'react-admin';
 import React from 'react';
-import { DineroPrice } from './DineroPrice';
+import DineroPrice from '../global/components/DineroPrice';
 const ProductListTitle = ({ record }) => {
     return (
         <span>

@@ -1,5 +1,5 @@
 import { TextInput,
-    Edit,
+    Create,
     SimpleForm,
     SelectArrayInput,
     Loading,
@@ -11,11 +11,9 @@ import _get from 'lodash/get';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 
-const StoreEditTitle = ({ record }) => {
+const StoreCreateTitle = ({ record }) => {
     return (
-        <span>
-            Store {record ? `${record.name}` : ''}
-        </span>
+        <span>Create Store</span>
     )
 };
 
@@ -26,21 +24,21 @@ const StoreEditTitle = ({ record }) => {
 //     return source
 // }
 
-const PaymentMethods = ({ record = {} }) => {
-    return <Query type="GET_ONE" resource="PaymentMethods" payload={{}}>
-        {({ data, loading, error }) => {
-            if (loading) { return <Loading />; }
-            if (error) { return <p>Some Error Occured!</p>; }
-            if(!_isEmpty(data)) {
-                return <SelectArrayInput label="Payment Methods" source="paymentMethods" choices={data} />
-            }
-        }}
-    </Query>
-}
+// const PaymentMethods = ({ record = {} }) => {
+//     return  <Query type="GET_ONE" resource="PaymentMethods" payload={{}}>
+//         {({ data, loading, error }) => {
+//             if (loading) { return <Loading />; }
+//             if (error) { return <p>Some Error Occured!</p>; }
+//             if(!_isEmpty(data)) {
+//                 return <SelectArrayInput label="Payment Methods" source="paymentMethods" choices={data} options={{ fullWidth: true }} />
+//             }
+//         }}
+//     </Query>
+// }
 
 export const StoreCreate = props => (
-    <Edit title={<StoreEditTitle />} {...props}>
-        <SimpleForm>
+    <Create title={<StoreCreateTitle />} {...props}>
+        <SimpleForm redirect="list">
             <TextInput label="Store Name" source="name" />
             <TextInput label="Address Line 1" source="address.addressLine1" />
             <TextInput label="Address Line 2" source="address.addressLine2" />
@@ -48,7 +46,7 @@ export const StoreCreate = props => (
             <TextInput label="City" source="address.city" />
             <TextInput label="State" source="address.state" />
             <TextInput label="Country" source="address.country" />
-            <PaymentMethods />
+            {/* <PaymentMethods /> */}
         </SimpleForm>
-    </Edit>
+    </Create>
 );
