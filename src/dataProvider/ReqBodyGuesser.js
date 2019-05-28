@@ -2,6 +2,7 @@ import {
     APPLICATION_BFF_URL
 } from "../global/UrlConstants";
 import _get from 'lodash/get';
+import _set from 'lodash/set'
 
 const reqObjMaker = (url, reqBody, ) => {
     return {
@@ -31,15 +32,22 @@ const ReqBodyGuesser = (obj) => {
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
     if (type == 'GET_ONE') {
-        if (url=='Upload/File') {
+        if (url == 'Upload/File') {
             const formData = new FormData();
             formData.append("file", params.file);
             let req = formObjectMaker(url, formData);
             debugger;
             return req
         }
-        return reqObjMaker(url, params) 
+        return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
+        if (url == 'Product/Update') {
+            if (_get(params, 'data.newImage.newImage')) {
+                _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
+            }
+            return reqObjMaker(url, params.data)
+
+        }
         return reqObjMaker(url, params.data)
     }
     switch (url) {
@@ -147,14 +155,14 @@ const ReqBodyGuesser = (obj) => {
             reqBody.page = params.pagination.page
             reqBody.sizePerPage = params.pagination.perPage
             return reqObjMaker(url, reqBody)
-            
+
         case 'Add/Strain':
             reqBody = {
                 ...params.data,
                 retailerId
             }
             return reqObjMaker(url, reqBody)
-        
+
 
         //For PaymentMethods ******************************************************************************************
         // case 'Store/AvailablePaymentMethods':
@@ -170,10 +178,10 @@ const ReqBodyGuesser = (obj) => {
             debugger;
             return { url: "http://demo6234876.mockable.io/incomingpackage", options: {} }
 
-            
+
         //For Package       ******************************************************************************************
         case 'Package/Get/ByRetailer':
-            return reqObjMaker(url, {id: retailerId})
+            return reqObjMaker(url, { id: retailerId })
         default:
             break;
 

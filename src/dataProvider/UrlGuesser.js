@@ -13,7 +13,7 @@ const UrlGuesser = (obj) => {
         case 'Search/Products/CREATE':
             return ''
         case 'Search/Products/UPDATE':
-            return ''
+            return 'Product/Update'
         case 'Search/Products/DELETE':
             return ''
         case 'Search/Products/DELETE_MANY':
