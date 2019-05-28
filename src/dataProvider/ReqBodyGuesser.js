@@ -141,6 +141,19 @@ const ReqBodyGuesser = (obj) => {
         case 'VendorProduct/Save':
             return reqObjMaker(url, params.data)
 
+        //For Strains ******************************************************************************************
+        case 'Get/Strain/RetailerId/Paginated':
+            reqBody.id = retailerId
+            reqBody.page = params.pagination.page
+            reqBody.sizePerPage = params.pagination.perPage
+            return reqObjMaker(url, reqBody)
+            
+        case 'Add/Strain':
+            reqBody = {
+                ...params.data,
+                retailerId
+            }
+            return reqObjMaker(url, reqBody)
         default:
             break;
 

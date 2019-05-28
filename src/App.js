@@ -12,6 +12,7 @@ import stores from './stores';
 import employees from './employees';
 import packagepending from './packagePending';
 import Login from './global/components/LoginPage';
+import strains from './strains';
 
 const App = () => (
   <div>
@@ -22,6 +23,7 @@ const App = () => (
      >
       <Resource name="Search/Products" {...products} options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
+      <Resource name="Strain" {...strains} />
       <Resource name="Store" {...stores} />
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />
