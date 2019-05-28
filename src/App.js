@@ -1,6 +1,6 @@
 // in src/App.js
 import React from 'react';
-import { Admin, Resource, ListGuesser,EditGuesser } from 'react-admin';
+import { Admin, Resource, ListGuesser, EditGuesser } from 'react-admin';
 
 import authProvider from './authProvider';
 import dataProvider from './dataProvider';
@@ -11,17 +11,23 @@ import vendorProducts from './vendorProducts'
 import stores from './stores';
 import employees from './employees';
 import packagepending from './packagePending';
+import Login from './global/components/LoginPage';
+
 const App = () => (
   <div>
-    <Admin dataProvider={dataProvider} authProvider={authProvider}>
+    <Admin
+      dataProvider={dataProvider}
+      authProvider={authProvider}
+      loginPage={Login}
+     >
       <Resource name="Search/Products" {...products} options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
       <Resource name="Store" {...stores} />
       <Resource name="PaymentMethods" />
-      <Resource name="vendors" {...vendors}  options={{ label: 'Vendor List' }} />
-      <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts}   options={{ label: 'Vendor Product List' }} />
-      <Resource name="employees"  {...employees}   options={{ label: 'Employees' }} />
-      <Resource name="packagePending"  {...packagepending}  options={{ label: 'Package Pending' }} />
+      <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />
+      <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Vendor Product List' }} />
+      <Resource name="employees"  {...employees} options={{ label: 'Employees' }} />
+      <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />
 
     </Admin>
   </div>
