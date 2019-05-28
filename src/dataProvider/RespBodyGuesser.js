@@ -70,10 +70,10 @@ const ResBodyGuesser = (obj) => {
             };
 
         //For Customers ******************************************************************************************
-        case 'Customer/All':
+        case 'Search/Customers':
             return {
-                data: json,
-                total: json.length,
+                data: _get(json, 'customers', []),
+                total: json.total || 0,
             };
         case 'Customer/Get':
             return (url, params)
@@ -163,8 +163,8 @@ const ResBodyGuesser = (obj) => {
         //For Package       ******************************************************************************************
         case 'Package/Get/ByRetailer':
             return {
-                data: _get(json,'result.packages',[]),
-                total: _get(json,'result.count',0)
+                data: _get(json, 'result.packages', []),
+                total: _get(json, 'result.count', 0)
             }
 
 

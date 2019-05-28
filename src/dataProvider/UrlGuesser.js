@@ -29,7 +29,7 @@ const UrlGuesser = (obj) => {
 
         //For Customers ******************************************************************************************
         case 'Customers/GET_LIST':
-            return 'Customer/All'
+            return 'Search/Customers'
 
         case 'Customers/GET_ONE':
             return 'Customer/Get'
