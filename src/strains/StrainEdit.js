@@ -7,7 +7,8 @@ import {
     Edit,
     SimpleForm,
     REDUX_FORM_NAME,
-    FormDataConsumer
+    FormDataConsumer,
+    TextField
 } from 'react-admin';
 
 const StrainTitle = ({ record }) => {
@@ -21,6 +22,8 @@ const StrainTitle = ({ record }) => {
 const StrainEdit = props => (
     <Edit title={<StrainTitle />} {...props}>
         <SimpleForm>
+            <TextField label="Metrc Id" source="metricId" />
+            <TextField label="Genetics" source="genetics" />
             <TextInput label="Strain Name" source="name" />
             <NumberInput label="THC Level" source="thcLevel" />
             <NumberInput label="CBD Level" source="cbdLevel" />
@@ -47,7 +50,6 @@ const StrainEdit = props => (
                     label="Sativa Percentage"
                     source="sativaPercentage" />)}
             </FormDataConsumer>
-            <TextInput label="Genetics" source="genetics" />
         </SimpleForm>
     </Edit>
 );

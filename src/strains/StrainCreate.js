@@ -19,6 +19,7 @@ const StrainCreate = props => (
             <NumberInput label="CBD Level" source="cbdLevel" />
             <FormDataConsumer>
                 {({ formData, dispatch, ...rest }) => (<NumberInput
+                    InputLabelProps={{ shrink: true }}
                     format={v => v > 100 ? 100 : (v < 0 ? 0 : v)}
                     parse={v => v > 100 ? 100 : (v < 0 ? 0 : v)}
                     onChange={(e, v) => {
@@ -40,7 +41,6 @@ const StrainCreate = props => (
                     label="Sativa Percentage"
                     source="sativaPercentage" />)}
             </FormDataConsumer>
-            <TextInput label="Genetics" source="genetics" />
         </SimpleForm>
     </Create>
 );

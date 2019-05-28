@@ -36,7 +36,6 @@ const ReqBodyGuesser = (obj) => {
             const formData = new FormData();
             formData.append("file", params.file);
             let req = formObjectMaker(url, formData);
-            debugger;
             return req
         }
         return reqObjMaker(url, params)
@@ -46,7 +45,6 @@ const ReqBodyGuesser = (obj) => {
                 _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
             }
             return reqObjMaker(url, params.data)
-
         }
         return reqObjMaker(url, params.data)
     }
@@ -175,7 +173,6 @@ const ReqBodyGuesser = (obj) => {
             })
         //For Package Pending ******************************************************************************************
         case 'incomingpackage':
-            debugger;
             return { url: "http://demo6234876.mockable.io/incomingpackage", options: {} }
 
 
