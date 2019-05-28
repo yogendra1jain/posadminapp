@@ -13,7 +13,7 @@ const StrainList = props => (
             <NumberField label="THC Level" source="thcLevel" />
             <NumberField label="CBD Level" source="cbdLevel" />
             <NumberField label="Indica Percentage"  source="indicaPercentage" />
-            <NumberField label="Sativa Percentage" source="sahivaPercentage" />
+            <NumberField label="Sativa Percentage" source="sativaPercentage" />
             <TextField label="Genetics" source="genetics" />
             <EditButton />
         </Datagrid>

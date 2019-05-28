@@ -14,7 +14,7 @@ const CustomerCreate = props => (
             <TextInput label="Email" source="email" />
             <TextInput label="Address Line 1" source="billingAddress.addressLine1" />
             <TextInput label="Address Line 2" source="billingAddress.addressLine2" />
-            <ZipCodeInput/>
+            <ZipCodeInput source="billingAddress.postalCode"/>
             <TextInput label="City" source="billingAddress.city" />
             <TextInput label="State" source="billingAddress.state" />
             <TextInput label="Country" source="billingAddress.country" />
