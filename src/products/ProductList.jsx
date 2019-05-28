@@ -26,10 +26,10 @@ const ProductFilter = (props) => {
 export const ProductList = props => (
     <List {...props} title={<ProductListTitle />}  filters={<ProductFilter/>}>
         <Datagrid rowClick="edit">
-            <TextField source="sku" />
-            <TextField source="name" />
-            <DineroPrice source="costPrice.amount" />
-            <DineroPrice source="salePrice.amount" />
+            <TextField label="SKU" source="sku" />
+            <TextField label="Name" source="name" />
+            <DineroPrice label="Cost Price" source="costPrice.amount" />
+            <DineroPrice label="Sale Price" source="salePrice.amount" />
             {/* <TextField source="id" />
             <TextField source="name" />
             <TextField source="description" />
