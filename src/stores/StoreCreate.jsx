@@ -36,7 +36,7 @@ const StoreCreateTitle = ({ record }) => {
 //     </Query>
 // }
 
-export const StoreCreate = props => (
+const StoreCreate = props => (
     <Create title={<StoreCreateTitle />} {...props}>
         <SimpleForm redirect="list">
             <TextInput label="Store Name" source="name" />
@@ -52,3 +52,5 @@ export const StoreCreate = props => (
         </SimpleForm>
     </Create>
 );
+
+export default StoreCreate;

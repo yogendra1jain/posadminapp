@@ -1,7 +1,8 @@
 
 import { Edit, SimpleForm, TextInput,NumberInput } from 'react-admin';
 import React from 'react';
-export const VendorEdit = props => (
+
+const VendorEdit = props => (
     <Edit {...props}>
         <SimpleForm>
             <TextInput source="name" />
@@ -12,3 +13,5 @@ export const VendorEdit = props => (
         </SimpleForm>   
     </Edit>
 );
+
+export default VendorEdit;

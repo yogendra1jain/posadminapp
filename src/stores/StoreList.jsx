@@ -6,7 +6,7 @@ import { TextField,
 import React from 'react';
 import {AddressField} from '../global/components/AddressField';
 
-export const StoreList = props => (
+const StoreList = props => (
     <List {...props}>
         <Datagrid rowClick="edit">
             <TextField source="name" />
@@ -15,3 +15,5 @@ export const StoreList = props => (
         </Datagrid>
     </List>
 );
+
+export default StoreList;

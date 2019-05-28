@@ -2,7 +2,7 @@
 import React from 'react';
 import { TextField, ReferenceField, EmailField, NumberField, BooleanField, List, Datagrid } from 'react-admin';
 
-export const EmployeeList = props => (
+const EmployeeList = props => (
     <List {...props}>
         <Datagrid rowClick="edit">
             <TextField source="id" />
@@ -22,3 +22,5 @@ export const EmployeeList = props => (
         </Datagrid>
     </List>
 )
+
+export default EmployeeList;

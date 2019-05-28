@@ -6,7 +6,7 @@ import { Create,
 } from 'react-admin';
 import ZipCodeInput from '../global/components/ZipCodeInput';
 
-export const CustomerCreate = props => (
+const CustomerCreate = props => (
     <Create {...props}>
         <SimpleForm redirect="list">
             <TextInput label="First Name" source="customer.firstName" />
@@ -22,3 +22,5 @@ export const CustomerCreate = props => (
         </SimpleForm>
     </Create>
 );
+
+export default CustomerCreate;

@@ -14,7 +14,7 @@ const CustomerTitle = ({ record }) => {
     )
 };
 
-export const CustomerEdit = props => (
+const CustomerEdit = props => (
     <Edit title={<CustomerTitle />} {...props}>
         <SimpleForm>
             <TextInput label="First Name" source="customer.firstName" />
@@ -30,4 +30,6 @@ export const CustomerEdit = props => (
         </SimpleForm>
     </Edit>
 );
+
+export default CustomerEdit;
 

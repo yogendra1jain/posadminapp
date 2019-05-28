@@ -16,7 +16,7 @@ const CustomerFilter = (props) => {
     </Filter>
 )};
 
-export const CustomerList = props => (
+const CustomerList = props => (
     <List filters={<CustomerFilter />}  {...props}>
         <Datagrid>
             <TextField source="id" />
@@ -27,3 +27,5 @@ export const CustomerList = props => (
         </Datagrid>
     </List>
 );
+
+export default CustomerList;

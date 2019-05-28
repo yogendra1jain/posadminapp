@@ -1,7 +1,8 @@
 
 import { Create, SimpleForm, TextInput,NumberInput } from 'react-admin';
 import React from 'react';
-export const VendorCreate = props => (
+
+const VendorCreate = props => (
     <Create {...props}>
         <SimpleForm redirect='list'>
             <TextInput source="name" />
@@ -12,3 +13,5 @@ export const VendorCreate = props => (
         </SimpleForm>   
     </Create>
 );
+
+export default VendorCreate;

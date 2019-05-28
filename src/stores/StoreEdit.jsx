@@ -38,7 +38,7 @@ const StoreEditTitle = ({ record }) => {
 //     </Query>
 // }
 
-export const StoreEdit = props => (
+const StoreEdit = props => (
     <Edit title={<StoreEditTitle />} {...props}>
         <SimpleForm>
             <TextInput label="Store Name" source="name" />
@@ -54,3 +54,5 @@ export const StoreEdit = props => (
         </SimpleForm>
     </Edit>
 );
+
+export default StoreEdit;

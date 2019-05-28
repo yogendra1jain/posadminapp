@@ -1,7 +1,7 @@
 import EmployeeIcon from '@material-ui/icons/Collections';
-import { EmployeeList } from './EmployeeList';
-import { EmployeeEdit } from './EmployeeEdit';
-import { EmployeeCreate } from './EmployeeCreate';
+import EmployeeList from './EmployeeList';
+import EmployeeEdit from './EmployeeEdit';
+import EmployeeCreate from './EmployeeCreate';
 
 export default {
     list: EmployeeList,

@@ -10,7 +10,7 @@ const VendroListTitle = ({ record }) => {
     )
 };
 
-export const VendorList = props => (
+const VendorList = props => (
     < List {...props} title={<VendroListTitle/>}>
         <Datagrid rowClick="edit">
             <TextField source="id" />
@@ -23,3 +23,5 @@ export const VendorList = props => (
         </Datagrid>
     </List >
 );
+
+export default VendorList;
