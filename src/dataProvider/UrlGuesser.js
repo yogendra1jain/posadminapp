@@ -20,6 +20,10 @@ const UrlGuesser = (obj) => {
             return ''
         case 'Search/Products/GET_MANY':
             return 'Product/GetByIds'
+        case 'MetricCategory/GET_LIST':
+            return 'Sync/Metrc/Categories'
+        case 'UOM/GET_LIST':
+            return 'Sync/Metrc/UnitOfMeasure'
 
         //For Category ******************************************************************************************
         case 'Level1ByRetailerId/GET_LIST':
@@ -108,6 +112,8 @@ const UrlGuesser = (obj) => {
             return 'Get/Strain/StrainId';
         case 'Strain/UPDATE':
             return 'Update/Strain'
+        case 'Strain/GET_MANY':
+            return 'Get/Strain/StrainIds'
         //For Employee ******************************************************************************************
         case 'employees/GET_LIST':
             return 'Employee/ByStore'
@@ -125,7 +131,6 @@ const UrlGuesser = (obj) => {
             return 'Vendor/GetByIds'
         //For Package Pending ******************************************************************************************
         case 'packagePending/GET_LIST':
-        debugger;
             return 'incomingpackage'
         case 'packagePending/GET_ONE':
         return 'incomingpackage/getOne'
