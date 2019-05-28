@@ -7,5 +7,5 @@ export default {
     list: VendorList,
     create: VendorCreate,
     edit: VendorEdit,
-    // icon: VendorIcon,
+     icon: VendorIcon,
 };

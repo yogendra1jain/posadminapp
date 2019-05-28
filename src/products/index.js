@@ -5,7 +5,7 @@ import {ProductCreate} from './ProductCreate';
 
 export default {
     list: ProductList,
-    // create: ProductCreate,
+    create: ProductCreate,
     edit: ProductEdit,
-    // icon: ProductIcon,
+    icon: ProductIcon,
 };

@@ -13,12 +13,14 @@ import employees from './employees';
 import packagepending from './packagePending';
 import Login from './global/components/LoginPage';
 import strains from './strains';
+import Layout from './layout/Layout';
 
 const App = () => (
   <div>
     <Admin
       dataProvider={dataProvider}
       authProvider={authProvider}
+      appLayout={Layout}
       loginPage={Login}
      >
       <Resource name="Search/Products" {...products} options={{ label: 'Product List' }} />
@@ -28,8 +30,8 @@ const App = () => (
       <Resource name="Store" {...stores} />
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />
-      <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Vendor Product List' }} />
-      <Resource name="employees"  {...employees} options={{ label: 'Employees' }} />
+      <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Product List' }} />
+      {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */}
       <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />
 
     </Admin>

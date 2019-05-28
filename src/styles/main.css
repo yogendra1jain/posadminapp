@@ -39,3 +39,64 @@
 .justify-flex-end {
     justify-content: flex-end;
 }
+
+/* Dashboard Styles */
+
+.dashboard .card-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.6)
+}
+
+.dashboard .card-value {
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.dashboard .MuiPaper-elevation2 {
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.dashboard .payment-method-pie svg {
+    width: 100%;
+}
+
+.dash-1 .dash-11 {
+    width: 25%;
+    height: 100%;
+}
+
+.dash-1 .dash-12 {
+    width: 75%;
+    height: 100%;
+}
+
+.dash-2 .dash-21 {
+    width: 75%;
+    height: 100%;
+}
+
+.dash-2 .dash-22 {
+    width: 25%;
+    height: 100%;
+}
+
+.dash-table-product-img {
+    width: 50px;
+}
+
+.dash-table-product-img img {
+    width: 100%;
+    height: auto;
+}
+
+.dash-table-main-text {
+    font-size: 1.35em;
+    color: rgba(0, 0, 0, 0.85)
+}
+
+.dash-table-sub-text {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.6)
+}

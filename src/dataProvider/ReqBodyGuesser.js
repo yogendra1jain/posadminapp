@@ -23,6 +23,23 @@ const formObjectMaker = (url, reqBody) => {
     }
 }
 
+const makePaginationReqBody = (url, params) => {
+    let page = _get(params, 'pagination.page', '');
+    let perPage = _get(params, 'pagination.perPage', '');
+    let field = _get(params, 'sort.field', '');
+    let order = _get(params, 'sort.order', '');
+    let reqBody = {
+        filters: [{
+            field: 'retailerId',
+            value: localStorage.getItem('retailerId')
+        }],
+        limit: perPage,
+        offset: (page - 1) * perPage,
+        text: _get(params, 'filter.q', '')
+    }
+    return reqBody
+}
+
 const ReqBodyGuesser = (obj) => {
     const {
         params,
@@ -53,21 +70,13 @@ const ReqBodyGuesser = (obj) => {
     switch (url) {
         // For Products ******************************************************************************************
         case 'Search/Products':
-            const {
+            let {
                 page, perPage
             } = params.pagination;
-            const {
+            let {
                 field, order
             } = params.sort;
-            reqBody = {
-                filters: [{
-                    field: 'retailerId',
-                    value: retailerId
-                }],
-                limit: perPage,
-                offset: (page - 1) * perPage,
-                text: _get(params, 'filter.q', '')
-            }
+            reqBody = makePaginationReqBody(url, params)
             return reqObjMaker(url, reqBody);
         case 'Product/Get':
             return reqObjMaker(url, params)
@@ -89,10 +98,9 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params)
 
         //For Customers ******************************************************************************************
-        case 'Customer/All':
-            return reqObjMaker(url, {
-                id: retailerId
-            })
+        case 'Search/Customers':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody);
         case 'Customer/Get':
             return reqObjMaker(url, params)
         case 'Customer/Create':

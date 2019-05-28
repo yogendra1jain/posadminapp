@@ -1,8 +1,14 @@
 import React from 'react';
 import { TextField, ReferenceField, DateField, NumberField, BooleanField, List, Datagrid } from 'react-admin';
-
+const VendorListTitle = ({ record }) => {
+    return (
+        <span>
+            Vendor Products List
+        </span>
+    )
+};
 const VendorProductList = props => (
-    <List {...props}>
+    <List {...props} title={<VendorListTitle/>}>
         <Datagrid rowClick="edit">
             <TextField source="id" />
             <ReferenceField source="vendorId" reference="vendors"><TextField source="name" /></ReferenceField>

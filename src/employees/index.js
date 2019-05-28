@@ -7,5 +7,5 @@ export default {
     list: EmployeeList,
     // create: EmployeeCreate,
     edit: EmployeeEdit,
-    // icon: EmployeeIcon,
+    icon: EmployeeIcon,
 };

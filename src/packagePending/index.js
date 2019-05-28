@@ -7,5 +7,5 @@ export default {
     list: PackagePendingList,
     create: PackagePendingCreate,
     edit: PackagePendingEdit,
-    // icon: PackagePendingIcon,
+    icon: PackagePendingIcon,
 };
