@@ -1,6 +1,7 @@
 import React from 'react';
 import { Create, TextInput, ReferenceInput, NumberInput, BooleanInput, SimpleForm, DateInput, SelectInput } from 'react-admin';
-export const VendorProductCreate = props => (
+
+const VendorProductCreate = props => (
     < Create {...props}>
         <SimpleForm>
             <ReferenceInput source="vendorId" reference="vendors"><SelectInput optionText="name" /></ReferenceInput>
@@ -16,3 +17,5 @@ export const VendorProductCreate = props => (
         </SimpleForm>
     </Create >
 );
+
+export default VendorProductCreate

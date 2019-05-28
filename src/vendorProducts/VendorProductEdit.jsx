@@ -1,6 +1,7 @@
 import React from 'react';
 import { Edit, AutocompleteInput, TextInput, ReferenceInput, NumberInput, BooleanInput, SimpleForm, DateInput, SelectInput } from 'react-admin';
-export const VendorProductEdit = props => (
+
+const VendorProductEdit = props => (
     < Edit {...props}>
         <SimpleForm>
             <ReferenceInput source="vendorId" reference="vendors">
@@ -20,3 +21,5 @@ export const VendorProductEdit = props => (
         </SimpleForm>
     </Edit >
 );
+
+export default VendorProductEdit

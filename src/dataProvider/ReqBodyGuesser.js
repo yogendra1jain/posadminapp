@@ -3,9 +3,9 @@ import {
 } from "../global/UrlConstants";
 import _get from 'lodash/get';
 
-const reqObjMaker = (url, reqBody, mock) => {
+const reqObjMaker = (url, reqBody, ) => {
     return {
-        url: mock ? `${mock}${url}` : `${APPLICATION_BFF_URL}${url}`,
+        url: `${APPLICATION_BFF_URL}${url}`,
         options: {
             body: JSON.stringify(reqBody),
             method: 'POST'
@@ -31,7 +31,14 @@ const ReqBodyGuesser = (obj) => {
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
     if (type == 'GET_ONE') {
-        return reqObjMaker(url, params)
+        if (url=='Upload/File') {
+            const formData = new FormData();
+            formData.append("file", params.file);
+            let req = formObjectMaker(url, formData);
+            debugger;
+            return req
+        }
+        return reqObjMaker(url, params) 
     } else if (type == 'UPDATE') {
         return reqObjMaker(url, params.data)
     }
@@ -96,7 +103,9 @@ const ReqBodyGuesser = (obj) => {
         case 'Upload/File':
             const formData = new FormData();
             formData.append("file", params.file);
-            return formObjectMaker(url, formData);
+            let req = formObjectMaker(url, formData);
+            debugger;
+            return req
 
         //For Stores ******************************************************************************************
         case 'Store/ByRetailerId':
@@ -158,8 +167,8 @@ const ReqBodyGuesser = (obj) => {
             })
         //For Package Pending ******************************************************************************************
         case 'incomingpackage':
-        debugger;
-            return { url: "http://demo6234876.mockable.io/incomingpackage",options:{} }
+            debugger;
+            return { url: "http://demo6234876.mockable.io/incomingpackage", options: {} }
 
             
         //For Package       ******************************************************************************************
