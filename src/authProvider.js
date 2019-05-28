@@ -1,5 +1,5 @@
 // in src/authProvider.js
-import { AUTH_LOGIN,AUTH_CHECK,AUTH_LOGOUT,AUTH_ERROR } from 'react-admin';
+import { AUTH_LOGIN, AUTH_CHECK, AUTH_LOGOUT, AUTH_ERROR } from 'react-admin';
 import jwtDecode from 'jwt-decode';
 
 const authProvider = (type, params) => {
@@ -28,7 +28,11 @@ const authProvider = (type, params) => {
         return Promise.resolve();
     }
     if (type === AUTH_ERROR) {
-        return Promise.reject();
+        const status = params.status;
+        if (status === 500) {
+            return Promise.reject();
+        }
+        return Promise.resolve();
     }
     if (type === AUTH_CHECK) {
         return localStorage.getItem('token')
