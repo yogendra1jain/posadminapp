@@ -47,7 +47,7 @@ class Menu extends Component {
         return (
             <div>
                 {' '}
-                {/* <DashboardMenuItem onClick={onMenuClick} /> */}
+                <DashboardMenuItem onClick={onMenuClick} />
                 <SubMenu
                     handleToggle={() => this.handleToggle('menuProducts')}
                     isOpen={this.state.menuProducts}

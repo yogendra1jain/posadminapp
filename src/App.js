@@ -15,6 +15,7 @@ import Login from './global/components/LoginPage';
 import strains from './strains';
 import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
+import DashboardContainer from './Dashboard/DashboardContainer';
 
 const App = () => (
   <div>
@@ -23,6 +24,8 @@ const App = () => (
       authProvider={authProvider}
       appLayout={Layout}
       loginPage={Login}
+      dashboard={DashboardContainer}
+
      >
       <Resource name="Search/Products" {...products} options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
