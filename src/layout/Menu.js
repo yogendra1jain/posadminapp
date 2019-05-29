@@ -142,7 +142,7 @@ class Menu extends Component {
                         onClick={onMenuClick}
                     />
                 </SubMenu>
-                {/* <SubMenu
+                <SubMenu
                     handleToggle={() => this.handleToggle('menuReports')}
                     isOpen={this.state.menuReports}
                     sidebarIsOpen={open}
@@ -155,7 +155,7 @@ class Menu extends Component {
                         leftIcon={<packagePending.icon />}
                         onClick={onMenuClick}
                     />
-                </SubMenu> */}
+                </SubMenu>
                 {/* <MenuItemLink
                     to={`/reviews`}
                     primaryText={translate(`resources.reviews.name`, {

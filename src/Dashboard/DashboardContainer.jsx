@@ -72,6 +72,7 @@ class DashboardContainer extends React.Component {
     }
 
     getReports = () => {
+        
         let endDate = moment(_get(this.state,'endDate',0))
         endDate.endOf('day');
         let newEndDate = new Date(endDate);

@@ -31,11 +31,6 @@ const ResBodyGuesser = (obj) => {
 
     }
     if (type == 'GET_MANY') {
-        // if(url == 'Sync/Metrc/Categories') {
-        //     return {
-        //         data: _get(json,'metrcCategories',[])
-        //     }
-        // }
         return {
             data: json
         };
