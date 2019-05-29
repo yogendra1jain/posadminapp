@@ -19,6 +19,7 @@ import FromandToCalander from '../global/components/FromandToCalander';
 import { toTimestamp } from '../global/helper/helpers';
 import _isEmpty from 'lodash/isEmpty';
 import DineroInit from '../global/conversion/DineroObj';
+import moment from 'moment';
 
 class DashboardContainer extends React.Component {
 
@@ -45,7 +46,6 @@ class DashboardContainer extends React.Component {
                 dispatch: this.props.dispatch,
                 identifier: "getStoreByRetailer_dashboard",
                 successCb: (storeList) => {
-                    debugger;
                     let storeListArr = storeList.map((store) => {
                         let displayObj = {
                             displayText: store.name,
@@ -72,15 +72,17 @@ class DashboardContainer extends React.Component {
     }
 
     getReports = () => {
-        let endD = _get(this.state, 'endDate', 0)
-        let endDate = new Date(endD)
+        
+        let endDate = moment(_get(this.state,'endDate',0))
+        endDate.endOf('day');
+        let newEndDate = new Date(endDate);
         let reqObj = {
             id: _get(this.state, 'selectedStore', ''),
             fromTimeStamp: {
                 seconds: toTimestamp(_get(this.state, 'startDate', 0)) / 1000
             },
             toTimestamp: {
-                seconds: parseInt(endDate / 1000)
+                seconds: parseInt(newEndDate / 1000)
             }
         }
 

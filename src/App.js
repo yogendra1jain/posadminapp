@@ -14,6 +14,7 @@ import packagepending from './packagePending';
 import Login from './global/components/LoginPage';
 import strains from './strains';
 import Layout from './layout/Layout';
+import saleReport from './reports/saleReport';
 import DashboardContainer from './Dashboard/DashboardContainer';
 
 const App = () => (
@@ -34,6 +35,7 @@ const App = () => (
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />
       <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Product List' }} />
+      <Resource name="SaleReport" {...saleReport} />
       {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */}
       <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />
       <Resource name="Category"/>

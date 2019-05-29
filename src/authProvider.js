@@ -2,7 +2,7 @@
 import { AUTH_LOGIN, AUTH_CHECK, AUTH_LOGOUT, AUTH_ERROR } from 'react-admin';
 import jwtDecode from 'jwt-decode';
 import { APPLICATION_BFF_URL } from './global/UrlConstants';
-
+import _get from 'lodash/get';
 
 const authProvider = (type, params) => {
     if (type === AUTH_LOGIN) {
@@ -23,6 +23,8 @@ const authProvider = (type, params) => {
                 localStorage.setItem('token', token);
                 let decodeData = jwtDecode(localStorage.getItem('token'));
                 localStorage.setItem('retailerId', decodeData.Retailer.id);
+                localStorage.setItem('storeId', _get(decodeData,'Store.id',''))
+                localStorage.setItem('role',_get(decodeData,'role',''))
             });
     }
     if (type === AUTH_LOGOUT) {

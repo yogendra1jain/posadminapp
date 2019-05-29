@@ -193,6 +193,17 @@ const ReqBodyGuesser = (obj) => {
         //For Package       ******************************************************************************************
         case 'Package/Get/ByRetailer':
             return reqObjMaker(url, { id: retailerId })
+
+        //For Reports       ******************************************************************************************
+
+        // Sale Report ***************
+        case 'Reports/SalesReport/ByStore':
+            reqBody.id = "90fcee1b-fef3-4af7-a686-80159751d127"
+            reqBody.fromTimeStamp = {}
+            reqBody.fromTimeStamp.seconds = 1557945000
+            reqBody.toTimeStamp = {}
+            reqBody.toTimeStamp.seconds = 1558031399
+            return reqObjMaker(url, reqBody)
         default:
             break;
 

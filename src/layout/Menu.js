@@ -13,6 +13,7 @@ import {
 } from 'react-admin';
 
 import customers from '../customers';
+import saleReport from '../reports/saleReport';
 import employees from '../employees';
 import packagePending from '../packagePending';
 import products from '../products';
@@ -29,6 +30,7 @@ class Menu extends Component {
         menuVendors: false,
         menuPackages: false,
         menuStores: false,
+        menuReports: false
     };
 
     static propTypes = {
@@ -136,6 +138,20 @@ class Menu extends Component {
                     <MenuItemLink
                         to={`/PackagePending`}
                         primaryText={'Pending Packages'}
+                        leftIcon={<packagePending.icon />}
+                        onClick={onMenuClick}
+                    />
+                </SubMenu>
+                <SubMenu
+                    handleToggle={() => this.handleToggle('menuReports')}
+                    isOpen={this.state.menuReports}
+                    sidebarIsOpen={open}
+                    name="Reports"
+                    icon={<packagePending.icon />}
+                >
+                    <MenuItemLink
+                        to={`/SaleReport`}
+                        primaryText={'SaleReport'}
                         leftIcon={<packagePending.icon />}
                         onClick={onMenuClick}
                     />

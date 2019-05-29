@@ -91,7 +91,7 @@ class From extends React.Component {
                         changeHandler={this.storeSelectHandler}
                     />
                 </div>
-                :
+                
                     {/* <div style={{ width: "25%", marginTop: "25px" }}>  
                         <label>Store Name: <span>{localStorage.getItem('storeName')}
                         </span></label>
