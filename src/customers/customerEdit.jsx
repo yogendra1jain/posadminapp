@@ -5,11 +5,12 @@ import { TextInput,
 } from 'react-admin';
 import React from 'react';
 import ZipCodeInput from '../global/components/ZipCodeInput';
+import _get from 'lodash/get';
 
 const CustomerTitle = ({ record }) => {
     return (
         <span>
-            Customer {record ? `${record.customer.firstName} ${record.customer.lastName}` : ''}
+            Customer {record ? `${_get(record,'customer.firstName')} ${_get(record,'customer.lastName')}` : ''}
         </span>
     )
 };

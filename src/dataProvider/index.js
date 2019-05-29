@@ -13,7 +13,6 @@ import ResBodyGuesser from './RespBodyGuesser';
  * @returns {Object} { url, options } The HTTP request parameters
  */
 const convertDataProviderRequestToHTTP = (type, resource, params) => {
-    debugger;
     let url = UrlGuesser({ type, resource });
     return ReqBodyGuesser({ params, url, type })
 };
