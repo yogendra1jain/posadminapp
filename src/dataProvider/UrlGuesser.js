@@ -31,7 +31,6 @@ const UrlGuesser = (obj) => {
         case 'GetChildren/GET_LIST':
             return 'Category/GetChildren'
         case 'Category/GET_MANY':
-        debugger;
         return 'Category/GetByIds'
 
         //For Customers ******************************************************************************************

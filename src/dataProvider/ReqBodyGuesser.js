@@ -98,7 +98,6 @@ const ReqBodyGuesser = (obj) => {
         case 'Category/GetChildren':
             return reqObjMaker(url, params)
         case 'Category/GetByIds':
-        debugger;
             return reqObjMaker(url, params)
 
         //For Customers ******************************************************************************************
