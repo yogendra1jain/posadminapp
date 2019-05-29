@@ -191,6 +191,13 @@ const ReqBodyGuesser = (obj) => {
         //For Package       ******************************************************************************************
         case 'Package/Get/ByRetailer':
             return reqObjMaker(url, { id: retailerId })
+
+        //For Reports       ******************************************************************************************
+
+        // Sale Report ***************
+        case 'Reports/SalesReport/ByStore':
+            // reqBody.id
+            return reqObjMaker(url, {})
         default:
             break;
 
