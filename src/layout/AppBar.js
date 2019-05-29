@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { withStyles } from '@material-ui/core/styles';
 
-import Logo from './Logo';
+import Logo from '../assets/images/aobLogo.png';
 
 const styles = {
     title: {
@@ -29,14 +29,14 @@ const CustomUserMenu = translate(({ translate, ...props }) => (
 ));
 
 const CustomAppBar = ({ classes, ...props }) => (
-    <AppBar {...props} userMenu={<CustomUserMenu />}>
+    <AppBar {...props} style={{backgroundColor:"#8BC34A"}}  userMenu={<CustomUserMenu />}>
         <Typography
             variant="title"
             color="inherit"
             className={classes.title}
             id="react-admin-title"
         />
-        {/* <Logo /> */}
+        <img style={{height:'45px'}} src={Logo}/>
         <span className={classes.spacer} />
     </AppBar>
 );
