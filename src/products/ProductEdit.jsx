@@ -1,9 +1,6 @@
 import React from "react";
 import {
   translate,
-  AutocompleteInput,
-  BooleanInput,
-  DateInput,
   ImageInput,
   Edit,
   TextInput,
@@ -11,7 +8,6 @@ import {
   NumberInput,
   ReferenceInput,
   SelectInput,
-  REDUX_FORM_NAME,
   Labeled,
   ImageField,
   SimpleForm,
@@ -27,7 +23,7 @@ import dineroObj from "../global/conversion/DineroObj";
 import splitDotWithInt from "../global/conversion/SplitDotWithInt";
 import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
-import {MetricCategoryAndUOMInput, UOMInput} from './MetricCategoryAndUOMInput';
+import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 
 const OrderTitle = translate(({ record, translate }) => (
   <span>
@@ -134,7 +130,6 @@ class ProductEdit extends React.Component {
             <SelectInput source="name" />
           </ReferenceInput>
           <MetricCategoryAndUOMInput />
-          <UOMInput />
         </SimpleForm>
       </Edit>
     );

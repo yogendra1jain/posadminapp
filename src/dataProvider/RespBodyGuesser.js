@@ -13,6 +13,9 @@ const ResBodyGuesser = (obj) => {
         json
     } = response
     if (type == 'CREATE' || type == 'UPDATE') {
+        if(url == 'Product/Create') {
+            debugger
+        }
         return {
             data: {
                 ...params.data,
@@ -173,7 +176,14 @@ const ResBodyGuesser = (obj) => {
                 total: _get(json, 'result.count', 0)
             }
 
-
+        //For Reports       ******************************************************************************************
+        case 'Reports/SalesReport/ByStore':
+            json && json.map(data => data.id = "uuid")
+            
+            return {
+                data: json,
+                total: json.length
+            }
         default:
             if (json.id == null) {
                 json.id = "uuid";
