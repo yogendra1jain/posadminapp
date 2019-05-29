@@ -41,7 +41,7 @@ class From extends React.Component {
                         id="date"
                         label="Start Date"
                         type="date"
-                        value={this.state.startDate}
+                        value={this.props.startDate}
                         onChange={this.dateSelectHandler("startDate")}
                         InputLabelProps={{
                             shrink: true,
@@ -64,7 +64,7 @@ class From extends React.Component {
                         id="date"
                         label="End Date"
                         type="date"
-                        value={this.state.endDate}
+                        value={this.props.endDate}
                         onChange={this.dateSelectHandler("endDate")}
                         InputLabelProps={{
                             shrink: true,
@@ -79,46 +79,45 @@ class From extends React.Component {
                         className="form-control"
                     /> */}
                 </div>}
-                {/* {
-                    role == 1 ?  */}
-                <div style={{ width: "25%" }}>
-                    <label>Select Store</label>
-                    <AutoComplete
-                        type="single"
-                        data={this.props.storeList}
-                        name="stores"
-                        value={_get(this.state, 'selectedStore', '')}
-                        changeHandler={this.storeSelectHandler}
-                    />
-                </div>
-                
-                    {/* <div style={{ width: "25%", marginTop: "25px" }}>  
-                        <label>Store Name: <span>{localStorage.getItem('storeName')}
-                        </span></label>
-                    </div> */}
+                {
+                    role == 1 ?
+                        <div style={{ width: "25%" }}>
+                            <label>Select Store</label>
+                            <AutoComplete
+                                type="single"
+                                data={this.props.storeList}
+                                name="stores"
+                                value={_get(this.state, 'selectedStore', '')}
+                                changeHandler={this.storeSelectHandler}
+                            />
+                        </div> : <div style={{ width: "25%", marginTop: "25px" }}>
+                            <label>Store Name: <span>{localStorage.getItem('storeName')}
+                            </span></label>
+                        </div> 
+                }
 
             </React.Fragment>
-
-        );
+    
+            );
+        }
     }
-}
-
-export default From;
-
-
-
-//Using this component
-
+    
+    export default From;
+    
+    
+    
+    //Using this component
+    
 /*<FromandToCalander
-    doNotShowTo={true} //if you dont want TODate to be shown
-    onDateSelect={this.onDateSelect}
-    storeList={this.state.storeList} //pass store list in this format
-    onStoreSelect={this.onStoreSelect}
-/>*/
-
-
-
-// implement this handler in your component
+                    doNotShowTo={true} //if you dont want TODate to be shown
+                    onDateSelect={this.onDateSelect}
+                    storeList={this.state.storeList} //pass store list in this format
+                    onStoreSelect={this.onStoreSelect}
+                />*/
+                
+                
+                
+                // implement this handler in your component
 //  onDateSelect = (type, value) => {
 //      this.setState({ [type]: value })
 //  }
