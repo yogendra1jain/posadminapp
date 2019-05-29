@@ -88,12 +88,16 @@ const ReqBodyGuesser = (obj) => {
             return ''
         case 'Product/GetByIds':
             return reqObjMaker(url, params)
-
+        case 'Sync/Metrc/Categories':
+            return reqObjMaker(url, {id: retailerId})
+        case 'Sync/Metrc/UnitOfMeasure':
+            return reqObjMaker(url, {id: retailerId})
         //For Category ******************************************************************************************
         case 'Category/Level1ByRetailerId':
             return reqObjMaker(url, params)
         case 'Category/GetChildren':
             return reqObjMaker(url, params)
+        
 
         //For Customers ******************************************************************************************
         case 'Search/Customers':
@@ -118,7 +122,6 @@ const ReqBodyGuesser = (obj) => {
             const formData = new FormData();
             formData.append("file", params.file);
             let req = formObjectMaker(url, formData);
-            debugger;
             return req
 
         //For Stores ******************************************************************************************
@@ -161,7 +164,8 @@ const ReqBodyGuesser = (obj) => {
             reqBody.page = params.pagination.page
             reqBody.sizePerPage = params.pagination.perPage
             return reqObjMaker(url, reqBody)
-
+        case 'Get/Strain/StrainIds':
+            return reqObjMaker(url, params)
         case 'Add/Strain':
             reqBody = {
                 ...params.data,

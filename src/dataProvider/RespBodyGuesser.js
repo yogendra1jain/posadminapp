@@ -22,7 +22,6 @@ const ResBodyGuesser = (obj) => {
     }
     if (type == 'GET_ONE') {
         //unused code to be removed
-        debugger;
         if (json.id == null) {
             json.id = "uuid";
         }
@@ -32,7 +31,11 @@ const ResBodyGuesser = (obj) => {
 
     }
     if (type == 'GET_MANY') {
-
+        // if(url == 'Sync/Metrc/Categories') {
+        //     return {
+        //         data: _get(json,'metrcCategories',[])
+        //     }
+        // }
         return {
             data: json
         };
@@ -56,7 +59,16 @@ const ResBodyGuesser = (obj) => {
             return 'Search/Products'
         case 'Search/Products/GET_ONE':
             return ''
-
+        case 'Sync/Metrc/Categories':
+            return {
+                data: _get(json,'metrcCategories', []),
+                total: json.metrcCategories.length
+            }
+        case 'Sync/Metrc/UnitOfMeasure':
+            return {
+                data: _get(json,'metrcUnitOfMeasures', []),
+                total: json.metrcUnitOfMeasures.length
+            }
         //For Category ******************************************************************************************
         case 'Category/Level1ByRetailerId':
             return {
@@ -148,7 +160,6 @@ const ResBodyGuesser = (obj) => {
             };
         //For Package Pending ******************************************************************************************
         case 'incomingpackage':
-            debugger;
             return {
                 data: json,
                 total: json.length,

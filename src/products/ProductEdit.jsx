@@ -1,38 +1,3 @@
-// import { TextField, BooleanField, ReferenceField, DateField, NumberField, Datagrid, List, } from 'react-admin';
-// import React from 'react';
-// export const ProductList = props => (
-//     <List {...props}>
-//         <Datagrid rowClick="edit">
-//             <TextField source="sku" />
-//             <TextField source="name" />
-//             <TextField source="costPrice.amount" />
-//             <TextField source="salePrice.amount" />
-//             {/* <TextField source="id" />
-//             <TextField source="name" />
-//             <TextField source="description" />
-//             <TextField source="category1" />
-//             <TextField source="category2" />
-//             <TextField source="category3" />
-//             <TextField source="image" />
-//             <BooleanField source="active" />
-//             <TextField source="salePrice.currency" />
-//             <TextField source="sku" />
-//             <TextField source="upcCode" />
-//             <BooleanField source="isTaxable" />
-//             <ReferenceField source="retailerId" reference="retailers"><TextField source="id" /></ReferenceField>
-//             <TextField source="costPrice.currency" />
-//             <BooleanField source="discountable" />
-//             <NumberField source="createdOn.seconds" />
-//             <DateField source="dimensions" />
-//             <TextField source="keywords" />
-//             <DateField source="extendedSku" />
-//             <TextField source="seasonality" />
-//             <NumberField source="updatedOn.seconds" />
-//             <TextField source="additionalUpcCodes" /> */}
-//         </Datagrid>
-//     </List>
-// );
-
 import React from "react";
 import {
   translate,
@@ -53,7 +18,7 @@ import {
   FormDataConsumer,
   Query,
   Loading,
-  Error
+  Error,
 } from "react-admin";
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -62,6 +27,7 @@ import dineroObj from "../global/conversion/DineroObj";
 import splitDotWithInt from "../global/conversion/SplitDotWithInt";
 import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
+import {MetricCategoryAndUOMInput, UOMInput} from './MetricCategoryAndUOMInput';
 
 const OrderTitle = translate(({ record, translate }) => (
   <span>
@@ -87,14 +53,8 @@ class ProductEdit extends React.Component {
     this.url = "";
   }
   componentDidMount() {}
+  
   getL2Category = ({ formData, ...rest }) => {
-    // axiosFetcher({
-    //     method: 'POST',
-    //     url: 'Customer/Create',
-    //     reqObj: values,
-    //     successCb: this.handleAddCustomerSuccess,
-    //     errorCb: this.handleAddCustomerError
-    // })
     return (
       <Query
         type="GET_ONE"
@@ -113,6 +73,7 @@ class ProductEdit extends React.Component {
       </Query>
     );
   };
+
   fetchCategory = ({ data, loading, error }) => {
     console.log(data, loading, error);
     return loading ? (
@@ -123,15 +84,14 @@ class ProductEdit extends React.Component {
       <div>User {data.username}</div>
     );
   };
-  //   saveImageUrl = (url)=>{
-  //     this.setState({url})
-  //   }
+  
   saveFetchedUrl = url => {
     this.state.url = url;
   };
+
   formDataRenderProp = () => {};
+
   render() {
-    console.log(this.props);
     return (
       <Edit title={<ProductTitle />} {...this.props}>
         <SimpleForm>
@@ -170,6 +130,11 @@ class ProductEdit extends React.Component {
           >
             <CustomImageInput />
           </ImageInput>
+          <ReferenceInput label="Select Strain" reference="Strain">
+            <SelectInput source="name" />
+          </ReferenceInput>
+          <MetricCategoryAndUOMInput />
+          <UOMInput />
         </SimpleForm>
       </Edit>
     );

@@ -4,7 +4,8 @@ import {
     Datagrid,
     List,
     Filter,
-    TextInput
+    TextInput,
+    EditButton
 } from 'react-admin';
 import React from 'react';
 import DineroPrice from '../global/components/DineroPrice';
@@ -25,33 +26,12 @@ const ProductFilter = (props) => {
 
 export const ProductList = props => (
     <List {...props} title={<ProductListTitle />}  filters={<ProductFilter/>}>
-        <Datagrid rowClick="edit">
-            <TextField source="sku" />
-            <TextField source="name" />
-            <DineroPrice source="costPrice.amount" />
-            <DineroPrice source="salePrice.amount" />
-            {/* <TextField source="id" />
-            <TextField source="name" />
-            <TextField source="description" />
-            <TextField source="category1" />
-            <TextField source="category2" />
-            <TextField source="category3" />
-            <TextField source="image" />
-            <BooleanField source="active" />
-            <TextField source="salePrice.currency" />
-            <TextField source="sku" />
-            <TextField source="upcCode" />
-            <BooleanField source="isTaxable" />
-            <ReferenceField source="retailerId" reference="retailers"><TextField source="id" /></ReferenceField>
-            <TextField source="costPrice.currency" />
-            <BooleanField source="discountable" />
-            <NumberField source="createdOn.seconds" />
-            <DateField source="dimensions" />
-            <TextField source="keywords" />
-            <DateField source="extendedSku" />
-            <TextField source="seasonality" />
-            <NumberField source="updatedOn.seconds" />
-            <TextField source="additionalUpcCodes" /> */}
+        <Datagrid>
+            <TextField label="SKU" source="sku" />
+            <TextField label="Name" source="name" />
+            <DineroPrice label="Cost Price" source="costPrice.amount" />
+            <DineroPrice label="Sale Price" source="salePrice.amount" />
+            <EditButton />
         </Datagrid>
     </List>
 );
