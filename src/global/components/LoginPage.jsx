@@ -29,7 +29,7 @@ const styles = theme => ({
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        background: {loginImage},
+        background:'url(https://s3.ap-south-1.amazonaws.com/aob-deverp/pos-dev/47c6aae9-eb79-4796-8ed0-95ec99dfc217.jpg)',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },

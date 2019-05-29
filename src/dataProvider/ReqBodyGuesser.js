@@ -111,6 +111,8 @@ const ReqBodyGuesser = (obj) => {
             reqBody = params.data
             reqBody.phoneNumber.countryCode = 1
             reqBody.retailerId = retailerId
+            reqBody.gender = parseInt(reqBody.gender)||0
+            reqBody.customerType =  parseInt(reqBody.customerType)||0
             return reqObjMaker(url, reqBody)
         case 'Customer/Update':
             return reqObjMaker(url, params.data)
