@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
-import SettingsIcon from '@material-ui/icons/Settings';
-import LabelIcon from '@material-ui/icons/Label';
+import Inbox from '@material-ui/icons/Inbox';
+import LocalShipping from '@material-ui/icons/LocalShipping';
 import { withRouter } from 'react-router-dom';
 import {
     translate,
@@ -107,7 +107,7 @@ class Menu extends Component {
                     isOpen={this.state.menuVendors}
                     sidebarIsOpen={open}
                     name="Vendors"
-                    icon={<vendors.icon />}
+                    icon={<LocalShipping/>}
                 >
                     <MenuItemLink
                         to={`/vendors`}
@@ -118,7 +118,7 @@ class Menu extends Component {
                     <MenuItemLink
                         to={`/VendorProduct/GetByRetailerId`}
                         primaryText={'Vendor Products'}
-                        leftIcon={<vendors.icon />}
+                        leftIcon={<vendorProduct.icon />}
                         onClick={onMenuClick}
                     />
                 </SubMenu>
@@ -126,8 +126,8 @@ class Menu extends Component {
                     handleToggle={() => this.handleToggle('menuPackages')}
                     isOpen={this.state.menuPackages}
                     sidebarIsOpen={open}
-                    name="Packages"
-                    icon={<packagePending.icon />}
+                    name="Inventory"
+                    icon={<Inbox/>}
                 >
                     <MenuItemLink
                         to={`/Package`}

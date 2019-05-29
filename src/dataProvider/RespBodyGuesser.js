@@ -30,7 +30,7 @@ const ResBodyGuesser = (obj) => {
         }
         return {
             data: json
-        };
+    };
 
     }
     if (type == 'GET_MANY') {

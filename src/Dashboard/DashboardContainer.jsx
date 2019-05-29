@@ -33,12 +33,15 @@ class DashboardContainer extends React.Component {
             highVelocityOrders: [],
             lowVelocityOrders: [],
             days: 1,
+            startDate: moment().subtract(7, 'days').format('YYYY-MM-DD'),
+            endDate:moment().format('YYYY-MM-DD')
+
         }
     }
     componentDidMount() {
-        // if(localStorage.getItem('role') == 1) {
+        if (localStorage.getItem('role') == 1) {
             axiosFetcher({
-                method:'POST',
+                method: 'POST',
                 url: "Store/ByRetailerId",
                 reqObj: {
                     id: localStorage.getItem('retailerId')
@@ -59,10 +62,12 @@ class DashboardContainer extends React.Component {
                 errorCb: () => console.log("err is here"),
                 dontShowMessage: true
             })
-        // } 
-        // else if(localStorage.getItem('role') == 2) {
-        //     this.setState({ selectedStore: localStorage.getItem('storeID')})
-        // }
+        }
+        else if (localStorage.getItem('role') == 2) {
+            this.setState({ selectedStore: localStorage.getItem('storeId') });
+            this.state.selectedStore = localStorage.getItem('storeId')
+            this.getReports()
+        }
     }
     onDateSelect = (type, value) => {
         this.setState({ [type]: value })
@@ -72,8 +77,8 @@ class DashboardContainer extends React.Component {
     }
 
     getReports = () => {
-        
-        let endDate = moment(_get(this.state,'endDate',0))
+
+        let endDate = moment(_get(this.state, 'endDate', 0))
         endDate.endOf('day');
         let newEndDate = new Date(endDate);
         let reqObj = {
@@ -93,7 +98,7 @@ class DashboardContainer extends React.Component {
         })
 
         axiosFetcher({
-            method:'POST',
+            method: 'POST',
             dispatch: this.props.dispatch,
             reqObj,
             url: 'Reports/SalesReport/ByPaymentMethods',
@@ -103,7 +108,7 @@ class DashboardContainer extends React.Component {
         })
 
         axiosFetcher({
-            method:'POST',
+            method: 'POST',
             dispatch: this.props.dispatch,
             reqObj,
             url: 'Reports/Sales/Dashboard',
@@ -116,7 +121,7 @@ class DashboardContainer extends React.Component {
     handlePaymentMethodReportSuccess = (data) => {
         let pieChartData = []
         if (!_isEmpty(data.result)) {
-            console.log(data.result,"data.resultdata.resultdata.result")
+            console.log(data.result, "data.resultdata.resultdata.result")
             if (Array.isArray(data.result)) {
                 _get(data, 'result', []).map(data => {
                     let temp = {}
@@ -160,6 +165,8 @@ class DashboardContainer extends React.Component {
                 </div>
                 <div style={{ padding: "20px" }} className="flex-row dash-1 justify-space-between">
                     <FromandToCalander
+                        startDate={this.state.startDate}
+                        endDate={this.state.endDate}
                         onDateSelect={this.onDateSelect}
                         storeList={this.state.storeList}
                         onStoreSelect={this.onStoreSelect}
@@ -227,11 +234,11 @@ class DashboardContainer extends React.Component {
                         {
                             _get(this.state, 'PaymentMethodsData').length ?
                                 <div className='dash-22'>
-                                    <div className='card flex-column payment-method-pie fheight' style={{position: 'relative'}}>
+                                    <div className='card flex-column payment-method-pie fheight' style={{ position: 'relative' }}>
                                         <span className='card-title'>Payment Methods</span>
                                         <PaymentMethodsPie
                                             data={_get(this.state, 'PaymentMethodsData', [])}
-                                        />  
+                                        />
                                     </div>
                                 </div> : null
                         }

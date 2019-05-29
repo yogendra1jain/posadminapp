@@ -24,7 +24,9 @@ const authProvider = (type, params) => {
                 let decodeData = jwtDecode(localStorage.getItem('token'));
                 localStorage.setItem('retailerId', decodeData.Retailer.id);
                 localStorage.setItem('storeId', _get(decodeData,'Store.id',''))
-                localStorage.setItem('role',_get(decodeData,'role',''))
+                localStorage.setItem('role',_get(decodeData,'Role',''))
+                localStorage.setItem('storeName',_get(decodeData,'Store.name',''))
+
             });
     }
     if (type === AUTH_LOGOUT) {
