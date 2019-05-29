@@ -11,7 +11,7 @@ const UrlGuesser = (obj) => {
         case 'Search/Products/GET_ONE':
             return 'Product/Get'
         case 'Search/Products/CREATE':
-            return ''
+            return 'Product/Create'
         case 'Search/Products/UPDATE':
             return 'Product/Update'
         case 'Search/Products/DELETE':
@@ -155,7 +155,7 @@ const UrlGuesser = (obj) => {
         
         //For Reports       ******************************************************************************************
         // Sale Report **********************************************************************
-        case 'Store/GET_MANY':
+        case 'SaleReport/GET_LIST':
             return 'Reports/SalesReport/ByStore'
         default:
             break;

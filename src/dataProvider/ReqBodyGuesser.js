@@ -76,6 +76,19 @@ const ReqBodyGuesser = (obj) => {
             } = params.sort;
             reqBody = makePaginationReqBody(url, params)
             return reqObjMaker(url, reqBody);
+        case 'Product/Create':
+            let productType = 0
+            !params.data.cannabisProduct ? productType = 0 : params.data.medicalProduct ? productType = 2 : productType = 1
+            reqBody = {
+                ...params.data,
+                productType,
+                image: _get(params.data,'newImage.newImage',''),
+                retailerId: localStorage.getItem('retailerId')
+            }
+            delete reqBody.newImage
+            delete reqBody.cannabisProduct
+            delete reqBody.medicalProduct
+            return reqObjMaker(url, reqBody)
         case 'Product/Get':
             return reqObjMaker(url, params)
         case 'Search/Products/DELETE':

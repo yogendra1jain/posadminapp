@@ -15,7 +15,7 @@ const CategoryInput = ({ record }) => (
         <Query
           type="GET_LIST"
           resource="Level1ByRetailerId"
-          payload={{ id: record.retailerId }}
+          payload={{ id: localStorage.getItem('retailerId') }}
         >
           {({ data, loading, error }) => {
             if (loading) {

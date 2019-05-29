@@ -8,8 +8,7 @@ import { TextField,
  } from 'react-admin';
  import _get from 'lodash/get';
  import React from 'react';
- import Synced from '@material-ui/icons/Sync';
- import SyncPending from '@material-ui/icons/SyncProblem'; 
+ import SyncIcon from '@material-ui/icons/Sync';
 
 const StrainList = props => (
     <List {...props}>
@@ -20,7 +19,7 @@ const StrainList = props => (
             <NumberField textAlign="left" label="Indica Percentage"  source="indicaPercentage" />
             <NumberField textAlign="left" label="Sativa Percentage" source="sativaPercentage" />
             <TextField label="Genetics" source="genetics" />
-            <FunctionField text-align="left" label="Sync Status" render={record => _get(record,'syncStatus',0) == 0 ? <SyncPending style={{color: 'orange'}} /> : <Synced style={{color: 'green'}} />} />
+            <FunctionField text-align="left" label="Sync Status" render={record => _get(record,'syncStatus',0) == 0 ? <SyncIcon style={{color: 'orange'}} /> : <SyncIcon style={{color: 'green'}} />} />
             <EditButton />
             <ShowButton/>
         </Datagrid>
