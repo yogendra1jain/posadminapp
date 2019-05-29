@@ -20,6 +20,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import { Notification, translate, userLogin } from 'react-admin';
 
 import { lightTheme } from './themes';
+import loginImage from '../../assets/images/front-bg.jpg'
 
 const styles = theme => ({
     main: {
@@ -28,7 +29,7 @@ const styles = theme => ({
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        background: 'url(https://source.unsplash.com/random/1600x900)',
+        background: {loginImage},
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },

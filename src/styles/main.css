@@ -100,3 +100,12 @@
     font-size: 0.9em;
     color: rgba(0, 0, 0, 0.6)
 }
+
+.card {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    min-height: 50px;
+    padding: 20px;
+}

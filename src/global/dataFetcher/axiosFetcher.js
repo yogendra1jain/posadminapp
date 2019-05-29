@@ -1,7 +1,12 @@
 import axios from 'axios';
-import generateV1uuid from '../Uuid';
-import {APPLICATION_BFF_URL} from '../../Redux/urlConstants'
+import uuidv1 from 'uuid/v1';
+import {APPLICATION_BFF_URL} from '../UrlConstants'
+import _get from 'lodash/get';
 
+const generateV1uuid = () => uuidv1();
+export {
+    generateV1uuid,
+}
 
 const axiosFetcher = ({method,
   url,
@@ -22,7 +27,7 @@ let requestObject = {};
   requestObject.headers = {
     originURL: window.origin,
     correlationid: generateV1uuid(),
-    Authorization:`Bearer ${localStorage.getItem("Token")}`,
+    Authorization:`Bearer ${localStorage.getItem("token")}`,
     'Content-Type': 'application/json',
   }
   console.log(requestObject,"requestObject")
@@ -31,7 +36,7 @@ let requestObject = {};
     requestObject
   )
     .then(responseData => {
-        successCb(responseData,dispatch,extraArgs)
+        successCb(_get(responseData,'data'),dispatch,extraArgs)
     })
 .catch((err)=>
 {
