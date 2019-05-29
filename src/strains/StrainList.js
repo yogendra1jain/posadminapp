@@ -3,7 +3,8 @@ import { TextField,
     NumberField,
     List,
     EditButton,
-    FunctionField
+    FunctionField,
+    ShowButton
  } from 'react-admin';
  import _get from 'lodash/get';
  import React from 'react';
@@ -21,6 +22,7 @@ const StrainList = props => (
             <TextField label="Genetics" source="genetics" />
             <FunctionField text-align="left" label="Sync Status" render={record => _get(record,'syncStatus',0) == 0 ? <SyncPending style={{color: 'red'}} /> : <Synced style={{color: 'green'}} />} />
             <EditButton />
+            <ShowButton/>
         </Datagrid>
     </List>
 );

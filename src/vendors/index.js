@@ -1,4 +1,4 @@
-import VendorIcon from '@material-ui/icons/Collections';
+import VendorIcon from '@material-ui/icons/LocalShipping';
 import VendorList from './VendorList';
 import VendorEdit from './VendorEdit';
 import VendorCreate from './VendorCreate';

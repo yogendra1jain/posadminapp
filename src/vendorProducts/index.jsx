@@ -1,4 +1,4 @@
-import VendorProductIcon from '@material-ui/icons/Collections';
+import VendorProductIcon from '@material-ui/icons/ShoppingCart';
 import VendorProductList from './VendorProductList';
 import VendorProductEdit from './VendorProductEdit';
 import VendorProductCreate from './VendorProductCreate';

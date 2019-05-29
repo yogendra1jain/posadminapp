@@ -1,6 +1,6 @@
 // in src/App.js
 import React from 'react';
-import { Admin, Resource, ListGuesser, EditGuesser } from 'react-admin';
+import { Admin, Resource, ListGuesser, EditGuesser,ShowGuesser } from 'react-admin';
 
 import authProvider from './authProvider';
 import dataProvider from './dataProvider';
@@ -26,9 +26,9 @@ const App = () => (
       dashboard={DashboardContainer}
 
      >
-      <Resource name="Search/Products" {...products} options={{ label: 'Product List' }} />
+      <Resource name="Search/Products" {...products}  options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
-      <Resource name="Strain" {...strains} />
+      <Resource name="Strain" {...strains}/>
       <Resource name="Package" list={ListGuesser} />
       <Resource name="Store" {...stores} />
       <Resource name="PaymentMethods" />
@@ -36,6 +36,8 @@ const App = () => (
       <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Product List' }} />
       {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */}
       <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />
+      <Resource name="Category"/>
+
 
     </Admin>
   </div>

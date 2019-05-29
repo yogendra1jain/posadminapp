@@ -5,7 +5,8 @@ import {
     List,
     Filter,
     TextInput,
-    EditButton
+    EditButton,
+    ShowButton
 } from 'react-admin';
 import React from 'react';
 import DineroPrice from '../global/components/DineroPrice';
@@ -31,7 +32,8 @@ export const ProductList = props => (
             <TextField label="Name" source="name" />
             <DineroPrice label="Cost Price" source="costPrice.amount" />
             <DineroPrice label="Sale Price" source="salePrice.amount" />
-            <EditButton />
+            <EditButton/>
+            <ShowButton/>
         </Datagrid>
     </List>
 );
