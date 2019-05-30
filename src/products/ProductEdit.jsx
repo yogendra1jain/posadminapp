@@ -24,6 +24,7 @@ import splitDotWithInt from "../global/conversion/SplitDotWithInt";
 import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
 import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
+import PriceInput from "../global/components/PriceInput";
 
 const OrderTitle = translate(({ record, translate }) => (
   <span>
@@ -32,9 +33,9 @@ const OrderTitle = translate(({ record, translate }) => (
 ));
 const ProductTitle = ({ record }) => {
   return (
-      <span>
-          Edit {record ? `${record.name}`:null}
-      </span>
+    <span>
+      Edit {record ? `${record.name}` : null}
+    </span>
   )
 };
 
@@ -48,8 +49,8 @@ class ProductEdit extends React.Component {
     this.state = { choices: [], url: "" };
     this.url = "";
   }
-  componentDidMount() {}
-  
+  componentDidMount() { }
+
   getL2Category = ({ formData, ...rest }) => {
     return (
       <Query
@@ -63,8 +64,8 @@ class ProductEdit extends React.Component {
           ) : error ? (
             <Error />
           ) : (
-            <div>User {data.username}</div>
-          )
+                <div>User {data.username}</div>
+              )
         }
       </Query>
     );
@@ -77,15 +78,15 @@ class ProductEdit extends React.Component {
     ) : error ? (
       <Error />
     ) : (
-      <div>User {data.username}</div>
-    );
+          <div>User {data.username}</div>
+        );
   };
-  
+
   saveFetchedUrl = url => {
     this.state.url = url;
   };
 
-  formDataRenderProp = () => {};
+  formDataRenderProp = () => { };
 
   render() {
     return (
@@ -94,16 +95,12 @@ class ProductEdit extends React.Component {
           <TextInput source="name" options={{ fullWidth: true }} />
           <TextInput source="sku" options={{ fullWidth: true }} />
           <LongTextInput source="description" />
-          <NumberInput
+          <PriceInput
             label="Cost Price"
-            format={v => dineroObj(v).toUnit(2)}
-            parse={v => splitDotWithInt(v)}
             source={"costPrice.amount"}
           />
-          <NumberInput
-            label="Pos Price"
-            format={v => dineroObj(v).toUnit(2)}
-            parse={v => splitDotWithInt(v)}
+          <PriceInput
+            label="POS Price"
             source={"salePrice.amount"}
           />
           <CategoryInput source={"category1"} />
