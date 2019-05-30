@@ -10,6 +10,7 @@ import {
 } from "react-admin";
 import _filter from 'lodash/filter';
 import _find from 'lodash/find';
+import _isEmpty from 'lodash/isEmpty'
 class MetricCategoryAndUOMInput extends React.Component {
     constructor(props) {
         super(props);
@@ -26,6 +27,7 @@ class MetricCategoryAndUOMInput extends React.Component {
                         payload={{}}
                     >
                         {({ data, loading, error }) => {
+                            
                             if (loading) {
                             return <LinearProgress />;
                             }
@@ -62,6 +64,7 @@ class MetricCategoryAndUOMInput extends React.Component {
                                 let filteredUOM = _filter(data, uom => {
                                     return uom.quantityType == _get(this.state,'selectedCategory.quantityType','')
                                 })
+                                console.log(formData, 'formData')
                                 if (loading) {
                                 return <LinearProgress />;
                                 }
@@ -69,11 +72,17 @@ class MetricCategoryAndUOMInput extends React.Component {
                                 return <p> Unit of measure not found!</p>;
                                 }
                                 return (
-                                <div>
+                                !_isEmpty(filteredUOM) ? <div>
                                     <SelectInput
                                         source="metrcUom"
                                         choices={filteredUOM}
-                                        optionText="name"
+                                        optionValue="name"
+                                        {...rest}
+                                    />
+                                </div> : <div>
+                                    <SelectInput
+                                        source="metrcUom"
+                                        choices={data}
                                         optionValue="name"
                                         {...rest}
                                     />
