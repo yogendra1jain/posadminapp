@@ -9,7 +9,8 @@ import {
     NumberInput,
     ReferenceInput,
     required,
-    SimpleForm
+    SimpleForm,
+    RadioButtonGroupInput
 } from 'react-admin';
 import React, { Component } from 'react';
 import dineroObj from "../global/conversion/DineroObj";
@@ -64,12 +65,12 @@ class ProductCreate extends Component {
                                         <SelectInput validate={required()} optionText="name" />
                                     </ReferenceInput>
                                     <MetricCategoryAndUOMInput />
-                                    <NumberInput validate={required()} lable="Unit CBD Percent" source="unitCbdPercent" />
-                                    <NumberInput validate={required()} lable="Unit CBD Content" source="unitCbdContent" />
-                                    <NumberInput validate={required()} lable="Unit THC Percent" source="unitThcPercent" />
-                                    <NumberInput validate={required()} lable="Unit THC Content" source="unitThcContent" />
-                                    <NumberInput validate={required()} label="Unit Volume" source="unitVolume" />
-                                    <NumberInput validate={required()} label="Unit Weight" source="unitWeight" />
+                                    <NumberInput lable="Unit CBD Percent" source="unitCbdPercent" />
+                                    <NumberInput lable="Unit CBD Content" source="unitCbdContent" />
+                                    <NumberInput lable="Unit THC Percent" source="unitThcPercent" />
+                                    <NumberInput lable="Unit THC Content" source="unitThcContent" />
+                                    <NumberInput label="Unit Volume" source="unitVolume" />
+                                    <NumberInput label="Unit Weight" source="unitWeight" />
                                 </React.Fragment>
                                 : ''
                         )}
