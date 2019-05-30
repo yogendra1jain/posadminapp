@@ -7,6 +7,7 @@ import {
     ImageInput,
     SelectInput,
     NumberInput,
+    REDUX_FORM_NAME,
     ReferenceInput,
     required,
     SimpleForm,
@@ -19,7 +20,8 @@ import CategoryInput from './CategoryInput';
 import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 import CustomImageField from './CustomImageInput';
 import { FormDataConsumer } from 'ra-core';
-
+import PriceInput from "../global/components/PriceInput";
+import {change} from 'redux-form';
 const ProductTypeChoices = [
     { id: 0, name: 'Non-Cannabis' },
     { id: 1, name: 'Cannabis Product' },
@@ -37,6 +39,21 @@ class ProductCreate extends Component {
         super(props);
         this.state = {}
     }
+
+    clearMetrcFields = (e, val, dispatch) => {
+        debugger
+        if(val == 0) {
+            dispatch(change(REDUX_FORM_NAME, "strainId", null))
+            dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
+            dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
+            dispatch(change(REDUX_FORM_NAME, "unitCbdPercent", null))
+            dispatch(change(REDUX_FORM_NAME, "unitCbdContent", null))
+            dispatch(change(REDUX_FORM_NAME, "unitThcPercent", null))
+            dispatch(change(REDUX_FORM_NAME, "unitThcContent", null))
+            dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
+            dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
+        }
+    }
     render() {
         return (
             <Create title={<ProductCreateTitle />}  {...this.props}>
@@ -45,23 +62,29 @@ class ProductCreate extends Component {
                     <TextInput validate={required()} source="sku" label="Sku" />
                     <LongTextInput validate={required()} source="description" />
                     <CategoryInput source={"category1"} />
-                    <NumberInput
+                    <PriceInput
                         validate={required()}
                         label="Cost Price"
-                        format={v => dineroObj(v).toUnit(2)}
-                        parse={v => splitDotWithInt(v)}
                         source={"costPrice.amount"}
                     />
-                    <NumberInput
+                    <PriceInput
                         validate={required()}
-                        label="Pos Price"
-                        format={v => dineroObj(v).toUnit(2)}
-                        parse={v => splitDotWithInt(v)}
+                        label="POS Price"
                         source={"salePrice.amount"}
                     />
                     <BooleanInput label="Taxable" source="isTaxable" />
                     <BooleanInput label="Discountable" source="discountable" />
-                    <RadioButtonGroupInput parse={val => parseInt(val, 10)} label="Product Type" source="productType" choices={ProductTypeChoices} />
+                    <FormDataConsumer>
+                        {({ formData, dispatch, ...rest }) => (
+                            <RadioButtonGroupInput 
+                                onChange={(e, val)=>this.clearMetrcFields(e, val,dispatch)}
+                                parse={val => parseInt(val, 10)} 
+                                label="Product Type" 
+                                source="productType" 
+                                choices={ProductTypeChoices} 
+                            />   
+                        )}
+                    </FormDataConsumer>
                     <FormDataConsumer>
                         {({ formData, dispatch, ...rest }) => {
                             return (
@@ -78,7 +101,7 @@ class ProductCreate extends Component {
                                         <NumberInput label="Unit Volume" source="unitVolume" />
                                         <NumberInput label="Unit Weight" source="unitWeight" />
                                     </React.Fragment>
-                                    : ''
+                                    : null
                             )
                         }}
                     </FormDataConsumer>

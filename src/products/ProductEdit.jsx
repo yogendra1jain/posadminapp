@@ -18,7 +18,8 @@ import {
   TextField,
   required,
   BooleanInput,
-  RadioButtonGroupInput
+  RadioButtonGroupInput,
+  REDUX_FORM_NAME
 } from "react-admin";
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -95,7 +96,20 @@ class ProductEdit extends React.Component {
     this.state.url = url;
   };
 
-  formDataRenderProp = () => { };
+  clearMetrcFields = (e, val, dispatch) => {
+    debugger
+    if(val == 0) {
+        dispatch(change(REDUX_FORM_NAME, "strainId", null))
+        dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
+        dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
+        dispatch(change(REDUX_FORM_NAME, "unitCbdPercent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitCbdContent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitThcPercent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitThcContent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
+        dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
+    }
+  }
 
   render() {
     return (
@@ -111,19 +125,30 @@ class ProductEdit extends React.Component {
             source={"costPrice.amount"}
           />
           <PriceInput
+            validate={required()}
             label="POS Price"
             source={"salePrice.amount"}
           />
           <CategoryInput source={"category1"} />
           <BooleanInput label="Taxable" source="isTaxable" />
           <BooleanInput label="Discountable" source="discountable" />
-          <RadioButtonGroupInput parse={val => parseInt(val, 10)} label="Product Type" source="productType" choices={ProductTypeChoices} />
+          <FormDataConsumer>
+              {({ formData, dispatch, ...rest }) => (
+                  <RadioButtonGroupInput 
+                      onChange={(e, val) => this.clearMetrcFields(e, val, dispatch)}
+                      parse={val => parseInt(val, 10)} 
+                      label="Product Type" 
+                      source="productType" 
+                      choices={ProductTypeChoices} 
+                  />   
+              )}
+          </FormDataConsumer>
           <FormDataConsumer>
             {({ formData, dispatch, ...rest }) => (
               formData.productType == '1' || formData.productType == '2' ?
                 <React.Fragment>
                   <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
-                    <SelectInput validate={required()} optionText="name" />
+                    <SelectInput optionText="name" />
                   </ReferenceInput>
                   <MetricCategoryAndUOMInput />
                   <NumberInput lable="Unit CBD Percent" source="unitCbdPercent" />
@@ -133,7 +158,7 @@ class ProductEdit extends React.Component {
                   <NumberInput label="Unit Volume" source="unitVolume" />
                   <NumberInput label="Unit Weight" source="unitWeight" />
                 </React.Fragment>
-                : ''
+                : null
             )}
           </FormDataConsumer>
           <FormDataConsumer>
