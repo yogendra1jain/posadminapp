@@ -17,7 +17,9 @@ import {
   Error,
   TextField,
   required,
-  BooleanInput
+  BooleanInput,
+  RadioButtonGroupInput,
+  REDUX_FORM_NAME
 } from "react-admin";
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -28,6 +30,12 @@ import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
 import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 import PriceInput from "../global/components/PriceInput";
+
+const ProductTypeChoices = [
+  { id: 0,  name: 'Non-Cannabis'},
+  { id: 1,  name: 'Cannabis Product' },
+  { id: 2,  name: 'Cannabis (Medical Only)' }
+]
 
 const OrderTitle = translate(({ record, translate }) => (
   <span>
@@ -88,7 +96,20 @@ class ProductEdit extends React.Component {
     this.state.url = url;
   };
 
-  formDataRenderProp = () => { };
+  clearMetrcFields = (e, val, dispatch) => {
+    debugger
+    if(val == 0) {
+        dispatch(change(REDUX_FORM_NAME, "strainId", null))
+        dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
+        dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
+        dispatch(change(REDUX_FORM_NAME, "unitCbdPercent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitCbdContent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitThcPercent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitThcContent", null))
+        dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
+        dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
+    }
+  }
 
   render() {
     return (
@@ -104,20 +125,30 @@ class ProductEdit extends React.Component {
             source={"costPrice.amount"}
           />
           <PriceInput
+            validate={required()}
             label="POS Price"
             source={"salePrice.amount"}
           />
           <CategoryInput source={"category1"} />
-          <BooleanInput label="Cannabis Product" source="cannabisProduct" />
-          <BooleanInput label="Taxable" source="taxable" />
+          <BooleanInput label="Taxable" source="isTaxable" />
           <BooleanInput label="Discountable" source="discountable" />
           <FormDataConsumer>
+              {({ formData, dispatch, ...rest }) => (
+                  <RadioButtonGroupInput 
+                      onChange={(e, val) => this.clearMetrcFields(e, val, dispatch)}
+                      parse={val => parseInt(val, 10)} 
+                      label="Product Type" 
+                      source="productType" 
+                      choices={ProductTypeChoices} 
+                  />   
+              )}
+          </FormDataConsumer>
+          <FormDataConsumer>
             {({ formData, dispatch, ...rest }) => (
-              formData.cannabisProduct ?
+              formData.productType == '1' || formData.productType == '2' ?
                 <React.Fragment>
-                  <BooleanInput label="Medical Only" source="medicalProduct" />
                   <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
-                    <SelectInput validate={required()} optionText="name" />
+                    <SelectInput optionText="name" />
                   </ReferenceInput>
                   <MetricCategoryAndUOMInput />
                   <NumberInput lable="Unit CBD Percent" source="unitCbdPercent" />
@@ -127,7 +158,7 @@ class ProductEdit extends React.Component {
                   <NumberInput label="Unit Volume" source="unitVolume" />
                   <NumberInput label="Unit Weight" source="unitWeight" />
                 </React.Fragment>
-                : ''
+                : null
             )}
           </FormDataConsumer>
           <FormDataConsumer>

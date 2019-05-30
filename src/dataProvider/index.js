@@ -37,7 +37,6 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
  * @returns {Promise} the Promise for response
  */
 const dataProvider = async (type, resource, params) => {
-    debugger;
     if (`${resource}/${type}` == "packagePending/GET_ONE") {
         return {
             data: {

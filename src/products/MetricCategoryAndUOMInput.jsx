@@ -38,7 +38,6 @@ class MetricCategoryAndUOMInput extends React.Component {
                             return (
                                 <div>
                                     <SelectInput
-                                        validate={required()} 
                                         source="metrcCategory"
                                         choices={data}
                                         optionValue="name"
@@ -76,7 +75,6 @@ class MetricCategoryAndUOMInput extends React.Component {
                                 return (
                                 !_isEmpty(filteredUOM) ? <div>
                                     <SelectInput
-                                        validate={required()} 
                                         source="metrcUom"
                                         choices={filteredUOM}
                                         optionValue="name"
@@ -84,7 +82,6 @@ class MetricCategoryAndUOMInput extends React.Component {
                                     />
                                 </div> : <div>
                                     <SelectInput   
-                                        validate={required()} 
                                         source="metrcUom"
                                         choices={data}
                                         optionValue="name"
