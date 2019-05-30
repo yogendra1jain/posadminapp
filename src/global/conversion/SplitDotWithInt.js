@@ -1,4 +1,7 @@
 let splitDotWithInt = (num) => {
+    if(num < 0) {
+        num = 0
+    } else {
     if (num) {
         let b = num.toString().split(".");
         let c
@@ -21,6 +24,7 @@ let splitDotWithInt = (num) => {
     else {
         return 0
     }
+}
 
 }
 

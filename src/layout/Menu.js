@@ -22,6 +22,7 @@ import strains from '../strains';
 import vendorProduct from '../vendorProducts';
 import vendors from '../vendors';
 import SubMenu from './SubMenu';
+import categories from '../categories';
 
 class Menu extends Component {
     state = {
@@ -65,6 +66,12 @@ class Menu extends Component {
                         to={`/Strain`}
                         primaryText={'Strain'}
                         leftIcon={<strains.icon />}
+                        onClick={onMenuClick}
+                    />
+                    <MenuItemLink
+                        to={`/Category`}
+                        primaryText={"Categories"}
+                        leftIcon={<categories.icon />}
                         onClick={onMenuClick}
                     />
                 </SubMenu>

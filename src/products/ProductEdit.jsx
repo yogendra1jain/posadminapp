@@ -15,6 +15,7 @@ import {
   Query,
   Loading,
   Error,
+  TextField
 } from "react-admin";
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -123,8 +124,8 @@ class ProductEdit extends React.Component {
           >
             <CustomImageInput />
           </ImageInput>
-          <ReferenceInput label="Select Strain" reference="Strain">
-            <SelectInput source="name" />
+          <ReferenceInput label="Select Strain" source="strainId" reference="Strain">
+            <SelectInput optionText="name" />
           </ReferenceInput>
           <MetricCategoryAndUOMInput />
         </SimpleForm>

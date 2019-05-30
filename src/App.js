@@ -1,15 +1,19 @@
 // in src/App.js
 import React from 'react';
-import { Admin, Resource, ListGuesser, EditGuesser,ShowGuesser } from 'react-admin';
+import { Admin, Resource, ListGuesser, EditGuesser,ShowGuesser, mergeTranslations} from 'react-admin';
+import { reducer as tree } from 'ra-tree-ui-materialui';
+import treeEnglishMessages from 'ra-tree-language-english';
+import englishMessages from 'ra-language-english';
 
 import authProvider from './authProvider';
 import dataProvider from './dataProvider';
 import products from './products';
 import customers from './customers';
+import categories from './categories'
 import vendors from './vendors';
 import vendorProducts from './vendorProducts'
 import stores from './stores';
-import employees from './employees';
+// import employees from './employees';
 import packagepending from './packagePending';
 import Login from './global/components/LoginPage';
 import strains from './strains';
@@ -17,15 +21,22 @@ import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
 import DashboardContainer from './Dashboard/DashboardContainer';
 
+const messages = {
+  'en': mergeTranslations(englishMessages, treeEnglishMessages),
+};
+const i18nProvider = locale => messages[locale];
+
+
 const App = () => (
   <div>
     <Admin
       dataProvider={dataProvider}
+      i18nProvider={i18nProvider}
       authProvider={authProvider}
       appLayout={Layout}
       loginPage={Login}
       dashboard={DashboardContainer}
-
+      customReducers={{ tree }}
      >
       <Resource name="Search/Products" {...products}  options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
@@ -38,7 +49,7 @@ const App = () => (
       <Resource name="SaleReport" {...saleReport} />
       {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */}
       <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />
-      <Resource name="Category"/>
+      <Resource name="Category" {...categories}/>
 
 
     </Admin>
