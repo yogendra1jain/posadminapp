@@ -7,6 +7,7 @@ import {
   SelectInput,
   FormDataConsumer,
   REDUX_FORM_NAME,
+  required
 } from "react-admin";
 import _filter from 'lodash/filter';
 import _find from 'lodash/find';
@@ -37,6 +38,7 @@ class MetricCategoryAndUOMInput extends React.Component {
                             return (
                                 <div>
                                     <SelectInput
+                                        validate={required()} 
                                         source="metrcCategory"
                                         choices={data}
                                         optionValue="name"
@@ -74,13 +76,15 @@ class MetricCategoryAndUOMInput extends React.Component {
                                 return (
                                 !_isEmpty(filteredUOM) ? <div>
                                     <SelectInput
+                                        validate={required()} 
                                         source="metrcUom"
                                         choices={filteredUOM}
                                         optionValue="name"
                                         {...rest}
                                     />
                                 </div> : <div>
-                                    <SelectInput
+                                    <SelectInput   
+                                        validate={required()} 
                                         source="metrcUom"
                                         choices={data}
                                         optionValue="name"
