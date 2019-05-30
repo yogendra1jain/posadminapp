@@ -1,9 +1,10 @@
 import React from 'react';
 import _get from 'lodash/get'
+import  Typography  from '@material-ui/core/Typography';
 
 export const FullNameField = ({ record = {} }) => {
     return (
-        <span>{_get(record,'customer.firstName','') + ' ' + _get(record,'customer.lastName','')}</span>
+        <Typography>{_get(record,'customer.firstName','') + ' ' + _get(record,'customer.lastName','')}</Typography>
     )
 }
 

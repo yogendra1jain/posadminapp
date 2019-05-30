@@ -24,11 +24,12 @@ const CustomerCreate = props => (
 
         <NumberInput label="Phone Number" source="phoneNumber.phoneNumber" />
         <RadioButtonGroupInput
+          parse={v => parseInt(v)}
           source="gender"
           choices={[
-            { id: "1", name: "Male" },
-            { id: "2", name: "Female" },
-            { id: "3", name: "Other" }
+            { id: 1, name: "Male" },
+            { id: 2, name: "Female" },
+            { id: 3, name: "Other" }
           ]}
         />
         <DateInput label="Date Of Birth" source="dob" />
@@ -50,10 +51,11 @@ const CustomerCreate = props => (
 
       <FormTab label="Patient Details">
         <RadioButtonGroupInput
+          parse={(v) => parseInt(v)}
           source="customerType"
           choices={[
-            { id: "1", name: "MEDICAL" },
-            { id: "2", name: "RECREATIONAL" }
+            { id: 1, name: "MEDICAL" },
+            { id: 2, name: "RECREATIONAL" }
           ]}
         />
         <FormDataConsumer>

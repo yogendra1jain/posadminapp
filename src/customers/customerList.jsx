@@ -4,7 +4,8 @@ import { TextField,
    List,
    Filter,
    TextInput,
-   EditButton
+   EditButton,
+   ShowButton
 } from 'react-admin';
 import React from 'react';
 import { FullNameField } from '../global/components/FullNameField';
@@ -24,6 +25,7 @@ const CustomerList = props => (
             <EmailField source="email" />
             <TextField label="Phone" source="phoneNumber.phoneNumber" />
             <EditButton />
+            <ShowButton/>
         </Datagrid>
     </List>
 );
