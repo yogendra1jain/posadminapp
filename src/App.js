@@ -30,8 +30,8 @@ const App = () => (
       <Resource name="Search/Products" {...products}  options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
       <Resource name="Strain" {...strains}/>
-      <Resource name="Package" list={ListGuesser} />
-      <Resource name="Store" {...stores} />
+      <Resource name="Package" list={ListGuesser}  />
+      <Resource name="Store" {...stores}  />
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />
       <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Product List' }} />
