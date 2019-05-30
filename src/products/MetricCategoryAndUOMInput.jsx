@@ -35,7 +35,7 @@ class MetricCategoryAndUOMInput extends React.Component {
                             return (
                                 <div>
                                     <SelectInput
-                                        source="metricCategory"
+                                        source="metrcCategory"
                                         choices={data}
                                         optionValue="name"
                                         onChange= { (valueObj, value) => {

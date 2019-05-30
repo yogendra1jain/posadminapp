@@ -160,9 +160,9 @@ class DashboardContainer extends React.Component {
     render() {
         return (
             <div className='dashboard'>
-                <div className='panel-container'>
+                {/* <div className='panel-container'>
                     <span className='panel-heading'>Dashboard</span>
-                </div>
+                </div> */}
                 <div style={{ padding: "20px" }} className="flex-row dash-1 justify-space-between">
                     <FromandToCalander
                         startDate={this.state.startDate}

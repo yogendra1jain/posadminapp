@@ -7,7 +7,8 @@ import {
     TextInput,
     EditButton,
     FunctionField,
-    ShowButton
+    ShowButton,
+    BooleanField
 } from 'react-admin';
 import React from 'react';
 import DineroPrice from '../global/components/DineroPrice';
@@ -34,8 +35,9 @@ export const ProductList = props => (
         <Datagrid>
             <TextField label="SKU" source="sku" />
             <TextField label="Name" source="name" />
-            <DineroPrice label="Cost Price" source="costPrice.amount" />
+            {/* <DineroPrice label="Cost Price" source="costPrice.amount" /> */}
             <DineroPrice label="Sale Price" source="salePrice.amount" />
+
             <FunctionField text-align="left" label="Sync Status" render={record => _get(record,'syncStatus',0) == 0 ? <SyncIcon style={{color: 'orange'}} /> : <SyncIcon style={{color: 'green'}} />} />
             <EditButton/>
             <ShowButton/>

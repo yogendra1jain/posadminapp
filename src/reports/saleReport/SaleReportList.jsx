@@ -16,8 +16,14 @@ import { TextField,
     </Filter>
     );
 
+const SaleReportTitle = () => {
+    return (
+        <span>Sale Report</span>
+    )
+}
+
  const SaleReportList = props => (
-     <List  filters={<SaleReportFilter />} filterDefaultValues={{ date: moment().format('YYYY-MM-DD') }} {...props}>
+     <List title={<SaleReportTitle />} filters={<SaleReportFilter />} filterDefaultValues={{ date: moment().format('YYYY-MM-DD') }} {...props}>
          <Datagrid>
              <TextField source="date" />
              <TextField source="orderId" />
