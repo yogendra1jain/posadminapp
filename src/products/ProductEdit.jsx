@@ -142,7 +142,6 @@ class ProductEdit extends React.Component {
             }}
           </FormDataConsumer>
           <ImageInput
-            validate={required()}
             source="newImage"
             label="Change Image"
             accept="image/*"
