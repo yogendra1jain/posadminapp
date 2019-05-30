@@ -19,6 +19,8 @@ class PriceInput extends React.Component {
                     format={v => dineroObj(v).toUnit(2)}
                     parse={v => splitDotWithInt(v)}
                     source={source}
+                    {...this.props}
+                    
                 />
                 <div style={{display:'none'}}>
                     <TextInput source={`${originSource}.currency`} />
