@@ -62,12 +62,12 @@ const ResBodyGuesser = (obj) => {
             return 'Search/Products'
         case 'Search/Products/GET_ONE':
             return ''
-        case 'Sync/Metrc/Categories':
+        case 'Get/Metrc/Categories':
             return {
                 data: _get(json,'metrcCategories', []),
                 total: json.metrcCategories.length
             }
-        case 'Sync/Metrc/UnitOfMeasure':
+        case 'Get/Metrc/UnitOfMeasure':
             return {
                 data: _get(json,'metrcUnitOfMeasures', []),
                 total: json.metrcUnitOfMeasures.length
