@@ -27,6 +27,7 @@ import splitDotWithInt from "../global/conversion/SplitDotWithInt";
 import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
 import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
+import PriceInput from "../global/components/PriceInput";
 
 const OrderTitle = translate(({ record, translate }) => (
   <span>
@@ -97,18 +98,13 @@ class ProductEdit extends React.Component {
           <TextInput validate={required()} source="name" options={{ fullWidth: true }} />
           <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
           <LongTextInput validate={required()} source="description" />
-          <NumberInput
+          <PriceInput
             validate={required()}
             label="Cost Price"
-            format={v => dineroObj(v).toUnit(2)}
-            parse={v => splitDotWithInt(v)}
             source={"costPrice.amount"}
           />
-          <NumberInput
-            validate={required()}
-            label="Pos Price"
-            format={v => dineroObj(v).toUnit(2)}
-            parse={v => splitDotWithInt(v)}
+          <PriceInput
+            label="POS Price"
             source={"salePrice.amount"}
           />
           <CategoryInput source={"category1"} />
