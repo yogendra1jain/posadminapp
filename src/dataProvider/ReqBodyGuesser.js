@@ -3,6 +3,8 @@ import {
 } from "../global/UrlConstants";
 import _get from 'lodash/get';
 import _set from 'lodash/set'
+import { filter } from "async";
+import moment from 'moment';
 
 const reqObjMaker = (url, reqBody, ) => {
     return {
@@ -212,11 +214,14 @@ const ReqBodyGuesser = (obj) => {
 
         // Sale Report ***************
         case 'Reports/SalesReport/ByStore':
-            reqBody.id = "90fcee1b-fef3-4af7-a686-80159751d127"
+            let startDate = new Date(moment(_get(params,'filter.date','')))
+            let endDate = moment(_get(params,'filter.date',''))
+            endDate.endOf('day')
+            reqBody.id = localStorage.getItem('storeId')
             reqBody.fromTimeStamp = {}
-            reqBody.fromTimeStamp.seconds = 1557945000
+            reqBody.fromTimeStamp.seconds = parseInt(startDate / 1000)
             reqBody.toTimeStamp = {}
-            reqBody.toTimeStamp.seconds = 1558031399
+            reqBody.toTimeStamp.seconds = parseInt(endDate / 1000)
             return reqObjMaker(url, reqBody)
         default:
             break;

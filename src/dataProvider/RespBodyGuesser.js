@@ -1,5 +1,11 @@
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty';
+import Dinero from 'dinero.js';
+import moment from 'moment';
+
+const DineroInit = (amount, currency, precision) => (
+    Dinero({amount:  parseInt(amount) || 0, currency: currency || 'USD', precision: precision || 2})
+)
 
 const ResBodyGuesser = (obj) => {
     const {
@@ -14,7 +20,6 @@ const ResBodyGuesser = (obj) => {
     } = response
     if (type == 'CREATE' || type == 'UPDATE') {
         if(url == 'Product/Create') {
-            debugger
         }
         return {
             data: {
@@ -178,11 +183,74 @@ const ResBodyGuesser = (obj) => {
 
         //For Reports       ******************************************************************************************
         case 'Reports/SalesReport/ByStore':
-            json && json.map(data => data.id = "uuid")
-            
+                let saleReportData = []
+                json && json.map(report => {
+                    let paymentMethod1 = ''
+                    let paymentMethod2 = ''
+                    let paymentMethod3 = ''
+                    _get(report, 'payments',[]).map(payment => {
+                        let isCash = ('paymentMethod' in  payment)
+                        if(!isCash) {
+                            paymentMethod1 = 'CASH'
+                        }
+                        if(payment.paymentMethod == 1) {
+                            paymentMethod2 = 'CARD - FREEDOM PAY'
+                        }
+                        if(payment.paymentMethod == 2) {
+                            paymentMethod3 = 'GIFT CARD'
+                        }
+                    })
+                    let isSaleTypeExist = _get(report,'saleItem.saleType')
+                    let isProduct = false
+                    let isGiftCard = false
+                    if(isSaleTypeExist)     {
+                        if(_get(report,'saleItem.saleType',0) == 1) {
+                        isGiftCard = true
+                        } else if(_get(report,'saleItem.saleType',0) == 0) {
+                        isProduct = true 
+                        }
+                    } else {
+                        isProduct = true
+                    }
+                    let isMiscDoesNotExist = !('misc' in _get(report, 'product', {}))
+                    let tempStore = {}
+                    tempStore.date = moment(_get(report, 'saleTransactionDetail.saleTimeStamp.seconds', 0) * 1000).format("MM/DD/YYYY h:mm a")
+                    tempStore.orderId = _get(report, 'saleTransactionDetail.id', '')
+                    tempStore.staffName = _get(report, 'staff.person.firstName', '') + ' ' + _get(report, 'staff.person.lastName', '')
+                    tempStore.customerName = _get(report, 'customer.customer.firstName', '') + ' ' + _get(report, 'customer.customer.lastName', '')
+                    tempStore.customerId = _get(report, 'customer.id', '')
+                    tempStore.employeeCode = _get(report, 'customer.employeeId', '')
+                    tempStore.sku = _get(report, 'product.sku', '')
+                    tempStore.barCode = _get(report, 'product.upcCode', '')
+                    tempStore.productName = isProduct ? _get(report, 'saleItem.product.name', '') : 'Gift Card'
+                    tempStore.staffNote = _get(report, 'saleTransactionDetail.saleComment', '')
+                    tempStore.group = _get(report, 'group.name', '')
+                    tempStore.category = _get(report, 'category.name', '')
+                    tempStore.subCategory = _get(report, 'subCategory.name', '')
+                    tempStore.itemType = isGiftCard ? 'Gift Card' : isMiscDoesNotExist ? 'Product' : 'Miscellaneous Product'
+                    tempStore.priceRetailUnit = DineroInit(_get(report, 'product.salePrice.amount', 0)).toFormat('$0,0.00')
+                    tempStore.costPrice = DineroInit(_get(report, 'product.costPrice.amount', 0)).toFormat('$0,0.00')
+                    tempStore.quantity = _get(report, 'saleItem.qty', 1)
+                    tempStore.totalRetailSales = DineroInit(_get(report, 'saleItem.itemRegularTotal.amount', 0)).toFormat('$0,0.00')
+                    
+                    tempStore.preTaxSales = DineroInit(_get(report, 'saleItem.itemSubTotal.amount', 0)).toFormat('$0,0.00')
+                    tempStore.tax = DineroInit(_get(report, 'saleItem.itemTaxAmount.amount',0)).toFormat('$0,0.00')
+                    tempStore.totalSales = DineroInit(_get(report, 'saleItem.itemEffectiveTotal.amount', 0)).toFormat('$0,0.00')
+                    tempStore.employeeDiscountAmount = DineroInit(_get(report,'saleItem.employeeDiscountTotal.amount',0)).toFormat('$0,0.00')
+                    tempStore.itemDiscountAmount = DineroInit(_get(report, 'saleItem.itemDiscountTotal.amount', 0)).toFormat('$0,0.00')
+                    tempStore.cartDiscountAmount = DineroInit(_get(report, 'saleItem.cartDiscountTotal.amount', 0)).toFormat('$0,0.00')
+                    tempStore.totalItemDiscount = DineroInit(_get(report,'saleItem.employeeDiscountTotal.amount',0) + _get(report, 'saleItem.itemDiscountTotal.amount', 0) + _get(report, 'saleItem.cartDiscountTotal.amount', 0)).toFormat('$0,0.00')
+                    tempStore.paymentMethod1 = paymentMethod1
+                    tempStore.paymentMethod2 = paymentMethod2
+                    tempStore.paymentMethod3 = paymentMethod3
+                    tempStore.itemVendorNo = _get(report, 'vendorProduct.sku', '')
+                    tempStore.vendorName = _get(report, 'vendor.name', '')
+                    tempStore.id = Math.floor((Math.random() * 100000) + 1);
+                    saleReportData.push(tempStore)
+                })
             return {
-                data: json,
-                total: json.length
+                data: saleReportData || [],
+                total: _get(saleReportData,'length',0)
             }
         default:
             if (json.id == null) {

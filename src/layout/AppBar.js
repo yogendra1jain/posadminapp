@@ -29,7 +29,8 @@ const CustomUserMenu = translate(({ translate, ...props }) => (
 ));
 
 const CustomAppBar = ({ classes, ...props }) => (
-    <AppBar {...props} userMenu={<CustomUserMenu />}>
+    // <AppBar {...props} userMenu={<CustomUserMenu />}>
+    <AppBar {...props}>
         <Typography
             variant="title"
             color="inherit"
