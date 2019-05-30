@@ -20,6 +20,12 @@ import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 import CustomImageField from './CustomImageInput';
 import { FormDataConsumer } from 'ra-core';
 
+const ProductTypeChoices = [
+    { id: 0, name: 'Non-Cannabis' },
+    { id: 1, name: 'Cannabis Product' },
+    { id: 2, name: 'Medical Only Cannabis Product' }
+]
+
 const ProductCreateTitle = ({ record }) => {
     return (
         <span>Create Product</span>
@@ -53,30 +59,30 @@ class ProductCreate extends Component {
                         parse={v => splitDotWithInt(v)}
                         source={"salePrice.amount"}
                     />
-                    <BooleanInput label="Cannabis Product" source="cannabisProduct" />
-                    <BooleanInput label="Taxable" source="taxable" />
+                    <BooleanInput label="Taxable" source="isTaxable" />
                     <BooleanInput label="Discountable" source="discountable" />
+                    <RadioButtonGroupInput parse={val => parseInt(val, 10)} label="Product Type" source="productType" choices={ProductTypeChoices} />
                     <FormDataConsumer>
-                        {({ formData, dispatch, ...rest }) => (
-                            formData.cannabisProduct ?
-                                <React.Fragment>
-                                    <BooleanInput label="Medical Only" source="medicalProduct" />
-                                    <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
-                                        <SelectInput validate={required()} optionText="name" />
-                                    </ReferenceInput>
-                                    <MetricCategoryAndUOMInput />
-                                    <NumberInput lable="Unit CBD Percent" source="unitCbdPercent" />
-                                    <NumberInput lable="Unit CBD Content" source="unitCbdContent" />
-                                    <NumberInput lable="Unit THC Percent" source="unitThcPercent" />
-                                    <NumberInput lable="Unit THC Content" source="unitThcContent" />
-                                    <NumberInput label="Unit Volume" source="unitVolume" />
-                                    <NumberInput label="Unit Weight" source="unitWeight" />
-                                </React.Fragment>
-                                : ''
-                        )}
+                        {({ formData, dispatch, ...rest }) => {
+                            return (
+                                formData.productType == '1' || formData.productType == '2' ?
+                                    <React.Fragment>
+                                        <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
+                                            <SelectInput validate={required()} optionText="name" />
+                                        </ReferenceInput>
+                                        <MetricCategoryAndUOMInput />
+                                        <NumberInput lable="Unit CBD Percent" source="unitCbdPercent" />
+                                        <NumberInput lable="Unit CBD Content" source="unitCbdContent" />
+                                        <NumberInput lable="Unit THC Percent" source="unitThcPercent" />
+                                        <NumberInput lable="Unit THC Content" source="unitThcContent" />
+                                        <NumberInput label="Unit Volume" source="unitVolume" />
+                                        <NumberInput label="Unit Weight" source="unitWeight" />
+                                    </React.Fragment>
+                                    : ''
+                            )
+                        }}
                     </FormDataConsumer>
                     <ImageInput
-                        validate={required()}
                         source="newImage"
                         label="Upload Image"
                         accept="image/*"

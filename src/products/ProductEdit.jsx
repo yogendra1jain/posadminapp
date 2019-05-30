@@ -17,7 +17,8 @@ import {
   Error,
   TextField,
   required,
-  BooleanInput
+  BooleanInput,
+  RadioButtonGroupInput
 } from "react-admin";
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -28,6 +29,12 @@ import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
 import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 import PriceInput from "../global/components/PriceInput";
+
+const ProductTypeChoices = [
+  { id: 0,  name: 'Non-Cannabis'},
+  { id: 1,  name: 'Cannabis Product' },
+  { id: 2,  name: 'Cannabis (Medical Only)' }
+]
 
 const OrderTitle = translate(({ record, translate }) => (
   <span>
@@ -108,14 +115,13 @@ class ProductEdit extends React.Component {
             source={"salePrice.amount"}
           />
           <CategoryInput source={"category1"} />
-          <BooleanInput label="Cannabis Product" source="cannabisProduct" />
-          <BooleanInput label="Taxable" source="taxable" />
+          <BooleanInput label="Taxable" source="isTaxable" />
           <BooleanInput label="Discountable" source="discountable" />
+          <RadioButtonGroupInput parse={val => parseInt(val, 10)} label="Product Type" source="productType" choices={ProductTypeChoices} />
           <FormDataConsumer>
             {({ formData, dispatch, ...rest }) => (
-              formData.cannabisProduct ?
+              formData.productType == '1' || formData.productType == '2' ?
                 <React.Fragment>
-                  <BooleanInput label="Medical Only" source="medicalProduct" />
                   <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
                     <SelectInput validate={required()} optionText="name" />
                   </ReferenceInput>
