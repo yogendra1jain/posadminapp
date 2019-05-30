@@ -84,6 +84,13 @@ const ResBodyGuesser = (obj) => {
                 total: json.length,
             };
 
+        case 'Category/AllByRetailerId':
+            debugger;
+            return {
+                data: json,
+                total: json.length,
+            };
+
         //For Customers ******************************************************************************************
         case 'Search/Customers':
             return {
