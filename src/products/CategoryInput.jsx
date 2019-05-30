@@ -6,6 +6,7 @@ import {
   SelectInput,
   FormDataConsumer,
   REDUX_FORM_NAME,
+  required
 } from "react-admin";
 
 const CategoryInput = ({ record }) => (
@@ -27,6 +28,7 @@ const CategoryInput = ({ record }) => (
             return (
               <div>
                 <SelectInput
+                  validate={required()} 
                   source="category1"
                   choices={data}
                   optionText="name"
@@ -59,6 +61,7 @@ const CategoryInput = ({ record }) => (
             return (
               <div>
                 <SelectInput
+                  validate={required()} 
                   source="category2"
                   choices={data}
                   optionText="name"
@@ -92,6 +95,7 @@ const CategoryInput = ({ record }) => (
               <div>
                 {formData.category2 != null ? (
                   <SelectInput
+                    validate={required()} 
                     source="category3"
                     choices={data}
                     optionText="name"

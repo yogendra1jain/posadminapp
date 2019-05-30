@@ -15,7 +15,9 @@ import {
   Query,
   Loading,
   Error,
-  TextField
+  TextField,
+  required,
+  BooleanInput
 } from "react-admin";
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -73,7 +75,6 @@ class ProductEdit extends React.Component {
   };
 
   fetchCategory = ({ data, loading, error }) => {
-    console.log(data, loading, error);
     return loading ? (
       <Loading />
     ) : error ? (
@@ -93,10 +94,12 @@ class ProductEdit extends React.Component {
     return (
       <Edit title={<ProductTitle />} {...this.props}>
         <SimpleForm>
-          <TextInput source="name" options={{ fullWidth: true }} />
-          <TextInput source="sku" options={{ fullWidth: true }} />
-          <LongTextInput source="description" />
+          <TextField source="metrcId" label="Metrc Id" />
+          <TextInput validate={required()} source="name" options={{ fullWidth: true }} />
+          <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
+          <LongTextInput validate={required()} source="description" />
           <PriceInput
+            validate={required()}
             label="Cost Price"
             source={"costPrice.amount"}
           />
@@ -105,6 +108,28 @@ class ProductEdit extends React.Component {
             source={"salePrice.amount"}
           />
           <CategoryInput source={"category1"} />
+          <BooleanInput label="Cannabis Product" source="cannabisProduct" />
+          <BooleanInput label="Taxable" source="taxable" />
+          <BooleanInput label="Discountable" source="discountable" />
+          <FormDataConsumer>
+            {({ formData, dispatch, ...rest }) => (
+              formData.cannabisProduct ?
+                <React.Fragment>
+                  <BooleanInput label="Medical Only" source="medicalProduct" />
+                  <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
+                    <SelectInput validate={required()} optionText="name" />
+                  </ReferenceInput>
+                  <MetricCategoryAndUOMInput />
+                  <NumberInput validate={required()} lable="Unit CBD Percent" source="unitCbdPercent" />
+                  <NumberInput validate={required()} lable="Unit CBD Content" source="unitCbdContent" />
+                  <NumberInput validate={required()} lable="Unit THC Percent" source="unitThcPercent" />
+                  <NumberInput validate={required()} lable="Unit THC Content" source="unitThcContent" />
+                  <NumberInput validate={required()} label="Unit Volume" source="unitVolume" />
+                  <NumberInput validate={required()} label="Unit Weight" source="unitWeight" />
+                </React.Fragment>
+                : ''
+            )}
+          </FormDataConsumer>
           <FormDataConsumer>
             {({ formData, dispatch, ...rest }) => {
               if (!formData.newImage) {
@@ -117,6 +142,7 @@ class ProductEdit extends React.Component {
             }}
           </FormDataConsumer>
           <ImageInput
+            validate={required()}
             source="newImage"
             label="Change Image"
             accept="image/*"
@@ -124,10 +150,6 @@ class ProductEdit extends React.Component {
           >
             <CustomImageInput />
           </ImageInput>
-          <ReferenceInput label="Select Strain" source="strainId" reference="Strain">
-            <SelectInput optionText="name" />
-          </ReferenceInput>
-          <MetricCategoryAndUOMInput />
         </SimpleForm>
       </Edit>
     );
