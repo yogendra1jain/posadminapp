@@ -21,9 +21,9 @@ const UrlGuesser = (obj) => {
         case 'Search/Products/GET_MANY':
             return 'Product/GetByIds'
         case 'MetricCategory/GET_LIST':
-            return 'Sync/Metrc/Categories'
+            return 'Get/Metrc/Categories'
         case 'UOM/GET_LIST':
-            return 'Sync/Metrc/UnitOfMeasure'
+            return 'Get/Metrc/UnitOfMeasure'
 
         //For Category ******************************************************************************************
         case 'Level1ByRetailerId/GET_LIST':
