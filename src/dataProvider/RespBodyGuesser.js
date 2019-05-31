@@ -54,23 +54,39 @@ const ResBodyGuesser = (obj) => {
             };
         case 'Product/Get':
             return (url, params)
-        case 'Search/Products/DELETE':
-            return ''
-        case 'Search/Products/DELETE_MANY':
-            return ''
         case 'Search/Products/GET_LIST':
             return 'Search/Products'
         case 'Search/Products/GET_ONE':
             return ''
-        case 'Get/Metrc/Categories':
+        case 'Get/Metrc/ItemTypes':
+            let MetrcItemTypes = _get(json, 'metrcItemTypes', []).map(item=> {
+                let UpdatedItem = {...item}
+                UpdatedItem.id = Math.floor((Math.random() * 100000) + 1)
+                return UpdatedItem
+            })
             return {
-                data: _get(json,'metrcCategories', []),
-                total: json.metrcCategories.length
+                data: MetrcItemTypes,
+                total: !_isEmpty(json.metrcItemTypes) ? json.metrcItemTypes.length : 0
+            }
+        case 'Get/Metrc/Categories/ByItemType':
+            let MetrcCategoryByItemTypes = _get(json, 'metrcCategories', []).map(item=> {
+                let UpdatedItem = {...item}
+                UpdatedItem.id = Math.floor((Math.random() * 100000) + 1)
+                return UpdatedItem
+            })
+            return {
+                data: MetrcCategoryByItemTypes,
+                total: !_isEmpty(json.metrcCategories) ? json.metrcCategories.length : 0
             }
         case 'Get/Metrc/UnitOfMeasure':
+            let MetrcUOM = _get(json, 'metrcUnitOfMeasures', []).map(item=> {
+                let UpdatedItem = {...item}
+                UpdatedItem.id = Math.floor((Math.random() * 100000) + 1)
+                return UpdatedItem
+            })
             return {
-                data: _get(json,'metrcUnitOfMeasures', []),
-                total: json.metrcUnitOfMeasures.length
+                data: MetrcUOM,
+                total: !_isEmpty(json.metrcUnitOfMeasures) ? json.metrcUnitOfMeasures.length : 0
             }
         //For Category ******************************************************************************************
         case 'Category/Level1ByRetailerId':

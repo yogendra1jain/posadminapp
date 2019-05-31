@@ -61,16 +61,6 @@ class ProductCreate extends Component {
                     <TextInput validate={required()} source="sku" label="Sku" />
                     <LongTextInput validate={required()} source="description" />
                     <CategoryInput source={"category1"} />
-                    <PriceInput
-                        validate={required()}
-                        label="Cost Price"
-                        source={"costPrice.amount"}
-                    />
-                    <PriceInput
-                        validate={required()}
-                        label="POS Price"
-                        source={"salePrice.amount"}
-                    />
                     <BooleanInput label="Taxable" source="isTaxable" />
                     <BooleanInput label="Discountable" source="discountable" />
                     <FormDataConsumer>
@@ -93,17 +83,21 @@ class ProductCreate extends Component {
                                             <SelectInput validate={required()} optionText="name" />
                                         </ReferenceInput>
                                         <MetricCategoryAndUOMInput />
-                                        <NumberInput lable="Unit CBD Percent" source="unitCbdPercent" />
-                                        <NumberInput lable="Unit CBD Content" source="unitCbdContent" />
-                                        <NumberInput lable="Unit THC Percent" source="unitThcPercent" />
-                                        <NumberInput lable="Unit THC Content" source="unitThcContent" />
-                                        <NumberInput label="Unit Volume" source="unitVolume" />
-                                        <NumberInput label="Unit Weight" source="unitWeight" />
                                     </React.Fragment>
                                     : null
                             )
                         }}
                     </FormDataConsumer>
+                    <PriceInput
+                        validate={required()}
+                        label="Cost Price"
+                        source={"costPrice.amount"}
+                    />
+                    <PriceInput
+                        validate={required()}
+                        label="POS Price"
+                        source={"salePrice.amount"}
+                    />
                     <ImageInput
                         source="newImage"
                         label="Upload Image"

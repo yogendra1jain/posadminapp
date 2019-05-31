@@ -151,12 +151,6 @@ class ProductEdit extends React.Component {
                     <SelectInput optionText="name" />
                   </ReferenceInput>
                   <MetricCategoryAndUOMInput />
-                  <NumberInput lable="Unit CBD Percent" source="unitCbdPercent" />
-                  <NumberInput lable="Unit CBD Content" source="unitCbdContent" />
-                  <NumberInput lable="Unit THC Percent" source="unitThcPercent" />
-                  <NumberInput lable="Unit THC Content" source="unitThcContent" />
-                  <NumberInput label="Unit Volume" source="unitVolume" />
-                  <NumberInput label="Unit Weight" source="unitWeight" />
                 </React.Fragment>
                 : null
             )}
