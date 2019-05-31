@@ -97,7 +97,7 @@ class ProductEdit extends React.Component {
   };
 
   clearMetrcFields = (e, val, dispatch) => {
-    debugger
+    
     if(val == 0) {
         dispatch(change(REDUX_FORM_NAME, "strainId", null))
         dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
