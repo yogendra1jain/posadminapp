@@ -119,16 +119,6 @@ class ProductEdit extends React.Component {
           <TextInput validate={required()} source="name" options={{ fullWidth: true }} />
           <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
           <LongTextInput validate={required()} source="description" />
-          <PriceInput
-            validate={required()}
-            label="Cost Price"
-            source={"costPrice.amount"}
-          />
-          <PriceInput
-            validate={required()}
-            label="POS Price"
-            source={"salePrice.amount"}
-          />
           <CategoryInput source={"category1"} />
           <BooleanInput label="Taxable" source="isTaxable" />
           <BooleanInput label="Discountable" source="discountable" />
@@ -166,6 +156,16 @@ class ProductEdit extends React.Component {
               }
             }}
           </FormDataConsumer>
+          <PriceInput
+            validate={required()}
+            label="Cost Price"
+            source={"costPrice.amount"}
+          />
+          <PriceInput
+            validate={required()}
+            label="POS Price"
+            source={"salePrice.amount"}
+          />
           <ImageInput
             source="newImage"
             label="Change Image"

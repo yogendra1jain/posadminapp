@@ -61,7 +61,7 @@ class ProductCreate extends Component {
                     <TextInput validate={required()} source="sku" label="Sku" />
                     <LongTextInput validate={required()} source="description" />
                     <CategoryInput source={"category1"} />
-                    <BooleanInput label="Taxable" source="isTaxable" />
+                    <BooleanInput defaultValue={true} label="Taxable" source="isTaxable" />
                     <BooleanInput label="Discountable" source="discountable" />
                     <FormDataConsumer>
                         {({ formData, dispatch, ...rest }) => (
