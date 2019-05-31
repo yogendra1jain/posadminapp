@@ -1,6 +1,7 @@
 import React from 'react';
 import { Show, SimpleShowLayout, TextField, BooleanField, DateField, NumberField, ReferenceField, ImageField } from 'react-admin';
 import _get from 'lodash/get';
+
 import moment from 'moment';
 const DisplayDateField = ({ source, record = {} }) => <span>{moment(_get(record, source) * 1000).format('MM-DD-YYYY')}</span>;
 
