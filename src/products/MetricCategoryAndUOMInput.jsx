@@ -36,6 +36,7 @@ class MetricCategoryAndUOMInput extends React.Component {
     }
 
     render() {
+        console.log(this.props.record, 'fydydgdudydfhy')
         const {selectedCategory} = this.state
         return (
             <div>
@@ -90,7 +91,10 @@ class MetricCategoryAndUOMInput extends React.Component {
                                             onChange={(valueObj, value) => {
                                                     let selectedCategory = _find(data, ['name', value])
                                                     this.setState({ selectedCategory })
-                                                    return dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
+                                                    return dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
+                                                    dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
+                                                    dispatch(change(REDUX_FORM_NAME, "unitVolumeUnitOfMeasure", null))
+                                                    dispatch(change(REDUX_FORM_NAME, "unitWeightUnitOfMeasure", null))
                                                 }
                                             }
                                         />
@@ -109,6 +113,7 @@ class MetricCategoryAndUOMInput extends React.Component {
                             payload={{}}
                         >
                             {({ data, loading, error }) => {
+                                console.log(formData, 'formData')
                                 let filteredUOM = _filter(data, uom => {
                                     return uom.quantityType == _get(this.state, 'selectedCategory.quantityType', '')
                                 })
@@ -134,7 +139,7 @@ class MetricCategoryAndUOMInput extends React.Component {
                                                     optionValue="name"
                                                     {...rest}
                                             />}
-                                        {_get(selectedCategory,'requiresUnitVolume', false) ?
+                                        {_get(selectedCategory,'requiresUnitVolume', false) || _get(formData, 'unitVolume', false) ?
                                         <div>
                                             <NumberInput validate={_get(selectedCategory,'requiresUnitVolume',false) && required()} label="Unit Volume" source="unitVolume" /> 
                                             <SelectInput 
@@ -145,7 +150,7 @@ class MetricCategoryAndUOMInput extends React.Component {
                                                 validate={_get(selectedCategory,'requiresUnitVolume',false) && required()}
                                             /> 
                                         </div> : ''}
-                                        {_get(selectedCategory,'requiresUnitWeight',false) ?
+                                        {_get(selectedCategory,'requiresUnitWeight',false) ||_get(formData, 'unitWeight', false) ?
                                         <div>
                                              <NumberInput validate={_get(selectedCategory,'requiresUnitWeight',false) && required()} label="Unit Weight" source="unitWeight" />
                                             <SelectInput 

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  translate,
   ImageInput,
   Edit,
   TextInput,
@@ -23,9 +22,6 @@ import {
 } from "react-admin";
 import { change } from "redux-form";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { CustomerPriceInput } from "./CustomPriceInput";
-import dineroObj from "../global/conversion/DineroObj";
-import splitDotWithInt from "../global/conversion/SplitDotWithInt";
 import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
 import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
@@ -37,11 +33,6 @@ const ProductTypeChoices = [
   { id: 2,  name: 'Cannabis (Medical Only)' }
 ]
 
-const OrderTitle = translate(({ record, translate }) => (
-  <span>
-    {translate("resources.commands.title", { reference: record.reference })}
-  </span>
-));
 const ProductTitle = ({ record }) => {
   return (
     <span>
@@ -53,7 +44,6 @@ const ProductTitle = ({ record }) => {
 const editStyles = {
   root: { alignItems: "flex-start" }
 };
-let count = 1;
 class ProductEdit extends React.Component {
   constructor(props) {
     super(props);
@@ -97,7 +87,6 @@ class ProductEdit extends React.Component {
   };
 
   clearMetrcFields = (e, val, dispatch) => {
-    
     if(val == 0) {
         dispatch(change(REDUX_FORM_NAME, "strainId", null))
         dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
@@ -108,6 +97,9 @@ class ProductEdit extends React.Component {
         dispatch(change(REDUX_FORM_NAME, "unitThcContent", null))
         dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
         dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
+        dispatch(change(REDUX_FORM_NAME, "metrcItemType", null))
+        dispatch(change(REDUX_FORM_NAME, "unitThcContentUnitOfMeasure", null))
+        dispatch(change(REDUX_FORM_NAME, "unitCbdContentUnitOfMeasure", null))
     }
   }
 

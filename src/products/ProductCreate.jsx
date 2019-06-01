@@ -51,6 +51,9 @@ class ProductCreate extends Component {
             dispatch(change(REDUX_FORM_NAME, "unitThcContent", null))
             dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
             dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
+            dispatch(change(REDUX_FORM_NAME, "metrcItemType", null))
+            dispatch(change(REDUX_FORM_NAME, "unitThcContentUnitOfMeasure", null))
+            dispatch(change(REDUX_FORM_NAME, "unitCbdContentUnitOfMeasure", null))
         }
     }
     render() {
