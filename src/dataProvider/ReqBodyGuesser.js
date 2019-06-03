@@ -100,8 +100,10 @@ const ReqBodyGuesser = (obj) => {
             return ''
         case 'Product/GetByIds':
             return reqObjMaker(url, params)
-        case 'Get/Metrc/Categories':
+        case 'Get/Metrc/ItemTypes':
             return reqObjMaker(url, { id: retailerId })
+        case 'Get/Metrc/Categories/ByItemType':
+            return reqObjMaker(url, params)
         case 'Get/Metrc/UnitOfMeasure':
             return reqObjMaker(url, { id: retailerId })
         //For Category ******************************************************************************************

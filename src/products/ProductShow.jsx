@@ -28,7 +28,7 @@ const ProductShow = props => (
             <TextField source="upcCode" />
             <BooleanField source="isTaxable" />
             <BooleanField source="discountable" />
-            <DisplayDateField label='Create On' addLabel={true} source='createdOn.seconds' />
+            <DisplayDateField label='Created On' addLabel={true} source='createdOn.seconds' />
             <DisplayDateField label='Updated On' addLabel={true} source='updatedOn.seconds' />
         </SimpleShowLayout>
     </Show>

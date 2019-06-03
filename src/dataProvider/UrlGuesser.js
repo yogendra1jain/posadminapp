@@ -20,8 +20,10 @@ const UrlGuesser = (obj) => {
             return ''
         case 'Search/Products/GET_MANY':
             return 'Product/GetByIds'
-        case 'MetricCategory/GET_LIST':
-            return 'Get/Metrc/Categories'
+        case 'MetrcItemTypes/GET_LIST':
+            return 'Get/Metrc/ItemTypes'
+        case 'MetrcCategory/GET_LIST':
+            return 'Get/Metrc/Categories/ByItemType'
         case 'UOM/GET_LIST':
             return 'Get/Metrc/UnitOfMeasure'
 
