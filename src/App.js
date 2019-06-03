@@ -20,6 +20,7 @@ import strains from './strains';
 import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
 import DashboardContainer from './Dashboard/DashboardContainer';
+import tax from './tax';
 
 const messages = {
   'en': mergeTranslations(englishMessages, treeEnglishMessages),
@@ -50,8 +51,7 @@ const App = () => (
       {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */}
       <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />
       <Resource name="Category" {...categories}/>
-
-
+      <Resource name="Tax" {...tax}/>
     </Admin>
   </div>
 );

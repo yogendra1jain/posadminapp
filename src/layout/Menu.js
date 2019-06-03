@@ -23,6 +23,7 @@ import vendorProduct from '../vendorProducts';
 import vendors from '../vendors';
 import SubMenu from './SubMenu';
 import categories from '../categories';
+import tax from '../tax';
 
 class Menu extends Component {
     state = {
@@ -31,7 +32,8 @@ class Menu extends Component {
         menuVendors: false,
         menuPackages: false,
         menuStores: false,
-        menuReports: false
+        menuReports: false,
+        menuTax: false
     };
 
     static propTypes = {
@@ -102,12 +104,6 @@ class Menu extends Component {
                         leftIcon={<customers.icon />}
                         onClick={onMenuClick}
                     />
-                    {/* <MenuItemLink
-                        to={`/employees`}
-                        primaryText={'Employees'}
-                        leftIcon={<employees.icon />}
-                        onClick={onMenuClick}
-                    /> */}
                 </SubMenu>
                 <SubMenu
                     handleToggle={() => this.handleToggle('menuVendors')}
@@ -163,15 +159,21 @@ class Menu extends Component {
                         onClick={onMenuClick}
                     />
                 </SubMenu>
-                {/* <MenuItemLink
-                    to={`/reviews`}
-                    primaryText={translate(`resources.reviews.name`, {
-                        smart_count: 2,
-                    })}
-                    leftIcon={<reviews.icon />}
-                    onClick={onMenuClick}
-                />
-                <Responsive
+                <SubMenu    
+                    handleToggle={() => this.handleToggle('menuTax')}
+                    isOpen={this.state.menuTax}
+                    sidebarIsOpen={open}
+                    name="Taxes"
+                    icon={<stores.icon />}
+                >
+                    <MenuItemLink
+                        to={`/Tax`}
+                        primaryText={'Tax'}
+                        leftIcon={<stores.icon />}
+                        onClick={onMenuClick}
+                    />
+                </SubMenu>
+                {/* <Responsive
                     xsmall={
                         <MenuItemLink
                             to="/configuration"
@@ -184,7 +186,7 @@ class Menu extends Component {
                 />
                 <Responsive
                     small={logout}
-                    medium={null} // Pass null to render nothing on larger devices
+                    medium={null} // Pass null to render nothing on larger devices 
                 /> */}
             </div>
         );

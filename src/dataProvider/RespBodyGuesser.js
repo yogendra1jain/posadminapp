@@ -19,9 +19,7 @@ const ResBodyGuesser = (obj) => {
         json
     } = response
     if (type == 'CREATE' || type == 'UPDATE') {
-        if(url == 'Product/Create') {
-        }
-        return {
+       return {
             data: {
                 ...params.data,
                 id: json.id
@@ -32,6 +30,9 @@ const ResBodyGuesser = (obj) => {
         //unused code to be removed
         if (json.id == null) {
             json.id = "uuid";
+        }
+        if(url == 'Get/Tax/Id') {
+            return {data: json.tax}
         }
         return {
             data: json
@@ -164,7 +165,6 @@ const ResBodyGuesser = (obj) => {
             };
         //For Vendor Products ******************************************************************************************
         case 'VendorProduct/GetByRetailerId':
-            console.log(json, 'json')
             let newJson = json.splice(0, 10)
             return {
                 data: newJson,
@@ -273,6 +273,13 @@ const ResBodyGuesser = (obj) => {
             return {
                 data: saleReportData || [],
                 total: _get(saleReportData,'length',0)
+            }
+
+        //For Tax       ******************************************************************************************
+        case 'Get/Tax/RetailerId':
+            return {
+                data: json.taxes,
+                total: json.taxes.length
             }
         default:
             if (json.id == null) {

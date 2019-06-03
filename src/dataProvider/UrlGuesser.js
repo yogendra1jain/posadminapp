@@ -166,6 +166,16 @@ const UrlGuesser = (obj) => {
         // Sale Report **********************************************************************
         case 'SaleReport/GET_LIST':
             return 'Reports/SalesReport/ByStore'
+
+        //For Tax       ******************************************************************************************
+        case 'Tax/GET_LIST':
+            return 'Get/Tax/RetailerId'
+        case 'Tax/CREATE':
+            return 'Create/Tax';
+        case 'Tax/GET_ONE':
+            return 'Get/Tax/Id';
+        case 'Tax/UPDATE':
+            return 'Update/Tax';
         default:
             break;
     }

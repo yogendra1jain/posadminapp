@@ -22,6 +22,7 @@ import CustomImageField from './CustomImageInput';
 import { FormDataConsumer } from 'ra-core';
 import PriceInput from "../global/components/PriceInput";
 import {change} from 'redux-form';
+
 const ProductTypeChoices = [
     { id: 0, name: 'Non-Cannabis' },
     { id: 1, name: 'Cannabis Product' },
