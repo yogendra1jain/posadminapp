@@ -70,12 +70,6 @@ const ReqBodyGuesser = (obj) => {
     switch (url) {
         // For Products ******************************************************************************************
         case 'Search/Products':
-            let {
-                page, perPage
-            } = params.pagination;
-            let {
-                field, order
-            } = params.sort;
             reqBody = makePaginationReqBody(url, params)
             return reqObjMaker(url, reqBody);
         case 'Product/Create':            
@@ -178,11 +172,9 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params.data)
 
         //For Strains ******************************************************************************************
-        case 'Get/Strain/RetailerId/Paginated':
-            reqBody.id = retailerId
-            reqBody.page = params.pagination.page
-            reqBody.sizePerPage = params.pagination.perPage
-            return reqObjMaker(url, reqBody)
+        case 'Search/Strains':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody);
         case 'Get/Strain/StrainIds':
             return reqObjMaker(url, params)
         case 'Add/Strain':
@@ -214,6 +206,7 @@ const ReqBodyGuesser = (obj) => {
 
         // Sale Report ***************
         case 'Reports/SalesReport/ByStore':
+            debugger
             let startDate = new Date(moment(_get(params,'filter.date','')))
             let endDate = moment(_get(params,'filter.date',''))
             endDate.endOf('day')
@@ -228,7 +221,7 @@ const ReqBodyGuesser = (obj) => {
         case 'Get/Tax/RetailerId':
             return reqObjMaker(url, {id: retailerId})
         case 'Create/Tax':
-            let reqBody = {
+            reqBody = {
                 ...params.data,
                 retailerId
             }

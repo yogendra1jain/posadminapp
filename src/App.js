@@ -19,7 +19,7 @@ import Login from './global/components/LoginPage';
 import strains from './strains';
 import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
-import DashboardContainer from './Dashboard/DashboardContainer';
+import DashboardContainer from './dashboard/DashboardContainer';
 import tax from './tax';
 
 const messages = {

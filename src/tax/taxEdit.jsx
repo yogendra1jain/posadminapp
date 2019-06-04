@@ -10,7 +10,7 @@ import {
 
 const TaxEditTitle = ({record}) => {
   return (
-    <span>Edit ${record.name}</span>
+    <span>Edit {record.name}</span>
   )
 }
 

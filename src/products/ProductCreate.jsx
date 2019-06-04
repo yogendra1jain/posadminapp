@@ -1,12 +1,10 @@
 import {
     Create,
-    TabbedForm,
+    AutocompleteInput,
     TextInput,
     LongTextInput,
     BooleanInput,
     ImageInput,
-    SelectInput,
-    NumberInput,
     REDUX_FORM_NAME,
     ReferenceInput,
     required,
@@ -14,14 +12,12 @@ import {
     RadioButtonGroupInput
 } from 'react-admin';
 import React, { Component } from 'react';
-import dineroObj from "../global/conversion/DineroObj";
-import splitDotWithInt from "../global/conversion/SplitDotWithInt";
 import CategoryInput from './CategoryInput';
 import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 import CustomImageField from './CustomImageInput';
 import { FormDataConsumer } from 'ra-core';
 import PriceInput from "../global/components/PriceInput";
-import {change} from 'redux-form';
+import { change } from 'redux-form';
 
 const ProductTypeChoices = [
     { id: 0, name: 'Non-Cannabis' },
@@ -42,7 +38,7 @@ class ProductCreate extends Component {
     }
 
     clearMetrcFields = (e, val, dispatch) => {
-        if(val == 0) {
+        if (val == 0) {
             dispatch(change(REDUX_FORM_NAME, "strainId", null))
             dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
             dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
@@ -69,13 +65,13 @@ class ProductCreate extends Component {
                     <BooleanInput label="Discountable" source="discountable" />
                     <FormDataConsumer>
                         {({ formData, dispatch, ...rest }) => (
-                            <RadioButtonGroupInput 
-                                onChange={(e, val)=>this.clearMetrcFields(e, val,dispatch)}
-                                parse={val => parseInt(val, 10)} 
-                                label="Product Type" 
-                                source="productType" 
-                                choices={ProductTypeChoices} 
-                            />   
+                            <RadioButtonGroupInput
+                                onChange={(e, val) => this.clearMetrcFields(e, val, dispatch)}
+                                parse={val => parseInt(val, 10)}
+                                label="Product Type"
+                                source="productType"
+                                choices={ProductTypeChoices}
+                            />
                         )}
                     </FormDataConsumer>
                     <FormDataConsumer>
@@ -83,8 +79,8 @@ class ProductCreate extends Component {
                             return (
                                 formData.productType == '1' || formData.productType == '2' ?
                                     <React.Fragment>
-                                        <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
-                                            <SelectInput validate={required()} optionText="name" />
+                                        <ReferenceInput label="Select Strain" source="strainId" reference="Strain">
+                                            <AutocompleteInput validate={required()}optionText="name" />
                                         </ReferenceInput>
                                         <MetricCategoryAndUOMInput />
                                     </React.Fragment>
