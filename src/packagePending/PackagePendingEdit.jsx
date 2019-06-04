@@ -5,20 +5,22 @@ import { withStyles } from '@material-ui/core/styles/withStyles';
 import Quantity from './Quantity';
 import SplitPackageForm from './SplitPackageForm';
 
+const Aside = (props)=>{
+
+return(<span>aside is here</span>)
+}
+
 const PackagePendingEdit = props => (
-    <Edit {...props} >
+    <Edit {...props}  >
         <TabbedForm >
             <FormTab label='Product Details'>
                 <TextField source="id" />
                 <TextField source="metricProduct" />
                 {/* <ReferenceInput source="uId" reference="us"><SelectInput optionText="id" /></ReferenceInput> */}
-                <ReferenceInput source="posProductId" reference="Search/Products">
-                    <AutocompleteInput optionText="name" />
-                </ReferenceInput>
                 {/* <Quantity /> */}
-                <ArrayInput source="Split Package" style={{ width: '100%' }}>
+                <ArrayInput source="Split Package" style={{ width: '100%' }} aside={<Aside />}>
                     <SimpleFormIterator>
-                        <ReferenceInput source="posProductId" reference="Search/Products" label='Product Name'>
+<ReferenceInput  source="posProductId" reference="Search/Products" label='Product Name'>
                             <AutocompleteInput optionText="name" />
                         </ReferenceInput>
                         <TextInput source="quantity" label='qty' />

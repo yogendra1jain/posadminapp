@@ -203,9 +203,8 @@ const ReqBodyGuesser = (obj) => {
                 active: true, storeId: "90fce   e1b-fef3-4af7-a686-80159751d127"
             })
         //For Package Pending ******************************************************************************************
-        case 'incomingpackage':
-            return { url: "http://demo6234876.mockable.io/incomingpackage", options: {} }
-
+        case 'Get/Metrc/IncomingPackages':
+        return reqObjMaker(url,{id:retailerId})
 
         //For Package       ******************************************************************************************
         case 'Package/Get/ByRetailer':
