@@ -128,9 +128,6 @@ class ProductEdit extends React.Component {
             {({ formData, dispatch, ...rest }) => (
               formData.productType == '1' || formData.productType == '2' ?
                 <React.Fragment>
-                  <ReferenceInput label="Select Strain" source="strainId" reference="Strain">
-                    <AutocompleteInput validate={required()} optionText="name" />
-                  </ReferenceInput>
                   <MetricCategoryAndUOMInput />
                 </React.Fragment>
                 : null

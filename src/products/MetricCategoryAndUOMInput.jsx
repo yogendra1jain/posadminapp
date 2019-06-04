@@ -9,6 +9,8 @@ import {
     TextInput,
     FormDataConsumer,
     REDUX_FORM_NAME,
+    ReferenceInput,
+    AutocompleteInput,
     required
 } from "react-admin";
 import Typography from '@material-ui/core/Typography';
@@ -35,45 +37,50 @@ class MetricCategoryAndUOMInput extends React.Component {
         })
     }
 
+    handleFilter = (val) => {
+        debugger
+    }
+
     render() {
         const { selectedCategory } = this.state
         return (
             <div>
                 <div>
                     <FormDataConsumer>
-                    {({ formData, dispatch, ...rest }) => (
-                    <Query
-                        type="GET_LIST"
-                        resource="MetrcItemTypes"
-                        payload={{}}
-                    >
-                        {({ data, loading, error }) => {
-                            if (loading) {
-                                return <LinearProgress />;
-                            }
-                            if (error) {
-                                return <Typography>No Category Found</Typography>
-                            }
-                            return (
-                                <div>
-                                    <SelectInput
-                                        label="Metrc Item Types"
-                                        source="metrcItemType"
-                                        choices={data}
-                                        optionValue="name"
-                                        onChange={(valueObj, value) => {
-                                        dispatch(change(REDUX_FORM_NAME, "unitWeight", null)),
-                                        dispatch(change(REDUX_FORM_NAME, "unitVolume", null)),
-                                        dispatch(change(REDUX_FORM_NAME, "unitVolumeUnitOfMeasure", null)),
-                                        dispatch(change(REDUX_FORM_NAME, "unitWeightUnitOfMeasure", null)),
-                                        dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
-                                        }}
-                                    />
-                                </div>
-                            );
-                        }}
-                    </Query>
-                    )}
+                        {({ formData, dispatch, ...rest }) => (
+                            <Query
+                                type="GET_LIST"
+                                resource="MetrcItemTypes"
+                                payload={{}}
+                            >
+                                {({ data, loading, error }) => {
+                                    if (loading) {
+                                        return <LinearProgress />;
+                                    }
+                                    if (error) {
+                                        return <Typography>No Category Found</Typography>
+                                    }
+                                    return (
+                                        <div>
+                                            <SelectInput
+                                                label="Metrc Item Types"
+                                                source="metrcItemType"
+                                                choices={data}
+                                                optionValue="name"
+                                                onChange={(valueObj, value) => {
+                                                    dispatch(change(REDUX_FORM_NAME, "unitWeight", null)),
+                                                        dispatch(change(REDUX_FORM_NAME, "unitVolume", null)),
+                                                        dispatch(change(REDUX_FORM_NAME, "unitVolumeUnitOfMeasure", null)),
+                                                        dispatch(change(REDUX_FORM_NAME, "unitWeightUnitOfMeasure", null)),
+                                                        dispatch(change(REDUX_FORM_NAME, "metrcUom", null)),
+                                                        dispatch(change(REDUX_FORM_NAME, 'strainId', null))
+                                                }}
+                                            />
+                                        </div>
+                                    );
+                                }}
+                            </Query>
+                        )}
                     </FormDataConsumer>
                 </div>
                 <FormDataConsumer>
@@ -104,7 +111,8 @@ class MetricCategoryAndUOMInput extends React.Component {
                                                 dispatch(change(REDUX_FORM_NAME, "unitWeight", null)),
                                                     dispatch(change(REDUX_FORM_NAME, "unitVolume", null)),
                                                     dispatch(change(REDUX_FORM_NAME, "unitVolumeUnitOfMeasure", null)),
-                                                    dispatch(change(REDUX_FORM_NAME, "unitWeightUnitOfMeasure", null))
+                                                    dispatch(change(REDUX_FORM_NAME, "unitWeightUnitOfMeasure", null)),
+                                                    dispatch(change(REDUX_FORM_NAME, 'strainId', null))
                                             }
                                             }
                                         />
@@ -112,6 +120,14 @@ class MetricCategoryAndUOMInput extends React.Component {
                                 );
                             }}
                         </Query>
+                    )}
+                </FormDataConsumer>
+                <FormDataConsumer>
+                    {({ formData, dispatch, ...rest }) => (
+                    _get(this.state,'selectedCategory.requiresStrain', false) || _get(formData,'strainId',false )? 
+                    <ReferenceInput filter={{syncStatus: "1"}} label="Select Strain" source="strainId" reference="Strain">
+                        <AutocompleteInput validate={required()} optionText="name" />
+                    </ReferenceInput> : ''
                     )}
                 </FormDataConsumer>
                 <FormDataConsumer>
