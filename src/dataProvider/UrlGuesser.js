@@ -142,7 +142,7 @@ const UrlGuesser = (obj) => {
             return 'Vendor/GetByIds'
         //For Package Pending ******************************************************************************************
         case 'packagePending/GET_LIST':
-            return 'incomingpackage'
+            return 'Get/Metrc/IncomingPackages'
         case 'packagePending/GET_ONE':
         return 'incomingpackage/getOne'
             return 'Vendor/Get'
