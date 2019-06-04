@@ -1,10 +1,7 @@
 import { TextField, 
     Datagrid, 
-    EmailField,
     List,
     Filter,
-    TextInput,
-    EditButton,
     DateInput
  } from 'react-admin';
  import React from 'react';

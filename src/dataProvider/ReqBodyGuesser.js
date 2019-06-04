@@ -224,6 +224,20 @@ const ReqBodyGuesser = (obj) => {
             reqBody.toTimeStamp = {}
             reqBody.toTimeStamp.seconds = parseInt(endDate / 1000)
             return reqObjMaker(url, reqBody)
+
+        //For Tax       ******************************************************************************************
+        case 'Get/Tax/RetailerId':
+            return reqObjMaker(url, {id: retailerId})
+        case 'Create/Tax':
+            let reqBody = {
+                ...params.data,
+                retailerId
+            }
+            return reqObjMaker(url, reqBody)
+        case 'Get/Tax/Id':
+            return reqObjMaker(url, params)
+        case 'Update/Tax':
+            return reqObjMaker(url, params)
         default:
             break;
 
