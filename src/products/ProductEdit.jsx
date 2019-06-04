@@ -4,9 +4,8 @@ import {
   Edit,
   TextInput,
   LongTextInput,
-  NumberInput,
+  AutocompleteInput,
   ReferenceInput,
-  SelectInput,
   Labeled,
   ImageField,
   SimpleForm,
@@ -28,9 +27,9 @@ import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 import PriceInput from "../global/components/PriceInput";
 
 const ProductTypeChoices = [
-  { id: 0,  name: 'Non-Cannabis'},
-  { id: 1,  name: 'Cannabis Product' },
-  { id: 2,  name: 'Cannabis (Medical Only)' }
+  { id: 0, name: 'Non-Cannabis' },
+  { id: 1, name: 'Cannabis Product' },
+  { id: 2, name: 'Cannabis (Medical Only)' }
 ]
 
 const ProductTitle = ({ record }) => {
@@ -87,19 +86,19 @@ class ProductEdit extends React.Component {
   };
 
   clearMetrcFields = (e, val, dispatch) => {
-    if(val == 0) {
-        dispatch(change(REDUX_FORM_NAME, "strainId", null))
-        dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
-        dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
-        dispatch(change(REDUX_FORM_NAME, "unitCbdPercent", null))
-        dispatch(change(REDUX_FORM_NAME, "unitCbdContent", null))
-        dispatch(change(REDUX_FORM_NAME, "unitThcPercent", null))
-        dispatch(change(REDUX_FORM_NAME, "unitThcContent", null))
-        dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
-        dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
-        dispatch(change(REDUX_FORM_NAME, "metrcItemType", null))
-        dispatch(change(REDUX_FORM_NAME, "unitThcContentUnitOfMeasure", null))
-        dispatch(change(REDUX_FORM_NAME, "unitCbdContentUnitOfMeasure", null))
+    if (val == 0) {
+      dispatch(change(REDUX_FORM_NAME, "strainId", null))
+      dispatch(change(REDUX_FORM_NAME, "metrcCategory", null))
+      dispatch(change(REDUX_FORM_NAME, "metrcUom", null))
+      dispatch(change(REDUX_FORM_NAME, "unitCbdPercent", null))
+      dispatch(change(REDUX_FORM_NAME, "unitCbdContent", null))
+      dispatch(change(REDUX_FORM_NAME, "unitThcPercent", null))
+      dispatch(change(REDUX_FORM_NAME, "unitThcContent", null))
+      dispatch(change(REDUX_FORM_NAME, "unitVolume", null))
+      dispatch(change(REDUX_FORM_NAME, "unitWeight", null))
+      dispatch(change(REDUX_FORM_NAME, "metrcItemType", null))
+      dispatch(change(REDUX_FORM_NAME, "unitThcContentUnitOfMeasure", null))
+      dispatch(change(REDUX_FORM_NAME, "unitCbdContentUnitOfMeasure", null))
     }
   }
 
@@ -115,23 +114,20 @@ class ProductEdit extends React.Component {
           <BooleanInput label="Taxable" source="isTaxable" />
           <BooleanInput label="Discountable" source="discountable" />
           <FormDataConsumer>
-              {({ formData, dispatch, ...rest }) => (
-                  <RadioButtonGroupInput 
-                      onChange={(e, val) => this.clearMetrcFields(e, val, dispatch)}
-                      parse={val => parseInt(val, 10)} 
-                      label="Product Type" 
-                      source="productType" 
-                      choices={ProductTypeChoices} 
-                  />   
-              )}
+            {({ formData, dispatch, ...rest }) => (
+              <RadioButtonGroupInput
+                onChange={(e, val) => this.clearMetrcFields(e, val, dispatch)}
+                parse={val => parseInt(val, 10)}
+                label="Product Type"
+                source="productType"
+                choices={ProductTypeChoices}
+              />
+            )}
           </FormDataConsumer>
           <FormDataConsumer>
             {({ formData, dispatch, ...rest }) => (
               formData.productType == '1' || formData.productType == '2' ?
                 <React.Fragment>
-                  <ReferenceInput source="strainId" label="Select Strain" reference="Strain">
-                    <SelectInput optionText="name" />
-                  </ReferenceInput>
                   <MetricCategoryAndUOMInput />
                 </React.Fragment>
                 : null

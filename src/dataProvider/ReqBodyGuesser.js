@@ -72,10 +72,10 @@ const ReqBodyGuesser = (obj) => {
         case 'Search/Products':
             reqBody = makePaginationReqBody(url, params)
             return reqObjMaker(url, reqBody);
-        case 'Product/Create':            
+        case 'Product/Create':
             reqBody = {
                 ...params.data,
-                image: _get(params.data,'newImage.newImage',''),
+                image: _get(params.data, 'newImage.newImage', ''),
                 retailerId: localStorage.getItem('retailerId'),
             }
             delete reqBody.newImage
@@ -120,8 +120,8 @@ const ReqBodyGuesser = (obj) => {
             reqBody = params.data
             reqBody.phoneNumber.countryCode = 1
             reqBody.retailerId = retailerId
-            reqBody.gender = parseInt(reqBody.gender)||0
-            reqBody.customerType =  parseInt(reqBody.customerType)||0
+            reqBody.gender = parseInt(reqBody.gender) || 0
+            reqBody.customerType = parseInt(reqBody.customerType) || 0
             return reqObjMaker(url, reqBody)
         case 'Customer/Update':
             return reqObjMaker(url, params.data)
@@ -173,7 +173,13 @@ const ReqBodyGuesser = (obj) => {
 
         //For Strains ******************************************************************************************
         case 'Search/Strains':
-            reqBody = makePaginationReqBody(url, params)
+            reqBody = makePaginationReqBody(url, params);
+            if(_get(params,'filter.syncStatus')) {
+                reqBody.filters.push({
+                    field: 'syncStatus',
+                    value: _get(params,'filter.syncStatus')
+                })
+             }
             return reqObjMaker(url, reqBody);
         case 'Get/Strain/StrainIds':
             return reqObjMaker(url, params)
@@ -206,9 +212,9 @@ const ReqBodyGuesser = (obj) => {
 
         // Sale Report ***************
         case 'Reports/SalesReport/ByStore':
-            debugger
-            let startDate = new Date(moment(_get(params,'filter.date','')))
-            let endDate = moment(_get(params,'filter.date',''))
+
+            let startDate = new Date(moment(_get(params, 'filter.date', '')))
+            let endDate = moment(_get(params, 'filter.date', ''))
             endDate.endOf('day')
             reqBody.id = localStorage.getItem('storeId')
             reqBody.fromTimeStamp = {}
@@ -219,7 +225,7 @@ const ReqBodyGuesser = (obj) => {
 
         //For Tax       ******************************************************************************************
         case 'Get/Tax/RetailerId':
-            return reqObjMaker(url, {id: retailerId})
+            return reqObjMaker(url, { id: retailerId })
         case 'Create/Tax':
             reqBody = {
                 ...params.data,
@@ -230,6 +236,10 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params)
         case 'Update/Tax':
             return reqObjMaker(url, params)
+
+        //For Requisition       ******************************************************************************************
+        case 'Requisition/GetByCriteria':
+            return reqObjMaker(url, { retailerId, statuses: [0] })
         default:
             break;
 

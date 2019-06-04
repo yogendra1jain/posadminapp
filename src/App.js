@@ -20,6 +20,7 @@ import strains from './strains';
 import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
 import DashboardContainer from './dashboard/DashboardContainer';
+import requisition from './requisition';
 import tax from './tax';
 
 const messages = {
@@ -52,6 +53,7 @@ const App = () => (
       <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />
       <Resource name="Category" {...categories}/>
       <Resource name="Tax" {...tax}/>
+      <Resource name="Requisition" {...requisition} />
     </Admin>
   </div>
 );

@@ -45,6 +45,7 @@ const ResBodyGuesser = (obj) => {
 
     }
     if (type == 'GET_MANY') {
+        debugger
         return {
             data: json
         };
@@ -291,6 +292,13 @@ const ResBodyGuesser = (obj) => {
             return {
                 data: json.taxes,
                 total: json.taxes.length
+            }
+
+        //For Requisition       ******************************************************************************************
+        case 'Requisition/GetByCriteria':
+            return {
+                data: json,
+                total: json.length
             }
         default:
             if (json.id == null) {

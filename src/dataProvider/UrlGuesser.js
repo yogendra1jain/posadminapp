@@ -176,6 +176,10 @@ const UrlGuesser = (obj) => {
             return 'Get/Tax/Id';
         case 'Tax/UPDATE':
             return 'Update/Tax';
+
+        //For Requisition       ******************************************************************************************
+        case 'Requisition/GET_LIST':
+            return 'Requisition/GetByCriteria'
         default:
             break;
     }
