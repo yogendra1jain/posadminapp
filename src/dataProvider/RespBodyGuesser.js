@@ -2,6 +2,7 @@ import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty';
 import Dinero from 'dinero.js';
 import moment from 'moment';
+import map from 'lodash/map';
 
 const DineroInit = (amount, currency, precision) => (
     Dinero({amount:  parseInt(amount) || 0, currency: currency || 'USD', precision: precision || 2})
@@ -27,12 +28,16 @@ const ResBodyGuesser = (obj) => {
         }
     }
     if (type == 'GET_ONE') {
-        //unused code to be removed
         if (json.id == null) {
             json.id = "uuid";
         }
         if(url == 'Get/Tax/Id') {
-            return {data: json.tax}
+            return {
+                data: {
+                    ...json.tax,
+                    appliedTo: _get(json,'tax.appliedTo', 0)
+                }
+            }
         }
         return {
             data: json

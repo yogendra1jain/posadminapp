@@ -159,20 +159,12 @@ class Menu extends Component {
                         onClick={onMenuClick}
                     />
                 </SubMenu>
-                <SubMenu    
-                    handleToggle={() => this.handleToggle('menuTax')}
-                    isOpen={this.state.menuTax}
-                    sidebarIsOpen={open}
-                    name="Taxes"
-                    icon={<stores.icon />}
-                >
-                    <MenuItemLink
-                        to={`/Tax`}
-                        primaryText={'Tax'}
-                        leftIcon={<stores.icon />}
-                        onClick={onMenuClick}
-                    />
-                </SubMenu>
+                <MenuItemLink
+                    to={`/Tax`}
+                    primaryText={'Tax'}
+                    leftIcon={<stores.icon />}
+                    onClick={onMenuClick}
+                />
                 {/* <Responsive
                     xsmall={
                         <MenuItemLink
