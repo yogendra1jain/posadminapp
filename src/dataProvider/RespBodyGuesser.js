@@ -177,10 +177,10 @@ const ResBodyGuesser = (obj) => {
             };
 
         //For Strains ******************************************************************************************
-        case 'Get/Strain/RetailerId/Paginated':
+        case 'Search/Strains':
             return {
-                data: _get(json, 'result.strains', []),
-                total: _get(json, 'result.count', 0),
+                data: _get(json, 'strains', []),
+                total: _get(json, 'total', 0),
             };
         //For Employee ******************************************************************************************
         case 'Employee/ByStore':

@@ -4,14 +4,24 @@ import { TextField,
     List,
     EditButton,
     FunctionField,
-    ShowButton
+    ShowButton,
+    Filter,
+    TextInput
  } from 'react-admin';
  import _get from 'lodash/get';
  import React from 'react';
  import SyncIcon from '@material-ui/icons/Sync';
 
+ const StrainFilter = (props) => {
+    return (
+        <Filter {...props}>
+            <TextInput label="Search Strain" source="q" alwaysOn />
+        </Filter>
+    )
+};
+
 const StrainList = props => (
-    <List {...props}>
+    <List {...props} filters={<StrainFilter />}>
         <Datagrid>
             <TextField text-align="left" label="Name" source="name" />
             <NumberField text-align="left" label="THC Level" source="thcLevel" />
