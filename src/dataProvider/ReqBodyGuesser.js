@@ -214,7 +214,7 @@ const ReqBodyGuesser = (obj) => {
             reqBody.fromTimeStamp = {}
             reqBody.fromTimeStamp.seconds = parseInt(startDate / 1000)
             reqBody.toTimeStamp = {}
-            reqBody.toTimeStamp.seconds = parseInt(endDate / 1000)
+            reqBody.toTimeStamp.seconds = parseInt(endDate / 1000);
             return reqObjMaker(url, reqBody)
 
         //For Tax       ******************************************************************************************

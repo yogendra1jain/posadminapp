@@ -190,8 +190,14 @@ const ResBodyGuesser = (obj) => {
             };
         //For Package Pending ******************************************************************************************
         case 'Get/Metrc/IncomingPackages':
+        let metrcPackages = json.metrcPackages||[];
+        metrcPackages =  metrcPackages.map((p)=>{
+            let obj  = {...p};
+            obj.id = p.packageLabel;
+            return obj;
+        })
             return {
-                data: json.metrcPackages,
+                data: metrcPackages,
                 total: _get(json,'metrcPackages.length',0),
             };
         case "incomingpackage/getOne":

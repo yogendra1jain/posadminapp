@@ -39,7 +39,7 @@ const App = () => (
       dashboard={DashboardContainer}
       customReducers={{ tree }}
      >
-      <Resource name="Search/Products" {...products}  options={{ label: 'Product List' }} />
+      <Resource name="Search/Products" {...products}   options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
       <Resource name="Strain" {...strains}/>
       <Resource name="Package" list={ListGuesser}  />
