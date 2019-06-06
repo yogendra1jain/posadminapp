@@ -31,6 +31,13 @@ const ResBodyGuesser = (obj) => {
         if (json.id == null) {
             json.id = "uuid";
         }
+        if (url == 'Package/Get') {
+            return {
+                data: {
+                    ...json.package
+                }
+            }
+        }
         if (url == 'Get/Tax/Id') {
             return {
                 data: {
@@ -39,13 +46,13 @@ const ResBodyGuesser = (obj) => {
                 }
             }
         }
+
         return {
             data: json
         };
 
     }
     if (type == 'GET_MANY') {
-        debugger
         return {
             data: json
         };
@@ -211,10 +218,10 @@ const ResBodyGuesser = (obj) => {
 
 
         //For Package       ******************************************************************************************
-        case 'Package/Get/ByRetailer':
+        case 'Search/Packages':
             return {
-                data: _get(json, 'packages', []).slice(0, 10),
-                total: _get(json, 'packages.length', 0) || 0,
+                data: _get(json, 'packages', []),
+                total: _get(json, 'total', 0) || 0,
             }
 
         //For Reports       ******************************************************************************************

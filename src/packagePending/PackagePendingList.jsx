@@ -6,7 +6,7 @@ import InfoOutline from '@material-ui/icons/InfoOutline'
 const PackagePendingList = props => (
     <List {...props}>
         <Datagrid >
-            <TextField label="Id" source="packageID" />
+            <TextField label="Id" source="  " />
             {/* <ReferenceField source="uId" reference="us"><TextField source="id" /></ReferenceField> */}
             <TextField label="Manifest Number" source="manifestNumber" />
             <TextField label="Transfer Id" source="transferID" />
@@ -21,7 +21,6 @@ const PackagePendingList = props => (
             <TextField label="UOM" source="shippedUnitOfMeasureName" />
             <FormDataConsumer>
                 {({ formData, ...rest }) => {
-                    debugger;
                     if (formData.shipmentPackageState == "Shipped") {
                         return <InfoOutline titleAccess="Please Accept Package at Metric Site" color="red"></InfoOutline>
                     }
@@ -34,8 +33,7 @@ const PackagePendingList = props => (
                 }
                 }
             </FormDataConsumer>
-
-
+            <EditButton label="Check In" />
                 
         </Datagrid>
     </List>

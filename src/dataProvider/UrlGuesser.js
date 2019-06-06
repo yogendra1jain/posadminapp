@@ -160,7 +160,9 @@ const UrlGuesser = (obj) => {
 
         //For Package       ******************************************************************************************
         case 'Package/GET_LIST':
-            return 'Package/Get/ByRetailer'
+            return 'Search/Packages'
+            case 'Package/GET_ONE':
+            return 'Package/Get'
         
         //For Reports       ******************************************************************************************
         // Sale Report **********************************************************************

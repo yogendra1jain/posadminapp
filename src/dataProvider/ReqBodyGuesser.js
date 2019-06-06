@@ -71,6 +71,12 @@ const ReqBodyGuesser = (obj) => {
         // For Products ******************************************************************************************
         case 'Search/Products':
             reqBody = makePaginationReqBody(url, params)
+            if (_get(params, 'filter.syncStatus')) {
+                reqBody.filters.push({
+                    field: 'syncStatus',
+                    value: _get(params, 'filter.syncStatus')
+                })
+            }
             return reqObjMaker(url, reqBody);
         case 'Product/Create':
             reqBody = {
@@ -174,12 +180,12 @@ const ReqBodyGuesser = (obj) => {
         //For Strains ******************************************************************************************
         case 'Search/Strains':
             reqBody = makePaginationReqBody(url, params);
-            if(_get(params,'filter.syncStatus')) {
+            if (_get(params, 'filter.syncStatus')) {
                 reqBody.filters.push({
                     field: 'syncStatus',
-                    value: _get(params,'filter.syncStatus')
+                    value: _get(params, 'filter.syncStatus')
                 })
-             }
+            }
             return reqObjMaker(url, reqBody);
         case 'Get/Strain/StrainIds':
             return reqObjMaker(url, params)
@@ -202,11 +208,14 @@ const ReqBodyGuesser = (obj) => {
             })
         //For Package Pending ******************************************************************************************
         case 'Get/Metrc/IncomingPackages':
-        return reqObjMaker(url,{id:retailerId})
+            return reqObjMaker(url, { id: retailerId })
 
         //For Package       ******************************************************************************************
-        case 'Package/Get/ByRetailer':
-            return reqObjMaker(url, { id: retailerId })
+        case 'Search/Packages':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody);
+        case 'Package/Get':
+            return reqObjMaker(url, params);
 
         //For Reports       ******************************************************************************************
 

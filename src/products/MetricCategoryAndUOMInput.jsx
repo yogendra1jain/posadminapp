@@ -36,9 +36,8 @@ class MetricCategoryAndUOMInput extends React.Component {
             return _get(uom, 'quantityType', '') == 'WeightBased'
         })
     }
-
+    
     handleFilter = (val) => {
-        debugger
     }
 
     render() {

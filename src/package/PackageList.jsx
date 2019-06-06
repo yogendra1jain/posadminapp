@@ -1,8 +1,14 @@
 import React from 'react';  
-import { List, Datagrid,ReferenceField,NumberField,TextField } from 'react-admin';
-
+import { List, Datagrid,ReferenceField,NumberField,TextField,Filter,TextInput,EditButton } from 'react-admin';
+const PackageFilter = (props) => {
+    return (
+        <Filter {...props}>
+            <TextInput label="Search" source="q" alwaysOn />
+        </Filter>
+    )
+};
  const PackageList = props => (
-    <List {...props}>
+    <List {...props} filters={<PackageFilter/>}>
         <Datagrid >
             <TextField source="id" />
             <TextField source="label" />
@@ -11,6 +17,7 @@ import { List, Datagrid,ReferenceField,NumberField,TextField } from 'react-admin
             <NumberField source="syncStatus" />
             <TextField source="metrcId" reference="metrcs"></TextField>
             <TextField source="metrcProduct" />
+            <EditButton/>
         </Datagrid>
     </List>
 );
