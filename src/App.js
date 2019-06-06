@@ -21,6 +21,7 @@ import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
 import DashboardContainer from './dashboard/DashboardContainer';
 import requisition from './requisition';
+import packageIn from './package'
 import tax from './tax';
 
 const messages = {
@@ -43,7 +44,7 @@ const App = () => (
       <Resource name="Search/Products" {...products}   options={{ label: 'Product List' }} />
       <Resource name="Customers" {...customers} />
       <Resource name="Strain" {...strains}/>
-      <Resource name="Package" list={ListGuesser}  />
+      <Resource name="Package" {...packageIn}   />
       <Resource name="Store" {...stores}  />
       <Resource name="PaymentMethods" />
       <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />
