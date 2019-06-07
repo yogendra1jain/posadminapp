@@ -33,15 +33,15 @@ const UrlGuesser = (obj) => {
         case 'GetChildren/GET_LIST':
             return 'Category/GetChildren'
         case 'Category/GET_MANY':
-        return 'Category/GetByIds'
+            return 'Category/GetByIds'
 
         case 'Category/GET_LIST':
-            return  'Category/AllByRetailerId'
+            return 'Category/AllByRetailerId'
         case 'Category/GET_ONE':
-            return  'Category/Get'
-            case 'Category/UPDATE':
-                return 'Category/Save'
-    
+            return 'Category/Get'
+        case 'Category/UPDATE':
+            return 'Category/Save'
+
         //For Customers ******************************************************************************************
         case 'Customers/GET_LIST':
             return 'Search/Customers'
@@ -142,9 +142,9 @@ const UrlGuesser = (obj) => {
             return 'Vendor/GetByIds'
         //For Package Pending ******************************************************************************************
         case 'packagePending/GET_LIST':
-                return 'Get/Metrc/IncomingPackages'
+            return 'Get/Metrc/IncomingPackages'
         case 'packagePending/GET_ONE':
-        return 'incomingpackage/getOne'
+            return 'incomingpackage/getOne'
             return 'Vendor/Get'
         case 'packagePending/CREATE':
             return 'Vendor/Create'
@@ -161,9 +161,11 @@ const UrlGuesser = (obj) => {
         //For Package       ******************************************************************************************
         case 'Package/GET_LIST':
             return 'Search/Packages'
-            case 'Package/GET_ONE':
+        case 'Package/GET_ONE':
             return 'Package/Get'
-        
+        case 'Package/GET_MANY':
+            return 'Package/GetMany'
+
         //For Reports       ******************************************************************************************
         // Sale Report **********************************************************************
         case 'SaleReport/GET_LIST':

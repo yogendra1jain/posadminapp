@@ -213,9 +213,18 @@ const ReqBodyGuesser = (obj) => {
         //For Package       ******************************************************************************************
         case 'Search/Packages':
             reqBody = makePaginationReqBody(url, params)
+            reqBody = makePaginationReqBody(url, params);
+            if (_get(params, 'filter.posProductId')) {
+                reqBody.filters.push({
+                    field: 'posProductId',
+                    value: _get(params, 'filter.posProductId')
+                })
+            }
             return reqObjMaker(url, reqBody);
         case 'Package/Get':
             return reqObjMaker(url, params);
+            case 'Package/GetMany':
+            return reqObjMaker(url,params)
 
         //For Reports       ******************************************************************************************
 
