@@ -20,7 +20,7 @@ return <div>{liArray}</div>
             <TextField source="name" />
             <AddressField addLabel = {true} label="Address" />
             <BooleanField source="active" />
-            <PaymentMethodMapper label='Payment Methods' addLabel={true} source="paymentMethods" />
+            {/* <PaymentMethodMapper label='Payment Methods' addLabel={true} source="paymentMethods" /> */}
             <TextField source="code" />
         </SimpleShowLayout>
     </Show>

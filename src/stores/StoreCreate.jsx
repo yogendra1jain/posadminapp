@@ -46,8 +46,8 @@ const StoreCreate = props => (
             <TextInput label="City" source="address.city" />
             <TextInput label="State" source="address.state" />
             <TextInput label="Country" source="address.country" />
-            <TextInput label="Store Key" source="storeKey" />
-            <TextInput label="License No." source="licenseNo" />
+            {/* <TextInput label="Store Key" source="storeKey" /> */}
+            {/* <TextInput label="License No." source="licenseNo" /> */}
             {/* <PaymentMethods /> */}
         </SimpleForm>
     </Create>

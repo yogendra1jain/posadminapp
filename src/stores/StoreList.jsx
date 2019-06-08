@@ -12,7 +12,9 @@ const StoreList = props => (
         <Datagrid rowClick="edit">
             <TextField source="name" />
             <AddressField />
-            <EditButton />
+            <TextField source="code" />
+
+            {/* <EditButton /> */}
             <ShowButton/>
         </Datagrid>
     </List>

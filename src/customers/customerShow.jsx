@@ -11,10 +11,10 @@ import CustomerTypeMapper from '../global/components/CustomerTypeMapper';
             <FullNameField label='Name' addLabel={true}/>
             <TextField label={'Phone Number'} source="phoneNumber.phoneNumber" />
             <TextField source="email" />
-            <BillingAddressField label='Billing Address' addLabel={true} source="billingAddress" />
-            <BooleanField label='Status' source="active" />
+            {/* <BillingAddressField label='Billing Address' addLabel={true} source="billingAddress" /> */}
+            <BooleanField label='Active Status' source="active" />
             <CustomerTypeMapper source="customerType"  addLabel={true} />
-            <BooleanField source="tempMedicalLicense" />
+            {/* <BooleanField source="tempMedicalLicense" /> */}
             <TextField source="medicalLicenseNumber" />
             <DateField source="medicalLicenseExpiration" locales="en-US" />
             <NumberField source="gramLimit" />

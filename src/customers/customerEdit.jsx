@@ -78,8 +78,8 @@ const CustomerEdit = props => (
                                         />
                                         <BooleanInput label="Tax Exempt" source="taxExempt" />
 
-                                        <TextField
-                                            label="Medical License Number"
+                                        <TextInput
+                                            label="Medical License"
                                             source="medicalLicenseNumber"
                                         />
 
