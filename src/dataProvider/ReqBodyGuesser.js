@@ -115,6 +115,10 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params)
         case 'Category/AllByRetailerId':
             return reqObjMaker(url, { id: retailerId })
+        case 'Category/Save':
+                reqBody = params.data
+                reqBody.retailerId = retailerId
+                return reqObjMaker(url, params.data)
 
         //For Customers ******************************************************************************************
         case 'Search/Customers':

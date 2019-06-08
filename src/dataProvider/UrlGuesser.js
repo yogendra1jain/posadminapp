@@ -4,7 +4,6 @@ const UrlGuesser = (obj) => {
         type
     } = obj;
     switch (`${resource}/${type}`) {
-
         //For Products ******************************************************************************************
         case 'Search/Products/GET_LIST':
             return 'Search/Products'
@@ -34,7 +33,8 @@ const UrlGuesser = (obj) => {
             return 'Category/GetChildren'
         case 'Category/GET_MANY':
             return 'Category/GetByIds'
-
+        case 'Category/CREATE':
+            return 'Category/Save'
         case 'Category/GET_LIST':
             return 'Category/AllByRetailerId'
         case 'Category/GET_ONE':

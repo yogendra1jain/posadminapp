@@ -32,12 +32,15 @@ const CategoryList = props => (
   <List {...props} perPage={10000}>
     <Tree
       parentSource="parentCategoryId"
-      enableDragAndDrop
-      dragPreviewComponent={CategoryDragPreview}
-      allowDropOnRoot
-      undoableDragDrop={false}
+      // enableDragAndDrop
+      // dragPreviewComponent={CategoryDragPreview}
+      // allowDropOnRoot
+      // undoableDragDrop={false}
     >
-      <NodeForm undoable={false} actions={<CategoryActions />}>
+      <NodeForm
+        undoable={false}
+        actions={<CategoryActions />}
+      >
         <TextInput source="name" />
       </NodeForm>
     </Tree>
