@@ -12,7 +12,7 @@ import _get from 'lodash/get';
 
 
 const TaxAppliedToChoices = [
-    { id: 0, name: 'Dummy Product' },
+    // { id: 0, name: 'Dummy Product' },
     { id: 1, name: 'Medical Cannabis' },
     { id: 2, name: 'Recreational Cannabis' },
     { id: 3, name: 'All Cannabis'},
@@ -30,7 +30,7 @@ const findTaxApplied = (record) => {
         <SimpleShowLayout>
             <TextField source="name" />
             <NumberField source="percentage" />
-            <FunctionField label="Tax Applied To" render={record => findTaxApplied(record)} />
+            <FunctionField label="Tax Rate Applicable On" render={record => findTaxApplied(record)} />
             <FunctionField label="Active" render={record => _get(record,'active', false) ? 'Yes' : 'No'} />
         </SimpleShowLayout>
     </Show>
