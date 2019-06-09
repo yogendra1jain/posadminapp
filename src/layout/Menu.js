@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import compose from "recompose/compose";
 import Inbox from "@material-ui/icons/Inbox";
 import LocalShipping from "@material-ui/icons/LocalShipping";
+import DashboardIcon from '@material-ui/icons/Dashboard'
 import { withRouter } from "react-router-dom";
 import {
   translate,
@@ -33,7 +34,8 @@ class Menu extends Component {
     menuPackages: false,
     menuStores: false,
     menuReports: false,
-    menuTax: false
+    menuTax: false,
+    menuDashBoardInventory:false
   };
 
   static propTypes = {
@@ -49,7 +51,27 @@ class Menu extends Component {
     const { onMenuClick, open, logout, translate } = this.props;
     return (
       <div>
-        <DashboardMenuItem onClick={onMenuClick} />
+        {/* <DashboardMenuItem onClick={onMenuClick} /> */}
+        <SubMenu
+          handleToggle={() => this.handleToggle("menuDashBoardInventory")}
+          isOpen={this.state.menuDashBoardInventory}
+          sidebarIsOpen={open}
+          name="Dashboards"
+          icon={<DashboardIcon/>}
+        >
+          <MenuItemLink
+            to={`/InventoryDashboard`}
+            primaryText={"Inventory"}
+            leftIcon={<DashboardIcon/>}
+            onClick={onMenuClick}
+          />
+           <MenuItemLink
+            to={`/SalesDashboard`}
+            primaryText={"Sales"}
+            leftIcon={<DashboardIcon/>}
+            onClick={onMenuClick}
+          />
+        </SubMenu>
         <SubMenu
           handleToggle={() => this.handleToggle("menuProducts")}
           isOpen={this.state.menuProducts}

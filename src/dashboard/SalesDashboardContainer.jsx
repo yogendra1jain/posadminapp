@@ -277,7 +277,7 @@ var QuickSightEmbedding = require("amazon-quicksight-embedding-sdk");
 
 
 
-class DashboardContainer extends React.Component {
+class SalesDashBoardContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {}
@@ -292,7 +292,7 @@ class DashboardContainer extends React.Component {
         console.log("Do something when the dashboard fails loading");
     }
     embedDashboard =()=> {
-        var containerDiv = document.getElementById("dashboardContainer");
+        var containerDiv = document.getElementById("SalesDashBoardContainer");
         var options = {
             url: this.state.EmbedUrl,
             container: containerDiv,
@@ -326,10 +326,10 @@ class DashboardContainer extends React.Component {
     render() {
         return (
            
-                <div id="dashboardContainer"></div>
+                <div id="SalesDashBoardContainer"></div>
 
         )
     }
 }
 
-export default DashboardContainer;
+export default SalesDashBoardContainer;
