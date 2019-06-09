@@ -165,6 +165,8 @@ const UrlGuesser = (obj) => {
             return 'Package/Get'
         case 'Package/GET_MANY':
             return 'Package/GetMany'
+        case 'Package/CREATE':
+        return 'Package/Create'
 
         //For Reports       ******************************************************************************************
         // Sale Report **********************************************************************

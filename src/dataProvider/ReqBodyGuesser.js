@@ -229,6 +229,13 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params);
             case 'Package/GetMany':
             return reqObjMaker(url,params)
+        case 'Package/Create':
+        reqBody = {
+            ...params.data,
+            retailerId: localStorage.getItem('retailerId'),
+        }
+        return reqObjMaker(url,reqBody)
+
 
         //For Reports       ******************************************************************************************
 
