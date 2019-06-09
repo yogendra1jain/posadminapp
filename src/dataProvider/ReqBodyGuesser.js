@@ -57,6 +57,7 @@ const ReqBodyGuesser = (obj) => {
             let req = formObjectMaker(url, formData);
             return req
         }
+        debugger;
         return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
         if (url == 'Product/Update') {
@@ -116,9 +117,9 @@ const ReqBodyGuesser = (obj) => {
         case 'Category/AllByRetailerId':
             return reqObjMaker(url, { id: retailerId })
         case 'Category/Save':
-                reqBody = params.data
-                reqBody.retailerId = retailerId
-                return reqObjMaker(url, params.data)
+            reqBody = params.data
+            reqBody.retailerId = retailerId
+            return reqObjMaker(url, params.data)
 
         //For Customers ******************************************************************************************
         case 'Search/Customers':
@@ -139,7 +140,8 @@ const ReqBodyGuesser = (obj) => {
         //For ZipCode ******************************************************************************************
         case 'Reference/GetZipCodeData':
             return reqObjMaker(url, params)
-
+        case 'Sync/Metrc/IncomingTransfers':
+            return reqObjMaker(url, params)
         //For Image ******************************************************************************************
         case 'Upload/File':
             const formData = new FormData();
@@ -227,14 +229,14 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, reqBody);
         case 'Package/Get':
             return reqObjMaker(url, params);
-            case 'Package/GetMany':
-            return reqObjMaker(url,params)
+        case 'Package/GetMany':
+            return reqObjMaker(url, params)
         case 'Package/Create':
-        reqBody = {
-            ...params.data,
-            retailerId: localStorage.getItem('retailerId'),
-        }
-        return reqObjMaker(url,reqBody)
+            reqBody = {
+                ...params.data,
+                retailerId: localStorage.getItem('retailerId'),
+            }
+            return reqObjMaker(url, reqBody)
 
 
         //For Reports       ******************************************************************************************
