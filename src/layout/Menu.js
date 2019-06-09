@@ -24,6 +24,7 @@ import vendors from '../vendors';
 import SubMenu from './SubMenu';
 import categories from '../categories';
 import tax from '../tax';
+import purchaseOrders from '../purchaseOrders';
 
 class Menu extends Component {
     state = {
@@ -168,6 +169,12 @@ class Menu extends Component {
                 <MenuItemLink
                     to={`/Requisition`}
                     primaryText={'Requisition'}
+                    leftIcon={<stores.icon />}
+                    onClick={onMenuClick}
+                />
+                <MenuItemLink
+                    to={`/PurchaseOrders`}
+                    primaryText={'PurchaseOrders'}
                     leftIcon={<stores.icon />}
                     onClick={onMenuClick}
                 />

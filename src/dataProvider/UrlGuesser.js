@@ -33,15 +33,15 @@ const UrlGuesser = (obj) => {
         case 'GetChildren/GET_LIST':
             return 'Category/GetChildren'
         case 'Category/GET_MANY':
-        return 'Category/GetByIds'
+            return 'Category/GetByIds'
 
         case 'Category/GET_LIST':
-            return  'Category/AllByRetailerId'
+            return 'Category/AllByRetailerId'
         case 'Category/GET_ONE':
-            return  'Category/Get'
-            case 'Category/UPDATE':
-                return 'Category/Save'
-    
+            return 'Category/Get'
+        case 'Category/UPDATE':
+            return 'Category/Save'
+
         //For Customers ******************************************************************************************
         case 'Customers/GET_LIST':
             return 'Search/Customers'
@@ -75,7 +75,8 @@ const UrlGuesser = (obj) => {
 
         case 'Store/GET_ONE':
             return 'Store/Get'
-
+        case 'Store/GET_MANY':
+            return 'Store/Get'
         case 'Store/CREATE':
             return 'Store/Create'
         case 'Store/UPDATE':
@@ -104,6 +105,8 @@ const UrlGuesser = (obj) => {
         case 'VendorProduct/GetByRetailerId/GET_LIST':
             return 'VendorProduct/GetByRetailerId'
         case 'VendorProduct/GetByRetailerId/GET_ONE':
+            return 'VendorProduct/Get'
+        case 'VendorProduct/GetByRetailerId/GET_MANY':
             return 'VendorProduct/Get'
         case 'VendorProduct/GetByRetailerId/CREATE':
             return 'VendorProduct/Save'
@@ -142,9 +145,9 @@ const UrlGuesser = (obj) => {
             return 'Vendor/GetByIds'
         //For Package Pending ******************************************************************************************
         case 'packagePending/GET_LIST':
-                return 'Get/Metrc/IncomingPackages'
+            return 'Get/Metrc/IncomingPackages'
         case 'packagePending/GET_ONE':
-        return 'incomingpackage/getOne'
+            return 'incomingpackage/getOne'
             return 'Vendor/Get'
         case 'packagePending/CREATE':
             return 'Vendor/Create'
@@ -161,9 +164,9 @@ const UrlGuesser = (obj) => {
         //For Package       ******************************************************************************************
         case 'Package/GET_LIST':
             return 'Search/Packages'
-            case 'Package/GET_ONE':
+        case 'Package/GET_ONE':
             return 'Package/Get'
-        
+
         //For Reports       ******************************************************************************************
         // Sale Report **********************************************************************
         case 'SaleReport/GET_LIST':
@@ -182,6 +185,10 @@ const UrlGuesser = (obj) => {
         //For Requisition       ******************************************************************************************
         case 'Requisition/GET_LIST':
             return 'Requisition/GetByCriteria'
+
+        //For Purchase Orders       ******************************************************************************************
+        case 'PurchaseOrders/GET_LIST':
+        return 'PurchaseOrder/GetByCriteria'
         default:
             break;
     }

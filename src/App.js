@@ -22,6 +22,7 @@ import saleReport from './reports/saleReport';
 import DashboardContainer from './dashboard/DashboardContainer';
 import requisition from './requisition';
 import packageIn from './package'
+import purchaseOrders from './purchaseOrders';
 import tax from './tax';
 
 const messages = {
@@ -55,6 +56,7 @@ const App = () => (
       <Resource name="Category" {...categories}/>
       <Resource name="Tax" {...tax}/>
       <Resource name="Requisition" {...requisition} />
+      <Resource name="PurchaseOrders" {...purchaseOrders} />
     </Admin>
   </div>
 );

@@ -53,6 +53,11 @@ const ResBodyGuesser = (obj) => {
 
     }
     if (type == 'GET_MANY') {
+        if(url == 'VendorProduct/Get' || url == 'Store/Get') {
+            return {
+                data: [json]
+            }
+        }
         return {
             data: json
         };
@@ -178,7 +183,7 @@ const ResBodyGuesser = (obj) => {
             };
         //For Vendor Products ******************************************************************************************
         case 'VendorProduct/GetByRetailerId':
-            let newJson = json.splice(0, 10)
+            let newJson = json ? json.splice(0, 10) : []
             return {
                 data: newJson,
                 total: 10,
@@ -306,8 +311,15 @@ const ResBodyGuesser = (obj) => {
         //For Requisition       ******************************************************************************************
         case 'Requisition/GetByCriteria':
             return {
-                data: json,
-                total: json.length
+                data: json || [],
+                total: _get(json,'length',0)
+            }
+        
+        //For Purchase Orders       ******************************************************************************************
+        case 'PurchaseOrder/GetByCriteria':
+            return {
+                data: json || [],
+                total: json ? json.length : 0
             }
         default:
             if (json.id == null) {
