@@ -181,7 +181,12 @@ const ReqBodyGuesser = (obj) => {
         case 'VendorProduct/Get':
             return reqObjMaker(url, params)
         case 'VendorProduct/Save':
-            return reqObjMaker(url, params.data)
+                reqBody = {
+                    ...params.data,
+                    retailerId: localStorage.getItem('retailerId'),
+                }
+                return reqObjMaker(url, reqBody)
+            // return reqObjMaker(url, params.data)
 
         //For Strains ******************************************************************************************
         case 'Search/Strains':

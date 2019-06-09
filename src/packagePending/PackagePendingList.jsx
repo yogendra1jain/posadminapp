@@ -38,7 +38,7 @@ class PackagePendingList extends React.Component {
                         <FormDataConsumer>
                             {({ formData, ...rest }) => {
                                 if (formData.shipmentPackageState == "Shipped") {
-                                    return <InfoOutline titleAccess="Please Accept Package at Metric Site" color="red"></InfoOutline>
+                                    return <InfoOutline titleAccess="Please Accept Package on METRC UI" color="red"></InfoOutline>
                                 }
                                 else if (formData.shipmentPackageState == "Accepted") {
                                     return <EditButton label="Check In" />

@@ -35,8 +35,13 @@ const PackageList = props => (
         text-align="left"
         label="Sync Status"
         render={record =>
-          _get(record, "syncStatus", 0) == 0 ? (
+          _get(record, "syncStatus", 0) === 0 ? (
             <SyncIcon style={{ color: "orange" }} />
+          ) : _get(record, "syncStatus", 0) === 3 ? (
+            <SyncIcon
+              style={{ color: "red" }}
+              titleAccess={record.metrcError}
+            />
           ) : (
             <SyncIcon style={{ color: "green" }} />
           )
