@@ -42,7 +42,7 @@ const PackageList = props => (
           )
         }
       />
-      <EditButton />
+      <EditButton label="Edit Item" />
     </Datagrid>
   </List>
 );
