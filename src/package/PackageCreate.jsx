@@ -23,7 +23,7 @@ const PackageCreate = (props) => {
                             <ArrayInput source="ingredients">
                                 <SimpleFormIterator>
                                     <ReferenceInput filter={{ posProductId: formData.posProductId }} label="Package" source="sourcePackageId" reference="Package">
-                                        <AutocompleteInput source="originalPackage" optionText={(val) => `${val.label}(${val.quantity})`} />
+                                        <AutocompleteInput source="originalPackage" optionText={(val) => `${val.label}(${val.quantity} ${val.uom})`} />
                                     </ReferenceInput>
                                     <NumberInput source="quantity" label="Quantity"></NumberInput>
                                 </SimpleFormIterator>
