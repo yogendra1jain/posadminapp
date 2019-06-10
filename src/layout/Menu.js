@@ -13,18 +13,19 @@ import {
   Responsive
 } from "react-admin";
 
-import customers from "../customers";
-import saleReport from "../reports/saleReport";
-import employees from "../employees";
-import packagePending from "../packagePending";
-import products from "../products";
-import stores from "../stores";
-import strains from "../strains";
-import vendorProduct from "../vendorProducts";
-import vendors from "../vendors";
-import SubMenu from "./SubMenu";
-import categories from "../categories";
-import tax from "../tax";
+import customers from '../customers';
+import saleReport from '../reports/saleReport';
+import employees from '../employees';
+import packagePending from '../packagePending';
+import products from '../products';
+import stores from '../stores';
+import strains from '../strains';
+import vendorProduct from '../vendorProducts';
+import vendors from '../vendors';
+import SubMenu from './SubMenu';
+import categories from '../categories';
+import tax from '../tax';
+import purchaseOrders from '../purchaseOrders';
 
 class Menu extends Component {
   state = {

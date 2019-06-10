@@ -21,6 +21,7 @@ import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
 import requisition from './requisition';
 import packageIn from './package'
+import purchaseOrders from './purchaseOrders';
 import tax from './tax'; 
 import routes from './routes';
 
@@ -55,6 +56,7 @@ const App = () => (
       <Resource name="Category" {...categories}/>
       <Resource name="Tax" {...tax}/>
       <Resource name="Requisition" {...requisition} />
+      <Resource name="PurchaseOrders" {...purchaseOrders} />
     </Admin>
   </div>
 );

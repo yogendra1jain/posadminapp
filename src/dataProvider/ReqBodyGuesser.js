@@ -154,7 +154,11 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { id: retailerId })
 
         case 'Store/Get':
-            return reqObjMaker(url, params)
+            if(Array.isArray(params.ids)) {
+                return reqObjMaker(url, {id: params.ids[0]})
+            } else {
+                return reqObjMaker(url, params)
+            }
 
         case 'Store/Create':
             return reqObjMaker(url, { ...params.data, retailerId })
@@ -179,7 +183,14 @@ const ReqBodyGuesser = (obj) => {
         case 'VendorProduct/GetByRetailerId':
             return reqObjMaker(url, { id: retailerId })
         case 'VendorProduct/Get':
-            return reqObjMaker(url, params)
+            if(Array.isArray(params.ids)) {
+                let reqBody = {
+                    id: params.ids[0]
+                }
+                return reqObjMaker(url, reqBody)
+            } else {
+                return reqObjMaker(url, params)
+            }
         case 'VendorProduct/Save':
                 reqBody = {
                     ...params.data,
@@ -276,6 +287,9 @@ const ReqBodyGuesser = (obj) => {
         //For Requisition       ******************************************************************************************
         case 'Requisition/GetByCriteria':
             return reqObjMaker(url, { retailerId, statuses: [0] })
+        //For Purchase Orders       ******************************************************************************************
+        case 'PurchaseOrder/GetByCriteria':
+            return reqObjMaker(url, {retailerId})
         default:
             break;
 
