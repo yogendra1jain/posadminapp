@@ -1,6 +1,7 @@
 import React from 'react';
 import axiosFetcher from '../global/dataFetcher/axiosFetcher';
 var QuickSightEmbedding = require("amazon-quicksight-embedding-sdk");
+import DashRings from '../assets/images/dashboardloader.gif';
 
 // /* Lodash Imports */
 // import _get from 'lodash/get';
@@ -283,15 +284,17 @@ class SalesDashBoardContainer extends React.Component {
         this.state = {}
     }
 
-    
-    onDashboardLoad = (payload)=> {
+
+    onDashboardLoad = (payload) => {
+        this.setState({ dashboardLoading: false })
         console.log("Do something when the dashboard is fully loaded.");
     }
 
-    onError =(payload)=> {
+    onError = (payload) => {
+        this.setState({ dashboardLoading: false })
         console.log("Do something when the dashboard fails loading");
     }
-    embedDashboard =()=> {
+    embedDashboard = () => {
         var containerDiv = document.getElementById("SalesDashBoardContainer");
         var options = {
             url: this.state.EmbedUrl,
@@ -303,13 +306,14 @@ class SalesDashBoardContainer extends React.Component {
         dashboard.on("error", this.onError);
         dashboard.on("load", this.onDashboardLoad);
     }
-    componentDidMount(){
-          axiosFetcher({
+    componentDidMount() {
+        this.setState({ dashboardLoading: true })
+        axiosFetcher({
             method: 'POST',
             url: "DashBoardUrl/Get",
             reqObj: {
                 Email: "admin@mega.com",
-                DashBoardName:'SALES_ANALYSIS'
+                DashBoardName: 'SALES_ANALYSIS'
             },
             successCb: (res) => {
                 this.state.EmbedUrl = res.EmbedUrl;
@@ -320,12 +324,16 @@ class SalesDashBoardContainer extends React.Component {
             errorCb: () => console.log("err is here"),
             dontShowMessage: true
         })
-    }   
+    }
 
     render() {
         return (
-           
+            <React.Fragment>
+                {this.state.dashboardLoading ? <img src={DashRings} />
+                    : null}
                 <div id="SalesDashBoardContainer"></div>
+            </React.Fragment>
+
 
         )
     }

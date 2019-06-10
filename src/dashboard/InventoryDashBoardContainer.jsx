@@ -1,6 +1,7 @@
 import React from 'react';
 import axiosFetcher from '../global/dataFetcher/axiosFetcher';
 var QuickSightEmbedding = require("amazon-quicksight-embedding-sdk");
+import DashRings from '../assets/images/dashboardloader.gif';
 
 class InventoryDashBoardContainer extends React.Component {
     constructor(props) {
@@ -10,10 +11,14 @@ class InventoryDashBoardContainer extends React.Component {
 
     
     onDashboardLoad = (payload)=> {
+        this.setState({ dashboardLoading: false })
+
         console.log("Do something when the dashboard is fully loaded.");
     }
 
     onError =(payload)=> {
+        this.setState({ dashboardLoading: false })
+
         console.log("Do something when the dashboard fails loading");
     }
     embedDashboard =()=> {
@@ -29,6 +34,7 @@ class InventoryDashBoardContainer extends React.Component {
         dashboard.on("load", this.onDashboardLoad);
     }
     componentDidMount(){
+        this.setState({ dashboardLoading: true })
           axiosFetcher({
             method: 'POST',
             url: "DashBoardUrl/Get",
@@ -49,8 +55,12 @@ class InventoryDashBoardContainer extends React.Component {
 
     render() {
         return (
-           
-                <div id="InventoryDashBoardContainer"></div>
+            <React.Fragment>
+            {this.state.dashboardLoading ? <img src={DashRings} />
+                : null}
+             <div id="InventoryDashBoardContainer"></div>
+        </React.Fragment>
+               
 
         )
     }
