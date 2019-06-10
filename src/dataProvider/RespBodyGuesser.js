@@ -58,6 +58,12 @@ const ResBodyGuesser = (obj) => {
                 data: [json]
             }
         }
+        if (url == "Package/GetMany") {
+            return {
+                data: _get(json, 'packages', [])
+            }
+        }   
+
         return {
             data: json
         };
@@ -227,6 +233,10 @@ const ResBodyGuesser = (obj) => {
             return {
                 data: _get(json, 'packages', []),
                 total: _get(json, 'total', 0) || 0,
+            }
+        case 'Package/GetMany':
+            return {
+                data: _get(json, 'packages', [])
             }
 
         //For Reports       ******************************************************************************************

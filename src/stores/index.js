@@ -5,8 +5,8 @@ import StoreIcon from  '@material-ui/icons/AccountBalance'
 import StoreShow  from './StoreShow';
 export default {
     list: StoreList,
-    create: StoreCreate,
-    edit: StoreEdit,
+    // create: StoreCreate,
+    // edit: StoreEdit,
     show:StoreShow,
     icon: StoreIcon
 };

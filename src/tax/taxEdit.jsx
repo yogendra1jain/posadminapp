@@ -5,7 +5,8 @@ import {
   TextInput,
   NumberInput,
   RadioButtonGroupInput,
-  BooleanInput
+  BooleanInput,
+  required
 } from 'react-admin'
 
 const TaxEditTitle = ({record}) => {
@@ -15,7 +16,7 @@ const TaxEditTitle = ({record}) => {
 }
 
 const TaxAppliedToChoices = [
-  { id: 0, name: 'Dummy Product' },
+  // { id: 0, name: 'Dummy Product' },
   { id: 1, name: 'Medical Cannabis' },
   { id: 2, name: 'Recreational Cannabis' },
   { id: 3, name: 'All Cannabis'},
@@ -26,11 +27,12 @@ const TaxAppliedToChoices = [
 const StoreEdit = props => (
   <Edit title={<TaxEditTitle />} {...props}>
     <SimpleForm redirect="list">
-      <TextInput label="Name" source="name" />
-      <NumberInput label="Percentage" source="percentage" />
+      <TextInput label="Name" source="name" validate={required()} />
+      <NumberInput label="Percentage" source="percentage" validate={required()}/>
       <RadioButtonGroupInput
+      validate={required()}
         parse={val => parseInt(val, 10)} 
-        label="Tax applied to"
+        label="Tax Rate Applicable on"
         source="appliedTo"
         choices={TaxAppliedToChoices}
       />

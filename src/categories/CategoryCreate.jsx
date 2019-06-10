@@ -1,22 +1,7 @@
-// /* eslint react/jsx-key: off */
-// import React from "react";
-// import { Edit, SimpleForm, TextField, TextInput, required } from "react-admin";
-
-// const CategoryEdit = props => (
-//   <Edit {...props}>
-//     <SimpleForm>
-//       <TextField source="id" />
-//       <TextInput source="name" validate={[required()]} />
-//     </SimpleForm>
-//   </Edit>
-// );
-
-// export default CategoryEdit;
-
 import React from "react";
 import { change } from "redux-form";
 import {
-  Edit,
+  Create,
   SimpleForm,
   FormDataConsumer,
   SelectInput,
@@ -29,13 +14,13 @@ import {
   RadioButtonGroupInput
 } from "react-admin";
 
-const CategoryEdit = props => (
-  <Edit {...props}>
+const CategoryCreate = props => (
+  <Create {...props}>
     <SimpleForm>
       <TextInput source="name" validate={[required()]} />
       <SelectInput
-        validate={[required()]}
         defaultValue={0}
+        validate={[required()]}
         parse={v => parseInt(v)}
         source="categoryType"
         label="Category Level"
@@ -92,7 +77,7 @@ const CategoryEdit = props => (
         }}
       </FormDataConsumer>
     </SimpleForm>
-  </Edit>
+  </Create>
 );
 
-export default CategoryEdit;
+export default CategoryCreate;

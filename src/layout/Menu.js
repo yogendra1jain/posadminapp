@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import compose from 'recompose/compose';
-import Inbox from '@material-ui/icons/Inbox';
-import LocalShipping from '@material-ui/icons/LocalShipping';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import compose from "recompose/compose";
+import Inbox from "@material-ui/icons/Inbox";
+import LocalShipping from "@material-ui/icons/LocalShipping";
+import { withRouter } from "react-router-dom";
 import {
-    translate,
-    DashboardMenuItem,
-    MenuItemLink,
-    Responsive,
-} from 'react-admin';
+  translate,
+  DashboardMenuItem,
+  MenuItemLink,
+  Responsive
+} from "react-admin";
 
 import customers from '../customers';
 import saleReport from '../reports/saleReport';
@@ -27,24 +27,24 @@ import tax from '../tax';
 import purchaseOrders from '../purchaseOrders';
 
 class Menu extends Component {
-    state = {
-        menuCustomers: false,
-        menuProducts: false,
-        menuVendors: false,
-        menuPackages: false,
-        menuStores: false,
-        menuReports: false,
-        menuTax: false
-    };
+  state = {
+    menuCustomers: false,
+    menuProducts: false,
+    menuVendors: false,
+    menuPackages: false,
+    menuStores: false,
+    menuReports: false,
+    menuTax: false
+  };
 
-    static propTypes = {
-        onMenuClick: PropTypes.func,
-        logout: PropTypes.object,
-    };
+  static propTypes = {
+    onMenuClick: PropTypes.func,
+    logout: PropTypes.object
+  };
 
-    handleToggle = menu => {
-        this.setState(state => ({ [menu]: !state[menu] }));
-    };
+  handleToggle = menu => {
+    this.setState(state => ({ [menu]: !state[menu] }));
+  };
 
     render() {
         const { onMenuClick, open, logout, translate } = this.props;
@@ -193,24 +193,24 @@ class Menu extends Component {
                     small={logout}
                     medium={null} // Pass null to render nothing on larger devices 
                 /> */}
-            </div>
-        );
-    }
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = state => ({
-    open: state.admin.ui.sidebarOpen,
-    theme: state.theme,
-    locale: state.i18n.locale,
+  open: state.admin.ui.sidebarOpen,
+  theme: state.theme,
+  locale: state.i18n.locale
 });
 
 const enhance = compose(
-    withRouter,
-    connect(
-        mapStateToProps,
-        {}
-    ),
-    translate
+  withRouter,
+  connect(
+    mapStateToProps,
+    {}
+  ),
+  translate
 );
 
 export default enhance(Menu);

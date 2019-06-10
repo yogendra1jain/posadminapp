@@ -14,7 +14,7 @@ import _isEmpty from 'lodash/isEmpty';
 const StoreEditTitle = ({ record }) => {
     return (
         <span>
-            Store {record ? `${record.name}` : ''}
+             {record ? `${record.name}` : ''}
         </span>
     )
 };
@@ -48,8 +48,8 @@ const StoreEdit = props => (
             <TextInput label="City" source="address.city" />
             <TextInput label="State" source="address.state" />
             <TextInput label="Country" source="address.country" />
-            <TextInput label="StoreKey" source="storeKey" />
-            <TextInput label="License No." source="licenseNo" />
+            {/* <TextInput label="StoreKey" source="storeKey" /> */}
+            {/* <TextInput label="License No." source="licenseNo" /> */}
             {/* <PaymentMethods /> */}
         </SimpleForm>
     </Edit>
