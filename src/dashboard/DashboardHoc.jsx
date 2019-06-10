@@ -46,7 +46,7 @@ function DashBoardHoc(WrappedComponent,DashboardName,ContainerName) {
                     // this.setState({ EmbedUrl: res.EmbedUrl});
 
                 },
-                errorCb: () => console.log("err is here"),
+                errorCb: () => {this.setState({dashboardLoading:false})},
                 dontShowMessage: true
             })
         }
