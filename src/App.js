@@ -19,11 +19,11 @@ import Login from './global/components/LoginPage';
 import strains from './strains';
 import Layout from './layout/Layout';
 import saleReport from './reports/saleReport';
-import DashboardContainer from './dashboard/DashboardContainer';
 import requisition from './requisition';
 import packageIn from './package'
 import purchaseOrders from './purchaseOrders';
-import tax from './tax';
+import tax from './tax'; 
+import routes from './routes';
 
 const messages = {
   'en': mergeTranslations(englishMessages, treeEnglishMessages),
@@ -37,9 +37,9 @@ const App = () => (
       dataProvider={dataProvider}
       i18nProvider={i18nProvider}
       authProvider={authProvider}
+      customRoutes={routes}
       appLayout={Layout}
       loginPage={Login}
-      dashboard={DashboardContainer}
       customReducers={{ tree }}
      >
       <Resource name="Search/Products" {...products}   options={{ label: 'Product List' }} />

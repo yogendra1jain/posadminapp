@@ -1,19 +1,36 @@
-import React from 'react';
-import { Edit, SimpleForm, TextField, ReferenceInput, NumberField, AutocompleteInput } from 'react-admin';
+import React from "react";
+import {
+  Edit,
+  SimpleForm,
+  TextField,
+  ReferenceInput,
+  NumberField,
+  AutocompleteInput,
+  required
+} from "react-admin";
 
- const PackageEdit = props => (
-    <Edit {...props}>
-        <SimpleForm>
-            <TextField source="id" />
-            <TextField source="label" />
-            <TextField source="packageType" />
-            <ReferenceInput  source="posProductId" reference="Search/Products"><AutocompleteInput  optionText="name" /></ReferenceInput>
-            <NumberField source="syncStatus" />
-            <TextField source="metrcId"/>
-            <TextField source="metrcProduct" />
-            <NumberField source="quantity" />
-        </SimpleForm>
-    </Edit>
+const PackageEdit = props => (
+  <Edit {...props}>
+    <SimpleForm>
+      {/* <TextField source="id" /> */}
+      <TextField source="label" />
+      <TextField source="metrcId" label="METRC Id" />
+      <TextField source="metrcProduct" />
+
+      {/* <TextField source="packageType" /> */}
+      <ReferenceInput
+        source="posProductId"
+        reference="Search/Products"
+        label="Change Item in Package"
+        validate={required()}
+      >
+        <AutocompleteInput optionText="name" />
+      </ReferenceInput>
+      {/* <NumberField source="syncStatus" /> */}
+      <NumberField source="quantity" />
+      <TextField source="uom" />
+    </SimpleForm>
+  </Edit>
 );
 
 export default PackageEdit;

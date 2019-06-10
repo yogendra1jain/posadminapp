@@ -151,7 +151,7 @@ class ProductEdit extends React.Component {
           />
           <PriceInput
             validate={required()}
-            label="POS Price"
+            label="POS Sale Price"
             source={"salePrice.amount"}
           />
           <ImageInput

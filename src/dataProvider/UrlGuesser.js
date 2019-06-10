@@ -65,6 +65,8 @@ const UrlGuesser = (obj) => {
         case 'Reference/GetZipCodeData/GET_ONE':
             return 'Reference/GetZipCodeData'
 
+        case 'Sync/Metrc/IncomingTransfers/GET_ONE':
+        return 'Sync/Metrc/IncomingTransfers';
         //For Image ******************************************************************************************
         case 'IMAGE/GET_ONE':
             return 'Upload/File'
@@ -168,6 +170,8 @@ const UrlGuesser = (obj) => {
             return 'Package/Get'
         case 'Package/GET_MANY':
             return 'Package/GetMany'
+        case 'Package/CREATE':
+        return 'Package/Create'
 
         //For Reports       ******************************************************************************************
         // Sale Report **********************************************************************
