@@ -298,7 +298,6 @@ class SalesDashBoardContainer extends React.Component {
             container: containerDiv,
             scrolling: "yes",
             height: "700px",
-            width: "1000px"
         };
         let dashboard = QuickSightEmbedding.embedDashboard(options);
         dashboard.on("error", this.onError);
