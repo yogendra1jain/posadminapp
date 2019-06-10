@@ -329,9 +329,15 @@ class SalesDashBoardContainer extends React.Component {
     render() {
         return (
             <React.Fragment>
-                {this.state.dashboardLoading ? <img src={DashRings} />
-                    : null}
-                <div id="SalesDashBoardContainer"></div>
+
+
+                {this.state.dashboardLoading ?
+                    <div className='flex-row justify-center align-center' style={{height:'100vh'}}>
+                        <img src={DashRings} height='200px' width="200px" />
+                    </div>
+
+                    : <div  style={this.state.dashboardLoading?{display:'none'}:null} id="SalesDashBoardContainer"></div>}
+                   <div id="SalesDashBoardContainer"></div>     
             </React.Fragment>
 
 
