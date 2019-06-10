@@ -44,7 +44,7 @@ const makePaginationReqBody = (url, params) => {
 }
 
 const ReqBodyGuesser = (obj) => {
-    const {
+    let {
         params,
         url,
         type
@@ -162,8 +162,8 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { id: retailerId })
 
         case 'Store/Get':
-            if(Array.isArray(params.ids)) {
-                return reqObjMaker(url, {id: params.ids[0]})
+            if (Array.isArray(params.ids)) {
+                return reqObjMaker(url, { id: params.ids[0] })
             } else {
                 return reqObjMaker(url, params)
             }
@@ -191,7 +191,7 @@ const ReqBodyGuesser = (obj) => {
         case 'VendorProduct/GetByRetailerId':
             return reqObjMaker(url, { id: retailerId })
         case 'VendorProduct/Get':
-            if(Array.isArray(params.ids)) {
+            if (Array.isArray(params.ids)) {
                 let reqBody = {
                     id: params.ids[0]
                 }
@@ -200,12 +200,12 @@ const ReqBodyGuesser = (obj) => {
                 return reqObjMaker(url, params)
             }
         case 'VendorProduct/Save':
-                reqBody = {
-                    ...params.data,
-                    retailerId: localStorage.getItem('retailerId'),
-                }
-                return reqObjMaker(url, reqBody)
-            // return reqObjMaker(url, params.data)
+            reqBody = {
+                ...params.data,
+                retailerId: localStorage.getItem('retailerId'),
+            }
+            return reqObjMaker(url, reqBody)
+        // return reqObjMaker(url, params.data)
 
         //For Strains ******************************************************************************************
         case 'Search/Strains':
@@ -256,6 +256,10 @@ const ReqBodyGuesser = (obj) => {
         case 'Package/GetMany':
             return reqObjMaker(url, params)
         case 'Package/Create':
+        debugger;
+            if (_get(params, 'data.sourcePackageId')) {
+                url = 'Package/Split'
+            }
             reqBody = {
                 ...params.data,
                 retailerId: localStorage.getItem('retailerId'),
@@ -297,7 +301,7 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { retailerId, statuses: [0] })
         //For Purchase Orders       ******************************************************************************************
         case 'PurchaseOrder/GetByCriteria':
-            return reqObjMaker(url, {retailerId})
+            return reqObjMaker(url, { retailerId })
         default:
             break;
 

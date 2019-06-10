@@ -11,49 +11,22 @@ import {
 } from "react-admin";
 import { SimpleForm } from "react-admin";
 import { FormDataConsumer } from "ra-core";
+import { parse } from "query-string";
+import NewPackageCreate from "./NewPackageCreate";
+import PackageSplitCreate from './PackageSplitCreate';
 
-const PackageCreateTitle = ({ record }) => {
-  return <span>Create Package</span>;
-};
+
+
 const PackageCreate = props => {
+  const { sourcePackageId: sourcePackageId } = parse(props.location.search);
+  console.log(sourcePackageId, "sourcePackageId_stringsourcePackageId_string")
   return (
-    <Create title={<PackageCreateTitle />} {...props}>
-      <SimpleForm redirect="list">
-        <ReferenceInput
-          source="posProductId"
-          reference="Search/Products"
-          validate={required()}
-        >
-          <AutocompleteInput source="posProductId" optionText="name" />
-        </ReferenceInput>
-        <TextInput source="label" label="METRC Tag (Label)" validate={required()} />
-        <FormDataConsumer>
-          {({ formData, ...rest }) => {
+    <React.Fragment>
+      {
+        sourcePackageId ? <PackageSplitCreate {...props} sourcePackageId={sourcePackageId} /> : <NewPackageCreate {...props} />
+      }
+    </React.Fragment>
 
-            return (
-              <ArrayInput source="ingredients" validate={required()}>
-                <SimpleFormIterator>
-                  <ReferenceInput
-                    filter={{ posProductId: formData.posProductId }}
-                    label="Package"
-                    source="sourcePackageId"
-                    reference="Package"
-                  >
-                    <AutocompleteInput
-                      source="originalPackage"
-                      optionText={val =>
-                        `${val.label}(${val.quantity} ${val.uom})`
-                      }
-                    />
-                  </ReferenceInput>
-                  <NumberInput source="quantity" label="Quantity" />
-                </SimpleFormIterator>
-              </ArrayInput>
-            );
-          }}
-        </FormDataConsumer>
-      </SimpleForm>
-    </Create>
   );
 };
 

@@ -12,6 +12,9 @@ import {
   EditButton,
   FunctionField
 } from "react-admin";
+import Button from '@material-ui/core/Button';
+import CallSplit from '@material-ui/icons/CallSplit';
+import { Link } from 'react-router-dom';
 const PackageFilter = props => {
   return (
     <Filter {...props}>
@@ -19,6 +22,23 @@ const PackageFilter = props => {
     </Filter>
   );
 };
+
+const AddNewSplitButton = ({ record }) => (
+  <Button
+    title="Split Package"
+    color="primary"
+    component={Link}
+    to={{
+      pathname: '/Package/create',
+      search: `?sourcePackageId=${record.id}`
+    }}
+    label="Split Package"
+  >
+    <CallSplit />
+    Split 
+  </Button>
+);
+
 const PackageList = props => (
   <List {...props} filters={<PackageFilter />}>
     <Datagrid>
@@ -43,11 +63,12 @@ const PackageList = props => (
               titleAccess={record.metrcError}
             />
           ) : (
-            <SyncIcon style={{ color: "green" }} />
-          )
+                <SyncIcon style={{ color: "green" }} />
+              )
         }
       />
-      <EditButton label="Edit Item" />
+      <EditButton label="Edit" />
+      <AddNewSplitButton label="Split" />
     </Datagrid>
   </List>
 );
