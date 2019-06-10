@@ -26,6 +26,13 @@ const UrlGuesser = (obj) => {
         case 'UOM/GET_LIST':
             return 'Get/Metrc/UnitOfMeasure'
 
+        //For Unfinished Products ******************************************************************************************
+        case 'UnfinishedProducts/GET_LIST':
+            return 'Search/Products'
+        case 'UnfinishedProducts/GET_ONE':
+            return 'Product/Get'
+
+
         //For Category ******************************************************************************************
         case 'Level1ByRetailerId/GET_LIST':
             return 'Category/Level1ByRetailerId'

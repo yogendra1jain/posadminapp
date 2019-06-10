@@ -5,6 +5,7 @@ import _get from 'lodash/get';
 import _set from 'lodash/set'
 import { filter } from "async";
 import moment from 'moment';
+import _isEmpty from 'lodash/isEmpty';
 
 const reqObjMaker = (url, reqBody, ) => {
     return {
@@ -57,7 +58,6 @@ const ReqBodyGuesser = (obj) => {
             let req = formObjectMaker(url, formData);
             return req
         }
-        debugger;
         return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
         if (url == 'Product/Update') {
@@ -78,6 +78,12 @@ const ReqBodyGuesser = (obj) => {
                     value: _get(params, 'filter.syncStatus')
                 })
             }
+            // if(_get(params,'filter.undefined')) {
+            //     reqBody.filters.push({
+            //         field: 'syncStatus',
+            //         value: _get(params, 'filter.undefined')
+            //     })
+            // }
             return reqObjMaker(url, reqBody);
         case 'Product/Create':
             reqBody = {

@@ -29,7 +29,6 @@ const PackageCreate = props => {
         <TextInput source="label" label="METRC Tag (Label)" validate={required()} />
         <FormDataConsumer>
           {({ formData, ...rest }) => {
-            debugger;
 
             return (
               <ArrayInput source="ingredients" validate={required()}>
