@@ -21,7 +21,7 @@ class InventoryDashBoardContainer extends React.Component {
         var options = {
             url: this.state.EmbedUrl,
             container: containerDiv,
-            scrolling: "no",
+            scrolling: "yes",
             height: "700px",
             width: "1000px"
         };
