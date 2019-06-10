@@ -26,7 +26,7 @@ const authProvider = (type, params) => {
                 localStorage.setItem('storeId', _get(decodeData,'Store.id',''))
                 localStorage.setItem('role',_get(decodeData,'Role',''))
                 localStorage.setItem('storeName',_get(decodeData,'Store.name',''))
-
+                localStorage.setItem('email',_get(decodeData,'RetailerAdmin.email',''))
             });
     }
     if (type === AUTH_LOGOUT) {
