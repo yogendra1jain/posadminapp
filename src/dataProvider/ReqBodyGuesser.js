@@ -95,6 +95,8 @@ const ReqBodyGuesser = (obj) => {
             delete reqBody.cannabisProduct
             delete reqBody.medicalProduct
             return reqObjMaker(url, reqBody)
+        case 'Product/Import/Update':
+            return reqObjMaker(url, params)
         case 'Product/Get':
             return reqObjMaker(url, params)
         case 'Search/Products/DELETE':

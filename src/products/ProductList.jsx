@@ -35,10 +35,7 @@ const ProductListTitle = ({ record }) => {
   return <span>Product List</span>;
 };
 
-const choices = [
-  { id: "0", name: "Pending Sync" },
-  { id: "1", name: "Live" }
-];
+const choices = [{ id: "0", name: "Pending Sync" }, { id: "1", name: "Live" }];
 
 const ProductFilter = props => {
   return (
@@ -46,15 +43,17 @@ const ProductFilter = props => {
       <TextInput label="Search" source="q" alwaysOn />
       <SelectInput
         choices={choices}
-        label="Sync Status"
+        label="Product Status"
         source="syncStatus"
+        alwaysOn
+        allowEmpty={false}
       />
     </Filter>
   );
 };
 
 const ProductList = props => (
-  <List {...props} title={<ProductListTitle />} filters={<ProductFilter />}>
+  <List {...props} title={<ProductListTitle />} filters={<ProductFilter />} filterDefaultValues={{syncStatus: "1"}}>
     <Datagrid>
       <TextField label="Name" source="name" />
       <TextField label="METRC Id" source="metrcId" />

@@ -94,13 +94,13 @@ class Menu extends Component {
           />
           <MenuItemLink
             to={`/Search/Products`}
-            primaryText={"Product Profiles"}
+            primaryText={"Product Master"}
             leftIcon={<products.icon />}
             onClick={onMenuClick}
           />
           <MenuItemLink
             to={`/UnfinishedProducts`}
-            primaryText={"UnfinishedProducts"}
+            primaryText={"METRC Items"}
             leftIcon={<products.icon />}
             onClick={onMenuClick}
           />

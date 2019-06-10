@@ -41,17 +41,13 @@ const Aside = ({ record }) => {
   <div style={{ width: 400, margin: '1em' }}>
     <Typography>Metrc Id: {_get(record,'metrcId','')}</Typography>
     <Typography>Name: {_get(record, 'name', '')}</Typography>
-    <Typography>Discountable: {_get(record, 'discountable', false) ? 'Yes' : 'No'}</Typography>
-    <Typography>Taxable: {_get(record, 'isTaxable', false) ? 'Yes' : 'No'}</Typography>
-    <Typography>Description: {_get(record, 'description','')}</Typography>
-    <Typography>Product Type: {_get(record, 'productType',0) == 0 ? 'Non-Cannabis' :  _get(record, 'productType',0) == 1 ? 'Cannabis Product' : 'Medical Only Cannabis Product'}</Typography>
     <Typography>Metrc Item Type: {_get(record, 'metrcItemType','')}</Typography>
     <Typography>Metrc Category: {_get(record, 'metrcCategory','')}</Typography>
     <Typography>Metrc UOM: {_get(record, 'metrcUom','')}</Typography>
     {_get(record,'unitWeight') ? 
       <span>
       <Typography>Unit Weight: {_get(record,'unitWeight', 0)}</Typography>
-      <Typography>Weight UOM: {_get(record, 'unitWeightUnitOfMeasure','')}</Typography>
+      <Typography>UOM: {_get(record, 'unitWeightUnitOfMeasure','')}</Typography>
       </span> : '' 
     }
     {_get(record,'unitVolume') ? 
@@ -108,7 +104,7 @@ class ProductEdit extends React.Component {
 
   render() {
     return (
-      <Edit aside={<Aside />} title={<ProductTitle />} {...this.props}>
+      <Edit aside={<Aside />} title={<ProductTitle />} {...this.props} undoable={false}>
         <SimpleForm>
           <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
           <CategoryInput source={"category1"} />
@@ -122,7 +118,7 @@ class ProductEdit extends React.Component {
             label="POS Sale Price"
             source={"salePrice.amount"}
           />
-          <FormDataConsumer>
+          {/* <FormDataConsumer>
             {({ formData, dispatch, ...rest }) => {
               if (!formData.newImage) {
                 return (
@@ -132,7 +128,7 @@ class ProductEdit extends React.Component {
                 );
               }
             }}
-          </FormDataConsumer>
+          </FormDataConsumer> */}
           <ImageInput
             source="newImage"
             label="Change Image"
