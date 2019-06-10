@@ -15,7 +15,8 @@ import {
   Filter,
   List,
   TextField,
-  TextInput
+  TextInput,
+  SelectInput
 } from "react-admin";
 import React from "react";
 import DineroPrice from "../global/components/DineroPrice";
@@ -35,21 +36,19 @@ const ProductListTitle = ({ record }) => {
 };
 
 const choices = [
-  { id: 0, name: "Pending Sync" },
-  { id: 1, name: "Live" },
-  { id: 2, name: "Partial (Metrc Imported)" }
+  { id: "0", name: "Pending Sync" },
+  { id: "1", name: "Live" }
 ];
 
 const ProductFilter = props => {
   return (
     <Filter {...props}>
       <TextInput label="Search" source="q" alwaysOn />
-      {/* <SelectInput
+      <SelectInput
         choices={choices}
-        label="Status"
-        soruce="syncStatus"
-        defaultValue={1}
-      /> */}
+        label="Sync Status"
+        source="syncStatus"
+      />
     </Filter>
   );
 };
