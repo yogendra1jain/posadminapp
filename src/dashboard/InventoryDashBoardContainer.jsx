@@ -22,8 +22,7 @@ class InventoryDashBoardContainer extends React.Component {
             url: this.state.EmbedUrl,
             container: containerDiv,
             scrolling: "yes",
-            height: "700px",
-            width: "1000px"
+            height: "700px"
         };
         let dashboard = QuickSightEmbedding.embedDashboard(options);
         dashboard.on("error", this.onError);
