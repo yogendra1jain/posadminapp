@@ -42,6 +42,9 @@ function DashBoardHoc(WrappedComponent,DashboardName,ContainerName) {
                 },
                 successCb: (res) => {
                     this.state.EmbedUrl = res.EmbedUrl;
+                    if(DashboardName=="INVENTORY_ANALYSIS")
+                    this.setState({ dashboardLoading: false })
+                    
                     this.embedDashboard();
                     // this.setState({ EmbedUrl: res.EmbedUrl});
 
