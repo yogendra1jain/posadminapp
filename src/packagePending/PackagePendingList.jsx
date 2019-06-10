@@ -18,7 +18,7 @@ class PackagePendingList extends React.Component {
         return (
             <div className='flex-column'>
                 <div className='flex-row justify-center align-center justify-flex-end'>
-                    <span>{`Metrc Last Synced ${moment(localStorage.getItem('incomingPkgSyncTime') * 1).format('MM-DD-YYYY,hh:mm:ss a')}`}</span>
+                    <span>{`METRC Last Synced ${moment(localStorage.getItem('incomingPkgSyncTime') * 1).format('MM/DD/YYYY hh:mm a')}`}</span>
                     <SyncIcon onClick={this.syncClick} style={{ fontSize: '1.2px' }} title="Sync to metrc again" style={{ color: 'orange' }} />
                 </div>
 
@@ -32,14 +32,13 @@ class PackagePendingList extends React.Component {
                         <TextField label="Type" source="packageType" />
                         <TextField label="Product Name" source="productName" />
                         <TextField label="Category" source="productCategoryName" />
-                        <TextField label="Lab Testting State" source="labTestingState" />
-                        <TextField label="Shipment Package State" source="shipmentPackageState" />
-                        <TextField label="Shipped Quantity" source="shippedQuantity" />
-                        <TextField label="UOM" source="shippedUnitOfMeasureName" />
+                        <TextField label="Shipment Status" source="shipmentPackageState" />
+                        <TextField label="Quantity" source="shippedQuantity" />
+                        <TextField label="UOM" source="shippedUnitOfMeasureName" defaultValue={0} />
                         <FormDataConsumer>
                             {({ formData, ...rest }) => {
                                 if (formData.shipmentPackageState == "Shipped") {
-                                    return <InfoOutline titleAccess="Please Accept Package at Metric Site" color="red"></InfoOutline>
+                                    return <InfoOutline titleAccess="Please Accept Package on METRC UI" color="red"></InfoOutline>
                                 }
                                 else if (formData.shipmentPackageState == "Accepted") {
                                     return <EditButton label="Check In" />
@@ -50,7 +49,7 @@ class PackagePendingList extends React.Component {
                             }
                             }
                         </FormDataConsumer>
-                        <EditButton label="Check In" />
+                        {/* <EditButton label="Check In" /> */}
 
                     </Datagrid>
                 </List>

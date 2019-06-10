@@ -186,12 +186,12 @@ class Menu extends Component {
           leftIcon={<stores.icon />}
           onClick={onMenuClick}
         />
-        <MenuItemLink
+        {/* <MenuItemLink
           to={`/Requisition`}
           primaryText={"Requisition"}
           leftIcon={<stores.icon />}
           onClick={onMenuClick}
-        />
+        /> */}
         {/* <Responsive
                     xsmall={
                         <MenuItemLink

@@ -5,7 +5,7 @@ import PackagePendingCreate from './PackagePendingCreate';
 
 export default {
     list: PackagePendingList,
-    create: PackagePendingCreate,
+    // create: PackagePendingCreate,
     edit: PackagePendingEdit,
     icon: PackagePendingIcon,
 };
