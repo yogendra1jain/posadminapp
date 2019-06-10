@@ -23,10 +23,17 @@ const authProvider = (type, params) => {
                 localStorage.setItem('token', token);
                 let decodeData = jwtDecode(localStorage.getItem('token'));
                 localStorage.setItem('retailerId', decodeData.Retailer.id);
-                localStorage.setItem('storeId', _get(decodeData,'Store.id',''))
-                localStorage.setItem('role',_get(decodeData,'Role',''))
-                localStorage.setItem('storeName',_get(decodeData,'Store.name',''))
-                localStorage.setItem('email',_get(decodeData,'RetailerAdmin.email',''))
+                localStorage.setItem('storeId', _get(decodeData, 'Store.id', ''))
+                localStorage.setItem('role', _get(decodeData, 'Role', ''))
+                localStorage.setItem('storeName', _get(decodeData, 'Store.name', ''))
+                localStorage.setItem('email', _get(decodeData, 'RetailerAdmin.email', ''))
+                if (_get(decodeData, 'Role', '') == "1") {
+                    localStorage.setItem('email', _get(decodeData, 'RetailerAdmin.email', ''))
+                }
+                else  if (_get(decodeData, 'Role', '') == "2") {
+                    localStorage.setItem('email', _get(decodeData, 'StoreAdmin.email', ''))
+                }
+
             });
     }
     if (type === AUTH_LOGOUT) {
