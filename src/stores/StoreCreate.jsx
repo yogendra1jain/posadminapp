@@ -3,7 +3,8 @@ import {
     Create,
     SimpleForm,
     ImageInput,
-    SelectInput
+    SelectInput,
+    NumberInput
 } from 'react-admin';
 import React from 'react';
 import ZipCodeInput from '../global/components/ZipCodeInput';
@@ -12,6 +13,9 @@ import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 import { TimeInput } from 'react-admin-date-inputs';
 import CustomImageInput from '../products/CustomImageInput';
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 
 
 const StoreCreateTitle = ({ record }) => {
@@ -56,9 +60,48 @@ const StoreCreate = props => (
             <TextInput label="City" source="address.city" />
             <TextInput label="State" source="address.state" />
             <TextInput label="Country" source="address.country" />
+            <div style={{ width: 400, margin: "1em" }} />
+
+            <Card>
+                <CardContent>
+                    <Typography>MED Purchase Limits</Typography>
+
+                    <NumberInput
+                        source="medLimit.weightLimit"
+                        label="Cannabis Limit (g)"
+                    />
+                    <NumberInput
+                        source="medLimit.concentrateLimit"
+                        label="Concentrate Limit (g)"
+                    />
+                    <NumberInput
+                        source="medLimit.plantCountLimit"
+                        label="Plant Limit (nos.)"
+                    />
+                </CardContent>
+            </Card>
+            <div style={{ width: 400, margin: "1em" }} />
+            <Card>
+                <CardContent>
+                    <Typography>REC Purchase Limits</Typography>
+                    <NumberInput
+                        source="recLimit.weightLimit"
+                        label="Cannabis Limit (g)"
+                    />
+                    <NumberInput
+                        source="recLimit.concentrateLimit"
+                        label="Concentrate Limit (g)"
+                    />
+                    <NumberInput
+                        source="recLimit.plantCountLimit"
+                        label="Plant Limit (nos.)"
+                    />
+                </CardContent>
+            </Card>
+            <CardContent />
             <TimeInput source="operatingHoursStart" label="Start time" options={{ format: 'HH:mm' }} />
             <TimeInput source="operatingHoursEnd" label="End time" options={{ format: 'HH:mm' }} />
-            <SelectInput  label="Time Zone" source='operatingTimezone' choices={UtcDateChoices} />
+            <SelectInput label="Time Zone" source='operatingTimezone' choices={UtcDateChoices} />
             <ImageInput
                 source="newImage"
                 label="Upload Store Logo"
