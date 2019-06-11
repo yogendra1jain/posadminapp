@@ -65,9 +65,15 @@ const ReqBodyGuesser = (obj) => {
             if (_get(params, 'data.newImage.newImage')) {
                 _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
             }
-            return reqObjMaker(url, params.data)
+        }
+        if (url == 'Store/Update') {
+            debugger;
+            if (_get(params, 'data.newImage.newImage')) {
+                _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
+            }
         }
         return reqObjMaker(url, params.data)
+
     }
     switch (url) {
         // For Products ******************************************************************************************
@@ -167,13 +173,13 @@ const ReqBodyGuesser = (obj) => {
                 return reqObjMaker(url, { id: params.ids[0] })
             } else {
                 return reqObjMaker(url, params)
-            }   
+            }
 
         case 'Store/Create':
             let data = { ...params.data };
-            data.image = _get(params,'data.newImage.newImage','');
-            data.operatingHoursStart = _get(params,'data.operatingHoursStart').getHours()+':'+_get(params,'data.operatingHoursStart').getMinutes();
-            data.operatingHoursEnd = _get(params,'data.operatingHoursEnd').getHours()+':'+_get(params,'data.operatingHoursEnd').getMinutes();
+            data.image = _get(params, 'data.newImage.newImage', '');
+            // data.operatingHoursStart = _get(params, 'data.operatingHoursStart').getHours() + ':' + _get(params, 'data.operatingHoursStart').getMinutes();
+            // data.operatingHoursEnd = _get(params, 'data.operatingHoursEnd').getHours() + ':' + _get(params, 'data.operatingHoursEnd').getMinutes();
             return reqObjMaker(url, { ...data, retailerId })
 
         case 'Store/Update':
