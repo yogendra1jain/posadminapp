@@ -43,6 +43,7 @@ const makePaginationReqBody = (url, params) => {
     return reqBody
 }
 
+
 const ReqBodyGuesser = (obj) => {
     let {
         params,
@@ -166,10 +167,14 @@ const ReqBodyGuesser = (obj) => {
                 return reqObjMaker(url, { id: params.ids[0] })
             } else {
                 return reqObjMaker(url, params)
-            }
+            }   
 
         case 'Store/Create':
-            return reqObjMaker(url, { ...params.data, retailerId })
+            let data = { ...params.data };
+            data.image = _get(params,'data.newImage.newImage','');
+            data.operatingHoursStart = _get(params,'data.operatingHoursStart').getHours()+':'+_get(params,'data.operatingHoursStart').getMinutes();
+            data.operatingHoursEnd = _get(params,'data.operatingHoursEnd').getHours()+':'+_get(params,'data.operatingHoursEnd').getMinutes();
+            return reqObjMaker(url, { ...data, retailerId })
 
         case 'Store/Update':
             return reqObjMaker(url, params.data)
@@ -256,7 +261,7 @@ const ReqBodyGuesser = (obj) => {
         case 'Package/GetMany':
             return reqObjMaker(url, params)
         case 'Package/Create':
-        debugger;
+            debugger;
             if (_get(params, 'data.sourcePackageId')) {
                 url = 'Package/Split'
             }
