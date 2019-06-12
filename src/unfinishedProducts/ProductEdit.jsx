@@ -11,6 +11,7 @@ import {
   Loading,
   Error,
   required,
+  RichTextInput
 } from "react-admin";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from '@material-ui/core/Typography';
@@ -43,7 +44,6 @@ const Aside = ({ record }) => {
     <Typography>Name: {_get(record, 'name', '')}</Typography>
     <Typography>Discountable: {_get(record, 'discountable', false) ? 'Yes' : 'No'}</Typography>
     <Typography>Taxable: {_get(record, 'isTaxable', false) ? 'Yes' : 'No'}</Typography>
-    <Typography>Description: {_get(record, 'description','')}</Typography>
     <Typography>Product Type: {_get(record, 'productType',0) == 0 ? 'Non-Cannabis' :  _get(record, 'productType',0) == 1 ? 'Cannabis Product' : 'Medical Only Cannabis Product'}</Typography>
     <Typography>Metrc Item Type: {_get(record, 'metrcItemType','')}</Typography>
     <Typography>Metrc Category: {_get(record, 'metrcCategory','')}</Typography>
@@ -111,6 +111,7 @@ class ProductEdit extends React.Component {
       <Edit aside={<Aside />} title={<ProductTitle />} {...this.props}>
         <SimpleForm>
           <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
+          <RichTextInput source="description" />
           <CategoryInput source={"category1"} />
           <PriceInput
             validate={required()}

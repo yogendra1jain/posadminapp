@@ -24,6 +24,7 @@ import requisition from './requisition';
 import packageIn from './package'
 import purchaseOrders from './purchaseOrders';
 import tax from './tax'; 
+import saleHistory from './saleHistory';
 import routes from './routes';
 
 const messages = {
@@ -59,6 +60,7 @@ const App = () => (
       <Resource name="Requisition" {...requisition} />
       <Resource name="PurchaseOrders" {...purchaseOrders} />
       <Resource name="UnfinishedProducts" {...unfinishedProducts} />
+      <Resource name="SaleHistory" {...saleHistory} />
     </Admin>
   </div>
 );

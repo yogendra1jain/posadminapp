@@ -73,7 +73,7 @@ const UrlGuesser = (obj) => {
             return 'Reference/GetZipCodeData'
 
         case 'Sync/Metrc/IncomingTransfers/GET_ONE':
-        return 'Sync/Metrc/IncomingTransfers';
+            return 'Sync/Metrc/IncomingTransfers';
         //For Image ******************************************************************************************
         case 'IMAGE/GET_ONE':
             return 'Upload/File'
@@ -178,7 +178,7 @@ const UrlGuesser = (obj) => {
         case 'Package/GET_MANY':
             return 'Package/GetMany'
         case 'Package/CREATE':
-        return 'Package/Create'
+            return 'Package/Create'
 
         //For Reports       ******************************************************************************************
         // Sale Report **********************************************************************
@@ -201,7 +201,11 @@ const UrlGuesser = (obj) => {
 
         //For Purchase Orders       ******************************************************************************************
         case 'PurchaseOrders/GET_LIST':
-        return 'PurchaseOrder/GetByCriteria'
+            return 'PurchaseOrder/GetByCriteria'
+
+        //For Sale History       ******************************************************************************************
+        case 'SaleHistory/GET_LIST':
+            return 'Sale/Employee/ByStoreId'
         default:
             break;
     }
