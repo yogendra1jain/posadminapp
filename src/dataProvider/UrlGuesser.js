@@ -205,6 +205,10 @@ const UrlGuesser = (obj) => {
         //For Purchase Orders       ******************************************************************************************
         case 'PurchaseOrders/GET_LIST':
             return 'PurchaseOrder/GetByCriteria'
+
+        //For Inventory       ******************************************************************************************
+        case 'Inventory/GET_LIST':
+            return 'Search/Inventory'
         default:
             break;
     }

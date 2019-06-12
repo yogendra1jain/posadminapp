@@ -36,7 +36,7 @@ class Menu extends Component {
     menuStores: false,
     menuReports: false,
     menuTax: false,
-    menuDashBoardInventory:false
+    menuDashBoardInventory: false
   };
 
   static propTypes = {
@@ -58,18 +58,18 @@ class Menu extends Component {
           isOpen={this.state.menuDashBoardInventory}
           sidebarIsOpen={open}
           name="Dashboards"
-          icon={<DashboardIcon/>}
+          icon={<DashboardIcon />}
         >
           <MenuItemLink
             to={`/InventoryDashboard`}
             primaryText={"Inventory"}
-            leftIcon={<DashboardIcon/>}
+            leftIcon={<DashboardIcon />}
             onClick={onMenuClick}
           />
-           <MenuItemLink
+          <MenuItemLink
             to={`/SalesDashboard`}
             primaryText={"Sales"}
-            leftIcon={<DashboardIcon/>}
+            leftIcon={<DashboardIcon />}
             onClick={onMenuClick}
           />
         </SubMenu>
@@ -169,6 +169,12 @@ class Menu extends Component {
           <MenuItemLink
             to={`/PackagePending`}
             primaryText={"Pending Packages"}
+            leftIcon={<packagePending.icon />}
+            onClick={onMenuClick}
+          />
+          <MenuItemLink
+            to={`/Inventory`}
+            primaryText={"Non-Cannabis"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />

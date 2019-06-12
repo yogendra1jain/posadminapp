@@ -313,6 +313,17 @@ const ReqBodyGuesser = (obj) => {
         //For Purchase Orders       ******************************************************************************************
         case 'PurchaseOrder/GetByCriteria':
             return reqObjMaker(url, { retailerId })
+        //For Inventory       ******************************************************************************************
+        case 'Search/Inventory':
+        let reqObj = makePaginationReqBody(url, params)
+        reqObj.filters.push({'field':'productType','value':'3'})
+            reqBody = {
+                request:reqObj,
+                storeId:localStorage.getItem('storeId')
+            }
+            return reqObjMaker(url, reqBody);
+
+            return
         default:
             break;
 
