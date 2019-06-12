@@ -20,7 +20,7 @@ import PriceInput from "../global/components/PriceInput";
 import { change } from 'redux-form';
 
 const ProductTypeChoices = [
-    { id: 0, name: 'Non-Cannabis' },
+    { id: 3, name: 'Non-Cannabis' },
     { id: 1, name: 'Cannabis Product' },
     { id: 2, name: 'Medical Only Cannabis Product' }
 ]

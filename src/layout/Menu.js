@@ -162,13 +162,13 @@ class Menu extends Component {
         >
           <MenuItemLink
             to={`/Package`}
-            primaryText={"Package"}
+            primaryText={"In Hand Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />
           <MenuItemLink
             to={`/PackagePending`}
-            primaryText={"Pending Packages"}
+            primaryText={"Incoming Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />
