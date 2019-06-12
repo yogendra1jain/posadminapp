@@ -349,6 +349,13 @@ const ResBodyGuesser = (obj) => {
                 total: json.total  || 0
             }
 
+
+        //For Sale History       ******************************************************************************************
+        case 'Sale/Employee/ByStoreId':
+            return {
+                data: json || [],
+                total: json ? json.length : 0
+            }
         default:
             if (json.id == null) {
                 json.id = "uuid";

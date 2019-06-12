@@ -104,6 +104,12 @@ class Menu extends Component {
             leftIcon={<products.icon />}
             onClick={onMenuClick}
           />
+          {/* <MenuItemLink
+            to={`/SaleHistory`}
+            primaryText={"SaleHistory"}
+            leftIcon={<products.icon />}
+            onClick={onMenuClick}
+          /> */}
         </SubMenu>
         <SubMenu
           handleToggle={() => this.handleToggle("menuStores")}
@@ -162,13 +168,13 @@ class Menu extends Component {
         >
           <MenuItemLink
             to={`/Package`}
-            primaryText={"Package"}
+            primaryText={"In Hand Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />
           <MenuItemLink
             to={`/PackagePending`}
-            primaryText={"Pending Packages"}
+            primaryText={"Incoming Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />

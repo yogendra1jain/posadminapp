@@ -53,7 +53,12 @@ const ProductFilter = props => {
 };
 
 const ProductList = props => (
-  <List {...props} title={<ProductListTitle />} filters={<ProductFilter />} filterDefaultValues={{syncStatus: "1"}}>
+  <List
+    {...props}
+    title={<ProductListTitle />}
+    filters={<ProductFilter />}
+    filterDefaultValues={{ syncStatus: "1" }}
+  >
     <Datagrid>
       <TextField label="Name" source="name" />
       <TextField label="METRC Id" source="metrcId" />
@@ -65,7 +70,9 @@ const ProductList = props => (
         text-align="left"
         label="Sync Status"
         render={record =>
-          _get(record, "syncStatus", 0) === 0 ? (
+          _get(record, "productType", 0) === 3 ? (
+            <span>Non Cannabis</span>
+          ) : _get(record, "syncStatus", 0) === 0 ? (
             <SyncIcon style={{ color: "orange" }} />
           ) : (
             <SyncIcon style={{ color: "green" }} />

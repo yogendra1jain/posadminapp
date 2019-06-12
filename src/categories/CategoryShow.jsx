@@ -17,6 +17,7 @@ const CategoryShow = props => (
                   label="Parent Category"
                   source="parentCategoryId"
                   reference="Category"
+                  linkType="show"
                   {...rest}
                 >
                   <TextField source="name" />
