@@ -112,20 +112,26 @@ class Menu extends Component {
             onClick={onMenuClick}
           /> */}
         </SubMenu>
-        <SubMenu
-          handleToggle={() => this.handleToggle("menuStores")}
-          isOpen={this.state.menuStores}
-          sidebarIsOpen={open}
-          name="Stores"
-          icon={<stores.icon />}
-        >
-          <MenuItemLink
-            to={`/Store`}
-            primaryText={"Dispensaries"}
-            leftIcon={<stores.icon />}
-            onClick={onMenuClick}
-          />
-        </SubMenu>
+        <WithPermissions
+          render={({ permissions }) =>
+            permissions === "1" ? (
+              <SubMenu
+                handleToggle={() => this.handleToggle("menuStores")}
+                isOpen={this.state.menuStores}
+                sidebarIsOpen={open}
+                name="Stores"
+                icon={<stores.icon />}
+              >
+                <MenuItemLink
+                  to={`/Store`}
+                  primaryText={"Dispensaries"}
+                  leftIcon={<stores.icon />}
+                  onClick={onMenuClick}
+                />
+              </SubMenu>
+            ) : null
+          }
+        />
         <SubMenu
           handleToggle={() => this.handleToggle("menuCustomers")}
           isOpen={this.state.menuCustomers}
