@@ -120,7 +120,7 @@ class Menu extends Component {
         >
           <MenuItemLink
             to={`/Store`}
-            primaryText={"Stores"}
+            primaryText={"Dispensaries"}
             leftIcon={<stores.icon />}
             onClick={onMenuClick}
           />
