@@ -312,7 +312,11 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { retailerId, statuses: [0] })
         //For Purchase Orders       ******************************************************************************************
         case 'PurchaseOrder/GetByCriteria':
-            return reqObjMaker(url, { retailerId })
+            return reqObjMaker(url, {retailerId})
+        
+        //For Sale History       ******************************************************************************************
+        case 'Sale/Employee/ByStoreId':
+            return reqObjMaker(url, {id: localStorage.getItem('storeId')})
         default:
             break;
 

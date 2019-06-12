@@ -104,6 +104,12 @@ class Menu extends Component {
             leftIcon={<products.icon />}
             onClick={onMenuClick}
           />
+          {/* <MenuItemLink
+            to={`/SaleHistory`}
+            primaryText={"SaleHistory"}
+            leftIcon={<products.icon />}
+            onClick={onMenuClick}
+          /> */}
         </SubMenu>
         <SubMenu
           handleToggle={() => this.handleToggle("menuStores")}
