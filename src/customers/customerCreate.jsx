@@ -9,7 +9,8 @@ import {
   RadioButtonGroupInput,
   DateInput,
   FormDataConsumer,
-  BooleanInput
+  BooleanInput,
+  required
 } from "react-admin";
 import ZipCodeInput from "../global/components/ZipCodeInput";
 import { TextField } from "@material-ui/core";
@@ -18,8 +19,8 @@ const CustomerCreate = props => (
   <Create {...props}>
     <TabbedForm redirect="list">
       <FormTab label="Contact Details">
-        <TextInput label="First Name" source="customer.firstName" />
-        <TextInput label="Last Name" source="customer.lastName" />
+        <TextInput label="First Name" validate={required()} source="customer.firstName" />
+        <TextInput label="Last Name" validate={required()} source="customer.lastName" />
         <TextInput label="Email" source="email" />
 
         <NumberInput label="Phone Number" source="phoneNumber.phoneNumber" />
@@ -32,7 +33,7 @@ const CustomerCreate = props => (
             { id: 3, name: "Other" }
           ]}
         />
-        <DateInput label="Date Of Birth" source="dob" />
+        <DateInput validate={required()} label="Date Of Birth" source="dob" />
       </FormTab>
       <FormTab label="Address">
         <TextInput
@@ -85,6 +86,7 @@ const CustomerCreate = props => (
                       label="Purchase Limit (plants)"
                       source="plantCountLimit"
                     />
+                    <DateInput validate={required()} label="License Expiry Date" source="medicalLicenseExpiration" />
                   </React.Fragment>
                 ) : null}
               </React.Fragment>
