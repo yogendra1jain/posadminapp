@@ -51,7 +51,7 @@ const Aside = ({ record }) => {
     {_get(record,'unitWeight') ? 
       <span>
       <Typography>Unit Weight: {_get(record,'unitWeight', 0)}</Typography>
-      <Typography>Weight UOM: {_get(record, 'unitWeightUnitOfMeasure','')}</Typography>
+      <Typography>UOM: {_get(record, 'unitWeightUnitOfMeasure','')}</Typography>
       </span> : '' 
     }
     {_get(record,'unitVolume') ? 
@@ -108,7 +108,7 @@ class ProductEdit extends React.Component {
 
   render() {
     return (
-      <Edit aside={<Aside />} title={<ProductTitle />} {...this.props}>
+      <Edit aside={<Aside />} title={<ProductTitle />} {...this.props} undoable={false}>
         <SimpleForm>
           <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
           <RichTextInput source="description" />
@@ -123,7 +123,7 @@ class ProductEdit extends React.Component {
             label="POS Sale Price"
             source={"salePrice.amount"}
           />
-          <FormDataConsumer>
+          {/* <FormDataConsumer>
             {({ formData, dispatch, ...rest }) => {
               if (!formData.newImage) {
                 return (
@@ -133,7 +133,7 @@ class ProductEdit extends React.Component {
                 );
               }
             }}
-          </FormDataConsumer>
+          </FormDataConsumer> */}
           <ImageInput
             source="newImage"
             label="Change Image"

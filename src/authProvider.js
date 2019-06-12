@@ -1,5 +1,5 @@
 // in src/authProvider.js
-import { AUTH_LOGIN, AUTH_CHECK, AUTH_LOGOUT, AUTH_ERROR } from 'react-admin';
+import { AUTH_LOGIN, AUTH_CHECK, AUTH_LOGOUT, AUTH_ERROR,AUTH_GET_PERMISSIONS } from 'react-admin';
 import jwtDecode from 'jwt-decode';
 import { APPLICATION_BFF_URL } from './global/UrlConstants';
 import _get from 'lodash/get';
@@ -23,9 +23,16 @@ const authProvider = (type, params) => {
                 localStorage.setItem('token', token);
                 let decodeData = jwtDecode(localStorage.getItem('token'));
                 localStorage.setItem('retailerId', decodeData.Retailer.id);
-                localStorage.setItem('storeId', _get(decodeData,'Store.id',''))
-                localStorage.setItem('role',_get(decodeData,'Role',''))
-                localStorage.setItem('storeName',_get(decodeData,'Store.name',''))
+                localStorage.setItem('storeId', _get(decodeData, 'Store.id', ''))
+                localStorage.setItem('role', _get(decodeData, 'Role', ''))
+                localStorage.setItem('storeName', _get(decodeData, 'Store.name', ''))
+                localStorage.setItem('email', _get(decodeData, 'RetailerAdmin.email', ''))
+                if (_get(decodeData, 'Role', '') == "1") {
+                    localStorage.setItem('email', _get(decodeData, 'RetailerAdmin.email', ''))
+                }
+                else if (_get(decodeData, 'Role', '') == "2") {
+                    localStorage.setItem('email', _get(decodeData, 'StoreAdmin.email', ''))
+                }
 
             });
     }
@@ -44,6 +51,11 @@ const authProvider = (type, params) => {
         return localStorage.getItem('token')
             ? Promise.resolve()
             : Promise.reject();
+    }
+    if (type === AUTH_GET_PERMISSIONS) {
+        debugger;
+        const role = localStorage.getItem('role');
+        return role ? Promise.resolve(role) : Promise.reject();
     }
     return Promise.reject('Unkown method');
 }

@@ -43,8 +43,9 @@ const makePaginationReqBody = (url, params) => {
     return reqBody
 }
 
+
 const ReqBodyGuesser = (obj) => {
-    const {
+    let {
         params,
         url,
         type
@@ -64,9 +65,15 @@ const ReqBodyGuesser = (obj) => {
             if (_get(params, 'data.newImage.newImage')) {
                 _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
             }
-            return reqObjMaker(url, params.data)
+        }
+        if (url == 'Store/Update') {
+            debugger;
+            if (_get(params, 'data.newImage.newImage')) {
+                _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
+            }
         }
         return reqObjMaker(url, params.data)
+
     }
     switch (url) {
         // For Products ******************************************************************************************
@@ -95,6 +102,8 @@ const ReqBodyGuesser = (obj) => {
             delete reqBody.cannabisProduct
             delete reqBody.medicalProduct
             return reqObjMaker(url, reqBody)
+        case 'Product/Import/Update':
+            return reqObjMaker(url, params)
         case 'Product/Get':
             return reqObjMaker(url, params)
         case 'Search/Products/DELETE':
@@ -160,14 +169,18 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { id: retailerId })
 
         case 'Store/Get':
-            if(Array.isArray(params.ids)) {
-                return reqObjMaker(url, {id: params.ids[0]})
+            if (Array.isArray(params.ids)) {
+                return reqObjMaker(url, { id: params.ids[0] })
             } else {
                 return reqObjMaker(url, params)
             }
 
         case 'Store/Create':
-            return reqObjMaker(url, { ...params.data, retailerId })
+            let data = { ...params.data };
+            data.image = _get(params, 'data.newImage.newImage', '');
+            // data.operatingHoursStart = _get(params, 'data.operatingHoursStart').getHours() + ':' + _get(params, 'data.operatingHoursStart').getMinutes();
+            // data.operatingHoursEnd = _get(params, 'data.operatingHoursEnd').getHours() + ':' + _get(params, 'data.operatingHoursEnd').getMinutes();
+            return reqObjMaker(url, { ...data, retailerId })
 
         case 'Store/Update':
             return reqObjMaker(url, params.data)
@@ -189,7 +202,7 @@ const ReqBodyGuesser = (obj) => {
         case 'VendorProduct/GetByRetailerId':
             return reqObjMaker(url, { id: retailerId })
         case 'VendorProduct/Get':
-            if(Array.isArray(params.ids)) {
+            if (Array.isArray(params.ids)) {
                 let reqBody = {
                     id: params.ids[0]
                 }
@@ -198,12 +211,12 @@ const ReqBodyGuesser = (obj) => {
                 return reqObjMaker(url, params)
             }
         case 'VendorProduct/Save':
-                reqBody = {
-                    ...params.data,
-                    retailerId: localStorage.getItem('retailerId'),
-                }
-                return reqObjMaker(url, reqBody)
-            // return reqObjMaker(url, params.data)
+            reqBody = {
+                ...params.data,
+                retailerId: localStorage.getItem('retailerId'),
+            }
+            return reqObjMaker(url, reqBody)
+        // return reqObjMaker(url, params.data)
 
         //For Strains ******************************************************************************************
         case 'Search/Strains':
@@ -254,6 +267,10 @@ const ReqBodyGuesser = (obj) => {
         case 'Package/GetMany':
             return reqObjMaker(url, params)
         case 'Package/Create':
+            debugger;
+            if (_get(params, 'data.sourcePackageId')) {
+                url = 'Package/Split'
+            }
             reqBody = {
                 ...params.data,
                 retailerId: localStorage.getItem('retailerId'),

@@ -3,6 +3,7 @@ import _isEmpty from 'lodash/isEmpty';
 import Dinero from 'dinero.js';
 import moment from 'moment';
 import map from 'lodash/map';
+import { uuidv1 } from 'uuid/v1';
 
 const DineroInit = (amount, currency, precision) => (
     Dinero({ amount: parseInt(amount) || 0, currency: currency || 'USD', precision: precision || 2 })
@@ -15,11 +16,19 @@ const ResBodyGuesser = (obj) => {
         params,
         type
     } = obj;
-
     let {
         json
     } = response
     if (type == 'CREATE' || type == 'UPDATE') {
+        if (url == 'Package/Create') {
+            if(_get(params,'data.sourcePackageId'))
+            return {
+                data: {
+                    id:params.data.sourcePackageId,
+                    ...params.data
+                }
+            }
+        }
         return {
             data: {
                 ...params.data,
@@ -322,7 +331,7 @@ const ResBodyGuesser = (obj) => {
         case 'Requisition/GetByCriteria':
             return {
                 data: json || [],
-                total: _get(json, 'length', 0)
+                total: _get(json, 'length',0)
             }
 
         //For Purchase Orders       ******************************************************************************************
