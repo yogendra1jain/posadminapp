@@ -8,7 +8,8 @@ import {
     RadioButtonGroupInput,
     DateInput,
     FormDataConsumer,
-    TextField
+    TextField,
+    required
 } from 'react-admin';
 import React from 'react';
 import ZipCodeInput from '../global/components/ZipCodeInput';
@@ -26,8 +27,8 @@ const CustomerEdit = props => (
     <Edit title={<CustomerTitle />} {...props}>
         <TabbedForm>
             <FormTab label="Contact Details">
-                <TextInput label="First Name" source="customer.firstName" />
-                <TextInput label="Last Name" source="customer.lastName" />
+                <TextInput label="First Name" validate={required()} source="customer.firstName" />
+                <TextInput label="Last Name" validate={required()} source="customer.lastName" />
                 <TextInput label="Email" source="email" />
 
                 <NumberInput label="Phone Number" source="phoneNumber.phoneNumber" />
@@ -40,7 +41,7 @@ const CustomerEdit = props => (
                         { id: 3, name: "Other" }
                     ]}
                 />
-                <DateInput label="Date Of Birth" source="dob" />
+                <DateInput validate={required()} label="Date Of Birth" source="dob" />
             </FormTab>
             <FormTab label="Address">
                 <TextInput
@@ -92,6 +93,7 @@ const CustomerEdit = props => (
                                             label="Purchase Limit (plants)"
                                             source="plantCountLimit"
                                         />
+                                        <DateInput validate={required()} label="License Expiry Date" source="medicalLicenseExpiration" />
                                     </React.Fragment>
                                 ) : null}
                             </React.Fragment>
