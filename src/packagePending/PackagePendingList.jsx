@@ -13,6 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import uuidv1 from "uuid/v1";
 
+const PendingPackageTitle = () => {
+  return <span>Shipped Packages</span>;
+};
+
 const ListActionButton = ({
   basePath,
   data,
@@ -26,8 +30,13 @@ const ListActionButton = ({
       <Typography>{`Last Synced: ${moment(
         lastSynched * 1
       ).fromNow()}`}</Typography>
-      <Button disabled={disable} color="primary" onClick={syncClick}>
-        Sync Now
+      <Button
+        disabled={disable}
+        color="primary"
+        variant="contained"
+        onClick={syncClick}
+      >
+        synchronize
       </Button>
     </div>
   );
@@ -63,6 +72,7 @@ class PackagePendingList extends React.Component {
         <List
           {...this.props}
           key={this.state.key}
+          title={<PendingPackageTitle />}
           actions={
             <ListActionButton
               disable={this.state.disable}
@@ -73,11 +83,11 @@ class PackagePendingList extends React.Component {
         >
           <Datagrid>
             {/* <ReferenceField source="uId" reference="us"><TextField source="id" /></ReferenceField> */}
-            <TextField label="Manifest Number" source="manifestNumber" />
-            <TextField label="Transfer Id" source="transferID" />
+            <TextField label="Manifest" source="manifestNumber" />
+            {/* <TextField label="Transfer Id" source="transferID" /> */}
 
             <TextField label="Label" source="packageLabel" />
-            <TextField label="Type" source="packageType" />
+            {/* <TextField label="Type" source="packageType" /> */}
             <TextField label="Product Name" source="productName" />
             <TextField label="Category" source="productCategoryName" />
             <TextField label="Shipment Status" source="shipmentPackageState" />
