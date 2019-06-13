@@ -313,17 +313,27 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { retailerId })
         //For Inventory       ******************************************************************************************
         case 'Search/Inventory':
-        let reqObj = makePaginationReqBody(url, params)
-        reqObj.filters.push({'field':'productType','value':'3'})
+            let reqObj = makePaginationReqBody(url, params)
+            reqObj.filters.push({ 'field': 'productType', 'value': '3' })
             reqBody = {
-                request:reqObj,
-                storeId:localStorage.getItem('storeId')
+                request: reqObj,
+                storeId: localStorage.getItem('storeId')
             }
             return reqObjMaker(url, reqBody);
-        
+
         //For Sale History       ******************************************************************************************
         case 'Sale/Employee/ByStoreId':
-            return reqObjMaker(url, {id: localStorage.getItem('storeId')})
+            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
+
+        //For Terminal       ******************************************************************************************
+        case 'Terminal/ByStoreId':
+            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
+        case 'Terminal/ByRetailerId':
+            return reqObjMaker(url, { id: localStorage.getItem('retailerId') })
+        case 'Terminal/Create':
+            reqBody = params.data
+            reqBody.retailerId = retailerId
+            return reqObjMaker(url, params.data)
         default:
             break;
 
