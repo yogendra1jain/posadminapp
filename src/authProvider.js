@@ -53,7 +53,6 @@ const authProvider = (type, params) => {
             : Promise.reject();
     }
     if (type === AUTH_GET_PERMISSIONS) {
-        debugger;
         const role = localStorage.getItem('role');
         return role ? Promise.resolve(role) : Promise.reject();
     }

@@ -67,7 +67,6 @@ const dataProvider = async (type, resource, params) => {
     return fetchJson(url, options).then(response =>
         convertHTTPResponseToDataProvider(response, type, resource, params)
     ).catch(err=>{
-        debugger;
     })
     ;
 };
