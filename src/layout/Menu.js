@@ -4,28 +4,29 @@ import { connect } from "react-redux";
 import compose from "recompose/compose";
 import Inbox from "@material-ui/icons/Inbox";
 import LocalShipping from "@material-ui/icons/LocalShipping";
-import DashboardIcon from '@material-ui/icons/Dashboard'
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import { withRouter } from "react-router-dom";
 import {
   translate,
   DashboardMenuItem,
   MenuItemLink,
-  Responsive
+  Responsive,
+  WithPermissions
 } from "react-admin";
 
-import customers from '../customers';
-import saleReport from '../reports/saleReport';
-import employees from '../employees';
-import packagePending from '../packagePending';
-import products from '../products';
-import stores from '../stores';
-import strains from '../strains';
-import vendorProduct from '../vendorProducts';
-import vendors from '../vendors';
-import SubMenu from './SubMenu';
-import categories from '../categories';
-import tax from '../tax';
-import purchaseOrders from '../purchaseOrders';
+import customers from "../customers";
+import saleReport from "../reports/saleReport";
+import employees from "../employees";
+import packagePending from "../packagePending";
+import products from "../products";
+import stores from "../stores";
+import strains from "../strains";
+import vendorProduct from "../vendorProducts";
+import vendors from "../vendors";
+import SubMenu from "./SubMenu";
+import categories from "../categories";
+import tax from "../tax";
+import purchaseOrders from "../purchaseOrders";
 
 class Menu extends Component {
   state = {
@@ -111,20 +112,26 @@ class Menu extends Component {
             onClick={onMenuClick}
           /> */}
         </SubMenu>
-        <SubMenu
-          handleToggle={() => this.handleToggle("menuStores")}
-          isOpen={this.state.menuStores}
-          sidebarIsOpen={open}
-          name="Stores"
-          icon={<stores.icon />}
-        >
-          <MenuItemLink
-            to={`/Store`}
-            primaryText={"Dispensaries"}
-            leftIcon={<stores.icon />}
-            onClick={onMenuClick}
-          />
-        </SubMenu>
+        <WithPermissions
+          render={({ permissions }) =>
+            permissions === "1" ? (
+              <SubMenu
+                handleToggle={() => this.handleToggle("menuStores")}
+                isOpen={this.state.menuStores}
+                sidebarIsOpen={open}
+                name="Stores"
+                icon={<stores.icon />}
+              >
+                <MenuItemLink
+                  to={`/Store`}
+                  primaryText={"Dispensaries"}
+                  leftIcon={<stores.icon />}
+                  onClick={onMenuClick}
+                />
+              </SubMenu>
+            ) : null
+          }
+        />
         <SubMenu
           handleToggle={() => this.handleToggle("menuCustomers")}
           isOpen={this.state.menuCustomers}
@@ -178,11 +185,18 @@ class Menu extends Component {
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />
-          <MenuItemLink
-            to={`/Inventory`}
-            primaryText={"Non-Cannabis"}
-            leftIcon={<packagePending.icon />}
-            onClick={onMenuClick}
+
+          <WithPermissions
+            render={({ permissions }) =>
+              permissions === "2" ? (
+                <MenuItemLink
+                  to={`/Inventory`}
+                  primaryText={"Non-Cannabis"}
+                  leftIcon={<packagePending.icon />}
+                  onClick={onMenuClick}
+                />
+              ) : null
+            }
           />
         </SubMenu>
         <SubMenu

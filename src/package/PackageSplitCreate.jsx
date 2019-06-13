@@ -59,7 +59,6 @@ class PackageSplitCreate extends React.Component {
 
   componentDidMount() {
     this.props.dataProvider('GET_ONE', 'Package', { id: this.props.sourcePackageId }).then((data) => {
-      debugger;
       this.setState({ ...data.data })
     })
 

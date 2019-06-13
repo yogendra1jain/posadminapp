@@ -67,7 +67,6 @@ const ReqBodyGuesser = (obj) => {
             }
         }
         if (url == 'Store/Update') {
-            debugger;
             if (_get(params, 'data.newImage.newImage')) {
                 _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
             }
@@ -267,7 +266,6 @@ const ReqBodyGuesser = (obj) => {
         case 'Package/GetMany':
             return reqObjMaker(url, params)
         case 'Package/Create':
-            debugger;
             if (_get(params, 'data.sourcePackageId')) {
                 url = 'Package/Split'
             }

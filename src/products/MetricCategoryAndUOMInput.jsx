@@ -273,6 +273,7 @@ class MetricCategoryAndUOMInput extends React.Component {
             )
           }
         </FormDataConsumer>
+        <NumberInput label="Cannabis Weight (g)" source="cannabisContent" validate={required()} helperText="Enter the Cannabis Weight from the Lab Test Report" />
         {/* <NumberInput label="Unit CBD Percent" source="unitCbdPercent" />
         <NumberInput label="Unit CBD Content" source="unitCbdContent" />
         <TextInput source="unitCbdContentUnitOfMeasure" label="Unit CBD UOM" />
