@@ -7,7 +7,7 @@ const StoreList = ({ permissions, ...props }) => (
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <AddressField />
-      <TextField source="code" />
+      {/* <TextField source="code" /> */}
       {permissions === '1' ? <EditButton /> : null}
       <ShowButton />
     </Datagrid>

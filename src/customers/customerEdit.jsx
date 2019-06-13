@@ -8,7 +8,6 @@ import {
     RadioButtonGroupInput,
     DateInput,
     FormDataConsumer,
-    TextField,
     required
 } from 'react-admin';
 import React from 'react';

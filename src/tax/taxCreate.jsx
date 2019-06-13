@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Create,
   SimpleForm,
@@ -6,32 +6,54 @@ import {
   NumberInput,
   RadioButtonGroupInput,
   BooleanInput,
+  ReferenceField,
+  ReferenceInput,
+  TextField,
+  SelectInput,
   required
-} from 'react-admin'
+} from "react-admin";
 
 const TaxCreateTitle = () => {
-  return (
-    <span>Create Tax</span>
-  )
-}
+  return <span>Create Tax</span>;
+};
 
 const TaxAppliedToChoices = [
-  // { id: 0, name: 'Dummy Product' },
-  { id: 1, name: 'Medical Cannabis' },
-  { id: 2, name: 'Recreational Cannabis' },
-  { id: 3, name: 'All Cannabis'},
-  { id: 4, name: 'Non Cannabis'},
-  { id: 5, name: 'All Products'}
-]
+  { id: 1, name: "Medical Cannabis" },
+  { id: 2, name: "Recreational Cannabis" },
+  { id: 3, name: "All Cannabis" },
+  { id: 4, name: "Non Cannabis" },
+  { id: 5, name: "All Products" }
+];
 
-const StoreCreate = props => (
+
+
+const TaxCreate = props => (
   <Create title={<TaxCreateTitle />} {...props}>
-    <SimpleForm redirect="list">
+    <SimpleForm
+      redirect="list"
+    >
+      {props.permissions !== "1" ? (
+        <ReferenceField label="Store" source="storeId" reference="Store">
+          <TextField source="name" />
+        </ReferenceField>
+      ) : (
+        <ReferenceInput
+          source="storeId"
+          reference="Store"
+          validate={required()}
+        >
+          <SelectInput optionText="name" />
+        </ReferenceInput>
+      )}
       <TextInput label="Name" source="name" validate={required()} />
-      <NumberInput label="Percentage" source="percentage" validate={required()}/>
+      <NumberInput
+        label="Percentage"
+        source="percentage"
+        validate={required()}
+      />
       <RadioButtonGroupInput
         validate={required()}
-        parse={val => parseInt(val, 10)} 
+        parse={val => parseInt(val, 10)}
         label="Tax Rate Applicable on"
         source="appliedTo"
         choices={TaxAppliedToChoices}
@@ -41,4 +63,4 @@ const StoreCreate = props => (
   </Create>
 );
 
-export default StoreCreate;
+export default TaxCreate;
