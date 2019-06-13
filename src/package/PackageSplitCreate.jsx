@@ -13,77 +13,84 @@ import {
   withDataProvider,
   TextField
 } from "react-admin";
-import { Typography } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 
-
-const Aside = (props) => (
-  <div style={{ width: 400, margin: '1em' }}>
-
-    <div className="mt-10">
-      <Typography variant="caption">Id</Typography>
-      <Typography variant="h5">{props.id}</Typography>
-    </div>
-    <div className="mt-10">
-      <Typography variant="caption">Label</Typography>
-      <Typography variant="h5">{props.label}</Typography>
-    </div>
-    <div className="mt-10">
-      <Typography variant="caption">Metrc Id</Typography>
-      <Typography variant="h5">{props.metrcId}</Typography>
-    </div>
-    <div className="mt-10">
-      <Typography variant="caption">Metrc Product</Typography>
-      <Typography variant="h5">{props.metrcProduct}</Typography>
-    </div>
-    <div className="mt-10">
-      <Typography variant="caption">Quantity</Typography>
-      <Typography variant="h5">{props.quantity}</Typography>
-    </div>
-    <div className="mt-10">
-      <Typography variant="caption">UOM</Typography>
-      <Typography variant="h5">{props.uom}</Typography>
-    </div>
-    <div className="mt-10">
-      <Typography variant="caption">Package Type</Typography>
-      <Typography variant="h5">{props.packageType}</Typography>
-    </div>
+const Aside = props => (
+  <div style={{ width: 400, margin: "1em" }}>
+    <Card>
+      <CardContent>
+        <Typography>Source Package Details</Typography>
+        <div style={{ width: 400, margin: "1em" }} />
+        <div className="mt-10">
+          <Typography variant="caption">Label</Typography>
+          <Typography>{props.label}</Typography>
+        </div>
+        <div className="mt-10">
+          <Typography variant="caption">Metrc Id</Typography>
+          <Typography>{props.metrcId}</Typography>
+        </div>
+        <div className="mt-10">
+          <Typography variant="caption">Product</Typography>
+          <Typography>{props.metrcProduct}</Typography>
+        </div>
+        <div className="mt-10">
+          <Typography variant="caption">Quantity</Typography>
+          <Typography>{props.quantity}</Typography>
+        </div>
+        <div className="mt-10">
+          <Typography variant="caption">UOM</Typography>
+          <Typography>{props.uom}</Typography>
+        </div>
+        <div className="mt-10">
+          <Typography variant="caption">Package Type</Typography>
+          <Typography>{props.packageType}</Typography>
+        </div>
+      </CardContent>
+    </Card>
   </div>
 );
 
 class PackageSplitCreate extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {};
   }
 
   componentDidMount() {
-    this.props.dataProvider('GET_ONE', 'Package', { id: this.props.sourcePackageId }).then((data) => {
-      this.setState({ ...data.data })
-    })
-
+    this.props
+      .dataProvider("GET_ONE", "Package", { id: this.props.sourcePackageId })
+      .then(data => {
+        this.setState({ ...data.data });
+      });
   }
   render() {
     return (
-      <Create {...this.props}  aside={<Aside {...this.state} />}>
+      <Create {...this.props} aside={<Aside {...this.state} />}>
         <SimpleForm
-        redirect="list"
+          redirect="list"
           defaultValue={{ sourcePackageId: this.props.sourcePackageId }}
         >
-          <TextField source="sourcePackageId" />
-          <ArrayInput source="itemPackages" validate={required()}>
+          {/* <TextField source="sourcePackageId" /> */}
+          <ArrayInput
+            label="Create New Packages"
+            source="itemPackages"
+            validate={required()}
+          >
             <SimpleFormIterator>
-              <TextInput source="label" />
-              <NumberInput source="quantity" label="Quantity" />
+              <TextInput label="METRC Tag (Label)" source="label" validate={required()} />
+              <NumberInput
+                source="quantity"
+                label="Quantity"
+                validate={required()}
+              />
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleForm>
       </Create>
     );
-
   }
 }
-
-
 
 export default withDataProvider(PackageSplitCreate);
