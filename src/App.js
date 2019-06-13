@@ -1,6 +1,6 @@
 // in src/App.js
 import React from 'react';
-import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser, mergeTranslations } from 'react-admin';
+import { Admin, Resource, ListGuesser,  EditGuesser, ShowGuesser, mergeTranslations } from 'react-admin';
 import { reducer as tree } from 'ra-tree-ui-materialui';
 import treeEnglishMessages from 'ra-tree-language-english';
 import englishMessages from 'ra-language-english';
@@ -26,6 +26,7 @@ import purchaseOrders from './purchaseOrders';
 import tax from './tax';
 import routes from './routes';
 import inventory from './inventory';
+import terminals from './terminals'
 
 const messages = {
   'en': mergeTranslations(englishMessages, treeEnglishMessages),
@@ -50,18 +51,22 @@ const App = () => (
         <Resource name="Strain" {...strains} />,
         <Resource name="Package" {...packageIn} />,
         <Resource name="Store" list={stores.list} show={stores.show} create = {permissions == '1' ?stores.create:null} edit ={permissions=='1'?stores.edit:null} />, 
+        <Resource name="Terminal" {...terminals} />, 
+        <Resource name="Operator" list={terminals.list} show={terminals.show} create = {permissions == '1' ?terminals.create:null} edit ={permissions=='1'?terminals.edit:null} />, 
+
         <Resource name="PaymentMethods" />,
         <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />,
         <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Product List' }} />,
         <Resource name="SaleReport" {...saleReport} />,
         // {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */ }
-        < Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />,
+        <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />,
         <Resource name="Category" {...categories} />,
         <Resource name="Tax" {...tax} />,
         <Resource name="Requisition" {...requisition} />,
         <Resource name="PurchaseOrders" {...purchaseOrders} />,
         <Resource name="Inventory" {...inventory}  />,
         <Resource name="UnfinishedProducts" {...unfinishedProducts} />
+
       ]}
 
     </Admin>
