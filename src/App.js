@@ -27,6 +27,7 @@ import tax from './tax';
 import routes from './routes';
 import inventory from './inventory';
 import terminals from './terminals'
+import operators from './operators';
 
 const messages = {
   'en': mergeTranslations(englishMessages, treeEnglishMessages),
@@ -52,7 +53,7 @@ const App = () => (
         <Resource name="Package" {...packageIn} />,
         <Resource name="Store" list={stores.list} show={stores.show} create = {permissions == '1' ?stores.create:null} edit ={permissions=='1'?stores.edit:null} />, 
         <Resource name="Terminal" {...terminals} />, 
-        <Resource name="Operator" list={terminals.list} show={terminals.show} create = {permissions == '1' ?terminals.create:null} edit ={permissions=='1'?terminals.edit:null} />, 
+        <Resource name="Operator" {...operators} />, 
 
         <Resource name="PaymentMethods" />,
         <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />,
