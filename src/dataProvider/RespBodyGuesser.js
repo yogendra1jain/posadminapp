@@ -21,13 +21,13 @@ const ResBodyGuesser = (obj) => {
     } = response
     if (type == 'CREATE' || type == 'UPDATE') {
         if (url == 'Package/Create') {
-            if(_get(params,'data.sourcePackageId'))
-            return {
-                data: {
-                    id:params.data.sourcePackageId,
-                    ...params.data
+            if (_get(params, 'data.sourcePackageId'))
+                return {
+                    data: {
+                        id: params.data.sourcePackageId,
+                        ...params.data
+                    }
                 }
-            }
         }
         return {
             data: {
@@ -331,7 +331,7 @@ const ResBodyGuesser = (obj) => {
         case 'Requisition/GetByCriteria':
             return {
                 data: json || [],
-                total: _get(json, 'length',0)
+                total: _get(json, 'length', 0)
             }
 
         //For Purchase Orders       ******************************************************************************************
@@ -340,6 +340,15 @@ const ResBodyGuesser = (obj) => {
                 data: json || [],
                 total: json ? json.length : 0
             }
+        //For Inventory       ******************************************************************************************
+        case 'Search/Inventory':
+
+            return {
+
+                data: json.products.map(p=>({...p,id:p.product.id})) || [],
+                total: json.total  || 0
+            }
+
 
         //For Sale History       ******************************************************************************************
         case 'Sale/Employee/ByStoreId':

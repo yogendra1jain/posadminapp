@@ -4,28 +4,29 @@ import { connect } from "react-redux";
 import compose from "recompose/compose";
 import Inbox from "@material-ui/icons/Inbox";
 import LocalShipping from "@material-ui/icons/LocalShipping";
-import DashboardIcon from '@material-ui/icons/Dashboard'
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import { withRouter } from "react-router-dom";
 import {
   translate,
   DashboardMenuItem,
   MenuItemLink,
-  Responsive
+  Responsive,
+  WithPermissions
 } from "react-admin";
 
-import customers from '../customers';
-import saleReport from '../reports/saleReport';
-import employees from '../employees';
-import packagePending from '../packagePending';
-import products from '../products';
-import stores from '../stores';
-import strains from '../strains';
-import vendorProduct from '../vendorProducts';
-import vendors from '../vendors';
-import SubMenu from './SubMenu';
-import categories from '../categories';
-import tax from '../tax';
-import purchaseOrders from '../purchaseOrders';
+import customers from "../customers";
+import saleReport from "../reports/saleReport";
+import employees from "../employees";
+import packagePending from "../packagePending";
+import products from "../products";
+import stores from "../stores";
+import strains from "../strains";
+import vendorProduct from "../vendorProducts";
+import vendors from "../vendors";
+import SubMenu from "./SubMenu";
+import categories from "../categories";
+import tax from "../tax";
+import purchaseOrders from "../purchaseOrders";
 
 class Menu extends Component {
   state = {
@@ -36,7 +37,7 @@ class Menu extends Component {
     menuStores: false,
     menuReports: false,
     menuTax: false,
-    menuDashBoardInventory:false
+    menuDashBoardInventory: false
   };
 
   static propTypes = {
@@ -58,18 +59,18 @@ class Menu extends Component {
           isOpen={this.state.menuDashBoardInventory}
           sidebarIsOpen={open}
           name="Dashboards"
-          icon={<DashboardIcon/>}
+          icon={<DashboardIcon />}
         >
           <MenuItemLink
             to={`/InventoryDashboard`}
             primaryText={"Inventory"}
-            leftIcon={<DashboardIcon/>}
+            leftIcon={<DashboardIcon />}
             onClick={onMenuClick}
           />
-           <MenuItemLink
+          <MenuItemLink
             to={`/SalesDashboard`}
             primaryText={"Sales"}
-            leftIcon={<DashboardIcon/>}
+            leftIcon={<DashboardIcon />}
             onClick={onMenuClick}
           />
         </SubMenu>
@@ -111,20 +112,26 @@ class Menu extends Component {
             onClick={onMenuClick}
           /> */}
         </SubMenu>
-        <SubMenu
-          handleToggle={() => this.handleToggle("menuStores")}
-          isOpen={this.state.menuStores}
-          sidebarIsOpen={open}
-          name="Stores"
-          icon={<stores.icon />}
-        >
-          <MenuItemLink
-            to={`/Store`}
-            primaryText={"Stores"}
-            leftIcon={<stores.icon />}
-            onClick={onMenuClick}
-          />
-        </SubMenu>
+        <WithPermissions
+          render={({ permissions }) =>
+            permissions === "1" ? (
+              <SubMenu
+                handleToggle={() => this.handleToggle("menuStores")}
+                isOpen={this.state.menuStores}
+                sidebarIsOpen={open}
+                name="Stores"
+                icon={<stores.icon />}
+              >
+                <MenuItemLink
+                  to={`/Store`}
+                  primaryText={"Dispensaries"}
+                  leftIcon={<stores.icon />}
+                  onClick={onMenuClick}
+                />
+              </SubMenu>
+            ) : null
+          }
+        />
         <SubMenu
           handleToggle={() => this.handleToggle("menuCustomers")}
           isOpen={this.state.menuCustomers}
@@ -168,15 +175,28 @@ class Menu extends Component {
         >
           <MenuItemLink
             to={`/Package`}
-            primaryText={"Package"}
+            primaryText={"In Hand Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />
           <MenuItemLink
             to={`/PackagePending`}
-            primaryText={"Pending Packages"}
+            primaryText={"Incoming Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
+          />
+
+          <WithPermissions
+            render={({ permissions }) =>
+              permissions === "2" ? (
+                <MenuItemLink
+                  to={`/Inventory`}
+                  primaryText={"Non-Cannabis"}
+                  leftIcon={<packagePending.icon />}
+                  onClick={onMenuClick}
+                />
+              ) : null
+            }
           />
         </SubMenu>
         <SubMenu

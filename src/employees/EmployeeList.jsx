@@ -13,7 +13,7 @@ const EmployeeList = props => (
             <BooleanField source="employee" />
             <BooleanField source="isEmpPayEnabled" />
             <BooleanField source="active" />
-            <ReferenceField source="employeeId" reference="employees"><TextField source="id" /></ReferenceField>
+            <ReferenceField source="employeeId" reference="employees"><TextField source="id" linkType="show" /></ReferenceField>
             <ReferenceField source="employeeStoreId" reference="employeeStores"><TextField source="id" /></ReferenceField>
             <NumberField source="employeeDiscount" />
             <NumberField source="lastUpdated.seconds" />

@@ -43,7 +43,7 @@ const PackageList = props => (
   <List {...props} filters={<PackageFilter />}>
     <Datagrid>
       <TextField source="metrcId" reference="metrcs" label="METRC ID" />
-      <ReferenceField source="posProductId" reference="Search/Products">
+      <ReferenceField source="posProductId" reference="Search/Products" linkType="show">
         <TextField source="name" />
       </ReferenceField>
       <TextField source="label" />

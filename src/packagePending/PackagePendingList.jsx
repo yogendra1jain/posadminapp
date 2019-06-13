@@ -10,7 +10,7 @@ const ListActionButton = ({ basePath, data, resource,syncClick,lastSynched,disab
     return (
     <div>
     <Button disabled={disable}  color="primary" onClick={syncClick}>Sync Now</Button>
-    <span>{`METRC Last Synced ${moment(lastSynched * 1).format('MM/DD/YYYY hh:mm a')}`}</span>
+    <span>{`Last Synced ${moment(lastSynched * 1).format('MM/DD/YYYY hh:mm a')}`}</span>
     </div>
     )
 }

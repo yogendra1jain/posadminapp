@@ -12,9 +12,9 @@ const VendorEdit = props => (
   <Edit {...props} undoable={false}>
     <SimpleForm>
       <TextInput source="name" />
-      <TextInput source="email" />
+      <TextInput source="email" label="Contact Email"/>
 
-      <NumberInput label="Country Code" source="phoneNumber.countryCode" />
+      {/* <NumberInput label="Country Code" source="phoneNumber.countryCode" /> */}
       <NumberInput label="Phone Number" source="phoneNumber.phoneNumber" />
 
       <ArrayInput source="licenses">

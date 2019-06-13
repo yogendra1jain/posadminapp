@@ -27,7 +27,7 @@ import MetricCategoryAndUOMInput from './MetricCategoryAndUOMInput';
 import PriceInput from "../global/components/PriceInput";
 
 const ProductTypeChoices = [
-  { id: 0, name: 'Non-Cannabis' },
+  { id: 3, name: 'Non-Cannabis' },
   { id: 1, name: 'Cannabis Product' },
   { id: 2, name: 'Cannabis (Medical Only)' }
 ]
