@@ -53,8 +53,8 @@ const App = () => (
         <Resource name="Strain" {...strains} />,
         <Resource name="Package" {...packageIn} />,
         <Resource name="Store" list={stores.list} show={stores.show} create = {permissions == '1' ?stores.create:null} edit ={permissions=='1'?stores.edit:null} />, 
-        <Resource name="Terminal" {...terminals} />, 
-        <Resource name="Operator" {...operators} />, 
+        <Resource name="Terminal" {...terminals}  />, 
+        <Resource name="Operator" {...operators}  />, 
 
         <Resource name="PaymentMethods" />,
         <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />,

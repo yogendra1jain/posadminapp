@@ -20,13 +20,18 @@ import {
   CreateButton,
   BooleanField,
   Link,
+  EmailField,
+  NumberField,
   ReferenceField
 } from "react-admin";
 
 
-const SampleList = ()=>{
-  return(
-    null
+const SampleList = (props) => {
+  return (
+    <List {...props}>
+      <Datagrid>
+      </Datagrid>
+    </List>
   )
 }
 

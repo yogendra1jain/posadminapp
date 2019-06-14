@@ -27,28 +27,37 @@ import MobileGrid from "./MobileGrid";
 
 const storeId = localStorage.getItem("storeId");
 
-const FilterActions = ({ basePath, ...rest }) => (
-  <CardActions>
-    <CreateButton
-      {...rest}
-      basePath={basePath}
-      to={{
-        pathname: "/Terminal/create",
-        search: `?storeId=${storeId}`
-        // state: { record: { storeId: storeId } }
-      }}
-    />
-  </CardActions>
-);
+const FilterActions = ({ permissions, basePath, ...rest }) =>{
+  debugger;
+  return(
+    <CardActions>
+      {localStorage.getItem('role')==="1" ? <CreateButton {...rest} basePath={basePath}
+        to={{
+          pathname: "/Terminal/create",
+        }} /> :
+        <CreateButton
+          {...rest}
+          basePath={basePath}
+          to={{
+            pathname: "/Terminal/create",
+            search: `?storeId=${localStorage.getItem("storeId")}`
+            // state: { record: { storeId: storeId } }
+          }}
+        />
+      }
+  
+    </CardActions>
+  );
+} 
 
 
 const MyEditButton = ({ record, ...props }) => (
   <EditButton
     {...props}
     component={Link}
-    to={{ 
+    to={{
       pathname: props.basePath + "/" + record.id,
-      state: { record: { storeId: storeId } }
+      state: { record: { storeId: localStorage.getItem("storeId") } }
     }}
   />
 );
@@ -57,8 +66,8 @@ const MyShowButton = ({ record, ...props }) => (
     {...props}
     component={Link}
     to={{
-      pathname: props.basePath + "/" + record.id +"/show",
-      search: `?storeId=${storeId}`
+      pathname: props.basePath + "/" + record.id + "/show",
+      search: `?storeId=${localStorage.getItem("storeId")}`
     }}
   />
 );
@@ -84,7 +93,7 @@ const StoreFilter = ({ permissions, ...props }) => {
 const TerminalList = ({ permissions, ...props }) => (
   <List {...props}
     filters={<StoreFilter permissions={permissions} />}
-    actions={<FilterActions />}
+    actions={<FilterActions permissions={permissions} />}
   >
     <Responsive 
       small={<MobileGrid />}
@@ -98,12 +107,11 @@ const TerminalList = ({ permissions, ...props }) => (
         >
           <TextField source="name" />
         </ReferenceField>
-        ) : null}
-        <TextField source="name" />
-        <BooleanField source="active" />
-        <MyEditButton />
-        <MyShowButton />
-      </Datagrid>}
+      ) : null}
+      <BooleanField source="active" />
+      <MyEditButton />
+      <MyShowButton />
+    </Datagrid>}
     />
   </List>
 );

@@ -37,7 +37,7 @@ const authProvider = (type, params) => {
             });
     }
     if (type === AUTH_LOGOUT) {
-        localStorage.removeItem('token');
+        localStorage.clear();
         return Promise.resolve();
     }
     if (type === AUTH_ERROR) {

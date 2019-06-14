@@ -360,7 +360,7 @@ const ResBodyGuesser = (obj) => {
         case 'Search/Inventory':
 
             return {
-                
+
                 data: json.products.map(p => ({ ...p, id: p.product.id })) || [],
                 total: json.total || 0
             }
@@ -379,12 +379,22 @@ const ResBodyGuesser = (obj) => {
                 data: json || [],
                 total: json ? json.length : 0
             }
-            case 'Terminal/ByRetailerId':
+        case 'Terminal/ByRetailerId':
             return {
-                data: _get(json,'terminals') || [],
-                total: _get(json,'terminals') ? _get(json,'terminals.length') : 0
+                data: _get(json, 'terminals') || [],
+                total: _get(json, 'terminals') ? _get(json, 'terminals.length') : 0
             }
-
+        //For Operator       ******************************************************************************************
+        case 'Operator/ByStoreId':
+            return {
+                data: json || [],
+                total: json ? json.length : 0
+            }
+        case 'Operator/ByRetailerId':
+            return {
+                data: _get(json, 'operators') || [],
+                total: _get(json, 'operators') ? _get(json, 'operators.length') : 0
+            }
         default:
             if (json.id == null) {
                 json.id = "uuid";

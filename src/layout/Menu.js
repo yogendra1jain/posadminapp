@@ -28,6 +28,7 @@ import SubMenu from "./SubMenu";
 import categories from "../categories";
 import tax from "../tax";
 import purchaseOrders from "../purchaseOrders";
+import operators from "../operators";
 
 class Menu extends Component {
   state = {
@@ -134,6 +135,12 @@ class Menu extends Component {
                 to={`/Terminal`}
                 primaryText={"Terminals"}
                 leftIcon={<terminals.icon />}
+                onClick={onMenuClick}
+              />
+               <MenuItemLink
+                to={`/Operator`}
+                primaryText={"Operators"}
+                leftIcon={<operators.icon />}
                 onClick={onMenuClick}
               />
             </SubMenu>

@@ -260,6 +260,19 @@ const ReqBodyGuesser = (obj) => {
                     value: _get(params, 'filter.posProductId')
                 })
             }
+            if (_get(params, 'filter.storeId') || localStorage.getItem('storeId')) {
+                reqBody.filters.push({
+                    field: 'storeId.keyword',
+                    value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
+                })
+            }
+            if (_get(params, 'filter.syncStatus')) {
+                reqBody.filters.push({
+                    field: 'syncStatus',
+                    value: _get(params, 'filter.syncStatus')
+                })
+            }
+
             return reqObjMaker(url, reqBody);
         case 'Package/Get':
             return reqObjMaker(url, params);
@@ -323,7 +336,7 @@ const ReqBodyGuesser = (obj) => {
 
         //For Sale History       ******************************************************************************************
         case 'Sale/ByStore':
-            return reqObjMaker(url, {id: localStorage.getItem('storeId')})
+            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
         case 'Sale/Get':
             return reqObjMaker(url, params)
         case 'Sale/Employee/ByStoreId':
@@ -335,6 +348,15 @@ const ReqBodyGuesser = (obj) => {
         case 'Terminal/ByRetailerId':
             return reqObjMaker(url, { id: localStorage.getItem('retailerId') })
         case 'Terminal/Create':
+            reqBody = params.data
+            reqBody.retailerId = retailerId
+            return reqObjMaker(url, params.data)
+        //For Operator       ******************************************************************************************
+        case 'Operator/ByStoreId':
+            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
+        case 'Operator/ByRetailerId':
+            return reqObjMaker(url, { id: localStorage.getItem('retailerId') })
+        case 'Operator/Create':
             reqBody = params.data
             reqBody.retailerId = retailerId
             return reqObjMaker(url, params.data)

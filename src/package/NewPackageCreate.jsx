@@ -9,16 +9,32 @@ import {
     TextInput,
     required,
     FormDataConsumer,
-    SimpleForm
+    SimpleForm,
+    SelectInput,
+    ReferenceField,
+    TextField
 } from "react-admin";
 
 const PackageCreateTitle = ({ record }) => {
     return <span>Create Package</span>;
-  };
-const NewPackageCreate = (props) => {
+};
+const NewPackageCreate = ({ permissions, ...props }) => {
     return (
         <Create title={<PackageCreateTitle />} {...props}>
             <SimpleForm redirect="list">
+                {permissions !== "1" ? (
+                    <ReferenceField label="Store" source="storeId" reference="Store">
+                        <TextField source="name" />
+                    </ReferenceField>
+                ) : (
+                        <ReferenceInput
+                            source="storeId"
+                            label="Store"
+                            reference="Store"
+                        >
+                            <SelectInput />
+                        </ReferenceInput>
+                    )}
                 <ReferenceInput
                     source="posProductId"
                     reference="Search/Products"
@@ -34,7 +50,7 @@ const NewPackageCreate = (props) => {
                             <ArrayInput source="ingredients" validate={required()}>
                                 <SimpleFormIterator>
                                     <ReferenceInput
-                                        filter={{ posProductId: formData.posProductId }}
+                                        filter={permissions === "1" ? { posProductId: formData.posProductId, storeId: formData.storeId,syncStatus:"1" } : { posProductId: formData.posProductId, storeId: localStorage.getItem("storeId"),syncStatus:"1" }}
                                         label="Package"
                                         source="sourcePackageId"
                                         reference="Package"
