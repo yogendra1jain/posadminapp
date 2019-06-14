@@ -11,7 +11,9 @@ import {
   CardActions,
   CreateButton,
   Link,
-  ReferenceField
+  ReferenceField,
+  Responsive,
+  SimpleList
 } from "react-admin";
 import React from "react";
 import _find from "lodash/find";
@@ -81,30 +83,42 @@ const TaxList = ({ permissions, ...props }) => (
     filters={<TaxFilter permissions={permissions} />}
     actions={<TaxActions />}
   >
-    <Datagrid>
-      <TextField source="name" />
-      <TextField label="Percentage" source="percentage" />
-      {permissions == "1" ? (
-        <ReferenceField
-          label="Store"
-          source="storeId"
-          reference="Store"
+    <Responsive
+      small={
+        <SimpleList
+          primaryText={record => record.name}
+          secondaryText={record => `${record.percentage}%`}
+          tertiaryText={record => findTaxApplied(record)}
           linkType="show"
-        >
+        />
+      }
+      medium={
+        <Datagrid>
           <TextField source="name" />
-        </ReferenceField>
-      ) : null}
-      <FunctionField
-        label="Tax Applied To"
-        render={record => findTaxApplied(record)}
-      />
-      <FunctionField
-        label="Active"
-        render={record => (_get(record, "active", false) ? "Yes" : "No")}
-      />
-      <MyEditButton />
-      <ShowButton />
-    </Datagrid>
+          <TextField label="Percentage" source="percentage" />
+          {permissions == "1" ? (
+            <ReferenceField
+              label="Store"
+              source="storeId"
+              reference="Store"
+              linkType="show"
+            >
+              <TextField source="name" />
+            </ReferenceField>
+          ) : null}
+          <FunctionField
+            label="Tax Applied To"
+            render={record => findTaxApplied(record)}
+          />
+          <FunctionField
+            label="Active"
+            render={record => (_get(record, "active", false) ? "Yes" : "No")}
+          />
+          <MyEditButton />
+          <ShowButton />
+        </Datagrid>
+      }
+    />
   </List>
 );
 

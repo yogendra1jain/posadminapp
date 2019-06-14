@@ -20,6 +20,7 @@ import employees from "../employees";
 import packagePending from "../packagePending";
 import products from "../products";
 import stores from "../stores";
+import terminals from "../terminals";
 import strains from "../strains";
 import vendorProduct from "../vendorProducts";
 import vendors from "../vendors";
@@ -114,22 +115,28 @@ class Menu extends Component {
         </SubMenu>
         <WithPermissions
           render={({ permissions }) =>
-            permissions === "1" ? (
-              <SubMenu
-                handleToggle={() => this.handleToggle("menuStores")}
-                isOpen={this.state.menuStores}
-                sidebarIsOpen={open}
-                name="Stores"
-                icon={<stores.icon />}
-              >
-                <MenuItemLink
+            <SubMenu
+              handleToggle={() => this.handleToggle("menuStores")}
+              isOpen={this.state.menuStores}
+              sidebarIsOpen={open}
+              name="Stores"
+              icon={<stores.icon />}
+            >
+              {
+                permissions === "1" ? (<MenuItemLink
                   to={`/Store`}
                   primaryText={"Dispensaries"}
                   leftIcon={<stores.icon />}
                   onClick={onMenuClick}
-                />
-              </SubMenu>
-            ) : null
+                />) : null
+              }
+              <MenuItemLink
+                to={`/Terminal`}
+                primaryText={"Terminals"}
+                leftIcon={<terminals.icon />}
+                onClick={onMenuClick}
+              />
+            </SubMenu>
           }
         />
         <SubMenu
@@ -181,7 +188,7 @@ class Menu extends Component {
           />
           <MenuItemLink
             to={`/PackagePending`}
-            primaryText={"Incoming Packages"}
+            primaryText={"Shipped Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />

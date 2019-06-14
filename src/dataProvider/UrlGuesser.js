@@ -214,6 +214,15 @@ const UrlGuesser = (obj) => {
             return 'Sale/ByStore'
         case 'SaleHistory/GET_ONE':
             return 'Sale/Get'
+        //For Terminal       ******************************************************************************************
+        case 'Terminal/GET_LIST':
+            return localStorage.getItem('storeId') ? 'Terminal/ByStoreId' : 'Terminal/ByRetailerId'
+        case 'Terminal/GET_ONE':
+            return 'Terminal/Get'
+        case 'Terminal/CREATE':
+            return 'Terminal/Create'
+        case 'Terminal/UPDATE':
+            return 'Terminal/Update'
         default:
             break;
     }
