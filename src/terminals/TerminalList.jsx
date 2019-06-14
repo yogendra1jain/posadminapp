@@ -19,8 +19,11 @@ import {
   CreateButton,
   Link,
   BooleanField,
-  ReferenceField
+  ReferenceField,
+  Responsive,
+  SimpleList
 } from "react-admin";
+import MobileGrid from "./MobileGrid";
 
 const storeId = localStorage.getItem("storeId");
 
@@ -82,24 +85,26 @@ const TerminalList = ({ permissions, ...props }) => (
   <List {...props}
     filters={<StoreFilter permissions={permissions} />}
     actions={<FilterActions />}
-
   >
-    <Datagrid>
-      <TextField source="id" />
-      <ReferenceField
-        label="Store"
-        source="storeId"
-        reference="Store"
-        linkType="show"
-      >
+    <Responsive 
+      small={<MobileGrid />}
+      medium={<Datagrid>
+        <TextField source="id" />
+        <ReferenceField
+          label="Store"
+          source="storeId"
+          reference="Store"
+          linkType="show"
+        >
+          <TextField source="name" />
+        </ReferenceField>
+        ) : null}
         <TextField source="name" />
-      </ReferenceField>
-      ) : null}
-      <TextField source="name" />
-      <BooleanField source="active" />
-      <MyEditButton />
-      <MyShowButton />
-    </Datagrid>
+        <BooleanField source="active" />
+        <MyEditButton />
+        <MyShowButton />
+      </Datagrid>}
+    />
   </List>
 );
 

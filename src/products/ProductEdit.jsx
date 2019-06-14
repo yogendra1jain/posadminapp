@@ -4,8 +4,6 @@ import {
   Edit,
   TextInput,
   LongTextInput,
-  AutocompleteInput,
-  ReferenceInput,
   Labeled,
   ImageField,
   SimpleForm,
@@ -35,7 +33,7 @@ const ProductTypeChoices = [
 const ProductTitle = ({ record }) => {
   return (
     <span>
-      Edit {record ? `${record.name}` : null}
+      Product {record ? `${record.name}` : null}
     </span>
   )
 };

@@ -21,7 +21,7 @@ import { TimeInput } from "react-admin-date-inputs";
 import CustomImageInput from "../products/CustomImageInput";
 
 const StoreEditTitle = ({ record }) => {
-  return <span>{record ? `${record.name}` : ""}</span>;
+  return <span>Store {record ? `${record.name}` : ""}</span>;
 };
 
 // let createSource = (paymentMethods, availablePaymentMethods) => {

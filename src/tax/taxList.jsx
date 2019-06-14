@@ -13,11 +13,11 @@ import {
   Link,
   ReferenceField,
   Responsive,
-  SimpleList
 } from "react-admin";
 import React from "react";
 import _find from "lodash/find";
 import _get from "lodash/get";
+import MobileGrid from './MobileGrid'; 
 
 const TaxAppliedToChoices = [
   { id: 1, name: "Medical Cannabis" },
@@ -26,6 +26,7 @@ const TaxAppliedToChoices = [
   { id: 4, name: "Non Cannabis" },
   { id: 5, name: "All Products" }
 ];
+
 const storeId = localStorage.getItem("storeId");
 const TaxActions = ({ basePath, ...rest }) => (
   <CardActions>
@@ -69,7 +70,7 @@ const TaxFilter = ({ permissions, ...props }) => {
   );
 };
 
-const findTaxApplied = record => {
+export const findTaxApplied = record => {
   let taxApplied = _find(TaxAppliedToChoices, [
     "id",
     _get(record, "appliedTo", 0)
@@ -85,12 +86,7 @@ const TaxList = ({ permissions, ...props }) => (
   >
     <Responsive
       small={
-        <SimpleList
-          primaryText={record => record.name}
-          secondaryText={record => `${record.percentage}%`}
-          tertiaryText={record => findTaxApplied(record)}
-          linkType="show"
-        />
+        <MobileGrid />
       }
       medium={
         <Datagrid>

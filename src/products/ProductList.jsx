@@ -1,13 +1,4 @@
 import {
-  //   AutocompleteInput,
-  //   BooleanField,
-  //   DateField,
-  //   DateInput,
-  //   NullableBooleanInput,
-  // NumberField,
-  //   ReferenceInput,
-  //   Responsive,
-  //   SearchInput,
   ShowButton,
   FunctionField,
   Datagrid,
@@ -21,54 +12,9 @@ import {
 } from "react-admin";
 import React from "react";
 import DineroPrice from "../global/components/DineroPrice";
-import SyncIcon from "@material-ui/icons/Sync";
 import _get from "lodash/get";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
-import Avatar from "@material-ui/core/Avatar";
-
-const cardStyle = {
-  width: 300,
-  minHeight: 300,
-  margin: "0.5em",
-  display: "inline-block",
-  verticalAlign: "top"
-};
-// import withStyles from "@material-ui/core/styles/withStyles";
-// import Divider from "@material-ui/core/Divider";
-// import Tabs from "@material-ui/core/Tabs";
-// import Tab from "@material-ui/core/Tab";
-
-// const datagridStyles = {
-//   total: { fontWeight: "bold" }
-// };
-
-const ProductGrid = ({ ids, data, basePath }) => (
-  <div style={{ margin: "1em" }}>
-    {ids.map(id => (
-      <Card key={id} style={cardStyle}>
-        <CardHeader
-          title={<TextField record={data[id]} source="name" />}
-          subheader={<TextField record={data[id]} source="sku" />}
-          avatar={<Avatar src={data[id].image} />}
-        />
-        <CardContent>
-          <TextField record={data[id]} source="description" />
-        </CardContent>
-
-        <CardActions style={{ textAlign: "right" }}>
-          <EditButton
-            resource="Search/Products"
-            basePath={basePath}
-            record={data[id]}
-          />
-        </CardActions>
-      </Card>
-    ))}
-  </div>
-);
+import MobileGrid from './MobileGrid';
+import SyncIcon from '@material-ui/icons/Sync';
 
 const ProductListTitle = ({ record }) => {
   return <span>Product List</span>;
@@ -99,7 +45,7 @@ const ProductList = props => (
     filterDefaultValues={{ syncStatus: "1" }}
   >
     <Responsive
-      small={<ProductGrid />}
+      small={<MobileGrid />}
       medium={
         <Datagrid>
           <TextField label="Name" source="name" />

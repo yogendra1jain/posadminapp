@@ -21,10 +21,13 @@ DisplayTimeField.defaultProps = {
 //   return <div>{liArray}</div>;
 // };
 
+const StoreShowTitle = ({ record }) => {
+  return <span>Store {record ? `${record.name}` : ""}</span>;
+};
+
 const StoreShow = props => (
-  <Show {...props}>
+  <Show {...props} title={<StoreShowTitle />}>
     <SimpleShowLayout>
-      {/* <TextField source="id" /> */}
       <TextField source="name" />
       <AddressField addLabel={true} label="Address" />
       <BooleanField source="active" />

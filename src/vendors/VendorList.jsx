@@ -7,9 +7,11 @@ import {
   SingleFieldList,
   ChipField,
   List,
-  EditButton
+  EditButton,
+  Responsive
 } from "react-admin";
 import { PhoneNumber } from "../global/components/PhoneNumber";
+import MobileGrid from "./MobileGrid";
 
 const VendroListTitle = ({ record }) => {
   return <span>Vendor List</span>;
@@ -17,20 +19,23 @@ const VendroListTitle = ({ record }) => {
 
 const VendorList = props => (
   <List {...props} title={<VendroListTitle />}>
-    <Datagrid rowClick="edit">
-      {/* <TextField source="id" /> */}
-      <TextField source="name" />
-      <EmailField source="email" />
-      {/* <BooleanField source="status" />
-            <TextField source="code" /> */}
-      <PhoneNumber source="phoneNumber" />
-      <ArrayField source="licenses">
-        <SingleFieldList>
-          <ChipField source="type" />
-        </SingleFieldList>
-      </ArrayField>
-      <EditButton />
-    </Datagrid>
+    <Responsive
+      small={<MobileGrid />}
+      medium={
+        <Datagrid rowClick="edit">
+          <TextField source="name" />
+          <EmailField source="email" />
+          <TextField source="code" /> */}
+          <PhoneNumber source="phoneNumber" />
+          <ArrayField source="licenses">
+            <SingleFieldList>
+              <ChipField source="type" />
+            </SingleFieldList>
+          </ArrayField>
+          <EditButton />
+        </Datagrid>
+      }
+    />
   </List>
 );
 
