@@ -322,8 +322,10 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, reqBody);
         
         //For Sale History       ******************************************************************************************
-        case 'Sale/Employee/ByStoreId':
+        case 'Sale/ByStore':
             return reqObjMaker(url, {id: localStorage.getItem('storeId')})
+        case 'Sale/Get':
+            return reqObjMaker(url, params)
         default:
             break;
 

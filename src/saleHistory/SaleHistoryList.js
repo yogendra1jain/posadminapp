@@ -5,12 +5,13 @@ import {
     TextField,
     Filter,
     DateInput,
-    FunctionField
+    FunctionField, ReferenceField
 } from 'react-admin';
 import moment from 'moment';
 import DineroPrice from '../global/components/DineroPrice';
 import SaleHistoryShow from './SaleHistoryShow';
 import _get from 'lodash/get';
+import SyncIcon from '@material-ui/icons/Sync';
 
 const ListFilters = props => (
     <Filter {...props}>
@@ -26,10 +27,21 @@ const SaleHistory = () => {
 const SaleHistoryList = props => (
     <List {...props} title={<SaleHistory />} >
         <Datagrid rowClick="expand" expand={<SaleHistoryShow />}>
-            <TextField source="sale.id" label="Id" />
-            <FunctionField label="Date" render={record => moment(_get(record.sale,'saleTimeStamp.seconds',0) * 1000).format('DD/MM/YYYY')} />
-            <FunctionField label="Customer" render={record => `${_get(record,'customer.customer.firstName','')} + ${_get(record,'customer.customer.lastName','')}`} />
-            <DineroPrice label="Sale Price" source="sale.totalAmount.amount" />
+            <TextField source="id" label="Id" />
+            <FunctionField label="Date" render={record => moment(_get(record, 'saleTimeStamp.seconds', 0) * 1000).format('MM/DD/YYYY h:ss a')} />
+            <ReferenceField
+                label="Customer"
+                source="customerId"
+                reference="Customer"
+                linkType="show"
+            >
+                <TextField source="name" />
+            </ReferenceField>
+            <FunctionField label="No of Items" render={record => _get(record, 'saleItems', []).length} />
+
+            <FunctionField text-align="left" label="Sync Status" render={record => _get(record, 'syncStatus', 0) == 0 ? <SyncIcon style={{ color: 'yellow' }} /> : _get(record, 'syncStatus', 0) == 1 || _get(record, 'syncStatus', 0) == 2 ? <SyncIcon style={{ color: 'green' }} /> : <SyncIcon style={{ color: 'red' }} />} />
+
+            <DineroPrice label="Sales Price" source="totalAmount.amount" />
         </Datagrid>
     </List>
 );

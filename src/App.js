@@ -26,6 +26,7 @@ import purchaseOrders from './purchaseOrders';
 import tax from './tax';
 import routes from './routes';
 import inventory from './inventory';
+import saleHistory from './saleHistory';
 
 const messages = {
   'en': mergeTranslations(englishMessages, treeEnglishMessages),
@@ -61,7 +62,8 @@ const App = () => (
         <Resource name="Requisition" {...requisition} />,
         <Resource name="PurchaseOrders" {...purchaseOrders} />,
         <Resource name="Inventory" {...inventory}  />,
-        <Resource name="UnfinishedProducts" {...unfinishedProducts} />
+        <Resource name="UnfinishedProducts" {...unfinishedProducts} />,
+        <Resource name="SaleHistory" {...saleHistory} />
       ]}
 
     </Admin>
