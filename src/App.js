@@ -27,6 +27,7 @@ import tax from './tax';
 import routes from './routes';
 import inventory from './inventory';
 import terminals from './terminals'
+import saleHistory from './saleHistory';
 import operators from './operators';
 
 const messages = {
@@ -66,8 +67,8 @@ const App = () => (
         <Resource name="Requisition" {...requisition} />,
         <Resource name="PurchaseOrders" {...purchaseOrders} />,
         <Resource name="Inventory" {...inventory}  />,
-        <Resource name="UnfinishedProducts" {...unfinishedProducts} />
-
+        <Resource name="UnfinishedProducts" {...unfinishedProducts} />,
+        <Resource name="SaleHistory" {...saleHistory} />
       ]}
 
     </Admin>

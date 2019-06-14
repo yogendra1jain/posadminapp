@@ -56,6 +56,22 @@ const ResBodyGuesser = (obj) => {
             }
         }
 
+        if(url == 'Sale/Get') {
+            let saleData = {};
+            let { sale } = json
+            saleData = { ...sale.sale,
+                customer: sale.customer,
+                operator: sale.operator,
+                store: sale.store,
+                terminal: sale.terminal
+            }
+            return {
+                data: {...saleData, 
+                    id: _get(sale,'sale.id','')
+                }
+            }
+        }
+
         return {
             data: json
         };
@@ -351,10 +367,10 @@ const ResBodyGuesser = (obj) => {
 
 
         //For Sale History       ******************************************************************************************
-        case 'Sale/Employee/ByStoreId':
+        case 'Sale/ByStore':
             return {
-                data: json || [],
-                total: json ? json.length : 0
+                data: json.sales || [],
+                total: json ? json.sales.length : 0
             }
 
         //For Terminal       ******************************************************************************************

@@ -107,12 +107,12 @@ class Menu extends Component {
             leftIcon={<products.icon />}
             onClick={onMenuClick}
           />
-          {/* <MenuItemLink
+          <MenuItemLink
             to={`/SaleHistory`}
             primaryText={"SaleHistory"}
             leftIcon={<products.icon />}
             onClick={onMenuClick}
-          /> */}
+          />
         </SubMenu>
         <WithPermissions
           render={({ permissions }) =>
@@ -195,7 +195,7 @@ class Menu extends Component {
           />
           <MenuItemLink
             to={`/PackagePending`}
-            primaryText={"Incoming Packages"}
+            primaryText={"Shipped Packages"}
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />

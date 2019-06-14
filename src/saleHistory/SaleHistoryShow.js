@@ -1,99 +1,55 @@
-// import React from 'react';
-// import Card from '@material-ui/core/Card';
-// import CardContent from '@material-ui/core/CardContent';
-// import Grid from '@material-ui/core/Grid';
-// import Typography from '@material-ui/core/Typography';
-// import { ShowController } from 'react-admin';
-// import _get from 'lodash/get';
-// import _isEmpty from 'lodash/isEmpty'
-// import moment from 'moment';
+import React from 'react';
+import moment from 'moment';
+import _get from 'lodash/get';
+import {
+    Show, 
+    TextField,
+    SimpleShowLayout,
+    FunctionField,
+    ArrayField,
+    Datagrid,
+    NumberField
+} from 'react-admin';
+import DineroPrice from "../global/components/DineroPrice";
 
-// let DineroInit = (amount, currency, precision) => (
-//     Dinero({amount:  parseInt(amount) || 0, currency: currency || 'USD', precision: precision || 2}).toFormat('$0,0.00')
-// )
+const ShowTitle = ({record}) => {
+    return ''
+}
 
-// let subTotal = 0
+const SaleHistoryShow = (props) => {
+    console.log(props, 'sale history data')
+    return (
+        <Show {...props} title={<ShowTitle />}>
+            <SimpleShowLayout>
+                <TextField label="Order Id" source="id" />
+                <FunctionField label="Order Date" render={record => moment(record.saleTimeStamp.seconds * 1000).format('DD/MM/YYYY hh:mm:ss')} />
+                <TextField label="Store name" source="store.name" />
+                <FunctionField label="Store Address" render={record => `${_get(record,'store.address.addressLine1','')}, ${_get(record,'store.address.addressLine1','')}, ${_get(record,'store.address.city','')}, ${_get(record,'store.address.state','')}, ${_get(record,'store.address.country','')}, ${_get(record,'store.address.postalCode','')}`} />
+                <FunctionField label="Cashier name" render={record => `${_get(record,'operator.person.firstName','')} ${_get(record,'operator.person.lastName','')}`} />
+                <TextField label="Terminal name" source="terminal.name" />
+                <FunctionField label="Customer name" render={record => `${_get(record,'customer.customer.firstName','')} ${_get(record,'customer.customer.lastName','')}`} />
+                <ArrayField source="saleItems">
+                    <Datagrid>
+                        <TextField label='Product Name' source="product.name" />
+                        <NumberField label="Quantity" source="qty" />
+                        <DineroPrice label='Sale Price' source="itemRegularTotal.amount" />
+                        {_get(props,'record.employeeDiscountTotal.amount', false) ? <DineroPrice label='Emp Discount' source="employeeDiscountTotal.amount" /> : ''}
+                        {_get(props,'record.cartDiscountTotal.amount', false) ? <DineroPrice label='Cart Discount' source="cartDiscountTotal.amount" /> : ''}
+                        {_get(props,'record.itemDiscountTotal.amount', false) ? <DineroPrice label='Item Discount' source="itemDiscountTotal.amount" /> : ''}
+                        {_get(props,'record.itemTaxAmount.amount', false) ? <DineroPrice label='Tax' source="itemTaxAmount.amount" /> : ''}
+                        <DineroPrice label='Subtotal' source="itemSubTotal.amount" />
+                    </Datagrid>
+                </ArrayField>
+                {_get(props,'record.cartDiscountAmount.amount', false) ? <DineroPrice label='Cart Discount' source="cartDiscountAmount.amount" />: ''}
+                {_get(props,'record.employeeDiscountAmount.amount', false) ? <DineroPrice label='Emp Discount' source="employeeDiscountAmount.amount" /> : ''}
+                {_get(props,'record.itemDiscountAmount.amount', false) ? <DineroPrice label='Item Discount' source="itemDiscountAmount.amount" /> : ''}
+                {_get(props,'record.totalTaxAmount.amount', false) ? <DineroPrice label='Tax Amount' source="totalTaxAmount.amount" /> : ''}
+                <DineroPrice label='Total Amount' source="totalAmount.amount" />
+                <DineroPrice label='Total Amount Paid' source="totalAmountPaid.amount" />
+                {_get(props,'record.changeDue.amount', false) ? <DineroPrice label='Change Due' source="changeDue.amount" /> :  ''}
+            </SimpleShowLayout>
+        </Show>
+    )
+}
 
-// const showItemTable = record => {
-//     _get(record, 'sale.saleItems', []).map(item => {
-//         subTotal += _get(item, 'subTotal', DineroInit()).getAmount()
-//         return (
-//             <div style={{ display: 'flex', flex: '1', paddingTop: "10px", paddingBottom: "10px", borderBottom: 'dotted 1px #9e9e9e' }}>
-//                 <div style={{ width: "35%" }}>{_get(item, 'doc.product.isGiftCard', false) ? 'Gift Card' : _get(item, 'doc.product.name', '')}<br /><span style={{ fontSize: '10px' }}>{_get(item, 'packages[0].label')}</span></div>
-//                 <div style={{ width: "10%", textAlign: "center" }}>{_get(item, 'qty', '')}</div>
-//                 <div style={{ width: "30%", textAlign: "right" }}>{DineroInit(_get(item, 'doc.product.salePrice.amount', 0)).toFormat('$0,0.00')}<br />
-//                     <div style={{ fontSize: "9px" }}>
-//                         {_get(item, 'itemDiscountMoney', DineroInit()).getAmount() == 0 ? '' : <span>(Item Disc.: {_get(item, 'itemDiscountMoney', DineroInit()).toFormat('$0,0.00')})</span>}
-//                         <br />
-//                         {_get(item, 'empDiscountMoney', DineroInit()).getAmount() == 0 ? '' : <span>(Emp Disc.: {_get(item, 'empDiscountMoney', DineroInit()).toFormat('$0,0.00')})</span>}
-//                         {_get(item, 'cartDiscountMoney', DineroInit()).getAmount() == 0 ? '' : <span>(Cart Disc.: {_get(item, 'cartDiscountMoney', DineroInit()).toFormat('$0,0.00')})</span>}
-//                     </div>
-//                 </div>
-//                 <div style={{ width: "25%", textAlign: "right" }}>{_get(item, 'subTotal', DineroInit()).toFormat('$0,0.00')}</div>
-//             </div>
-//         )
-//     })
-// }
-
-// const SaleHistoryShow = props => (
-//     <ShowController {...props} title=" ">
-//         {({ record }) =>
-//             record && (
-//                 <Card style={{ width: 600, margin: 'auto' }}>
-//                     <CardContent>
-//                         <Grid container spacing={16}>
-//                             <Grid item xs={12}>
-//                                 <Typography variant="title" gutterBottom>
-//                                     Invoice
-//                                 </Typography>
-//                             </Grid>
-//                         </Grid>
-//                         <Grid container spacing={16}>
-//                             <Grid item xs={12}>
-//                                 <Typography>
-//                                     Order id: {_get(record, 'sale.id', '')}
-//                                 </Typography>
-//                                 <Typography>
-//                                     Date: {moment(_get(record, 'sale.saleTimeStamp.seconds', '') * 1000).toFormat('DD/MM/YYYY hh:mm:ss')}
-//                                 </Typography>
-//                                 <Typography>
-//                                     Store Name: {_get(record.store, 'name', '')}
-//                                 </Typography>
-//                                 <Typography>
-//                                     Address: {_get(record.store, 'address.addressLine1', '') + ', ' + _get(record.store, 'address.addressLine2', '') + ', ' + _get(record.store, 'address.city', '') + ', ' + _get(record.store, 'address.state', '') + ', ' + _get(record.store, 'address.country', '') + ', ' + _get(record.store, 'address.postalCode', '')}
-//                                 </Typography>
-//                                 <Typography>
-//                                     Cashier: {_get(record.operator, 'person.firstName') + _get(record.operator, 'person.lastName')}
-//                                 </Typography>
-//                                 <Typography>
-//                                     Terminal: {_get(record.terminal, 'name', '')}
-//                                 </Typography>
-//                                 <Typography>
-//                                     Customer: {_get(record.customer, 'customer.firstName', '') + _get(record.customer, 'customer.lastName', '')}
-//                                 </Typography>
-//                             </Grid>
-//                         </Grid>
-//                         <Grid container spacing={16}>
-//                             <Grid item xs={8} align="left">
-//                                 <Typography>Total Tax:</Typography>
-//                                 <Typography>Grand Total:</Typography>
-//                                 <Typography>Total Paid:</Typography>
-//                                 <Typography>Change Due:</Typography>
-//                                 <Typography>Payment Method:</Typography>
-//                             </Grid>
-//                             <Grid item xs={8} align="right">
-//                                 <Typography>{DineroInit(_get(record,'sale.totalTaxAmount.amount',0))}</Typography>
-//                                 <Typography>{DineroInit(_get(record,'sale.totalAmount.amount',0))}</Typography>
-//                                 <Typography>{DineroInit(_get(record,'sale.totalAmountPaid.amount',0))}</Typography>
-//                                 <Typography>{DineroInit(_get(record,'sale.changeDue.amount',0))}</Typography>
-//                                 <Typography>{_}</Typography>
-//                             </Grid>
-//                         </Grid>
-//                     </CardContent>
-//                 </Card>
-//             )
-//         }
-//     </ShowController>
-// );
-
-// export default SaleHistoryShow;
+export default SaleHistoryShow;

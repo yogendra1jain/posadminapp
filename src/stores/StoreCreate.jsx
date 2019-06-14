@@ -40,13 +40,14 @@ const StoreCreateTitle = ({ record }) => {
 //         }}
 //     </Query>
 // }
+
 const UtcDateChoices = [
-  { id: "UTC-10", name: "UTC-10" },
-  { id: "UTC-8", name: "UTC-8" },
-  { id: "UTC-7", name: "UTC-7" },
-  { id: "UTC-6", name: "UTC-6" },
-  { id: "UTC-5", name: "UTC-5" },
-  { id: "UTC-4", name: "UTC-4" }
+  { id: "UTC-10", name: "US/Hawaii (GMT -10:00)" },
+  { id: "UTC-8", name: "US/Pacific (GMT -8:00)" },
+  { id: "UTC-7", name: "US/Arizona (GMT -7:00)" },
+  { id: "UTC-6", name: "US/Central (GMT -6:00)" },
+  { id: "UTC-5", name: "US/Eastern (GMT -5:00)" }
+  // { id: 'UTC-4', name: 'UTC-4' }
 ];
 const StoreCreate = props => (
   <Create title={<StoreCreateTitle />} {...props}>

@@ -16,12 +16,26 @@ import {
   List,
   TextField,
   TextInput,
-  SelectInput
+  SelectInput,
+  Responsive
 } from "react-admin";
 import React from "react";
 import DineroPrice from "../global/components/DineroPrice";
 import SyncIcon from "@material-ui/icons/Sync";
 import _get from "lodash/get";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import Avatar from "@material-ui/core/Avatar";
+
+const cardStyle = {
+  width: 300,
+  minHeight: 300,
+  margin: "0.5em",
+  display: "inline-block",
+  verticalAlign: "top"
+};
 // import withStyles from "@material-ui/core/styles/withStyles";
 // import Divider from "@material-ui/core/Divider";
 // import Tabs from "@material-ui/core/Tabs";
@@ -30,6 +44,31 @@ import _get from "lodash/get";
 // const datagridStyles = {
 //   total: { fontWeight: "bold" }
 // };
+
+const ProductGrid = ({ ids, data, basePath }) => (
+  <div style={{ margin: "1em" }}>
+    {ids.map(id => (
+      <Card key={id} style={cardStyle}>
+        <CardHeader
+          title={<TextField record={data[id]} source="name" />}
+          subheader={<TextField record={data[id]} source="sku" />}
+          avatar={<Avatar src={data[id].image} />}
+        />
+        <CardContent>
+          <TextField record={data[id]} source="description" />
+        </CardContent>
+
+        <CardActions style={{ textAlign: "right" }}>
+          <EditButton
+            resource="Search/Products"
+            basePath={basePath}
+            record={data[id]}
+          />
+        </CardActions>
+      </Card>
+    ))}
+  </div>
+);
 
 const ProductListTitle = ({ record }) => {
   return <span>Product List</span>;
@@ -59,29 +98,34 @@ const ProductList = props => (
     filters={<ProductFilter />}
     filterDefaultValues={{ syncStatus: "1" }}
   >
-    <Datagrid>
-      <TextField label="Name" source="name" />
-      <TextField label="METRC Id" source="metrcId" />
-      <TextField label="SKU" source="sku" />
-      {/* <DineroPrice label="Cost Price" source="costPrice.amount" /> */}
-      <DineroPrice label="Sale Price" source="salePrice.amount" />
+    <Responsive
+      small={<ProductGrid />}
+      medium={
+        <Datagrid>
+          <TextField label="Name" source="name" />
+          <TextField label="METRC Id" source="metrcId" />
+          <TextField label="SKU" source="sku" />
+          {/* <DineroPrice label="Cost Price" source="costPrice.amount" /> */}
+          <DineroPrice label="Sale Price" source="salePrice.amount" />
 
-      <FunctionField
-        text-align="left"
-        label="Sync Status"
-        render={record =>
-          _get(record, "productType", 0) === 3 ? (
-            <span>Non Cannabis</span>
-          ) : _get(record, "syncStatus", 0) === 0 ? (
-            <SyncIcon style={{ color: "orange" }} />
-          ) : (
-            <SyncIcon style={{ color: "green" }} />
-          )
-        }
-      />
-      <EditButton />
-      <ShowButton />
-    </Datagrid>
+          <FunctionField
+            text-align="left"
+            label="Sync Status"
+            render={record =>
+              _get(record, "productType", 0) === 3 ? (
+                <span>Non Cannabis</span>
+              ) : _get(record, "syncStatus", 0) === 0 ? (
+                <SyncIcon style={{ color: "orange" }} />
+              ) : (
+                <SyncIcon style={{ color: "green" }} />
+              )
+            }
+          />
+          <EditButton />
+          <ShowButton />
+        </Datagrid>
+      }
+    />
   </List>
 );
 

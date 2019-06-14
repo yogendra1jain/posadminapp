@@ -209,6 +209,11 @@ const UrlGuesser = (obj) => {
         //For Inventory       ******************************************************************************************
         case 'Inventory/GET_LIST':
             return 'Search/Inventory'
+        '//For Sale History       ******************************************************************************************'
+        case 'SaleHistory/GET_LIST':
+            return 'Sale/ByStore'
+        case 'SaleHistory/GET_ONE':
+            return 'Sale/Get'
         //For Terminal       ******************************************************************************************
         case 'Terminal/GET_LIST':
             return localStorage.getItem('storeId') ? 'Terminal/ByStoreId' : 'Terminal/ByRetailerId'

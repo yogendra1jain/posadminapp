@@ -12,9 +12,9 @@ import {
   EditButton,
   FunctionField
 } from "react-admin";
-import Button from '@material-ui/core/Button';
-import CallSplit from '@material-ui/icons/CallSplit';
-import { Link } from 'react-router-dom';
+import Button from "@material-ui/core/Button";
+import CallSplit from "@material-ui/icons/CallSplit";
+import { Link } from "react-router-dom";
 const PackageFilter = props => {
   return (
     <Filter {...props}>
@@ -29,28 +29,42 @@ const AddNewSplitButton = ({ record }) => (
     color="primary"
     component={Link}
     to={{
-      pathname: '/Package/create',
+      pathname: "/Package/create",
       search: `?sourcePackageId=${record.id}`
     }}
     label="Split Package"
   >
     <CallSplit />
-    Split 
+    Split
   </Button>
 );
 
+const PackageTitle = () => {
+  return <span>In Hand Packages</span>;
+};
+
 const PackageList = props => (
-  <List {...props} filters={<PackageFilter />}>
+  <List {...props} filters={<PackageFilter />} title={<PackageTitle />}>
     <Datagrid>
-      <TextField source="metrcId" reference="metrcs" label="METRC ID" />
-      <ReferenceField source="posProductId" reference="Search/Products" linkType="show">
+      {/* <TextField source="metrcId" reference="metrcs" label="METRC ID" /> */}
+      <ReferenceField
+        label="Product"
+        source="posProductId"
+        reference="Search/Products"
+        linkType="show"
+      >
         <TextField source="name" />
       </ReferenceField>
       <TextField source="label" />
       {/* <TextField source="packageType" /> */}
-      <NumberField source="quantity" />
-      <TextField source="uom" />
-      <TextField source="metrcProduct" />
+      <FunctionField
+        label="Quantity"
+        render={record => `${record.quantity} ${record.uom}`}
+      />
+
+      {/* <NumberField source="quantity" />
+      <TextField source="uom" /> */}
+      {/* <TextField source="metrcProduct" /> */}
       <FunctionField
         text-align="left"
         label="Sync Status"
@@ -63,8 +77,8 @@ const PackageList = props => (
               titleAccess={record.metrcError}
             />
           ) : (
-                <SyncIcon style={{ color: "green" }} />
-              )
+            <SyncIcon style={{ color: "green" }} />
+          )
         }
       />
       <EditButton label="Edit" />
