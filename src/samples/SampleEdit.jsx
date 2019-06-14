@@ -18,10 +18,14 @@ const SampleEditTitle = ({ record }) => {
 };
 
 
-const SampleList = () => {
+const SampleEdit = () => {
     return (
-        null
+        <Edit title={<SampleEditTitle />} {...props}>
+            <SimpleForm redirect="list">
+            
+            </SimpleForm>
+        </Edit>
     )
 }
 
-export default SampleList
+export default SampleEdit

@@ -31,7 +31,7 @@ const FilterActions = ({ basePath, ...rest }) => (
       basePath={basePath}
       to={{
         pathname: "/Terminal/create",
-        search: `?storeId=${storeId}`
+        search: `?storeId=${localStorage.getItem("storeId")}`
         // state: { record: { storeId: storeId } }
       }}
     />
@@ -45,7 +45,7 @@ const MyEditButton = ({ record, ...props }) => (
     component={Link}
     to={{ 
       pathname: props.basePath + "/" + record.id,
-      state: { record: { storeId: storeId } }
+      state: { record: { storeId:localStorage.getItem("storeId")}}
     }}
   />
 );
@@ -55,7 +55,7 @@ const MyShowButton = ({ record, ...props }) => (
     component={Link}
     to={{
       pathname: props.basePath + "/" + record.id +"/show",
-      search: `?storeId=${storeId}`
+      search: `?storeId=${localStorage.getItem("storeId")}`
     }}
   />
 );

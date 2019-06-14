@@ -14,6 +14,13 @@ import _get from 'lodash/get';
 const SampleShow = props => (
     <Show {...props}>
         <SimpleShowLayout>
+            <TextField  label="First Name" source="person.firstName" />
+            <TextField  label="Last Name" source="person.lastName" />
+            <NumberField  label="Phone Number" source="phoneNumber.phoneNumber" />
+            <NumberField  source="loginPin" />
+            <TextField  source="role" />
+            <TextField  source="email" />
+            <BooleanField  source="active" />
         </SimpleShowLayout>
     </Show>
 );

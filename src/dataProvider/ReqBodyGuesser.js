@@ -334,6 +334,15 @@ const ReqBodyGuesser = (obj) => {
             reqBody = params.data
             reqBody.retailerId = retailerId
             return reqObjMaker(url, params.data)
+        //For Operator       ******************************************************************************************
+        case 'Operator/ByStoreId':
+            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
+        case 'Operator/ByRetailerId':
+            return reqObjMaker(url, { id: localStorage.getItem('retailerId') })
+        case 'Operator/Create':
+            reqBody = params.data
+            reqBody.retailerId = retailerId
+            return reqObjMaker(url, params.data)
         default:
             break;
 
