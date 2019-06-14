@@ -88,7 +88,7 @@ class PackagePendingList extends React.Component {
 
             <TextField label="Label" source="packageLabel" />
             {/* <TextField label="Type" source="packageType" /> */}
-            <TextField label="Product Name" source="productName" />
+            <TextField label="METRC Product" source="productName" />
             <TextField label="Category" source="productCategoryName" />
             <TextField label="Shipment Status" source="shipmentPackageState" />
             <TextField label="Quantity" source="shippedQuantity" />
