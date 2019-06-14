@@ -260,6 +260,19 @@ const ReqBodyGuesser = (obj) => {
                     value: _get(params, 'filter.posProductId')
                 })
             }
+            if (_get(params, 'filter.storeId') || localStorage.getItem('storeId')) {
+                reqBody.filters.push({
+                    field: 'storeId.keyword',
+                    value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
+                })
+            }
+            if (_get(params, 'filter.syncStatus')) {
+                reqBody.filters.push({
+                    field: 'syncStatus',
+                    value: _get(params, 'filter.syncStatus')
+                })
+            }
+
             return reqObjMaker(url, reqBody);
         case 'Package/Get':
             return reqObjMaker(url, params);
@@ -323,7 +336,7 @@ const ReqBodyGuesser = (obj) => {
 
         //For Sale History       ******************************************************************************************
         case 'Sale/ByStore':
-            return reqObjMaker(url, {id: localStorage.getItem('storeId')})
+            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
         case 'Sale/Get':
             return reqObjMaker(url, params)
         case 'Sale/Employee/ByStoreId':

@@ -23,7 +23,9 @@ const PackageCreate = props => {
   return (
     <React.Fragment>
       {
-        sourcePackageId ? <PackageSplitCreate {...props} sourcePackageId={sourcePackageId} /> : <NewPackageCreate {...props} />
+        sourcePackageId ?
+          <PackageSplitCreate {...props} sourcePackageId={sourcePackageId} />
+          : <NewPackageCreate {...props} />
       }
     </React.Fragment>
 

@@ -90,7 +90,16 @@ const SampleList = ({ ...props, permissions }) => {
       actions={<FilterActions />}
     >
       <Datagrid>
-        <ReferenceField source="storeId" reference="Store"><TextField source="name" /></ReferenceField>
+        {permissions == "1" ? (
+          <ReferenceField
+            label="Store"
+            source="storeId"
+            reference="Store"
+            linkType="show"
+          >
+            <TextField source="name" />
+          </ReferenceField>
+        ) : null}
         <BooleanField source="active" />
         <TextField label="First Name" source="person.firstName" />
         <TextField label="Last Name" source="person.lastName" />
