@@ -6,6 +6,14 @@ import {
   withDataProvider,
   EditButton,
   FormDataConsumer,
+  Filter,
+  TextInput,
+  ReferenceInput,
+  SelectInput,
+  CardActions,
+  CreateButton,
+  Link,
+  ShowButton,
   Responsive
 } from "react-admin";
 import InfoOutline from "@material-ui/icons/InfoOutline";
@@ -43,7 +51,67 @@ const ListActionButton = ({
     </div>
   );
 };
+const PackageFilter = ({ permissions, ...props }) => {
+  return (
+    <Filter {...props}>
+      <TextInput label="Search" source="q" alwaysOn />
+      {permissions === "1" ? (
+        <ReferenceInput
+          label="Select Store"
+          reference="Store"
+          alwaysOn
+          allowEmpty={false}
+          source="storeId"
+        >
+          <SelectInput source="name" />
+        </ReferenceInput>
+      ) : null}
+    </Filter>
+  );
+};
+const MyEditButton = ({ record, ...props }) => (
+  <EditButton
+    {...props}
+    component={Link}
+    to={{
+      pathname: props.basePath + "/" + record.packageLabel,
+      state: { record: { storeId: localStorage.getItem("storeId") } }
+    }}
+  />
+);
+const MyShowButton = ({ record, ...props }) => (
+  <ShowButton
+    {...props}
+    component={Link}
+    to={{
+      pathname: props.basePath + "/" + record.id + "/show",
+      search: `?storeId=${localStorage.getItem("storeId")}`
+    }}
+  />
+);
 
+const FilterActions = ({ permissions, basePath, ...rest }) => {
+  debugger;
+  return (
+    <CardActions>
+      {localStorage.getItem('role') === "1" ? <CreateButton {...rest} basePath={basePath}
+        to={{
+          pathname: "/Package/create",
+        }} /> :
+        <CreateButton
+          {...rest}
+          basePath={basePath}
+          to={{
+            pathname: "/Package/create",
+            search: `?storeId=${localStorage.getItem("storeId")}`
+            // state: { record: { storeId: storeId } }
+          }}
+        />
+      }
+
+    </CardActions>
+  );
+}
 class PackagePendingList extends React.Component {
   constructor(props) {
     super(props);
@@ -69,12 +137,15 @@ class PackagePendingList extends React.Component {
   }
 
   render() {
+    let { permissions } = this.props;
     return (
       <div className="flex-column">
         <List
           {...this.props}
           key={this.state.key}
           title={<PendingPackageTitle />}
+          actions={<FilterActions />}
+          filters={<PackageFilter permissions={permissions} />}
           actions={
             <ListActionButton
               disable={this.state.disable}
@@ -83,42 +154,28 @@ class PackagePendingList extends React.Component {
             />
           }
         >
-          <Responsive
-            small={<MobileGrid />}
-            medium={<Datagrid>
-              <TextField label="Manifest" source="manifestNumber" />
-              <TextField label="Label" source="packageLabel" />
-              <TextField label="METRC Product" source="productName" />
-              <TextField label="Category" source="productCategoryName" />
-              <TextField label="Shipment Status" source="shipmentPackageState" />
-              <TextField label="Quantity" source="shippedQuantity" />
-              <TextField
-                label="UOM"
-                source="shippedUnitOfMeasureName"
-                defaultValue={0}
-              />
-              <FormDataConsumer>
-                {({ formData, ...rest }) => {
-                  if (formData.shipmentPackageState == "Shipped") {
-                    return (
-                      <InfoOutline
-                        titleAccess="Please Accept Package on METRC UI"
-                        color="red"
-                      />
-                    );
-                  } else if (formData.shipmentPackageState == "Accepted") {
-                    return <EditButton label="Check In" />;
-                  } else {
-                    return null;
-                  }
-                }}
-              </FormDataConsumer>
-            </Datagrid>}
-          />
+            <Responsive
+              small={<MobileGrid />}
+              medium={<Datagrid>
+                <TextField label="Manifest" source="manifestNumber" />
+                <TextField label="Label" source="packageLabel" />
+                <TextField label="METRC Product" source="productName" />
+                <TextField label="Category" source="productCategoryName" />
+                <TextField label="Shipment Status" source="shipmentPackageState" />
+                <TextField label="Quantity" source="shippedQuantity" />
+                <TextField
+                  label="UOM"
+                  source="shippedUnitOfMeasureName"
+                  defaultValue={0}
+                />
+                <MyEditButton />
+              </Datagrid>}/>
         </List>
       </div>
-    );
-  }
-}
-
-export default withDataProvider(PackagePendingList);
+          );
+        }
+      }
+      
+      export default withDataProvider(PackagePendingList);
+      
+      
