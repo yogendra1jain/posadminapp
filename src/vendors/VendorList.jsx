@@ -8,7 +8,9 @@ import {
   ChipField,
   List,
   EditButton,
-  Responsive
+  Responsive,
+  Filter,
+  TextInput
 } from "react-admin";
 import { PhoneNumber } from "../global/components/PhoneNumber";
 import MobileGrid from "./MobileGrid";
@@ -17,8 +19,16 @@ const VendroListTitle = ({ record }) => {
   return <span>Vendor List</span>;
 };
 
+const VendorFilter = (props) => {
+  return (
+    <Filter {...props}>
+      <TextInput label="Search" source="q" alwaysOn />
+    </Filter>
+  )
+}
+
 const VendorList = props => (
-  <List {...props} title={<VendroListTitle />}>
+  <List {...props} title={<VendroListTitle />} filters={<VendorFilter />}>
     <Responsive
       small={<MobileGrid />}
       medium={

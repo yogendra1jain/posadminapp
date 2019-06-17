@@ -11,12 +11,14 @@ import {
   Responsive
 } from "react-admin";
 import MobileGrid from './MobileGrid';
+import {SimpleFilter} from '../global/components/filter';
+
 const VendorListTitle = ({ record }) => {
   return <span>Vendor Products List</span>;
 };
 
 const VendorProductList = props => (
-  <List {...props} title={<VendorListTitle />}>
+  <List filters={<SimpleFilter />} {...props} title={<VendorListTitle />}>
     <Responsive 
       small={<MobileGrid />}
       medium={<Datagrid rowClick="edit">

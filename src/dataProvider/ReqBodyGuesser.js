@@ -26,14 +26,14 @@ const formObjectMaker = (url, reqBody) => {
     }
 }
 
-const makePaginationReqBody = (url, params) => {
+const makePaginationReqBody = (url, params, admin) => {
     let page = _get(params, 'pagination.page', '');
     let perPage = _get(params, 'pagination.perPage', '');
     let field = _get(params, 'sort.field', '');
     let order = _get(params, 'sort.order', '');
     let reqBody = {
         filters: [{
-            field: 'retailerId',
+            field: admin ? admin : 'retailerId',
             value: localStorage.getItem('retailerId')
         }],
         limit: perPage,
@@ -164,8 +164,9 @@ const ReqBodyGuesser = (obj) => {
             return req
 
         //For Stores ******************************************************************************************
-        case 'Store/ByRetailerId':
-            return reqObjMaker(url, { id: retailerId })
+        case 'Search/Stores':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
 
         case 'Store/Get':
             if (Array.isArray(params.ids)) {
@@ -185,8 +186,9 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params.data)
 
         //For Vendors ******************************************************************************************
-        case 'Vendor/ByRetailerId':
-            return reqObjMaker(url, { id: retailerId })
+        case 'Search/Vendors':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
         case 'Vendor/Get':
             return reqObjMaker(url, params)
         case 'Vendor/Update':
@@ -198,8 +200,9 @@ const ReqBodyGuesser = (obj) => {
         case 'Vendor/GetByIds':
             return reqObjMaker(url, params)
         //For Vendors Products ******************************************************************************************
-        case 'VendorProduct/GetByRetailerId':
-            return reqObjMaker(url, { id: retailerId })
+        case 'Search/VendorProducts':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
         case 'VendorProduct/Get':
             if (Array.isArray(params.ids)) {
                 let reqBody = {
@@ -305,8 +308,9 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, reqBody)
 
         //For Tax       ******************************************************************************************
-        case 'Get/Tax/RetailerId':
-            return reqObjMaker(url, { id: retailerId })
+        case 'Search/Taxes':
+            reqBody = localStorage.getItem('storeId') ? makePaginationReqBody(url, params, 'storeId') : makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
         case 'Create/Tax':
             reqBody = {
                 ...params.data,
@@ -343,19 +347,17 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, { id: localStorage.getItem('storeId') })
 
         //For Terminal       ******************************************************************************************
-        case 'Terminal/ByStoreId':
-            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
-        case 'Terminal/ByRetailerId':
-            return reqObjMaker(url, { id: localStorage.getItem('retailerId') })
+        case 'Search/Terminals':
+            reqBody = localStorage.getItem('storeId') ? makePaginationReqBody(url, params, 'storeId') : makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
         case 'Terminal/Create':
             reqBody = params.data
             reqBody.retailerId = retailerId
             return reqObjMaker(url, params.data)
         //For Operator       ******************************************************************************************
-        case 'Operator/ByStoreId':
-            return reqObjMaker(url, { id: localStorage.getItem('storeId') })
-        case 'Operator/ByRetailerId':
-            return reqObjMaker(url, { id: localStorage.getItem('retailerId') })
+        case 'Search/Operators':
+            reqBody = localStorage.getItem('storeId') ? makePaginationReqBody(url, params, 'storeId') : makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
         case 'Operator/Create':
             reqBody = params.data
             reqBody.retailerId = retailerId

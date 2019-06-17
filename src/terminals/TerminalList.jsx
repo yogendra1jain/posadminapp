@@ -11,7 +11,6 @@ import {
   List,
   EditButton,
   ShowButton,
-  FunctionField,
   Filter,
   ReferenceInput,
   SelectInput,
@@ -21,7 +20,7 @@ import {
   BooleanField,
   ReferenceField,
   Responsive,
-  SimpleList
+  TextInput
 } from "react-admin";
 import MobileGrid from "./MobileGrid";
 
@@ -71,9 +70,10 @@ const MyShowButton = ({ record, ...props }) => (
   />
 );
 
-const StoreFilter = ({ permissions, ...props }) => {
+const TerminalFilter = ({ permissions, ...props }) => {
   return (
     <Filter {...props}>
+      <TextInput label="Search" source="q" alwaysOn />
       {permissions === "1" ? (
         <ReferenceInput
           label="Select Store"
@@ -91,7 +91,7 @@ const StoreFilter = ({ permissions, ...props }) => {
 
 const TerminalList = ({ permissions, ...props }) => (
   <List {...props}
-    filters={<StoreFilter permissions={permissions} />}
+    filters={<TerminalFilter permissions={permissions} />}
     actions={<FilterActions permissions={permissions} />}
   >
     <Responsive 

@@ -83,7 +83,7 @@ const UrlGuesser = (obj) => {
 
         //For Stores ******************************************************************************************
         case 'Store/GET_LIST':
-            return 'Store/ByRetailerId'
+            return 'Search/Stores'
 
         case 'Store/GET_ONE':
             return 'Store/Get'
@@ -100,7 +100,7 @@ const UrlGuesser = (obj) => {
 
         //For Vendors ******************************************************************************************
         case 'vendors/GET_LIST':
-            return 'Vendor/ByRetailerId'
+            return 'Search/Vendors'
         case 'vendors/GET_ONE':
             return 'Vendor/Get'
         case 'vendors/CREATE':
@@ -115,7 +115,7 @@ const UrlGuesser = (obj) => {
             return 'Vendor/GetByIds'
         //For Vendors Products ******************************************************************************************
         case 'VendorProduct/GetByRetailerId/GET_LIST':
-            return 'VendorProduct/GetByRetailerId'
+            return 'Search/VendorProducts'
         case 'VendorProduct/GetByRetailerId/GET_ONE':
             return 'VendorProduct/Get'
         case 'VendorProduct/GetByRetailerId/GET_MANY':
@@ -190,7 +190,7 @@ const UrlGuesser = (obj) => {
 
         //For Tax       ******************************************************************************************
         case 'Tax/GET_LIST':
-            return 'Get/Tax/RetailerId'
+            return 'Search/Taxes'
         case 'Tax/CREATE':
             return 'Create/Tax';
         case 'Tax/GET_ONE':
@@ -216,7 +216,7 @@ const UrlGuesser = (obj) => {
             return 'Sale/Get'
         //For Terminal       ******************************************************************************************
         case 'Terminal/GET_LIST':
-            return localStorage.getItem('storeId') ? 'Terminal/ByStoreId' : 'Terminal/ByRetailerId'
+            return 'Search/Terminals'
         case 'Terminal/GET_ONE':
             return 'Terminal/Get'
         case 'Terminal/CREATE':
@@ -225,7 +225,7 @@ const UrlGuesser = (obj) => {
             return 'Terminal/Update'
         //For Operator       ******************************************************************************************
         case 'Operator/GET_LIST':
-            return localStorage.getItem('storeId') ? 'Operator/ByStoreId' : 'Operator/ByRetailerId'
+            return 'Search/Operators'
         case 'Operator/GET_ONE':
             return 'Operator/Get'
         case 'Operator/CREATE':

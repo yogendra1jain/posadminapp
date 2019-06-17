@@ -13,6 +13,7 @@ import {
   Link,
   ReferenceField,
   Responsive,
+  TextInput
 } from "react-admin";
 import React from "react";
 import _find from "lodash/find";
@@ -27,7 +28,6 @@ const TaxAppliedToChoices = [
   { id: 5, name: "All Products" }
 ];
 
-const storeId = localStorage.getItem("storeId");
 const TaxActions = ({ basePath, ...rest }) => (
   <CardActions>
     <CreateButton
@@ -35,7 +35,7 @@ const TaxActions = ({ basePath, ...rest }) => (
       basePath={basePath}
       to={{
         pathname: "/Tax/create",
-        state: { record: { storeId: storeId } }
+        state: { record: { storeId: localStorage.getItem("storeId") } }
       }}
     />
   </CardActions>
@@ -47,7 +47,7 @@ const MyEditButton = ({ record, ...props }) => (
     component={Link}
     to={{
       pathname: props.basePath + "/" + record.id,
-      state: { record: { storeId: storeId } }
+      state: { record: { storeId: localStorage.getItem("storeId") } }
     }}
   />
 );
@@ -55,6 +55,7 @@ const MyEditButton = ({ record, ...props }) => (
 const TaxFilter = ({ permissions, ...props }) => {
   return (
     <Filter {...props}>
+      <TextInput label="Search" source="q" alwaysOn />
       {permissions === "1" ? (
         <ReferenceInput
           label="Select Store"
