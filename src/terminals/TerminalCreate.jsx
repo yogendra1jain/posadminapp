@@ -14,13 +14,13 @@ import {
 } from "react-admin";
 
 const TerminalCreateTitle = () => {
-    return <span>Create Tax</span>;
+    return <span>Create Terminal</span>;
 };
 
 
 
 
-const TaxCreate = props => (
+const TerminalCreate = props => (
     <Create title={<TerminalCreateTitle />} {...props}>
         <SimpleForm
             redirect="list"
@@ -45,4 +45,4 @@ const TaxCreate = props => (
     </Create>
 );
 
-export default TaxCreate;
+export default TerminalCreate;

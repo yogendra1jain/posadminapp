@@ -13,15 +13,12 @@ import {
     required
 } from "react-admin";
 
-const TerminalCreateTitle = () => {
-    return <span>Create Tax</span>;
+const OperatorCreateTitle = () => {
+    return <span>Create Operator</span>;
 };
 
-
-
-
-const TaxCreate = props => (
-    <Create title={<TerminalCreateTitle />} {...props}>
+const OperatorCreate = props => (
+    <Create title={<OperatorCreateTitle />} {...props}>
         <SimpleForm
             redirect="list"
         >
@@ -49,4 +46,4 @@ const TaxCreate = props => (
     </Create>
 );
 
-export default TaxCreate;
+export default OperatorCreate;

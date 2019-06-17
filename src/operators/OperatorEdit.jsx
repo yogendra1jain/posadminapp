@@ -13,16 +13,14 @@ import {
     required
 } from "react-admin";
 
-const SampleEditTitle = ({ record }) => {
-    return <span>Edit {record.name}</span>;
+const OperatorEditTitle = ({ record }) => {
+    return <span>Edit {record.person.firstName}</span>;
 };
 
-
 const OperatorEdit = (props) => {
-
     return (
         <Edit
-            title={<SampleEditTitle />} {...props}>
+            title={<OperatorEditTitle />} {...props}>
             <SimpleForm defaultValue={{countryCode:'1'}} redirect="list">
                 {props.permissions !== "1" ? (
                     <ReferenceField label="Store" source="storeId" reference="Store">

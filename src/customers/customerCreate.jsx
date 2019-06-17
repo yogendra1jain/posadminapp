@@ -14,9 +14,10 @@ import {
 } from "react-admin";
 import ZipCodeInput from "../global/components/ZipCodeInput";
 import { TextField } from "@material-ui/core";
+import {CreateTitle} from '../global/components/Title';
 
 const CustomerCreate = props => (
-  <Create {...props}>
+  <Create {...props} title={<CreateTitle name="Customer" />}>
     <TabbedForm redirect="list">
       <FormTab label="Contact Details">
         <TextInput label="First Name" validate={required()} source="customer.firstName" />

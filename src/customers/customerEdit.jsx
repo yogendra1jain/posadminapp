@@ -17,7 +17,7 @@ import _get from 'lodash/get';
 const CustomerTitle = ({ record }) => {
     return (
         <span>
-            Customer {record ? `${_get(record, 'customer.firstName')} ${_get(record, 'customer.lastName')}` : ''}
+            Customer {record.customer.firstName}
         </span>
     )
 };

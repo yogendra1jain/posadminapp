@@ -42,7 +42,6 @@ const PackageFilter = ({ permissions, ...props }) => {
 };
 
 const FilterActions = ({ permissions, basePath, ...rest }) => {
-  debugger;
   return (
     <CardActions>
       {localStorage.getItem('role') === "1" ? <CreateButton {...rest} basePath={basePath}

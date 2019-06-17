@@ -8,8 +8,12 @@ import {
 } from "react-admin";
 import React from "react";
 
+const VendorEditTitle = ({record}) => {
+  return <span>Vendor {record.name}</span>
+}
+
 const VendorEdit = props => (
-  <Edit {...props} undoable={false}>
+  <Edit {...props} undoable={false} title={<VendorEditTitle />}>
     <SimpleForm>
       <TextInput source="name" />
       <TextInput source="email" label="Contact Email"/>

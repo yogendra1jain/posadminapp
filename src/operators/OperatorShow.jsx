@@ -10,9 +10,12 @@ import {
 import _find from 'lodash/find';
 import _get from 'lodash/get';
 
+const OperatorShowTitle = ({ record }) => {
+    return <span>Operator {record.person.firstName}</span>;
+};
 
 const SampleShow = props => (
-    <Show {...props}>
+    <Show {...props} title={<OperatorShowTitle />}>
         <SimpleShowLayout>
             <TextField  label="First Name" source="person.firstName" />
             <TextField  label="Last Name" source="person.lastName" />

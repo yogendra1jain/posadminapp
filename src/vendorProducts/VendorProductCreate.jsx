@@ -15,7 +15,7 @@ const Title = () => <span>Create Vendor Product</span>
 
 const VendorProductCreate = props => (
   <Create {...props} title={<Title />}>
-    <SimpleForm>
+    <SimpleForm redirect="list">
       <ReferenceInput
         source="vendorId"
         reference="vendors"

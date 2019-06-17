@@ -27,8 +27,12 @@ const findTaxApplied = record => {
   return _get(taxApplied, "name", "");
 };
 
+const TaxShowTitle = ({record}) => {
+  return <span>Tax {record.name}</span>
+}
+
 const TaxShow = props => (
-  <Show {...props}>
+  <Show {...props} title={<TaxShowTitle />}>
     <SimpleShowLayout>
       <ReferenceField label="Store" source="storeId" reference="Store">
         <TextField source="name" />

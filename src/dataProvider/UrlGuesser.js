@@ -225,7 +225,6 @@ const UrlGuesser = (obj) => {
             return 'Terminal/Update'
         //For Operator       ******************************************************************************************
         case 'Operator/GET_LIST':
-        debugger;
             return localStorage.getItem('storeId') ? 'Operator/ByStoreId' : 'Operator/ByRetailerId'
         case 'Operator/GET_ONE':
             return 'Operator/Get'
