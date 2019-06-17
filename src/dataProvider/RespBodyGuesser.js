@@ -233,10 +233,10 @@ const ResBodyGuesser = (obj) => {
                 total: json.length,
             };
         //For Package Pending ******************************************************************************************
-        case 'Get/Metrc/IncomingPackages':
-            let metrcPackages = json.metrcPackages || [];
-            let incomingPkgSyncTime = json.lastSynced.seconds * 1000;
-            localStorage.setItem('incomingPkgSyncTime', incomingPkgSyncTime)
+        case 'Search/IncomingPackages':
+            let metrcPackages = json.incomingPackages || [];
+            // let incomingPkgSyncTime = json.lastSynced.seconds * 1000;
+            // localStorage.setItem('incomingPkgSyncTime', incomingPkgSyncTime)
             metrcPackages = metrcPackages.map((p) => {
                 let obj = { ...p };
                 obj.id = p.packageLabel;
@@ -244,7 +244,7 @@ const ResBodyGuesser = (obj) => {
             })
             return {
                 data: metrcPackages,
-                total: _get(json, 'metrcPackages.length', 0),
+                total: _get(json, 'total', 0),
             };
         case "incomingpackage/getOne":
             return {

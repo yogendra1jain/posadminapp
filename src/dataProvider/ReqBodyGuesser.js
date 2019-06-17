@@ -247,8 +247,15 @@ const ReqBodyGuesser = (obj) => {
                 active: true, storeId: "90fce   e1b-fef3-4af7-a686-80159751d127"
             })
         //For Package Pending ******************************************************************************************
-        case 'Get/Metrc/IncomingPackages':
-            return reqObjMaker(url, { id: retailerId })
+        case 'Search/IncomingPackages':
+            reqBody = makePaginationReqBody(url, params);
+            if (localStorage.getItem('role') != "1") {
+                reqBody.filters.push({
+                    field: 'storeId',
+                    value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
+                })
+            }
+            return reqObjMaker(url, reqBody);
 
         //For Package       ******************************************************************************************
         case 'Search/Packages':
