@@ -296,7 +296,6 @@ const ReqBodyGuesser = (obj) => {
 
         // Sale Report ***************
         case 'Reports/SalesReport/ByStore':
-
             let startDate = new Date(moment(_get(params, 'filter.date', '')))
             let endDate = moment(_get(params, 'filter.date', ''))
             endDate.endOf('day')

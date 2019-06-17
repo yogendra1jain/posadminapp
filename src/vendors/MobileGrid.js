@@ -64,12 +64,12 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                         <TextField record={data[id]} source="phoneNumber.phoneNumber" />
                     </span>
                     <span className={classes.cardContentRow}>
-                        License Type:&nbsp;
+                        {_get(data[id], 'licenses', false) ? <span>License Type:&nbsp;
                         <ArrayField record={data[id]} source="licenses">
                             <SingleFieldList>
                                 <TextField source="type" />
                             </SingleFieldList>
-                        </ArrayField>
+                        </ArrayField></span> : ''}
                     </span>
                     <EditButton
                         resource="vendors"
