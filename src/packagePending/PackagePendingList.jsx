@@ -13,13 +13,15 @@ import {
   CardActions,
   CreateButton,
   Link,
-  ShowButton
+  ShowButton,
+  Responsive
 } from "react-admin";
 import InfoOutline from "@material-ui/icons/InfoOutline";
 import moment from "moment";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import uuidv1 from "uuid/v1";
+import MobileGrid from "./MobileGrid";
 
 const PendingPackageTitle = () => {
   return <span>Shipped Packages</span>;
@@ -72,7 +74,7 @@ const MyEditButton = ({ record, ...props }) => (
     {...props}
     component={Link}
     to={{
-      pathname: props.basePath + "/" +record.packageLabel,
+      pathname: props.basePath + "/" + record.packageLabel,
       state: { record: { storeId: localStorage.getItem("storeId") } }
     }}
   />
@@ -152,44 +154,28 @@ class PackagePendingList extends React.Component {
             />
           }
         >
-          <Datagrid>
-            {/* <ReferenceField source="uId" reference="us"><TextField source="id" /></ReferenceField> */}
-            <TextField label="Manifest" source="manifestNumber" />
-            {/* <TextField label="Transfer Id" source="transferID" /> */}
-
-            <TextField label="Label" source="packageLabel" />
-            {/* <TextField label="Type" source="packageType" /> */}
-            <TextField label="METRC Product" source="productName" />
-            <TextField label="Category" source="productCategoryName" />
-            <TextField label="Shipment Status" source="shipmentPackageState" />
-            <TextField label="Quantity" source="shippedQuantity" />
-            <TextField
-              label="UOM"
-              source="shippedUnitOfMeasureName"
-              defaultValue={0}
-            />
-            {/* <FormDataConsumer>
-              {({ formData, ...rest }) => {
-                if (formData.shipmentPackageState == "Shipped") {
-                  return (
-                    <InfoOutline
-                      titleAccess="Please Accept Package on METRC UI"
-                      color="red"
-                    />
-                  );
-                } else if (formData.shipmentPackageState == "Accepted") {
-                  return <MyEditButton {...this.props} />;
-                } else {
-                  return null;
-                }
-              }}
-            </FormDataConsumer> */}
-            <MyEditButton/>
-          </Datagrid>
+            <Responsive
+              small={<MobileGrid />}
+              medium={<Datagrid>
+                <TextField label="Manifest" source="manifestNumber" />
+                <TextField label="Label" source="packageLabel" />
+                <TextField label="METRC Product" source="productName" />
+                <TextField label="Category" source="productCategoryName" />
+                <TextField label="Shipment Status" source="shipmentPackageState" />
+                <TextField label="Quantity" source="shippedQuantity" />
+                <TextField
+                  label="UOM"
+                  source="shippedUnitOfMeasureName"
+                  defaultValue={0}
+                />
+                <MyEditButton />
+              </Datagrid>}/>
         </List>
       </div>
-    );
-  }
-}
-
-export default withDataProvider(PackagePendingList);
+          );
+        }
+      }
+      
+      export default withDataProvider(PackagePendingList);
+      
+      

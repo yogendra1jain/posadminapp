@@ -10,6 +10,7 @@ import {
     FormDataConsumer,
     TextField
 } from 'react-admin';
+import {EditTitle} from '../global/components/Title';
 
 const StrainTitle = ({ record }) => {
     return (
@@ -20,7 +21,7 @@ const StrainTitle = ({ record }) => {
 };
 
 const StrainEdit = props => (
-    <Edit title={<StrainTitle />} {...props}>
+    <Edit title={<EditTitle source="name" />} {...props}>
         <SimpleForm>
             <TextField label="Metrc Id" source="metricId" />
             <TextField label="Genetics" source="genetics" />

@@ -11,7 +11,6 @@ import {
   List,
   EditButton,
   ShowButton,
-  FunctionField,
   Filter,
   ReferenceInput,
   SelectInput,
@@ -19,13 +18,15 @@ import {
   CreateButton,
   Link,
   BooleanField,
-  ReferenceField
+  ReferenceField,
+  Responsive,
+  TextInput
 } from "react-admin";
+import MobileGrid from "./MobileGrid";
 
 const storeId = localStorage.getItem("storeId");
 
 const FilterActions = ({ permissions, basePath, ...rest }) =>{
-  debugger;
   return(
     <CardActions>
       {localStorage.getItem('role')==="1" ? <CreateButton {...rest} basePath={basePath}
@@ -69,9 +70,10 @@ const MyShowButton = ({ record, ...props }) => (
   />
 );
 
-const StoreFilter = ({ permissions, ...props }) => {
+const TerminalFilter = ({ permissions, ...props }) => {
   return (
     <Filter {...props}>
+      <TextInput label="Search" source="q" alwaysOn />
       {permissions === "1" ? (
         <ReferenceInput
           label="Select Store"
@@ -89,13 +91,13 @@ const StoreFilter = ({ permissions, ...props }) => {
 
 const TerminalList = ({ permissions, ...props }) => (
   <List {...props}
-    filters={<StoreFilter permissions={permissions} />}
+    filters={<TerminalFilter permissions={permissions} />}
     actions={<FilterActions permissions={permissions} />}
-
   >
-    <Datagrid>
-      <TextField source="name" />
-      {permissions == "1" ? (
+    <Responsive 
+      small={<MobileGrid />}
+      medium={<Datagrid>
+        <TextField source="id" />
         <ReferenceField
           label="Store"
           source="storeId"
@@ -108,7 +110,8 @@ const TerminalList = ({ permissions, ...props }) => (
       <BooleanField source="active" />
       <MyEditButton />
       <MyShowButton />
-    </Datagrid>
+    </Datagrid>}
+    />
   </List>
 );
 

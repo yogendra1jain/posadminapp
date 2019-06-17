@@ -1,8 +1,23 @@
 import React from 'react';
-import { Edit, AutocompleteInput, TextInput, ReferenceInput, NumberInput, BooleanInput, SimpleForm, DateInput, SelectInput } from 'react-admin';
+import { Edit, 
+    AutocompleteInput, 
+    TextInput, 
+    ReferenceInput, 
+    NumberInput, 
+    BooleanInput, 
+    SimpleForm, 
+    DateInput, 
+    SelectInput,
+    ReferenceField,
+    TextField
+} from 'react-admin';
+
+const Title = ({ record }) => {
+    return <span>Edit Vendor Product</span>
+}
 
 const VendorProductEdit = props => (
-    < Edit {...props}>
+    < Edit {...props} title={<Title />}>
         <SimpleForm>
             <ReferenceInput source="vendorId" reference="vendors">
                 <AutocompleteInput source="text" optionText="name" />

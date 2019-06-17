@@ -9,8 +9,12 @@ import {
   required
 } from "react-admin";
 
+const Title = ({record}) => {
+  return <span>Edit {record.label}</span>
+}
+
 const PackageEdit = props => (
-  <Edit {...props}>
+  <Edit {...props} title={<Title />}>
     <SimpleForm>
       {/* <TextField source="id" /> */}
       <TextField source="label" />

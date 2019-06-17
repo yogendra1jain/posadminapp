@@ -3,10 +3,7 @@ import {
   ImageInput,
   Edit,
   TextInput,
-  Labeled,
-  ImageField,
   SimpleForm,
-  FormDataConsumer,
   Query,
   Loading,
   Error,
@@ -25,7 +22,7 @@ import _isEmpty from 'lodash/isEmpty';
 const ProductTitle = ({ record }) => {
   return (
     <span>
-      Edit {record ? `${record.name}` : null}
+      Product {record ? `${record.name}` : null}
     </span>
   )
 };
@@ -35,33 +32,33 @@ const editStyles = {
 };
 
 const Aside = ({ record }) => {
-  if(_isEmpty(record)) {
+  if (_isEmpty(record)) {
     return <span></span>
   }
   return (
-  <div style={{ width: 400, margin: '1em' }}>
-    <Typography>Metrc Id: {_get(record,'metrcId','')}</Typography>
-    <Typography>Name: {_get(record, 'name', '')}</Typography>
-    <Typography>Discountable: {_get(record, 'discountable', false) ? 'Yes' : 'No'}</Typography>
-    <Typography>Taxable: {_get(record, 'isTaxable', false) ? 'Yes' : 'No'}</Typography>
-    <Typography>Product Type: {_get(record, 'productType',0) == 0 ? 'Non-Cannabis' :  _get(record, 'productType',0) == 1 ? 'Cannabis Product' : 'Medical Only Cannabis Product'}</Typography>
-    <Typography>Metrc Item Type: {_get(record, 'metrcItemType','')}</Typography>
-    <Typography>Metrc Category: {_get(record, 'metrcCategory','')}</Typography>
-    <Typography>Metrc UOM: {_get(record, 'metrcUom','')}</Typography>
-    {_get(record,'unitWeight') ? 
-      <span>
-      <Typography>Unit Weight: {_get(record,'unitWeight', 0)}</Typography>
-      <Typography>UOM: {_get(record, 'unitWeightUnitOfMeasure','')}</Typography>
-      </span> : '' 
-    }
-    {_get(record,'unitVolume') ? 
-      <span>
-      <Typography>Unit Volume: {_get(record,'unitVolume', 0)}</Typography>
-      <Typography>Volume UOM: {_get(record, 'unitVolumeUnitOfMeasure','')}</Typography>
-      </span> : '' 
-    }
-  </div>
-)
+    <div style={{ width: 400, margin: '1em' }}>
+      <Typography>Metrc Id: {_get(record, 'metrcId', '')}</Typography>
+      <Typography>Name: {_get(record, 'name', '')}</Typography>
+      <Typography>Discountable: {_get(record, 'discountable', false) ? 'Yes' : 'No'}</Typography>
+      <Typography>Taxable: {_get(record, 'isTaxable', false) ? 'Yes' : 'No'}</Typography>
+      <Typography>Product Type: {_get(record, 'productType', 0) == 0 ? 'Non-Cannabis' : _get(record, 'productType', 0) == 1 ? 'Cannabis Product' : 'Medical Only Cannabis Product'}</Typography>
+      <Typography>Metrc Item Type: {_get(record, 'metrcItemType', '')}</Typography>
+      <Typography>Metrc Category: {_get(record, 'metrcCategory', '')}</Typography>
+      <Typography>Metrc UOM: {_get(record, 'metrcUom', '')}</Typography>
+      {_get(record, 'unitWeight') ?
+        <span>
+          <Typography>Unit Weight: {_get(record, 'unitWeight', 0)}</Typography>
+          <Typography>UOM: {_get(record, 'unitWeightUnitOfMeasure', '')}</Typography>
+        </span> : ''
+      }
+      {_get(record, 'unitVolume') ?
+        <span>
+          <Typography>Unit Volume: {_get(record, 'unitVolume', 0)}</Typography>
+          <Typography>Volume UOM: {_get(record, 'unitVolumeUnitOfMeasure', '')}</Typography>
+        </span> : ''
+      }
+    </div>
+  )
 }
 
 class ProductEdit extends React.Component {
@@ -123,17 +120,6 @@ class ProductEdit extends React.Component {
             label="POS Sale Price"
             source={"salePrice.amount"}
           />
-          {/* <FormDataConsumer>
-            {({ formData, dispatch, ...rest }) => {
-              if (!formData.newImage) {
-                return (
-                  <Labeled label="Original image">
-                    <ImageField source="image" {...rest} />
-                  </Labeled>
-                );
-              }
-            }}
-          </FormDataConsumer> */}
           <ImageInput
             source="newImage"
             label="Change Image"

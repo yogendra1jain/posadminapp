@@ -12,6 +12,7 @@ import {
   SelectInput,
   required
 } from "react-admin";
+import {EditTitle} from '../global/components/Title';
 
 const TaxEditTitle = ({ record }) => {
   return <span>Edit {record.name}</span>;
@@ -26,7 +27,7 @@ const TaxAppliedToChoices = [
 ];
 
 const TaxEdit = props => (
-  <Edit title={<TaxEditTitle />} {...props}>
+  <Edit title={<EditTitle source="name" />} {...props}>
     <SimpleForm redirect="list">
       {props.permissions !== "1" ? (
         <ReferenceField label="Store" source="storeId" reference="Store">

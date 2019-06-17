@@ -1,11 +1,16 @@
 import React from 'react';
 import { Show, SimpleShowLayout, TextField, BooleanField, NumberField, DateField } from 'react-admin';
-import { BillingAddressField } from '../global/components/BillingAdressField';
 import { FullNameField } from '../global/components/FullNameField';
 import DisplayDateField from '../global/components/DisplayDateFields';
 import CustomerTypeMapper from '../global/components/CustomerTypeMapper';
+import _get from 'lodash/get';
+
+const CustomerShowTitle = ({ record }) => {
+    return <span>Customer {record ? `${_get(record,'customer.firstName','')}` : ""}</span>;
+};
+
  const CustomerShow = props => (
-    <Show {...props}>
+    <Show title={<CustomerShowTitle />} {...props}>
         <SimpleShowLayout>
             <TextField source="id" />
             <FullNameField label='Name' addLabel={true}/>

@@ -16,7 +16,7 @@ import {
 
 const CategoryCreate = props => (
   <Create {...props}>
-    <SimpleForm>
+    <SimpleForm redirect="list">
       <TextInput source="name" validate={[required()]} />
       <SelectInput
         defaultValue={0}

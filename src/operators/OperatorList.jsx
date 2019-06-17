@@ -22,7 +22,8 @@ import {
   Link,
   EmailField,
   NumberField,
-  ReferenceField
+  ReferenceField,
+  TextInput
 } from "react-admin";
 
 const FilterActions = ({ basePath, ...rest }) => {
@@ -64,9 +65,10 @@ const MyShowButton = ({ record, ...props }) => (
   />
 );
 
-const StoreFilter = ({ permissions, ...props }) => {
+const OperatorFilter = ({ permissions, ...props }) => {
   return (
     <Filter {...props}>
+      <TextInput label="Search" source="q" alwaysOn />
       {permissions === "1" ? (
         <ReferenceInput
           label="Select Store"
@@ -86,7 +88,7 @@ const StoreFilter = ({ permissions, ...props }) => {
 const SampleList = ({ ...props, permissions }) => {
   return (
     <List {...props}
-      filters={<StoreFilter permissions={permissions} />}
+      filters={<OperatorFilter permissions={permissions} />}
       actions={<FilterActions />}
     >
       <Datagrid>

@@ -56,18 +56,20 @@ const ResBodyGuesser = (obj) => {
             }
         }
 
-        if(url == 'Sale/Get') {
+        if (url == 'Sale/Get') {
             let saleData = {};
             let { sale } = json
-            saleData = { ...sale.sale,
+            saleData = {
+                ...sale.sale,
                 customer: sale.customer,
                 operator: sale.operator,
                 store: sale.store,
                 terminal: sale.terminal
             }
             return {
-                data: {...saleData, 
-                    id: _get(sale,'sale.id','')
+                data: {
+                    ...saleData,
+                    id: _get(sale, 'sale.id', '')
                 }
             }
         }
@@ -178,10 +180,10 @@ const ResBodyGuesser = (obj) => {
             return
 
         //For Stores ******************************************************************************************
-        case 'Store/ByRetailerId':
+        case 'Search/Stores':
             return {
-                data: json,
-                total: json.length,
+                data: _get(json, 'stores', []),
+                total: json.total || 0,
             };
         case 'Store/Get':
             return (url, params)
@@ -189,10 +191,10 @@ const ResBodyGuesser = (obj) => {
         // case 'Store/AvailablePaymentMethods':
         //     return (url, params)
         //For Vendors ******************************************************************************************
-        case 'Vendor/ByRetailerId':
+        case 'Search/Vendors':
             return {
-                data: json,
-                total: json.length,
+                data: _get(json, 'vendors',[]),
+                total: json.total || 0,
             };
 
         //For Stores ******************************************************************************************
@@ -213,11 +215,10 @@ const ResBodyGuesser = (obj) => {
                 total: json.length,
             };
         //For Vendor Products ******************************************************************************************
-        case 'VendorProduct/GetByRetailerId':
-            let newJson = json ? json.splice(0, 10) : []
+        case 'Search/VendorProducts':
             return {
-                data: newJson,
-                total: 10,
+                data: _get(json, 'vendorProducts', []),
+                total: json.total || 0,
             };
 
         //For Strains ******************************************************************************************
@@ -337,10 +338,10 @@ const ResBodyGuesser = (obj) => {
             }
 
         //For Tax       ******************************************************************************************
-        case 'Get/Tax/RetailerId':
+        case 'Search/Taxes':
             return {
-                data: json.taxes,
-                total: json.taxes.length
+                data: _get(json,'taxes',[]),
+                total: json.total || 0
             }
 
         //For Requisition       ******************************************************************************************
@@ -374,27 +375,17 @@ const ResBodyGuesser = (obj) => {
             }
 
         //For Terminal       ******************************************************************************************
-        case 'Terminal/ByStoreId':
+        case 'Search/Terminals':
             return {
-                data: json || [],
-                total: json ? json.length : 0
-            }
-        case 'Terminal/ByRetailerId':
-            return {
-                data: _get(json, 'terminals') || [],
-                total: _get(json, 'terminals') ? _get(json, 'terminals.length') : 0
-            }
+                data: _get(json, 'terminals', []),
+                total: json.total || 0,
+            };
         //For Operator       ******************************************************************************************
-        case 'Operator/ByStoreId':
+        case 'Search/Operators':
             return {
-                data: json || [],
-                total: json ? json.length : 0
-            }
-        case 'Operator/ByRetailerId':
-            return {
-                data: _get(json, 'operators') || [],
-                total: _get(json, 'operators') ? _get(json, 'operators.length') : 0
-            }
+                data: _get(json, 'operators', []),
+                total: json.total || 0,
+            };
         default:
             if (json.id == null) {
                 json.id = "uuid";

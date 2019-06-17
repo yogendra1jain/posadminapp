@@ -6,7 +6,6 @@ import {
     BooleanInput,
     ImageInput,
     REDUX_FORM_NAME,
-    ReferenceInput,
     required,
     SimpleForm,
     RadioButtonGroupInput

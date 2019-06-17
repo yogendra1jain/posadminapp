@@ -6,11 +6,13 @@ import { TextField,
    TextInput,
    EditButton,
    FunctionField,
-   ShowButton
+   ShowButton,
+   Responsive
 } from 'react-admin';
 import React from 'react';
 import _get from 'lodash/get';
 import { FullNameField } from '../global/components/FullNameField';
+import MobileGrid from './MobileGrid';
 
 const CustomerFilter = (props) => {
     return (
@@ -21,16 +23,18 @@ const CustomerFilter = (props) => {
 
 const CustomerList = props => (
     <List filters={<CustomerFilter />}  {...props}>
-        <Datagrid>
-            {/* <TextField source="id" /> */}
-            <FullNameField />
-            <EmailField source="email" />
-            <TextField label="Phone" source="phoneNumber.phoneNumber" />
-            <FunctionField label="Customer Segment" render={record => _get(record,'customerType', 0) == 1 ? 'Medical' : 'Recreational'} />
-
-            <EditButton />
-            <ShowButton/>
-        </Datagrid>
+        <Responsive 
+            small={<MobileGrid />}
+            medium={ <Datagrid>
+                <FullNameField />
+                <EmailField source="email" />
+                <TextField label="Phone" source="phoneNumber.phoneNumber" />
+                <FunctionField label="Customer Segment" render={record => _get(record,'customerType', 0) == 1 ? 'Medical' : 'Recreational'} />
+    
+                <EditButton />
+                <ShowButton/>
+            </Datagrid>}
+        />
     </List>
 );
 

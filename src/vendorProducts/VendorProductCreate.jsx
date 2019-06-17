@@ -11,9 +11,11 @@ import {
 } from "react-admin";
 import PriceInput from "../global/components/PriceInput";
 
+const Title = () => <span>Create Vendor Product</span>
+
 const VendorProductCreate = props => (
-  <Create {...props}>
-    <SimpleForm>
+  <Create {...props} title={<Title />}>
+    <SimpleForm redirect="list">
       <ReferenceInput
         source="vendorId"
         reference="vendors"

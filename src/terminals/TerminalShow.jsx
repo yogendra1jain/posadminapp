@@ -11,9 +11,12 @@ import {
 import _find from 'lodash/find';
 import _get from 'lodash/get';
 
+const TerminalShowTitle = ({ record }) => {
+    return <span>Terminal {record ? `${record.name}` : ""}</span>;
+};
 
 const TerminalShow = props => (
-    <Show {...props}>
+    <Show title={<TerminalShowTitle />} {...props}>
         <SimpleShowLayout>
         <ReferenceField  reference="Store" source="storeId"><TextField source="name" /></ReferenceField> 
             <TextField source="name" />

@@ -7,15 +7,21 @@ import {
   BooleanField,
   List,
   Datagrid,
-  EditButton
+  EditButton,
+  Responsive
 } from "react-admin";
+import MobileGrid from './MobileGrid';
+import {SimpleFilter} from '../global/components/filter';
+
 const VendorListTitle = ({ record }) => {
   return <span>Vendor Products List</span>;
 };
+
 const VendorProductList = props => (
-  <List {...props} title={<VendorListTitle />}>
-    <Datagrid rowClick="edit">
-      {/* <TextField source="id" /> */}
+  <List filters={<SimpleFilter />} {...props} title={<VendorListTitle />}>
+    <Responsive 
+      small={<MobileGrid />}
+      medium={<Datagrid rowClick="edit">
       <ReferenceField source="vendorId" reference="vendors">
         <TextField source="name" />
       </ReferenceField>
@@ -24,12 +30,11 @@ const VendorProductList = props => (
       </ReferenceField>
       <TextField source="sku" label="Vendor SKU"/>
       <DineroPrice label="Price" source="price.amount" />
-
-      {/* <NumberField source="defaultOrderQty" /> */}
       <NumberField source="conversionFactor" label="Pack Size"/>
       <BooleanField source="primary" label="Primary Supplier"/>
       <EditButton />
-    </Datagrid>
+    </Datagrid>}
+    />
   </List>
 );
 
