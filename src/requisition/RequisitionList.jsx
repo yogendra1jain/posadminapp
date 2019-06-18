@@ -11,7 +11,7 @@ import React from 'react';
 const RequisitionList = props => (
     <List {...props}>
         <Datagrid>
-            <ReferenceField label="Product Name" source="posProductId" reference="Search/Products" linkType="show">
+            <ReferenceField label="Product Name" source="posProductId" reference="Products" linkType="show">
                 <TextField source="name" />
             </ReferenceField>
             <ReferenceField label="Vendor Name" source="vendorId" reference="vendors" linkType="show">

@@ -24,7 +24,7 @@ const PackageEdit = props => (
       {/* <TextField source="packageType" /> */}
       <ReferenceInput
         source="posProductId"
-        reference="Search/Products"
+        reference="Products"
         label="Change Item in Package"
         validate={required()}
       >

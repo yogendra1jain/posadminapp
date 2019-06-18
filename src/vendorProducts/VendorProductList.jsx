@@ -25,7 +25,7 @@ const VendorProductList = props => (
       <ReferenceField source="vendorId" reference="vendors">
         <TextField source="name" />
       </ReferenceField>
-      <ReferenceField source="posProductId" reference="Search/Products" label="POS Product">
+      <ReferenceField source="posProductId" reference="Products" label="POS Product">
         <TextField source="name" />
       </ReferenceField>
       <TextField source="sku" label="Vendor SKU"/>

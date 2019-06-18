@@ -96,7 +96,7 @@ class Menu extends Component {
             onClick={onMenuClick}
           />
           <MenuItemLink
-            to={`/Search/Products`}
+            to={`/Products`}
             primaryText={"Product Master"}
             leftIcon={<products.icon />}
             onClick={onMenuClick}

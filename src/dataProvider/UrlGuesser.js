@@ -5,19 +5,19 @@ const UrlGuesser = (obj) => {
     } = obj;
     switch (`${resource}/${type}`) {
         //For Products ******************************************************************************************
-        case 'Search/Products/GET_LIST':
+        case 'Products/GET_LIST':
             return 'Search/Products'
-        case 'Search/Products/GET_ONE':
+        case 'Products/GET_ONE':
             return 'Product/Get'
-        case 'Search/Products/CREATE':
+        case 'Products/CREATE':
             return 'Product/Create'
-        case 'Search/Products/UPDATE':
+        case 'Products/UPDATE':
             return 'Product/Update'
-        case 'Search/Products/DELETE':
+        case 'Products/DELETE':
             return ''
-        case 'Search/Products/DELETE_MANY':
+        case 'Products/DELETE_MANY':
             return ''
-        case 'Search/Products/GET_MANY':
+        case 'Products/GET_MANY':
             return 'Product/GetByIds'
         case 'MetrcItemTypes/GET_LIST':
             return 'Get/Metrc/ItemTypes'

@@ -25,7 +25,7 @@ const VendorProductCreate = props => (
       </ReferenceInput>
       <ReferenceInput
         source="posProductId"
-        reference="Search/Products"
+        reference="Products"
         validate={required()}
       >
         <SelectInput optionText="name" />

@@ -96,7 +96,7 @@ const PackageList = ({ permissions, ...props }) => (
         <ReferenceField
           label="Product"
           source="posProductId"
-          reference="Search/Products"
+          reference="Products"
           linkType="show"
         >
           <TextField source="name" />

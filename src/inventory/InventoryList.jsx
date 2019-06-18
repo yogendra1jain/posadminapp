@@ -43,7 +43,7 @@ class InventoryList extends React.Component {
                 <List {...this.props}  >
                     <Datagrid rowClick="edit">
                         <ReferenceField linkType="show" source="product.id"
-                            reference="Search/Products" label="Product Name">
+                            reference="Products" label="Product Name">
                             <TextField source="name" />
                         </ReferenceField>
                         <TextField label="Quantity In Hand" source="inventory.quantity" />

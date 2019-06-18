@@ -22,7 +22,7 @@ const VendorProductEdit = props => (
             <ReferenceInput source="vendorId" reference="vendors">
                 <AutocompleteInput source="text" optionText="name" />
             </ReferenceInput>
-            <ReferenceInput source="posProductId" reference="Search/Products">
+            <ReferenceInput source="posProductId" reference="Products">
                 <AutocompleteInput optionText="name" />
             </ReferenceInput>
             <TextInput source="sku" />

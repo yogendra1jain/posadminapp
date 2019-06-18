@@ -48,7 +48,7 @@ const App = () => (
       customReducers={{ tree }}
     >
       {permissions => [
-        <Resource name="Search/Products" {...products} options={{ label: 'Product List' }} />,
+        <Resource name="Products" {...products} options={{ label: 'Product List' }} />,
         <Resource name="Customers" {...customers}/>,
         <Resource name="Strain" {...strains} />,
         <Resource name="Package" {...packageIn} />,

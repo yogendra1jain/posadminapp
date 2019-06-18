@@ -20,7 +20,7 @@ const PackagePendingEdit = props => (
                 {/* <Quantity /> */}
                 <ArrayInput source="Split Package" style={{ width: '100%' }} aside={<Aside />}>
                     <SimpleFormIterator>
-                        <ReferenceInput source="posProductId" reference="Search/Products" label='Product Name'>
+                        <ReferenceInput source="posProductId" reference="Products" label='Product Name'>
                             <AutocompleteInput optionText="name" />
                         </ReferenceInput>
                         <TextInput source="quantity" label='qty' />
