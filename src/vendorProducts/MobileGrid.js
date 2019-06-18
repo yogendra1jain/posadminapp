@@ -76,12 +76,12 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                         <BooleanField record={data[id]} source="primary" />
                     </span>
                     <EditButton
-                        resource="VendorProduct/GetByRetailerId"
+                        resource="VendorProducts"
                         basePath={basePath}
                         record={data[id]}
                     />
                     <ShowButton
-                        resource="VendorProduct/GetByRetailerId"
+                        resource="VendorProducts"
                         basePath={basePath}
                         record={data[id]}
                     />

@@ -22,14 +22,14 @@ class RequisitionCreate extends React.Component {
         return (
             <Create {...this.props}>
                 <SimpleForm redirect="list">
-                    <ReferenceInput label="Select Vendor Product" source="id" reference="VendorProduct/GetByRetailerId">
+                    <ReferenceInput label="Select Vendor Product" source="id" reference="VendorProducts">
                         <SelectInput optionText="id" optionValue="id" />
                     </ReferenceInput>
                     <FormDataConsumer>
                         {({ formData, dispatch, ...rest }) => (
                             formData.vendorId && <Query
                                 type="GET_LIST"
-                                resource="VendorProduct/GetByRetailerId"
+                                resource="VendorProducts"
                                 payload={{ }}
                             >
                                 {({ data, loading, error }) => {

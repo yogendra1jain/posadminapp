@@ -58,7 +58,7 @@ const App = () => (
 
         <Resource name="PaymentMethods" />,
         <Resource name="vendors" {...vendors} options={{ label: 'Vendor List' }} />,
-        <Resource name="VendorProduct/GetByRetailerId" {...vendorProducts} options={{ label: 'Product List' }} />,
+        <Resource name="VendorProducts" {...vendorProducts} options={{ label: 'Product List' }} />,
         <Resource name="SaleReport" {...saleReport} />,
         // {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */ }
         <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />,

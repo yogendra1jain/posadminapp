@@ -174,7 +174,7 @@ class Menu extends Component {
             onClick={onMenuClick}
           />
           <MenuItemLink
-            to={`/VendorProduct/GetByRetailerId`}
+            to={`/VendorProducts`}
             primaryText={"Vendor Products"}
             leftIcon={<vendorProduct.icon />}
             onClick={onMenuClick}

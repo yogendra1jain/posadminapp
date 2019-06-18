@@ -114,19 +114,19 @@ const UrlGuesser = (obj) => {
         case 'vendors/GET_MANY':
             return 'Vendor/GetByIds'
         //For Vendors Products ******************************************************************************************
-        case 'VendorProduct/GetByRetailerId/GET_LIST':
+        case 'VendorProducts/GET_LIST':
             return 'Search/VendorProducts'
-        case 'VendorProduct/GetByRetailerId/GET_ONE':
+        case 'VendorProducts/GET_ONE':
             return 'VendorProduct/Get'
-        case 'VendorProduct/GetByRetailerId/GET_MANY':
+        case 'VendorProducts/GET_MANY':
             return 'VendorProduct/Get'
-        case 'VendorProduct/GetByRetailerId/CREATE':
+        case 'VendorProducts/CREATE':
             return 'VendorProduct/Save'
-        case 'VendorProduct/GetByRetailerId/UPDATE':
+        case 'VendorProducts/UPDATE':
             return 'VendorProduct/Save'
-        case 'VendorProduct/GetByRetailerId/DELETE':
+        case 'VendorProducts/DELETE':
             return ''
-        case 'VendorProduct/GetByRetailerId/DELETE_MANY':
+        case 'VendorProducts/DELETE_MANY':
             return ''
 
         //For Strains ******************************************************************************************
