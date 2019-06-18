@@ -156,20 +156,19 @@ const UrlGuesser = (obj) => {
         case 'employees/GET_MANY':
             return 'Vendor/GetByIds'
         //For Package Pending ******************************************************************************************
-        case 'packagePending/GET_LIST':
+        case 'PackagePending/GET_LIST':
             return 'Search/IncomingPackages'
-        case 'packagePending/GET_ONE':
-            return 'incomingpackage/getOne'
-            return 'Vendor/Get'
-        case 'packagePending/CREATE':
+        case 'PackagePending/GET_ONE':
+            return 'Get/Metrc/Package/ByLabel'
+        case 'PackagePending/CREATE':
             return 'Vendor/Create'
-        case 'packagePending/UPDATE':
+        case 'PackagePending/UPDATE':
             return 'Vendor/Update'
-        case 'packagePending/DELETE':
+        case 'PackagePending/DELETE':
             return ''
-        case 'packagePending/DELETE_MANY':
+        case 'PackagePending/DELETE_MANY':
             return ''
-        case 'packagePending/GET_MANY':
+        case 'PackagePending/GET_MANY':
             return 'Vendor/GetByIds'
 
 

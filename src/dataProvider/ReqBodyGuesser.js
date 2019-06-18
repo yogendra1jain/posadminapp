@@ -34,7 +34,7 @@ const makePaginationReqBody = (url, params, admin) => {
     let reqBody = {
         filters: [{
             field: admin ? admin : 'retailerId',
-            value: localStorage.getItem('retailerId')
+            value:  admin ? localStorage.getItem('storeId') :localStorage.getItem('retailerId')
         }],
         limit: perPage,
         offset: (page - 1) * perPage,
@@ -53,6 +53,7 @@ const ReqBodyGuesser = (obj) => {
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
     if (type == 'GET_ONE') {
+        debugger;
         if (url == 'Upload/File') {
             const formData = new FormData();
             formData.append("file", params.file);
@@ -259,6 +260,8 @@ const ReqBodyGuesser = (obj) => {
                 })
             }
             return reqObjMaker(url, reqBody);
+            case 'Package/Get/ByLabel':
+                debugger
 
         //For Package       ******************************************************************************************
         case 'Search/Packages':
@@ -272,7 +275,7 @@ const ReqBodyGuesser = (obj) => {
             }
             if (_get(params, 'filter.storeId') || localStorage.getItem('storeId')) {
                 reqBody.filters.push({
-                    field: 'storeId.keyword',
+                    field: 'storeId',
                     value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
                 })
             }

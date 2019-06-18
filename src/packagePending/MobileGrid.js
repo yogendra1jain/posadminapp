@@ -73,14 +73,14 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                     </span>
                     <span className={classes.cardContentRow}>
                         {data[id].shipmentPackageState == 'Shipped' ? <InfoOutline
-                        titleAccess="Please Accept Package on METRC UI"
-                        color="red"
-                      /> : data[id].shipmentPackageState == 'Accepted' ? <EditButton
-                      label="Check In"
-                      resource="packagePending"
-                      basePath={basePath}
-                      record={data[id]}
-                  /> : ''}
+                            titleAccess="Please Accept Package on METRC UI"
+                            color="red"
+                        /> : data[id].shipmentPackageState == 'Accepted' ? <EditButton
+                            label="Check In"
+                            resource="packagePending"
+                            basePath={basePath}
+                            record={data[id]}
+                        /> : ''}
                     </span>
                 </CardContent>
             </Card>
