@@ -49,14 +49,15 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                 <CardContent className={classes.cardContent}>
                     <span className={classes.cardContentRow}>
                         Vendor:&nbsp;
-                        <TextField record={data[id]} source="vendorId" />
-                        {/* <ReferenceField record={data[id]} source="vendorId" reference="vendors">
+                        <ReferenceField resource="vendors" record={data[id]} source="vendorId" reference="vendors" basePath={basePath}>
                             <TextField source="name" />
-                        </ReferenceField> */}
+                        </ReferenceField>
                     </span>
                     <span className={classes.cardContentRow}>
                         Product:&nbsp;
-                        <TextField record={data[id]} source="posProductId" />
+                        <ReferenceField resource="Search/Products" record={data[id]} source="posProductId" reference="Search/Products" basePath={basePath}>
+                            <TextField source="name" />
+                        </ReferenceField>
                     </span>
                     <span className={classes.cardContentRow}>
                         SKU: &nbsp;
