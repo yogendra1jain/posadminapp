@@ -53,15 +53,9 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                     </span>
                     <span className={classes.cardContentRow}>
                         Store:&nbsp;
-                        <TextField record={data[id]} source="storeId" />
-                        {/* <ReferenceField
-                            record={data[id]}
-                            source="storeId"
-                            reference="Store"
-                            linkType="show"
-                        >
+                        <ReferenceField resource="Store" record={data[id]} source="storeId" reference="Store" basePath={basePath}>
                             <TextField source="name" />
-                        </ReferenceField> */}
+                        </ReferenceField>
                     </span>
                     <span className={classes.cardContentRow}>
                         Active:&nbsp;

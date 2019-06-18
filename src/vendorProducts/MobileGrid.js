@@ -4,7 +4,8 @@ import {
     EditButton,
     ShowButton,
     NumberField,
-    BooleanField
+    BooleanField,
+    ReferenceField
 } from 'react-admin'
 import Card from "@material-ui/core/Card";
 import { withStyles } from '@material-ui/core/styles';
@@ -48,11 +49,15 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                 <CardContent className={classes.cardContent}>
                     <span className={classes.cardContentRow}>
                         Vendor:&nbsp;
-                        <TextField record={data[id]} source="vendorId" />
+                        <ReferenceField resource="vendors" record={data[id]} source="vendorId" reference="vendors" basePath={basePath}>
+                            <TextField source="name" />
+                        </ReferenceField>
                     </span>
                     <span className={classes.cardContentRow}>
                         Product:&nbsp;
-                        <TextField record={data[id]} source="posProductId" />
+                        <ReferenceField resource="Search/Products" record={data[id]} source="posProductId" reference="Search/Products" basePath={basePath}>
+                            <TextField source="name" />
+                        </ReferenceField>
                     </span>
                     <span className={classes.cardContentRow}>
                         SKU: &nbsp;
@@ -64,11 +69,11 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                     </span>
                     <span className={classes.cardContentRow}>
                         Pack Size:&nbsp;
-                        <NumberField record={data[id]} source="conversionFactor" /> 
+                        <NumberField record={data[id]} source="conversionFactor" />
                     </span>
                     <span className={classes.cardContentRow}>
                         Primary Supplier:&nbsp;
-                        <BooleanField record={data[id]} source="primary" /> 
+                        <BooleanField record={data[id]} source="primary" />
                     </span>
                     <EditButton
                         resource="VendorProduct/GetByRetailerId"

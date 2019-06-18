@@ -4,13 +4,14 @@ import {
     EditButton,
     ShowButton,
     FunctionField,
-    BooleanField
+    BooleanField,
+    ReferenceField
 } from 'react-admin'
 import Card from "@material-ui/core/Card";
 import { withStyles } from '@material-ui/core/styles';
 import CardContent from "@material-ui/core/CardContent";
 import _get from 'lodash/get';
-import {findTaxApplied} from './taxList';
+import { findTaxApplied } from './taxList';
 
 const listStyles = theme => ({
     card: {
@@ -52,7 +53,9 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                     </span>
                     <span className={classes.cardContentRow}>
                         Store:&nbsp;
-                        <TextField record={data[id]} source="storeId" />
+                        <ReferenceField resource="Store" record={data[id]} source="storeId" reference="Store" basePath={basePath}>
+                            <TextField source="name" />
+                        </ReferenceField>
                     </span>
                     <span className={classes.cardContentRow}>
                         Tax Applied To:&nbsp;
