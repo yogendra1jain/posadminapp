@@ -12,14 +12,6 @@ import {
 } from 'react-admin';
 import {EditTitle} from '../global/components/Title';
 
-const StrainTitle = ({ record }) => {
-    return (
-        <span>
-            Strain {record ? `${record.name}` : ''}
-        </span>
-    )
-};
-
 const StrainEdit = props => (
     <Edit title={<EditTitle source="name" />} {...props}>
         <SimpleForm>

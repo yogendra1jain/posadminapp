@@ -157,7 +157,7 @@ class MetricCategoryAndUOMInput extends React.Component {
               <ReferenceInput
                 label="Select Strain"
                 source="strainId"
-                reference="Strain"
+                reference="Strains"
                 validate={required()}
               >
                 <AutocompleteInput optionText="name" />

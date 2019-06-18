@@ -90,8 +90,8 @@ class Menu extends Component {
             onClick={onMenuClick}
           />
           <MenuItemLink
-            to={`/Strain`}
-            primaryText={"Strain"}
+            to={`/Strains`}
+            primaryText={"Strains"}
             leftIcon={<strains.icon />}
             onClick={onMenuClick}
           />

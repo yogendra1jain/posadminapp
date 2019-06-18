@@ -130,15 +130,15 @@ const UrlGuesser = (obj) => {
             return ''
 
         //For Strains ******************************************************************************************
-        case 'Strain/GET_LIST':
+        case 'Strains/GET_LIST':
             return 'Search/Strains'
-        case 'Strain/CREATE':
+        case 'Strains/CREATE':
             return 'Add/Strain'
-        case 'Strain/GET_ONE':
+        case 'Strains/GET_ONE':
             return 'Get/Strain/StrainId';
-        case 'Strain/UPDATE':
+        case 'Strains/UPDATE':
             return 'Update/Strain'
-        case 'Strain/GET_MANY':
+        case 'Strains/GET_MANY':
             return 'Get/Strain/StrainIds'
         //For Employee ******************************************************************************************
         case 'employees/GET_LIST':

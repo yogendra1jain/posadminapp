@@ -50,7 +50,7 @@ const App = () => (
       {permissions => [
         <Resource name="Products" {...products} options={{ label: 'Product List' }} />,
         <Resource name="Customers" {...customers}/>,
-        <Resource name="Strain" {...strains} />,
+        <Resource name="Strains" {...strains} />,
         <Resource name="Package" {...packageIn} />,
         <Resource name="Store" list={stores.list} show={stores.show} create = {permissions == '1' ?stores.create:null} edit ={permissions=='1'?stores.edit:null} />, 
         <Resource name="Terminal" {...terminals}  />, 

@@ -89,12 +89,12 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                         />
                     </span>
                     <EditButton
-                        resource="Strain"
+                        resource="Strains"
                         basePath={basePath}
                         record={data[id]}
                     />
                     <ShowButton
-                        resource="Strain"
+                        resource="Strains"
                         basePath={basePath}
                         record={data[id]}
                     />
