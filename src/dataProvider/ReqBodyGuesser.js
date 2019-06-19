@@ -29,12 +29,10 @@ const formObjectMaker = (url, reqBody) => {
 const makePaginationReqBody = (url, params, admin) => {
     let page = _get(params, 'pagination.page', '');
     let perPage = _get(params, 'pagination.perPage', '');
-    let field = _get(params, 'sort.field', '');
-    let order = _get(params, 'sort.order', '');
     let reqBody = {
         filters: [{
             field: admin ? admin : 'retailerId',
-            value: localStorage.getItem('retailerId')
+            value: admin ? localStorage.getItem('storeId') : localStorage.getItem('retailerId')
         }],
         limit: perPage,
         offset: (page - 1) * perPage,
@@ -306,7 +304,7 @@ const ReqBodyGuesser = (obj) => {
             let startDate = new Date(moment(_get(params, 'filter.date', '')))
             let endDate = moment(_get(params, 'filter.date', ''))
             endDate.endOf('day')
-            reqBody.id = localStorage.getItem('storeId')
+            reqBody.id = localStorage.getItem('storeId') ? localStorage.getItem('storeId') : _get(params, 'filter.storeId', '')
             reqBody.fromTimeStamp = {}
             reqBody.fromTimeStamp.seconds = parseInt(startDate / 1000)
             reqBody.toTimeStamp = {}
@@ -368,6 +366,32 @@ const ReqBodyGuesser = (obj) => {
             reqBody = params.data
             reqBody.retailerId = retailerId
             return reqObjMaker(url, params.data)
+
+        //For Rooms       ******************************************************************************************
+        case 'Search/InventoryLocations':
+            reqBody = localStorage.getItem('storeId') ? makePaginationReqBody(url, params, 'storeId') : makePaginationReqBody(url, params)
+            if (_get(params, 'filter.storeId')) {
+                reqBody.filters.push({
+                    field: 'storeId',
+                    value: _get(params, 'filter.storeId')
+                })
+            }
+            return reqObjMaker(url, reqBody)
+        case 'Create/InventoryLocation':
+            localStorage.getItem('storeId') ?
+                reqBody = {
+                    ...params.data,
+                    storeId: localStorage.getItem('storeId'),
+                    retailerId
+                } : reqBody = {
+                    ...params.data,
+                    retailerId
+                }
+            return reqObjMaker(url, reqBody)
+        case 'Get/InventoryLocation/Id':
+            return reqObjMaker(url, params)
+        case 'Update/InventoryLocation':
+            return reqObjMaker(url, params)
         default:
             break;
 

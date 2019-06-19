@@ -18,7 +18,7 @@ const SampleEditTitle = ({ record }) => {
 };
 
 
-const SampleEdit = () => {
+const SampleEdit = (props) => {
     return (
         <Edit title={<SampleEditTitle />} {...props}>
             <SimpleForm redirect="list">

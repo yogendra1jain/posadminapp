@@ -29,12 +29,13 @@ import inventory from './inventory';
 import terminals from './terminals'
 import saleHistory from './saleHistory';
 import operators from './operators';
+import rooms from './rooms';
 
 const messages = {
-  'en': mergeTranslations(englishMessages, treeEnglishMessages),
-};
-const i18nProvider = locale => messages[locale];
+  en: englishMessages
+}
 
+const i18nProvider = locale => messages[locale];
 
 const App = () => (
   <div>
@@ -68,7 +69,8 @@ const App = () => (
         <Resource name="PurchaseOrders" {...purchaseOrders} />,
         <Resource name="Inventory" {...inventory}  />,
         <Resource name="UnfinishedProducts" {...unfinishedProducts} />,
-        <Resource name="SaleHistory" {...saleHistory} />
+        <Resource name="SaleHistory" {...saleHistory} />,
+        <Resource name="Rooms" {...rooms} />
       ]}
 
     </Admin>

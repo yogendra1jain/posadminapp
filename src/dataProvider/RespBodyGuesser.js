@@ -74,6 +74,12 @@ const ResBodyGuesser = (obj) => {
             }
         }
 
+        if(url == 'Get/InventoryLocation/Id') {
+            return {
+                data: json.room
+            }
+        }
+
         return {
             data: json
         };
@@ -193,7 +199,7 @@ const ResBodyGuesser = (obj) => {
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             return {
-                data: _get(json, 'vendors',[]),
+                data: _get(json, 'vendors', []),
                 total: json.total || 0,
             };
 
@@ -340,7 +346,7 @@ const ResBodyGuesser = (obj) => {
         //For Tax       ******************************************************************************************
         case 'Search/Taxes':
             return {
-                data: _get(json,'taxes',[]),
+                data: _get(json, 'taxes', []),
                 total: json.total || 0
             }
 
@@ -386,6 +392,14 @@ const ResBodyGuesser = (obj) => {
                 data: _get(json, 'operators', []),
                 total: json.total || 0,
             };
+
+        //For Rooms       ******************************************************************************************
+        case 'Search/InventoryLocations':
+            return {
+                data: _get(json, 'inventoryLocations', []),
+                total: json.total || 0,
+            };
+
         default:
             if (json.id == null) {
                 json.id = "uuid";

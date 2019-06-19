@@ -29,7 +29,7 @@ import categories from "../categories";
 import tax from "../tax";
 import purchaseOrders from "../purchaseOrders";
 import operators from "../operators";
-
+import rooms from '../rooms';
 class Menu extends Component {
   state = {
     menuCustomers: false,
@@ -137,7 +137,7 @@ class Menu extends Component {
                 leftIcon={<terminals.icon />}
                 onClick={onMenuClick}
               />
-               <MenuItemLink
+              <MenuItemLink
                 to={`/Operator`}
                 primaryText={"Operators"}
                 leftIcon={<operators.icon />}
@@ -199,7 +199,12 @@ class Menu extends Component {
             leftIcon={<packagePending.icon />}
             onClick={onMenuClick}
           />
-
+          <MenuItemLink
+            to={`/rooms`}
+            primaryText={"Rooms"}
+            leftIcon={<rooms.icon />}
+            onClick={onMenuClick}
+          />
           <WithPermissions
             render={({ permissions }) =>
               permissions === "2" ? (

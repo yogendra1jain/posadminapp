@@ -209,7 +209,7 @@ const UrlGuesser = (obj) => {
         //For Inventory       ******************************************************************************************
         case 'Inventory/GET_LIST':
             return 'Search/Inventory'
-        '//For Sale History       ******************************************************************************************'
+            '//For Sale History       ******************************************************************************************'
         case 'SaleHistory/GET_LIST':
             return 'Sale/ByStore'
         case 'SaleHistory/GET_ONE':
@@ -232,6 +232,21 @@ const UrlGuesser = (obj) => {
             return 'Operator/Create'
         case 'Operator/UPDATE':
             return 'Operator/Update'
+
+        //For Rooms       ******************************************************************************************
+        case 'Rooms/GET_LIST':
+            let url 
+            localStorage.getItem('storeId') ? 
+            url = 'Get/InventoryLocations/StoreId' : 
+            url = 'Get/InventoryLocations/RetailerId' 
+            return 'Search/InventoryLocations' 
+
+        case 'Rooms/CREATE':
+            return 'Create/InventoryLocation'
+        case 'Rooms/GET_ONE':
+            return 'Get/InventoryLocation/Id';
+        case 'Rooms/UPDATE':
+            return 'Update/InventoryLocation';
         default:
             break;
     }
