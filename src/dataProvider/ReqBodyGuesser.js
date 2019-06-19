@@ -51,6 +51,7 @@ const ReqBodyGuesser = (obj) => {
     let reqBody = {};
     const retailerId = localStorage.getItem('retailerId')
     if (type == 'GET_ONE') {
+        debugger;
         if (url == 'Upload/File') {
             const formData = new FormData();
             formData.append("file", params.file);
@@ -69,6 +70,17 @@ const ReqBodyGuesser = (obj) => {
                 _set(params, 'data.image', _get(params, 'data.newImage.newImage'));
             }
         }
+        if (url == 'PackagePending/UPDATE') {
+            url = 'Package/Split';
+            debugger
+            params.data.sourcePackageId = params.data.id
+            reqBody = {
+                ...params.data,
+                retailerId: localStorage.getItem('retailerId'),
+            }
+            return reqObjMaker(url, reqBody)
+        }
+
         return reqObjMaker(url, params.data)
 
     }
@@ -258,6 +270,8 @@ const ReqBodyGuesser = (obj) => {
             }
             return reqObjMaker(url, reqBody);
 
+
+
         //For Package       ******************************************************************************************
         case 'Search/Packages':
             reqBody = makePaginationReqBody(url, params)
@@ -270,7 +284,7 @@ const ReqBodyGuesser = (obj) => {
             }
             if (_get(params, 'filter.storeId') || localStorage.getItem('storeId')) {
                 reqBody.filters.push({
-                    field: 'storeId.keyword',
+                    field: 'storeId',
                     value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
                 })
             }

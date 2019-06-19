@@ -62,7 +62,7 @@ const App = () => (
         <Resource name="VendorProducts" {...vendorProducts} options={{ label: 'Product List' }} />,
         <Resource name="SaleReport" {...saleReport} />,
         // {/* <Resource name="employees"  {...employees} options={{ label: 'Employees' }} /> */ }
-        <Resource name="packagePending"  {...packagepending} options={{ label: 'Package Pending' }} />,
+        <Resource name="PackagePending"  {...packagepending} options={{ label: 'Package Pending' }} />,
         <Resource name="Category" {...categories} />,
         <Resource name="Tax" {...tax} />,
         <Resource name="Requisition" {...requisition} />,

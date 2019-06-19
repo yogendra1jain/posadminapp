@@ -69,16 +69,26 @@ const PackageFilter = ({ permissions, ...props }) => {
     </Filter>
   );
 };
-const MyEditButton = ({ record, ...props }) => (
-  <EditButton
-    {...props}
-    component={Link}
-    to={{
-      pathname: props.basePath + "/" + record.packageLabel,
-      state: { record: { storeId: localStorage.getItem("storeId") } }
-    }}
-  />
-);
+const MyEditButton = ({ record, ...props }) => {
+  return (
+    <React.Fragment>
+      {record.shipmentPackageState !== 'Accepted' ?
+        <InfoOutline
+          titleAccess="Please Accept Package on METRC UI"
+          color="red"
+        /> :
+        <EditButton
+          {...props}
+          label="Check in"
+          component={Link}
+          to={{
+            pathname: props.basePath + "/" + record.packageLabel,
+            state: { record: { storeId: localStorage.getItem("storeId") } }
+          }}
+        />}
+    </React.Fragment>
+  );
+}
 const MyShowButton = ({ record, ...props }) => (
   <ShowButton
     {...props}
@@ -154,28 +164,28 @@ class PackagePendingList extends React.Component {
             />
           }
         >
-            <Responsive
-              small={<MobileGrid />}
-              medium={<Datagrid>
-                <TextField label="Manifest" source="manifestNumber" />
-                <TextField label="Label" source="packageLabel" />
-                <TextField label="METRC Product" source="productName" />
-                <TextField label="Category" source="productCategoryName" />
-                <TextField label="Shipment Status" source="shipmentPackageState" />
-                <TextField label="Quantity" source="shippedQuantity" />
-                <TextField
-                  label="UOM"
-                  source="shippedUnitOfMeasureName"
-                  defaultValue={0}
-                />
-                <MyEditButton />
-              </Datagrid>}/>
+          <Responsive
+            small={<MobileGrid />}
+            medium={<Datagrid>
+              <TextField label="Manifest" source="manifestNumber" />
+              <TextField label="Label" source="packageLabel" />
+              <TextField label="METRC Product" source="productName" />
+              <TextField label="Category" source="productCategoryName" />
+              <TextField label="Shipment Status" source="shipmentPackageState" />
+              <TextField label="Quantity" source="shippedQuantity" />
+              <TextField
+                label="UOM"
+                source="shippedUnitOfMeasureName"
+                defaultValue={0}
+              />
+              <MyEditButton />
+            </Datagrid>} />
         </List>
       </div>
-          );
-        }
-      }
-      
-      export default withDataProvider(PackagePendingList);
-      
-      
+    );
+  }
+}
+
+export default withDataProvider(PackagePendingList);
+
+

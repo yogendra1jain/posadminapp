@@ -6,7 +6,9 @@ import _get from 'lodash/get';
 /* Material import */
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+
+import { TextInput,NumberInput } from 'react-admin';
+import Quantity from './Quantity';
 /* Admin Imports */
 
 /* Component Imports */
@@ -154,22 +156,28 @@ class SplitPackageForm extends React.Component {
     }
 
     render() {
-        const { classes } = this.props
+        debugger;
+        const { classes } = this.props;
+        let quantity = this.props.record.shippedQuantity;
+        let arr = [];
+        if (this.props.record.shippedUnitOfMeasureName == "Each") {
+            for (let i = 1; i <= quantity; i++) {
+                arr.push(
+                    <div>
+                        <TextInput label={`Scan${i}`} source={`itemPackages[${i-1}].label`} />
+                        <NumberInput label='Quantity' defaultValue={1}  source={`itemPackages[${i-1}].quantity`} />
+
+                    </div>)
+            }
+        }
+        if (this.props.record.shippedUnitOfMeasureName == "Grams") {
+            arr = <div><Quantity /></div>
+        }
+
         return (
-            <div>
-                <Grid container spacing={3} justify="center">
-                    <Grid item xs={3} >
-                        <TextField
-                            id="outlined-name"
-                            label="Search Text"
-                            value={this.state.SearchText}
-                            onChange={this.handleChange('SearchText')}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </Grid>
-                </Grid>
-                {this.populatePackages(classes)}
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                {arr}
+                {/* {this.populatePackages(classes)} */}
             </div>
 
         );
