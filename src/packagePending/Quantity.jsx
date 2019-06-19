@@ -12,7 +12,7 @@ class Quantity extends React.Component {
                         <FormDataConsumer>
                             {({ formData, dispatch, ...rest }) => (<span>{formData.gram*1||0} g</span>)}
                         </FormDataConsumer>
-                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="gramLabel" label="label" />
+                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="itemPackages[0].label" label="label" />
                     </div>
                     <div>
                         <span>1/8 oz</span>
@@ -20,7 +20,7 @@ class Quantity extends React.Component {
                         <FormDataConsumer>
                             {({ formData, dispatch, ...rest }) => (<span>{formData.byEight*3.5||0} g</span>)}
                         </FormDataConsumer>
-                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="byEightOzLabel" label="label" />
+                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="itemPackages[1].label" label="label" />
                     </div>
                     <div>
                         <span>1/4 oz</span>
@@ -28,7 +28,7 @@ class Quantity extends React.Component {
                         <FormDataConsumer>
                             {({ formData, dispatch, ...rest }) => (<span>{formData.byFour*7||0} g</span>)}
                         </FormDataConsumer>
-                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="byFourOzLabel" label="label" />
+                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="itemPackages[2].label" label="label" />
                     </div>
                     <div>
                         <span>1/2 oz</span>
@@ -36,7 +36,7 @@ class Quantity extends React.Component {
                         <FormDataConsumer>
                             {({ formData, dispatch, ...rest }) => (<span>{formData.byTwo*14||0} g</span>)}
                         </FormDataConsumer>
-                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="halfOzLabel" label="label" />
+                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="itemPackages[3].label" label="label" />
                     </div>
                     <div>
                         <span>1 oz</span>
@@ -44,7 +44,7 @@ class Quantity extends React.Component {
                         <FormDataConsumer>
                             {({ formData, dispatch, ...rest }) => (<span>{formData.byOne*28||0} g</span>)}
                         </FormDataConsumer>
-                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="byOneOzLabel" label="label" />
+                        <TextInput style={{marginLeft:'10px',marginRight:'10px'}} source="itemPackages[4].label" label="label" />
                     </div>
                 </div>
             </div>

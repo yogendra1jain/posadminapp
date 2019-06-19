@@ -163,7 +163,7 @@ const UrlGuesser = (obj) => {
         case 'PackagePending/CREATE':
             return 'Vendor/Create'
         case 'PackagePending/UPDATE':
-            return 'Vendor/Update'
+            return 'PackagePending/UPDATE'
         case 'PackagePending/DELETE':
             return ''
         case 'PackagePending/DELETE_MANY':

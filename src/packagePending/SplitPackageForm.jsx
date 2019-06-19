@@ -7,7 +7,7 @@ import _get from 'lodash/get';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 
-import { TextInput } from 'react-admin';
+import { TextInput,NumberInput } from 'react-admin';
 import Quantity from './Quantity';
 /* Admin Imports */
 
@@ -162,11 +162,16 @@ class SplitPackageForm extends React.Component {
         let arr = [];
         if (this.props.record.shippedUnitOfMeasureName == "Each") {
             for (let i = 1; i <= quantity; i++) {
-                arr.push(<TextInput label={`Scan${i}`} source={`Scan${i}`} />)
+                arr.push(
+                    <div>
+                        <TextInput label={`Scan${i}`} source={`itemPackages[${i-1}].label`} />
+                        <NumberInput label='Quantity' defaultValue={1}  source={`itemPackages[${i-1}].quantity`} />
+
+                    </div>)
             }
         }
         if (this.props.record.shippedUnitOfMeasureName == "Grams") {
-           arr =  <div><Quantity/></div>
+            arr = <div><Quantity /></div>
         }
 
         return (
