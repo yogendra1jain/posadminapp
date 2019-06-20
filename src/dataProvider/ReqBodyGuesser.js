@@ -88,10 +88,10 @@ const ReqBodyGuesser = (obj) => {
         // For Products ******************************************************************************************
         case 'Search/Products':
             reqBody = makePaginationReqBody(url, params)
-            if (_get(params, 'filter.syncStatus')) {
+            if (_get(params, 'filter.productType')) {
                 reqBody.filters.push({
-                    field: 'syncStatus',
-                    value: _get(params, 'filter.syncStatus')
+                    field: 'productType',
+                    value: _get(params, 'filter.productType')
                 })
             }
             // if(_get(params,'filter.undefined')) {

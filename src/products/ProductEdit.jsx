@@ -104,7 +104,6 @@ class ProductEdit extends React.Component {
     return (
       <Edit title={<ProductTitle />} {...this.props}>
         <SimpleForm>
-          <TextField source="metrcId" label="Metrc Id" />
           <TextInput validate={required()} source="name" options={{ fullWidth: true }} />
           <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
           <LongTextInput validate={required()} source="description" />
