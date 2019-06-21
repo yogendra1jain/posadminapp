@@ -4,7 +4,6 @@ import {
   SimpleForm,
   TextInput,
   NumberInput,
-  RadioButtonGroupInput,
   BooleanInput,
   ReferenceField,
   ReferenceInput,
@@ -12,6 +11,7 @@ import {
   SelectInput,
   required
 } from "react-admin";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 const OperatorEditTitle = ({ record }) => {
   return <span>Edit {record.person.firstName}</span>;
@@ -22,7 +22,15 @@ const roleChoices = [
   { id: "manager", name: "Manager" }
 ];
 
-const OperatorEdit = props => {
+export const styles = {
+  width: { width: "5em" },
+  timezone: { width: "10em" },
+  widthFormGroup: { display: "inline-block" },
+  height: { width: "5em" },
+  heightFormGroup: { display: "inline-block", marginLeft: 32 }
+};
+
+const OperatorEdit = ({ classes, ...props }) => {
   return (
     <Edit title={<OperatorEditTitle />} {...props}>
       <SimpleForm defaultValue={{ countryCode: "1" }} redirect="list">
@@ -43,28 +51,49 @@ const OperatorEdit = props => {
           validate={required()}
           label="First Name"
           source="person.firstName"
+          formClassName={classes.widthFormGroup}
         />
         <TextInput
           validate={required()}
           label="Last Name"
+          formClassName={classes.heightFormGroup}
           source="person.lastName"
         />
+        <div style={{ width: 400, margin: "1em" }} />
+
         <NumberInput
           validate={required()}
           label="Phone Number"
+          formClassName={classes.widthFormGroup}
           source="phoneNumber.phoneNumber"
         />
-        <NumberInput validate={required()} source="loginPin" />
+        <TextInput
+          validate={required()}
+          source="email"
+          formClassName={classes.heightFormGroup}
+        />
+        <div style={{ width: 400, margin: "1em" }} />
+
         <SelectInput
           validate={required()}
           choices={roleChoices}
           source="role"
+          formClassName={classes.widthFormGroup}
         />
-        <TextInput validate={required()} source="email" />
-        <BooleanInput validate={required()} source="active" />
+        <NumberInput
+          validate={required()}
+          source="loginPin"
+          formClassName={classes.heightFormGroup}
+        />
+
+        <BooleanInput
+          validate={required()}
+          source="active"
+          defaultValue={true}
+        />
       </SimpleForm>
     </Edit>
   );
 };
 
-export default OperatorEdit;
+export default withStyles(styles)(OperatorEdit);
