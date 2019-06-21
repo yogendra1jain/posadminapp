@@ -365,10 +365,12 @@ const ReqBodyGuesser = (obj) => {
         //For Terminal       ******************************************************************************************
         case 'Search/Terminals':
             reqBody = localStorage.getItem('storeId') ? makePaginationReqBody(url, params, 'storeId') : makePaginationReqBody(url, params)
-            reqBody.filters.push({
-                field: 'storeId',
-                value: _get(params, 'filter.storeId')
-            })
+            if (_get(params, 'filter.storeId')) {
+                reqBody.filters.push({
+                    field: 'storeId',
+                    value: _get(params, 'filter.storeId')
+                })
+            }
             return reqObjMaker(url, reqBody)
         case 'Terminal/Create':
             reqBody = params.data
@@ -377,10 +379,12 @@ const ReqBodyGuesser = (obj) => {
         //For Operator       ******************************************************************************************
         case 'Search/Operators':
             reqBody = localStorage.getItem('storeId') ? makePaginationReqBody(url, params, 'storeId') : makePaginationReqBody(url, params)
-            reqBody.filters.push({
-                field: 'storeId',
-                value: _get(params, 'filter.storeId')
-            })
+            if (_get(params, 'filter.storeId')) {
+                reqBody.filters.push({
+                    field: 'storeId',
+                    value: _get(params, 'filter.storeId')
+                })
+            }
             return reqObjMaker(url, reqBody)
         case 'Operator/Create':
             reqBody = params.data
