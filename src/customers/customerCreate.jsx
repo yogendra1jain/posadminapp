@@ -3,7 +3,6 @@ import {
   Create,
   TabbedForm,
   FormTab,
-  SimpleForm,
   TextInput,
   NumberInput,
   RadioButtonGroupInput,
@@ -13,28 +12,93 @@ import {
   required
 } from "react-admin";
 import ZipCodeInput from "../global/components/ZipCodeInput";
-import { TextField } from "@material-ui/core";
-import {CreateTitle} from '../global/components/Title';
+import { CreateTitle } from "../global/components/Title";
+import withStyles from "@material-ui/core/styles/withStyles";
 
-const CustomerCreate = props => (
+export const styles = {
+  width: { width: "5em" },
+  widthFormGroup: { display: "inline-block" },
+  height: { width: "5em" },
+  heightFormGroup: { display: "inline-block", marginLeft: 32 }
+};
+
+const MedicalInfo = withStyles(styles)(({ classes, ...props }) => (
+  <div>
+    <BooleanInput
+      label="Temporary Recommendation"
+      source="tempMedicalLicense"
+      defaultValue={false}
+    />
+    <BooleanInput label="Tax Exempt" source="taxExempt" />
+    <FormDataConsumer>
+      {(formData, ...rest) => {
+        return (
+          <div>
+            {formData.formData.tempMedicalLicense === false ? (
+              <div>
+                <TextInput
+                  label="Medical License"
+                  source="medicalLicenseNumber"
+                  className={classes.widthFormGroup}
+                />
+                <DateInput
+                  validate={required()}
+                  label="License Expiry Date"
+                  source="medicalLicenseExpiration"
+                  className={classes.heightFormGroup}
+                />
+              </div>
+            ) : null}
+          </div>
+        );
+      }}
+    </FormDataConsumer>
+
+    <NumberInput
+      label="Purchase Limit (g)"
+      source="gramLimit"
+      className={classes.widthFormGroup}
+      defaultValue={28}
+    />
+    <NumberInput
+      label="Plant Count Limit"
+      source="plantCountLimit"
+      className={classes.heightFormGroup}
+      defaultValue={6}
+    />
+  </div>
+));
+
+const CustomerCreate = ({ classes, ...props }) => (
   <Create {...props} title={<CreateTitle name="Customer" />}>
     <TabbedForm redirect="list">
       <FormTab label="Contact Details">
-        <TextInput label="First Name" validate={required()} source="customer.firstName" />
-        <TextInput label="Last Name" validate={required()} source="customer.lastName" />
+        <TextInput
+          label="First Name"
+          validate={required()}
+          formClassName={classes.widthFormGroup}
+          source="customer.firstName"
+        />
+        <TextInput
+          label="Last Name"
+          validate={required()}
+          formClassName={classes.heightFormGroup}
+          source="customer.lastName"
+        />
         <TextInput label="Email" source="email" />
 
         <NumberInput label="Phone Number" source="phoneNumber.phoneNumber" />
         <RadioButtonGroupInput
           parse={v => parseInt(v)}
+          validate={required()}
           source="gender"
           choices={[
             { id: 1, name: "Male" },
-            { id: 2, name: "Female" },
-            { id: 3, name: "Other" }
+            { id: 2, name: "Female" }
+            // { id: 3, name: "Other" }
           ]}
+          defaultValue={1}
         />
-        <DateInput validate={required()} label="Date Of Birth" source="dob" />
       </FormTab>
       <FormTab label="Address">
         <TextInput
@@ -53,44 +117,22 @@ const CustomerCreate = props => (
 
       <FormTab label="Patient Details">
         <RadioButtonGroupInput
-          parse={(v) => parseInt(v)}
+          parse={v => parseInt(v)}
           source="customerType"
+          validate={required()}
           choices={[
             { id: 1, name: "MEDICAL" },
             { id: 2, name: "RECREATIONAL" }
           ]}
+          defaultValue={2}
         />
+        <DateInput validate={required()} label="Date Of Birth" source="dob" />
         <FormDataConsumer>
           {(formData, ...rest) => {
-            console.log(formData, "formDataformDataformData");
             return (
-              <React.Fragment>
-                {formData.formData.customerType == 1 ? (
-                  <React.Fragment>
-                    <BooleanInput
-                      label="Temp Medical Licence"
-                      source="tempMedicalLicense"
-                    />
-                    <BooleanInput label="Tax Exempt" source="taxExempt" />
-
-                    <TextInput
-                      label="Medical License"
-                      source="medicalLicenseNumber"
-                    />
-
-                    <NumberInput
-                      label="Purchase Limit (g)"
-                      source="gramLimit"
-                    />
-
-                    <NumberInput
-                      label="Purchase Limit (plants)"
-                      source="plantCountLimit"
-                    />
-                    <DateInput validate={required()} label="License Expiry Date" source="medicalLicenseExpiration" />
-                  </React.Fragment>
-                ) : null}
-              </React.Fragment>
+              <div>
+                {formData.formData.customerType === 1 ? <MedicalInfo /> : null}
+              </div>
             );
           }}
         </FormDataConsumer>
@@ -99,4 +141,4 @@ const CustomerCreate = props => (
   </Create>
 );
 
-export default CustomerCreate;
+export default withStyles(styles)(CustomerCreate);
