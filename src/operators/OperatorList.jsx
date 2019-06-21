@@ -1,4 +1,3 @@
-
 import React from "react";
 
 //lodash imports
@@ -40,9 +39,7 @@ const FilterActions = ({ basePath, ...rest }) => {
       />
     </CardActions>
   );
-
-}
-
+};
 
 const MyEditButton = ({ record, ...props }) => (
   <EditButton
@@ -84,15 +81,22 @@ const OperatorFilter = ({ permissions, ...props }) => {
   );
 };
 
+const FullNameField = ({ record = {} }) => (
+  <div style={{ display: "flex", flexWrap: "nowrap", alignItems: "center" }}>
+    {record.person.firstName} {record.person.lastName}
+  </div>
+);
 
-const SampleList = ({ ...props, permissions }) => {
+const SampleList = ({ permissions, ...props }) => {
   return (
-    <List {...props}
+    <List
+      {...props}
       filters={<OperatorFilter permissions={permissions} />}
       actions={<FilterActions />}
     >
       <Datagrid>
-        {permissions == "1" ? (
+        <FullNameField label="Name" />
+        {permissions === "1" ? (
           <ReferenceField
             label="Store"
             source="storeId"
@@ -102,18 +106,26 @@ const SampleList = ({ ...props, permissions }) => {
             <TextField source="name" />
           </ReferenceField>
         ) : null}
-        <BooleanField source="active" />
-        <TextField label="First Name" source="person.firstName" />
-        <TextField label="Last Name" source="person.lastName" />
-        <NumberField label="Phone Number" source="phoneNumber.phoneNumber" />
+        {/* <TextField label="First Name" source="person.firstName" /> */}
+        {/* <TextField label="Last Name" source="person.lastName" /> */}
+        <TextField label="Phone Number" source="phoneNumber.phoneNumber" />
         <EmailField source="email" />
-        <NumberField source="loginPin" />
-        <TextField source="role" />
+        <BooleanField source="active" />
+        {/* <NumberField source="loginPin" /> */}
+        <FunctionField
+          label="Role"
+          render={record =>
+            _get(record, "role", "cashier") === "cashier"
+              ? "Budtender"
+              : "Manager"
+          }
+        />
+
         <MyEditButton />
         <MyShowButton />
       </Datagrid>
     </List>
-  )
-}
+  );
+};
 
-export default SampleList
+export default SampleList;

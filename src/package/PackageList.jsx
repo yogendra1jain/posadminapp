@@ -4,7 +4,6 @@ import _get from "lodash/get";
 import {
   List,
   Datagrid,
-  ReferenceField,
   TextField,
   Filter,
   TextInput,
@@ -14,13 +13,13 @@ import {
   ReferenceInput,
   SelectInput,
   CardActions,
-  CreateButton,
+  CreateButton
 } from "react-admin";
 import Button from "@material-ui/core/Button";
 import CallSplit from "@material-ui/icons/CallSplit";
 import MobileGrid from "./MobileGrid";
 import { Link } from "react-router-dom";
-
+import ProductReferenceField from "../products/ProductReferenceField";
 
 const PackageFilter = ({ permissions, ...props }) => {
   return (
@@ -44,10 +43,15 @@ const PackageFilter = ({ permissions, ...props }) => {
 const FilterActions = ({ permissions, basePath, ...rest }) => {
   return (
     <CardActions>
-      {localStorage.getItem('role') === "1" ? <CreateButton {...rest} basePath={basePath}
-        to={{
-          pathname: "/Package/create",
-        }} /> :
+      {localStorage.getItem("role") === "1" ? (
+        <CreateButton
+          {...rest}
+          basePath={basePath}
+          to={{
+            pathname: "/Package/create"
+          }}
+        />
+      ) : (
         <CreateButton
           {...rest}
           basePath={basePath}
@@ -57,11 +61,10 @@ const FilterActions = ({ permissions, basePath, ...rest }) => {
             // state: { record: { storeId: storeId } }
           }}
         />
-      }
-
+      )}
     </CardActions>
   );
-}
+};
 
 const AddNewSplitButton = ({ record }) => (
   <Button
@@ -88,48 +91,57 @@ const PackageList = ({ permissions, ...props }) => (
     {...props}
     filters={<PackageFilter permissions={permissions} />}
     actions={<FilterActions permissions={permissions} />}
-    title={<PackageTitle />}>
-    <Responsive 
+    title={<PackageTitle />}
+  >
+    <Responsive
       small={<MobileGrid />}
-      medium={<Datagrid>
-        {/* <TextField source="metrcId" reference="metrcs" label="METRC ID" /> */}
-        <ReferenceField
+      medium={
+        <Datagrid>
+          {/* <TextField source="metrcId" reference="metrcs" label="METRC ID" /> */}
+          {/* <ReferenceField
           label="Product"
           source="posProductId"
           reference="Products"
           linkType="show"
         >
           <TextField source="name" />
-        </ReferenceField>
-        <TextField source="label" />
-        {/* <TextField source="packageType" /> */}
-        <FunctionField
-          label="Quantity"
-          render={record => `${record.quantity} ${record.uom}`}
-        />
-  
-        {/* <NumberField source="quantity" />
+        </ReferenceField> */}
+
+          <ProductReferenceField src="posProductId" label="Product" />
+          <TextField source="label" />
+          {/* <TextField source="packageType" /> */}
+          <FunctionField
+            label="Quantity"
+            render={record =>
+              _get(record, "quantity", 0) === 0
+                ? `0 ${record.uom}`
+                : `${record.quantity} ${record.uom}`
+            }
+          />
+
+          {/* <NumberField source="quantity" />
         <TextField source="uom" /> */}
-        {/* <TextField source="metrcProduct" /> */}
-        <FunctionField
-          text-align="left"
-          label="Sync Status"
-          render={record =>
-            _get(record, "syncStatus", 0) === 0 ? (
-              <SyncIcon style={{ color: "orange" }} />
-            ) : _get(record, "syncStatus", 0) === 3 ? (
-              <SyncIcon
-                style={{ color: "red" }}
-                titleAccess={record.metrcError}
-              />
-            ) : (
-                  <SyncIcon style={{ color: "green" }} />
-                )
-          }
-        />
-        <EditButton label="Edit" />
-        <AddNewSplitButton label="Split" />
-      </Datagrid>}
+          {/* <TextField source="metrcProduct" /> */}
+          <FunctionField
+            text-align="left"
+            label="Sync Status"
+            render={record =>
+              _get(record, "syncStatus", 0) === 0 ? (
+                <SyncIcon style={{ color: "orange" }} />
+              ) : _get(record, "syncStatus", 0) === 3 ? (
+                <SyncIcon
+                  style={{ color: "red" }}
+                  titleAccess={record.metrcError}
+                />
+              ) : (
+                <SyncIcon style={{ color: "green" }} />
+              )
+            }
+          />
+          <EditButton label="Edit" />
+          <AddNewSplitButton label="Split" />
+        </Datagrid>
+      }
     />
   </List>
 );

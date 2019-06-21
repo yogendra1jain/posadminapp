@@ -16,10 +16,10 @@ const ProductShow = props => (
         <SimpleShowLayout>
             <TextField source="name" />
             <TextField source="description" />
-            <ReferenceField label="Category" source="category1" reference="Category">
+            <ReferenceField label="Category" source="category1" reference="Category" linkType="show">
                 <TextField source="name" />
             </ReferenceField>
-            <ReferenceField label="Sub Category" source="category2" reference="Category">
+            <ReferenceField label="Sub Category" source="category2" reference="Category" linkType="show">
                 <TextField source="name" />
             </ReferenceField>
             <DineroPrice label='Sale Price' source="salePrice.amount" />

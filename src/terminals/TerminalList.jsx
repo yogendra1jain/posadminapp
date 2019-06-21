@@ -26,13 +26,18 @@ import MobileGrid from "./MobileGrid";
 
 const storeId = localStorage.getItem("storeId");
 
-const FilterActions = ({ permissions, basePath, ...rest }) =>{
-  return(
+const FilterActions = ({ permissions, basePath, ...rest }) => {
+  return (
     <CardActions>
-      {localStorage.getItem('role')==="1" ? <CreateButton {...rest} basePath={basePath}
-        to={{
-          pathname: "/Terminal/create",
-        }} /> :
+      {localStorage.getItem("role") === "1" ? (
+        <CreateButton
+          {...rest}
+          basePath={basePath}
+          to={{
+            pathname: "/Terminal/create"
+          }}
+        />
+      ) : (
         <CreateButton
           {...rest}
           basePath={basePath}
@@ -42,12 +47,10 @@ const FilterActions = ({ permissions, basePath, ...rest }) =>{
             // state: { record: { storeId: storeId } }
           }}
         />
-      }
-  
+      )}
     </CardActions>
   );
-} 
-
+};
 
 const MyEditButton = ({ record, ...props }) => (
   <EditButton
@@ -90,27 +93,30 @@ const TerminalFilter = ({ permissions, ...props }) => {
 };
 
 const TerminalList = ({ permissions, ...props }) => (
-  <List {...props}
+  <List
+    {...props}
     filters={<TerminalFilter permissions={permissions} />}
     actions={<FilterActions permissions={permissions} />}
   >
-    <Responsive 
+    <Responsive
       small={<MobileGrid />}
-      medium={<Datagrid>
-        <TextField source="id" />
-        <ReferenceField
-          label="Store"
-          source="storeId"
-          reference="Store"
-          linkType="show"
-        >
+      medium={
+        <Datagrid>
           <TextField source="name" />
-        </ReferenceField>
-      ) : null}
-      <BooleanField source="active" />
-      <MyEditButton />
-      <MyShowButton />
-    </Datagrid>}
+          <ReferenceField
+            label="Store"
+            source="storeId"
+            reference="Store"
+            linkType="show"
+          >
+            <TextField source="name" />
+          </ReferenceField>
+          ) : null}
+          <BooleanField source="active" />
+          <MyEditButton />
+          <MyShowButton />
+        </Datagrid>
+      }
     />
   </List>
 );

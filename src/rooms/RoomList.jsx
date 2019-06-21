@@ -18,7 +18,6 @@ import {
   Link,
   ReferenceInput,
   SelectInput,
-  TextInput,
   Filter
 } from "react-admin";
 
@@ -93,7 +92,7 @@ const RoomList = ({...props, permissions}) => {
         <TextField label="Location" source="location" />
         <TextField label="Info" source="info" />
         <BooleanField label="Active" source="active" />
-        <BooleanField label="For Sale" source="inventoryForSale" />
+        <BooleanField label="Item Avaiable For Sale" source="inventoryForSale" />
         <MyEditButton />
         <MyShowButton />
       </Datagrid>

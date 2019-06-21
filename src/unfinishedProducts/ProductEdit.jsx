@@ -11,20 +11,16 @@ import {
   RichTextInput
 } from "react-admin";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Typography from '@material-ui/core/Typography';
+import Typography from "@material-ui/core/Typography";
 import CategoryInput from "./CategoryInput.jsx";
 import CustomImageInput from "./CustomImageInput";
 import PriceInput from "../global/components/PriceInput";
-import _get from 'lodash/get';
-import _filter from 'lodash/filter';
-import _isEmpty from 'lodash/isEmpty';
+import _get from "lodash/get";
+import _filter from "lodash/filter";
+import _isEmpty from "lodash/isEmpty";
 
 const ProductTitle = ({ record }) => {
-  return (
-    <span>
-      Product {record ? `${record.name}` : null}
-    </span>
-  )
+  return <span>Product {record ? `${record.name}` : null}</span>;
 };
 
 const editStyles = {
@@ -33,33 +29,56 @@ const editStyles = {
 
 const Aside = ({ record }) => {
   if (_isEmpty(record)) {
-    return <span></span>
+    return <span />;
   }
   return (
-    <div style={{ width: 400, margin: '1em' }}>
-      <Typography>Metrc Id: {_get(record, 'metrcId', '')}</Typography>
-      <Typography>Name: {_get(record, 'name', '')}</Typography>
-      <Typography>Discountable: {_get(record, 'discountable', false) ? 'Yes' : 'No'}</Typography>
-      <Typography>Taxable: {_get(record, 'isTaxable', false) ? 'Yes' : 'No'}</Typography>
-      <Typography>Product Type: {_get(record, 'productType', 0) == 0 ? 'Non-Cannabis' : _get(record, 'productType', 0) == 1 ? 'Cannabis Product' : 'Medical Only Cannabis Product'}</Typography>
-      <Typography>Metrc Item Type: {_get(record, 'metrcItemType', '')}</Typography>
-      <Typography>Metrc Category: {_get(record, 'metrcCategory', '')}</Typography>
-      <Typography>Metrc UOM: {_get(record, 'metrcUom', '')}</Typography>
-      {_get(record, 'unitWeight') ?
+    <div style={{ width: 400, margin: "1em" }}>
+      <Typography>Metrc Id: {_get(record, "metrcId", "")}</Typography>
+      <Typography>Name: {_get(record, "name", "")}</Typography>
+      <Typography>
+        Discountable: {_get(record, "discountable", false) ? "Yes" : "No"}
+      </Typography>
+      <Typography>
+        Taxable: {_get(record, "isTaxable", false) ? "Yes" : "No"}
+      </Typography>
+      <Typography>
+        Product Type:{" "}
+        {_get(record, "productType", 0) == 0
+          ? "Non-Cannabis"
+          : _get(record, "productType", 0) == 1
+          ? "Cannabis Product"
+          : "Medical Only Cannabis Product"}
+      </Typography>
+      <Typography>
+        Metrc Item Type: {_get(record, "metrcItemType", "")}
+      </Typography>
+      <Typography>
+        Metrc Category: {_get(record, "metrcCategory", "")}
+      </Typography>
+      <Typography>Metrc UOM: {_get(record, "metrcUom", "")}</Typography>
+      {_get(record, "unitWeight") ? (
         <span>
-          <Typography>Unit Weight: {_get(record, 'unitWeight', 0)}</Typography>
-          <Typography>UOM: {_get(record, 'unitWeightUnitOfMeasure', '')}</Typography>
-        </span> : ''
-      }
-      {_get(record, 'unitVolume') ?
+          <Typography>Unit Weight: {_get(record, "unitWeight", 0)}</Typography>
+          <Typography>
+            UOM: {_get(record, "unitWeightUnitOfMeasure", "")}
+          </Typography>
+        </span>
+      ) : (
+        ""
+      )}
+      {_get(record, "unitVolume") ? (
         <span>
-          <Typography>Unit Volume: {_get(record, 'unitVolume', 0)}</Typography>
-          <Typography>Volume UOM: {_get(record, 'unitVolumeUnitOfMeasure', '')}</Typography>
-        </span> : ''
-      }
+          <Typography>Unit Volume: {_get(record, "unitVolume", 0)}</Typography>
+          <Typography>
+            Volume UOM: {_get(record, "unitVolumeUnitOfMeasure", "")}
+          </Typography>
+        </span>
+      ) : (
+        ""
+      )}
     </div>
-  )
-}
+  );
+};
 
 class ProductEdit extends React.Component {
   constructor(props) {
@@ -67,7 +86,7 @@ class ProductEdit extends React.Component {
     this.state = { choices: [], url: "" };
     this.url = "";
   }
-  componentDidMount() { }
+  componentDidMount() {}
 
   getL2Category = ({ formData, ...rest }) => {
     return (
@@ -82,8 +101,8 @@ class ProductEdit extends React.Component {
           ) : error ? (
             <Error />
           ) : (
-                <div>User {data.username}</div>
-              )
+            <div>User {data.username}</div>
+          )
         }
       </Query>
     );
@@ -95,8 +114,8 @@ class ProductEdit extends React.Component {
     ) : error ? (
       <Error />
     ) : (
-          <div>User {data.username}</div>
-        );
+      <div>User {data.username}</div>
+    );
   };
 
   saveFetchedUrl = url => {
@@ -105,9 +124,18 @@ class ProductEdit extends React.Component {
 
   render() {
     return (
-      <Edit aside={<Aside />} title={<ProductTitle />} {...this.props} undoable={false}>
+      <Edit
+        aside={<Aside />}
+        title={<ProductTitle />}
+        {...this.props}
+        undoable={false}
+      >
         <SimpleForm>
-          <TextInput validate={required()} source="sku" options={{ fullWidth: true }} />
+          <TextInput
+            validate={required()}
+            source="sku"
+            options={{ fullWidth: true }}
+          />
           <RichTextInput source="description" />
           <CategoryInput source={"category1"} />
           <PriceInput
@@ -133,5 +161,4 @@ class ProductEdit extends React.Component {
     );
   }
 }
-ProductEdit = withStyles(editStyles)(ProductEdit);
-export { ProductEdit };
+export default (ProductEdit = withStyles(editStyles)(ProductEdit));
