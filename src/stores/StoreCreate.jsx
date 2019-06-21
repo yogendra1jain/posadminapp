@@ -1,10 +1,11 @@
 import {
   TextInput,
   Create,
-  SimpleForm,
+  TabbedForm,
   ImageInput,
   SelectInput,
   NumberInput,
+  FormTab,
   required
 } from "react-admin";
 import React from "react";
@@ -17,11 +18,19 @@ import CustomImageInput from "../products/CustomImageInput";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 const StoreCreateTitle = ({ record }) => {
   return <span>Create Store</span>;
 };
 
+export const styles = {
+  width: { width: "5em" },
+  timezone: { width: "10em" },
+  widthFormGroup: { display: "inline-block" },
+  height: { width: "5em" },
+  heightFormGroup: { display: "inline-block", marginLeft: 32 }
+};
 // let createSource = (paymentMethods, availablePaymentMethods) => {
 //     let source = paymentMethods.map(paymentMethod => {
 //         return _find(availablePaymentMethods,'id',paymentMethod)
@@ -49,88 +58,123 @@ const UtcDateChoices = [
   { id: "UTC-5", name: "US/Eastern (GMT -5:00)" }
   // { id: 'UTC-4', name: 'UTC-4' }
 ];
-const StoreCreate = props => (
+const StoreCreate = ({ classes, ...props }) => (
   <Create title={<StoreCreateTitle />} {...props}>
-    <SimpleForm redirect="list">
-      <TextInput label="Store Name" source="name" validate={required()} />
-      <TextInput label="Address Line 1" source="address.addressLine1" />
-      <TextInput label="Address Line 2" source="address.addressLine2" />
-      <ZipCodeInput source="address.postalCode" />
-      <TextInput label="City" source="address.city" />
-      <TextInput label="State" source="address.state" validate={required()} />
-      <TextInput label="Country" source="address.country" />
-      <div style={{ width: 400, margin: "1em" }} />
+    <TabbedForm redirect="list">
+      <FormTab label="Dispensary Info">
+        <TextInput
+          label="Dispensary Name"
+          source="name"
+          validate={required()}
+        />
+        <TextInput
+          label="Address Line 1"
+          source="address.addressLine1"
+          formClassName={classes.widthFormGroup}
+        />
+        <TextInput
+          label="Address Line 2"
+          source="address.addressLine2"
+          formClassName={classes.heightFormGroup}
+        />
+        <ZipCodeInput source="address.postalCode" />
+        <TextInput
+          label="City"
+          source="address.city"
+          formClassName={classes.widthFormGroup}
+        />
+        <TextInput
+          label="State"
+          source="address.state"
+          validate={required()}
+          className={classes.height}
+          formClassName={classes.heightFormGroup}
+        />
+        <TextInput
+          label="Country"
+          source="address.country"
+          className={classes.height}
+          formClassName={classes.heightFormGroup}
+        />
+        <SelectInput
+          label="Time Zone"
+          source="operatingTimezone"
+          choices={UtcDateChoices}
+          validate={required()}
+        />
+        <TimeInput
+          source="operatingHoursStart"
+          label="Operating Hours (Start)"
+          options={{ format: "HH:mm" }}
+          validate={required()}
+          formClassName={classes.widthFormGroup}
+        />
+        <TimeInput
+          source="operatingHoursEnd"
+          label="Operating Hours (End)"
+          options={{ format: "HH:mm" }}
+          validate={required()}
+          formClassName={classes.heightFormGroup}
+        />
+      </FormTab>
+      <FormTab label="Purchase Limits" path="limits">
+        <div style={{ width: 400, margin: "1em" }} />
 
-      <Card>
-        <CardContent>
-          <Typography>MED Purchase Limits</Typography>
+        <Card>
+          <CardContent>
+            <Typography>MED Purchase Limits</Typography>
 
-          <NumberInput
-            source="medLimit.weightLimit"
-            label="Cannabis Limit (g)"
-            validate={required()}
-          />
-          <NumberInput
-            source="medLimit.concentrateLimit"
-            label="Concentrate Limit (g)"
-            validate={required()}
-          />
-          <NumberInput
-            source="medLimit.plantCountLimit"
-            label="Plant Limit (nos.)"
-            validate={required()}
-          />
-        </CardContent>
-      </Card>
-      <div style={{ width: 400, margin: "1em" }} />
-      <Card>
-        <CardContent>
-          <Typography>REC Purchase Limits</Typography>
-          <NumberInput
-            source="recLimit.weightLimit"
-            label="Cannabis Limit (g)"
-            validate={required()}
-          />
-          <NumberInput
-            source="recLimit.concentrateLimit"
-            label="Concentrate Limit (g)"
-            validate={required()}
-          />
-          <NumberInput
-            source="recLimit.plantCountLimit"
-            label="Plant Limit (nos.)"
-            validate={required()}
-          />
-        </CardContent>
-      </Card>
-      <TimeInput
-        source="operatingHoursStart"
-        label="Start time"
-        options={{ format: "HH:mm" }}
-        validate={required()}
-      />
-      <TimeInput
-        source="operatingHoursEnd"
-        label="End time"
-        options={{ format: "HH:mm" }}
-        validate={required()}
-      />
-      <SelectInput
-        label="Time Zone"
-        source="operatingTimezone"
-        choices={UtcDateChoices}
-        validate={required()}
-      />
-      <ImageInput
-        source="newImage"
-        label="Upload Store Logo"
-        accept="image/*"
-        options={{ onAbort: event => console.log(event, "event") }}
-      >
-        <CustomImageInput source="src" />
-      </ImageInput>
-    </SimpleForm>
+            <NumberInput
+              source="medLimit.weightLimit"
+              label="Cannabis Limit (g)"
+              validate={required()}
+            />
+            <NumberInput
+              source="medLimit.concentrateLimit"
+              label="Concentrate Limit (g)"
+              validate={required()}
+            />
+            <NumberInput
+              source="medLimit.plantCountLimit"
+              label="Plant Limit (nos.)"
+              validate={required()}
+            />
+          </CardContent>
+        </Card>
+        <div style={{ width: 400, margin: "1em" }} />
+        <Card>
+          <CardContent>
+            <Typography>REC Purchase Limits</Typography>
+            <NumberInput
+              source="recLimit.weightLimit"
+              label="Cannabis Limit (g)"
+              validate={required()}
+            />
+            <NumberInput
+              source="recLimit.concentrateLimit"
+              label="Concentrate Limit (g)"
+              validate={required()}
+            />
+            <NumberInput
+              source="recLimit.plantCountLimit"
+              label="Plant Limit (nos.)"
+              validate={required()}
+            />
+          </CardContent>
+        </Card>
+      </FormTab>
+      <FormTab label="Logo" path="logo">
+        <ImageInput
+          source="newImage"
+          label="Logo"
+          accept="image/*"
+          options={{ onAbort: event => console.log(event, "event") }}
+        >
+          <CustomImageInput source="src" />
+        </ImageInput>
+      </FormTab>
+    </TabbedForm>
   </Create>
 );
 
-export default StoreCreate;
+export default withStyles(styles)(StoreCreate);
