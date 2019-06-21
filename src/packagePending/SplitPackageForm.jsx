@@ -156,7 +156,6 @@ class SplitPackageForm extends React.Component {
     }
 
     render() {
-        debugger;
         const { classes } = this.props;
         let quantity = this.props.record.shippedQuantity;
         let arr = [];

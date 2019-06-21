@@ -10,7 +10,6 @@ const DineroInit = (amount, currency, precision) => (
 )
 
 const ResBodyGuesser = (obj) => {
-    debugger;
     const {
         response,
         url,
@@ -42,7 +41,6 @@ const ResBodyGuesser = (obj) => {
             json.id = "uuid";
         }
         if (url == "Get/Metrc/Package/ByLabel") {
-            debugger
                 return {
                     data: {
                         ...json.metrcPackage,
