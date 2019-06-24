@@ -18,9 +18,10 @@ import {
   Link,
   ReferenceInput,
   SelectInput,
-  TextInput,
-  Filter
+  Filter,
+  Responsive
 } from "react-admin";
+import MobileGrid from "./MobileGrid";
 
 const FilterActions = ({ permissions, basePath, ...rest }) => {
   return (
@@ -83,20 +84,23 @@ const RoomsFilter = ({ permissions, ...props }) => {
   );
 };
 
-const RoomList = ({...props, permissions}) => {
+const RoomList = ({ ...props, permissions }) => {
   return (
     <List {...props}
       filters={<RoomsFilter permissions={permissions} />}
       actions={<FilterActions permissions={permissions} />}
     >
-      <Datagrid>
-        <TextField label="Location" source="location" />
-        <TextField label="Info" source="info" />
-        <BooleanField label="Active" source="active" />
-        <BooleanField label="For Sale" source="inventoryForSale" />
-        <MyEditButton />
-        <MyShowButton />
-      </Datagrid>
+      <Responsive
+        small={<MobileGrid />}
+        medium={<Datagrid>
+          <TextField label="Location" source="location" />
+          <TextField label="Info" source="info" />
+          <BooleanField label="Active" source="active" />
+          <BooleanField label="Item Avaiable For Sale" source="inventoryForSale" />
+          <MyEditButton />
+          <MyShowButton />
+        </Datagrid>}>
+      </Responsive>
     </List>
   )
 }

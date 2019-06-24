@@ -120,7 +120,7 @@ class Menu extends Component {
               handleToggle={() => this.handleToggle("menuStores")}
               isOpen={this.state.menuStores}
               sidebarIsOpen={open}
-              name="Stores"
+              name="Offices"
               icon={<stores.icon />}
             >
               {
@@ -139,7 +139,7 @@ class Menu extends Component {
               />
               <MenuItemLink
                 to={`/Operator`}
-                primaryText={"Operators"}
+                primaryText={"Staff"}
                 leftIcon={<operators.icon />}
                 onClick={onMenuClick}
               />

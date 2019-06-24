@@ -2,21 +2,21 @@ import React from "react";
 import {
   List,
   TextInput,
-  SaveButton,
   EditButton,
-  ShowButton
+  ShowButton,
+  SaveButton
 } from "react-admin";
 import {
   Tree,
   NodeForm,
   NodeActions,
-  DragPreview,
+  // DragPreview,
   IgnoreFormProps
 } from "ra-tree-ui-materialui";
 
-const CategoryDragPreview = props => (
-  <DragPreview {...props}>{({ node }) => node.record.name}</DragPreview>
-);
+// const CategoryDragPreview = props => (
+//   <DragPreview {...props}>{({ node }) => node.record.name}</DragPreview>
+// );
 
 const CategoryActions = props => (
   <NodeActions {...props}>
@@ -37,10 +37,7 @@ const CategoryList = props => (
       // allowDropOnRoot
       // undoableDragDrop={false}
     >
-      <NodeForm
-        undoable={false}
-        actions={<CategoryActions />}
-      >
+      <NodeForm undoable={false} actions={<CategoryActions />}>
         <TextInput source="name" />
       </NodeForm>
     </Tree>

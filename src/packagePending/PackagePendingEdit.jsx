@@ -8,7 +8,6 @@ import { Typography, Card, CardContent } from '@material-ui/core';
 import { required } from 'ra-core';
 
 const Aside = ({ record, ...props }) => {
-    debugger;
     console.log(record, "record");
     return (
         <div style={{ width: 400, margin: "1em" }}>

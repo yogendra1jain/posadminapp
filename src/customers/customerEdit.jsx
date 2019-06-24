@@ -1,108 +1,148 @@
+import React from "react";
 import {
-    TextInput,
-    NumberInput,
-    Edit,
-    TabbedForm,
-    FormTab,
-    BooleanInput,
-    RadioButtonGroupInput,
-    DateInput,
-    FormDataConsumer,
-    required
-} from 'react-admin';
-import React from 'react';
-import ZipCodeInput from '../global/components/ZipCodeInput';
-import _get from 'lodash/get';
+  Edit,
+  TabbedForm,
+  FormTab,
+  TextInput,
+  NumberInput,
+  RadioButtonGroupInput,
+  DateInput,
+  FormDataConsumer,
+  BooleanInput,
+  required
+} from "react-admin";
+import ZipCodeInput from "../global/components/ZipCodeInput";
+import { EditTitle } from "../global/components/Title";
+import withStyles from "@material-ui/core/styles/withStyles";
 
-const CustomerTitle = ({ record }) => {
-    return (
-        <span>
-            Customer {record.customer.firstName}
-        </span>
-    )
+export const styles = {
+  width: { width: "5em" },
+  widthFormGroup: { display: "inline-block" },
+  height: { width: "5em" },
+  heightFormGroup: { display: "inline-block", marginLeft: 32 }
 };
 
-const CustomerEdit = props => (
-    <Edit title={<CustomerTitle />} {...props}>
-        <TabbedForm>
-            <FormTab label="Contact Details">
-                <TextInput label="First Name" validate={required()} source="customer.firstName" />
-                <TextInput label="Last Name" validate={required()} source="customer.lastName" />
-                <TextInput label="Email" source="email" />
+const CustomerTitle = ({ record }) => {
+  return <span>Customer {record.customer.firstName}</span>;
+};
 
-                <NumberInput label="Phone Number" source="phoneNumber.phoneNumber" />
-                <RadioButtonGroupInput
-                    parse={(v) => parseInt(v)}
-                    source="gender"
-                    choices={[
-                        { id: 1, name: "Male" },
-                        { id: 2, name: "Female" },
-                        { id: 3, name: "Other" }
-                    ]}
-                />
-                <DateInput validate={required()} label="Date Of Birth" source="dob" />
-            </FormTab>
-            <FormTab label="Address">
+const MedicalInfo = withStyles(styles)(({ classes, ...props }) => (
+  <div>
+    <BooleanInput
+      label="Temporary Recommendation"
+      source="tempMedicalLicense"
+      defaultValue={false}
+    />
+    <BooleanInput label="Tax Exempt" source="taxExempt" />
+    <FormDataConsumer>
+      {(formData, ...rest) => {
+        return (
+          <div>
+            {formData.formData.tempMedicalLicense === false ? (
+              <div>
                 <TextInput
-                    label="Address Line 1"
-                    source="billingAddress.addressLine1"
+                  label="Medical License"
+                  source="medicalLicenseNumber"
+                  className={classes.widthFormGroup}
                 />
-                <TextInput
-                    label="Address Line 2"
-                    source="billingAddress.addressLine2"
+                <DateInput
+                  validate={required()}
+                  label="License Expiry Date"
+                  source="medicalLicenseExpiration"
+                  className={classes.heightFormGroup}
                 />
-                <ZipCodeInput source="billingAddress.postalCode" />
-                <TextInput label="City" source="billingAddress.city" />
-                <TextInput label="State" source="billingAddress.state" />
-                <TextInput label="Country" source="billingAddress.country" />
-            </FormTab>
-            <FormTab label="Patient Details">
-                <RadioButtonGroupInput
-                    parse={(v) => parseInt(v,10)}
-                    source="customerType"
-                    choices={[
-                        { id: 1, name: "MEDICAL" },
-                        { id: 2, name: "RECREATIONAL" }
-                    ]}
-                />
-                <FormDataConsumer>
-                    {(formData, ...rest) => {
-                        console.log(formData, "formDataformDataformData");
-                        return (
-                            <React.Fragment>
-                                {formData.formData.customerType == 1 ? (
-                                    <React.Fragment>
-                                        <BooleanInput
-                                            label="Temp Medical Licence"
-                                            source="tempMedicalLicense"
-                                        />
-                                        <BooleanInput label="Tax Exempt" source="taxExempt" />
+              </div>
+            ) : null}
+          </div>
+        );
+      }}
+    </FormDataConsumer>
 
-                                        <TextInput
-                                            label="Medical License"
-                                            source="medicalLicenseNumber"
-                                        />
+    <NumberInput
+      label="Purchase Limit (g)"
+      source="gramLimit"
+      className={classes.widthFormGroup}
+      defaultValue={28}
+    />
+    <NumberInput
+      label="Plant Count Limit"
+      source="plantCountLimit"
+      className={classes.heightFormGroup}
+      defaultValue={6}
+    />
+  </div>
+));
 
-                                        <NumberInput
-                                            label="Purchase Limit (g)"
-                                            source="gramLimit"
-                                        />
+const CustomerEdit = ({ classes, ...props }) => (
+  <Edit {...props} title={<CustomerTitle />}>
+    <TabbedForm redirect="list">
+      <FormTab label="Contact Details">
+        <TextInput
+          label="First Name"
+          validate={required()}
+          formClassName={classes.widthFormGroup}
+          source="customer.firstName"
+        />
+        <TextInput
+          label="Last Name"
+          validate={required()}
+          formClassName={classes.heightFormGroup}
+          source="customer.lastName"
+        />
+        <TextInput label="Email" source="email" />
 
-                                        <NumberInput
-                                            label="Purchase Limit (plants)"
-                                            source="plantCountLimit"
-                                        />
-                                        <DateInput validate={required()} label="License Expiry Date" source="medicalLicenseExpiration" />
-                                    </React.Fragment>
-                                ) : null}
-                            </React.Fragment>
-                        );
-                    }}
-                </FormDataConsumer>
-            </FormTab>
-        </TabbedForm>
-    </Edit>
+        <NumberInput label="Phone Number" source="phoneNumber.phoneNumber" />
+        <RadioButtonGroupInput
+          parse={v => parseInt(v)}
+          validate={required()}
+          source="gender"
+          choices={[
+            { id: 1, name: "Male" },
+            { id: 2, name: "Female" }
+            // { id: 3, name: "Other" }
+          ]}
+          defaultValue={1}
+        />
+      </FormTab>
+      <FormTab label="Address">
+        <TextInput
+          label="Address Line 1"
+          source="billingAddress.addressLine1"
+        />
+        <TextInput
+          label="Address Line 2"
+          source="billingAddress.addressLine2"
+        />
+        <ZipCodeInput source="billingAddress.postalCode" />
+        <TextInput label="City" source="billingAddress.city" />
+        <TextInput label="State" source="billingAddress.state" />
+        <TextInput label="Country" source="billingAddress.country" />
+      </FormTab>
+
+      <FormTab label="Patient Details">
+        <RadioButtonGroupInput
+          parse={v => parseInt(v)}
+          source="customerType"
+          validate={required()}
+          choices={[
+            { id: 1, name: "MEDICAL" },
+            { id: 2, name: "RECREATIONAL" }
+          ]}
+          defaultValue={2}
+        />
+        <DateInput validate={required()} label="Date Of Birth" source="dob" />
+        <FormDataConsumer>
+          {(formData, ...rest) => {
+            return (
+              <div>
+                {formData.formData.customerType === 1 ? <MedicalInfo /> : null}
+              </div>
+            );
+          }}
+        </FormDataConsumer>
+      </FormTab>
+    </TabbedForm>
+  </Edit>
 );
 
-export default CustomerEdit;
-
+export default withStyles(styles)(CustomerEdit);
