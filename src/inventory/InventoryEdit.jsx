@@ -1,28 +1,19 @@
-import React from 'react';
-import {
-    Create,
-    TextInput,
-    SimpleForm,
-    required,
-    SaveButton,
-    Toolbar,
-    translate
-} from 'react-admin';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import { Edit, SimpleForm, NumberInput, required } from "react-admin";
+import ProductReferenceField from "../products/ProductReferenceField";
 
-const TagCreateToolbar = translate(({ onCancel, translate, ...props }) => (
-    <Toolbar {...props}>
-        <SaveButton />
-        <Button onClick={onCancel}>{translate('ra.action.cancel')}</Button>
-    </Toolbar>
-));
-
-const InventoryCreate = ({ onCancel, ...props }) => (
-    <Create title=" " {...props}>
-        <SimpleForm >
-            <TextInput source="name" validate={required()} />
-        </SimpleForm>
-    </Create>
+const InventoryEdit = props => (
+  <Edit title="Adjust Inventory" {...props} undoable={false}>
+    <SimpleForm>
+      <ProductReferenceField src="productId" label="Product" />
+      <NumberInput source="quantity" disabled label="On-hand Quantity" />
+      <NumberInput
+        source="deltaQuantity"
+        label="Adjust Quantity (Delta)"
+        defaultValue={0}
+      />
+    </SimpleForm>
+  </Edit>
 );
 
-export default InventoryCreate;
+export default InventoryEdit;

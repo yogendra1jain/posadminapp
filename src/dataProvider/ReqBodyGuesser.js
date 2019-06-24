@@ -57,6 +57,13 @@ const ReqBodyGuesser = (obj) => {
             let req = formObjectMaker(url, formData);
             return req
         }
+        if (url === 'Inventory/Get') {
+            reqBody.storeId= localStorage.getItem('storeId')
+            reqBody.productId = _get(params,'id')
+            return reqObjMaker(url, reqBody);
+        } 
+            
+
         return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
         if (url == 'Product/Update') {
@@ -350,13 +357,14 @@ const ReqBodyGuesser = (obj) => {
         case 'Search/Inventory':
             let reqObj = makePaginationReqBody(url, params)
             reqObj.filters.push({ 'field': 'productType', 'value': '3' })
+            reqObj.filters.push({ 'field': 'availableAtStores', 'value': localStorage.getItem('storeId') })
             reqBody = {
                 request: reqObj,
                 storeId: localStorage.getItem('storeId')
             }
             return reqObjMaker(url, reqBody);
 
-        //For Sale History       ******************************************************************************************
+       //For Sale History       ******************************************************************************************
         case 'Sale/ByStore':
             return reqObjMaker(url, { id: localStorage.getItem('storeId') })
         case 'Sale/Get':

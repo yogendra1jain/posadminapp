@@ -210,7 +210,12 @@ const UrlGuesser = (obj) => {
         //For Inventory       ******************************************************************************************
         case 'Inventory/GET_LIST':
             return 'Search/Inventory'
-            '//For Sale History       ******************************************************************************************'
+       
+        case 'Inventory/GET_ONE':
+            return 'Inventory/Get'
+        case 'Inventory/Update':
+                return 'Store/Inventory/Update'
+            //For Sale History       ******************************************************************************************'
         case 'SaleHistory/GET_LIST':
             return 'Sale/ByStore'
         case 'SaleHistory/GET_ONE':

@@ -40,6 +40,14 @@ const ResBodyGuesser = (obj) => {
         if (json.id == null) {
             json.id = "uuid";
         }
+        if (url === "Inventory/Get") {
+            return {
+                data : {
+                    ...json.inventory,
+                    id: json.inventory.productId
+                }
+            }
+        }
         if (url == "Get/Metrc/Package/ByLabel") {
                 return {
                     data: {
