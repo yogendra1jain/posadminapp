@@ -47,6 +47,14 @@ const ResBodyGuesser = (obj) => {
         if (json.id == null) {
             json.id = "uuid";
         }
+        if (url === "Inventory/Get") {
+            return {
+                data : {
+                    ...json.inventory,
+                    id: json.inventory.productId
+                }
+            }
+        }
         if (url == "Get/Metrc/Package/ByLabel") {
                 return {
                     data: {
@@ -211,6 +219,14 @@ const ResBodyGuesser = (obj) => {
         //For PaymentMethods ******************************************************************************************
         // case 'Store/AvailablePaymentMethods':
         //     return (url, params)
+
+            case 'Get/FacilitiesRetailer/ByRetailerId':
+                return {
+                    data: _get(json,'facilities',[]),
+                    total: json.facilities.length || 0,
+
+                }
+        
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             return {
@@ -224,11 +240,7 @@ const ResBodyGuesser = (obj) => {
                 data: json,
                 total: json.length,
             };
-        case 'Store/Get':
-            return (url, params)
-        //For PaymentMethods ******************************************************************************************
-        // case 'Store/AvailablePaymentMethods':
-        //     return (url, params)
+       
         //For Vendors ******************************************************************************************
         case 'Vendor/ByRetailerId':
             return {

@@ -97,6 +97,8 @@ const UrlGuesser = (obj) => {
             return 'Store/MapProducts';
         case 'StoreProducts/GET_LIST':
             return 'Search/Products'
+        case "facility/GET_LIST":
+            return 'Get/FacilitiesRetailer/ByRetailerId'
 
         //For PaymentMethods ******************************************************************************************
         // case 'PaymentMethods/GET_ONE':
@@ -212,7 +214,12 @@ const UrlGuesser = (obj) => {
         //For Inventory       ******************************************************************************************
         case 'Inventory/GET_LIST':
             return 'Search/Inventory'
-            '//For Sale History       ******************************************************************************************'
+
+        case 'Inventory/GET_ONE':
+            return 'Inventory/Get'
+        case 'Inventory/UPDATE':
+            return 'Store/Inventory/Update'
+        //For Sale History       ******************************************************************************************'
         case 'SaleHistory/GET_LIST':
             return 'Sale/ByStore'
         case 'SaleHistory/GET_ONE':
@@ -228,7 +235,7 @@ const UrlGuesser = (obj) => {
             return 'Terminal/Update'
         //For Operator       ******************************************************************************************
         case 'Operator/GET_LIST':
-            return 'Search/Operators'
+            return 'Search/Operators';
         case 'Operator/GET_ONE':
             return 'Operator/Get'
         case 'Operator/CREATE':
@@ -238,11 +245,11 @@ const UrlGuesser = (obj) => {
 
         //For Rooms       ******************************************************************************************
         case 'Rooms/GET_LIST':
-            let url 
-            localStorage.getItem('storeId') ? 
-            url = 'Get/InventoryLocations/StoreId' : 
-            url = 'Get/InventoryLocations/RetailerId' 
-            return 'Search/InventoryLocations' 
+            let url
+            localStorage.getItem('storeId') ?
+                url = 'Get/InventoryLocations/StoreId' :
+                url = 'Get/InventoryLocations/RetailerId'
+            return 'Search/InventoryLocations'
 
         case 'Rooms/CREATE':
             return 'Create/InventoryLocation'

@@ -17,6 +17,7 @@ import {
 } from "react-admin";
 import Button from "@material-ui/core/Button";
 import CallSplit from "@material-ui/icons/CallSplit";
+import Print from "@material-ui/icons/Print";
 import MobileGrid from "./MobileGrid";
 import { Link } from "react-router-dom";
 import ProductReferenceField from "../products/ProductReferenceField";
@@ -52,16 +53,16 @@ const FilterActions = ({ permissions, basePath, ...rest }) => {
           }}
         />
       ) : (
-        <CreateButton
-          {...rest}
-          basePath={basePath}
-          to={{
-            pathname: "/Package/create",
-            search: `?storeId=${localStorage.getItem("storeId")}`
-            // state: { record: { storeId: storeId } }
-          }}
-        />
-      )}
+          <CreateButton
+            {...rest}
+            basePath={basePath}
+            to={{
+              pathname: "/Package/create",
+              search: `?storeId=${localStorage.getItem("storeId")}`
+              // state: { record: { storeId: storeId } }
+            }}
+          />
+        )}
     </CardActions>
   );
 };
@@ -79,6 +80,21 @@ const AddNewSplitButton = ({ record }) => (
   >
     <CallSplit />
     Split
+  </Button>
+);
+const PrintLabelButton = ({ record,...rest }) => (
+  <Button
+    title="Print Label"
+    color="primary"
+    component={Link}
+    to={{
+      pathname: "/PackageLabel",
+      state:{sourcePackageId:record.id,label:record.label,name:record.metrcProduct},
+      search:`?sourcePackageId=${record.id}&label=${record.label}&name=${record.metrcProduct}`
+    }}
+  >
+    <Print/>
+    {rest.label}
   </Button>
 );
 
@@ -134,12 +150,13 @@ const PackageList = ({ permissions, ...props }) => (
                   titleAccess={record.metrcError}
                 />
               ) : (
-                <SyncIcon style={{ color: "green" }} />
-              )
+                    <SyncIcon style={{ color: "green" }} />
+                  )
             }
           />
           <EditButton label="Edit" />
           <AddNewSplitButton label="Split" />
+          <PrintLabelButton label="Print" />
         </Datagrid>
       }
     />

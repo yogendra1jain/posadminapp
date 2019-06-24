@@ -49,7 +49,7 @@ const PackagePendingEdit = props => (
         <SimpleForm>
             <ReferenceInput
                 source="posProductId"
-                reference="Search/Products"
+                reference="Products"
                 validate={required()}
             >
                 <AutocompleteInput source="posProductId" optionText="name" />

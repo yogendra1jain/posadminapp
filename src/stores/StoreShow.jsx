@@ -1,4 +1,4 @@
-import { Show, SimpleShowLayout, TextField, BooleanField } from "react-admin";
+import { Show, SimpleShowLayout, TextField, ImageField } from "react-admin";
 import { AddressField } from "../global/components/AddressField";
 import React from "react";
 import moment from "moment";
@@ -29,12 +29,14 @@ const StoreShow = props => (
   <Show {...props} title={<StoreShowTitle />}>
     <SimpleShowLayout>
       <TextField source="name" />
+      <TextField source="MetrcLicense" />
       <AddressField addLabel={true} label="Address" />
-      <BooleanField source="active" />
+      {/* <BooleanField source="active" /> */}
       {/* <PaymentMethodMapper label='Payment Methods' addLabel={true} source="paymentMethods" /> */}
       {/* <TextField source="code" /> */}
       <DisplayTimeField source="operatingHoursStart" />
       <DisplayTimeField source="operatingHoursEnd" />
+      <ImageField source="image" label="Logo" />
     </SimpleShowLayout>
   </Show>
 );
