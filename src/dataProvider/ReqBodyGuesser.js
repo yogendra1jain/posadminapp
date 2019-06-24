@@ -192,7 +192,9 @@ const ReqBodyGuesser = (obj) => {
 
         case 'Store/Update':
             return reqObjMaker(url, params.data)
-
+            
+        case 'Get/FacilitiesRetailer/ByRetailerId':
+                return reqObjMaker(url,  { id: retailerId })
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             reqBody = makePaginationReqBody(url, params)

@@ -204,6 +204,14 @@ const ResBodyGuesser = (obj) => {
         //For PaymentMethods ******************************************************************************************
         // case 'Store/AvailablePaymentMethods':
         //     return (url, params)
+
+            case 'Get/FacilitiesRetailer/ByRetailerId':
+                return {
+                    data: _get(json,'facilities',[]),
+                    total: json.facilities.length || 0,
+
+                }
+        
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             return {
@@ -217,11 +225,7 @@ const ResBodyGuesser = (obj) => {
                 data: json,
                 total: json.length,
             };
-        case 'Store/Get':
-            return (url, params)
-        //For PaymentMethods ******************************************************************************************
-        // case 'Store/AvailablePaymentMethods':
-        //     return (url, params)
+       
         //For Vendors ******************************************************************************************
         case 'Vendor/ByRetailerId':
             return {
