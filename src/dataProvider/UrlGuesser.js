@@ -1,4 +1,5 @@
 const UrlGuesser = (obj) => {
+    debugger;
     const {
         resource,
         type
@@ -213,7 +214,7 @@ const UrlGuesser = (obj) => {
        
         case 'Inventory/GET_ONE':
             return 'Inventory/Get'
-        case 'Inventory/Update':
+        case 'Inventory/UPDATE':
                 return 'Store/Inventory/Update'
             //For Sale History       ******************************************************************************************'
         case 'SaleHistory/GET_LIST':
