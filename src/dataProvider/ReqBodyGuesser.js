@@ -262,7 +262,7 @@ const ReqBodyGuesser = (obj) => {
         //For Package Pending ******************************************************************************************
         case 'Search/IncomingPackages':
             reqBody = makePaginationReqBody(url, params);
-            if (localStorage.getItem('role') != "1") {
+            if (_get(params, 'filter.storeId') || localStorage.getItem('storeId')) {
                 reqBody.filters.push({
                     field: 'storeId',
                     value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
