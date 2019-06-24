@@ -8,9 +8,14 @@ import {
   TextField,
   TextInput,
   SelectInput,
-  Responsive
+  Responsive,
+  CardActions,
+  CreateButton,
+  ExportButton,
+  RefreshButton,
+  withDataProvider
 } from "react-admin";
-import React from "react";
+import React, { Fragment } from "react";
 import DineroPrice from "../global/components/DineroPrice";
 import _get from "lodash/get";
 import MobileGrid from "./MobileGrid";
@@ -19,6 +24,7 @@ import SyncIcon from "@material-ui/icons/Sync";
 import MedicalIcon from "@material-ui/icons/Healing";
 import RecIcon from "@material-ui/icons/Spa";
 import NonCannaIcon from "@material-ui/icons/ShoppingCart";
+import Button from '@material-ui/core/Button';
 
 const ProductListTitle = ({ record }) => {
   return <span>Product List</span>;
@@ -49,55 +55,120 @@ const ProductFilter = props => {
         choices={productTypeChoices}
         label="Product Type"
         source="productType"
+        alwaysOn
         allowEmpty={false}
       />
     </Filter>
   );
 };
 
-const ProductList = props => (
-  <List
-    {...props}
-    title={<ProductListTitle />}
-    filters={<ProductFilter />}
-    // filterDefaultValues={{ productType: "1" }}
-  >
-    <Responsive
-      small={<MobileGrid />}
-      medium={
-        <Datagrid>
-          {/* <TextField label="Name" source="name" /> */}
-          <ProductField label="Product" />
-          <TextField label="SKU" source="sku" />
-          <DineroPrice label="Cost Price" source="costPrice.amount" />
-          <DineroPrice label="Sale Price" source="salePrice.amount" />
+const mapProductsWithStore = (props) => {
+  props.dataProvider("CREATE", "MapProductWithStore", {
+    storeId: localStorage.getItem("storeId"),
+    productIds: _get(props,'selectedIds', [])
+  }).then(data => {
+    props.history.push('/StoreProducts')
+  })
+    .catch(err => {
+      console.log(err)
+    })
 
-          <FunctionField
-            text-align="left"
-            label="Product Type"
-            render={record =>
-              _get(record, "productType", 0) === 1 ? (
-                <RecIcon style={{ color: "grey" }} titleAccess="Cannabis" />
-              ) : _get(record, "productType", 0) === 2 ? (
-                <MedicalIcon
-                  style={{ color: "grey" }}
-                  titleAccess="Medical Only"
-                />
-              ) : (
-                <NonCannaIcon
-                  style={{ color: "grey" }}
-                  titleAccess="Non Cannabis"
-                />
-              )
-            }
-          />
-          <EditButton />
-          <ShowButton label="View" />
-        </Datagrid>
+}
+
+
+const BulkActionButtons = (props) => {
+  return (
+  <Fragment>
+    <Button onClick={() => mapProductsWithStore(props)}>{props.location.search == '?isMap=true' ? 'Map' : 'Delete'}</Button>
+  </Fragment>
+)};
+
+const CustomActions = (props) => {
+  const { bulkActions,
+    basePath,
+    currentSort,
+    displayedFilters,
+    exporter,
+    filters,
+    filterValues,
+    onUnselectItems,
+    resource,
+    selectedIds,
+    showFilter,
+    total,
+    ...rest } = props
+  return (
+    <CardActions>
+      {props.location.search == '?isMap=true' ? null :
+        <CreateButton
+          {...rest}
+          basePath={basePath}
+          to={{
+            pathname: "/Products/create",
+          }}
+        />
       }
-    />
-  </List>
-);
+      <ExportButton
+        disabled={total === 0}
+        resource={resource}
+        sort={currentSort}
+        filter={filterValues}
+        exporter={exporter}
+      />
+      <RefreshButton />
+    </CardActions>
+  );
+}
+
+class ProductList extends React.Component {
+  render() {
+    return (
+      <List
+        {...this.props}
+        title={<ProductListTitle />}
+        filters={<ProductFilter />}
+        bulkActionButtons={<BulkActionButtons {...this.props} />}
+        actions={<CustomActions {...this.props} />}
+      // filterDefaultValues={{ productType: "1" }}
+      >
+        <Responsive
+          small={<MobileGrid />}
+          medium={
+            <Datagrid>
+              {/* <TextField label="Name" source="name" /> */}
+              <ProductField label="Product" />
+              <TextField label="SKU" source="sku" />
+              <DineroPrice label="Cost Price" source="costPrice.amount" />
+              <DineroPrice label="Sale Price" source="salePrice.amount" />
+
+              <FunctionField
+                text-align="left"
+                label="Product Type"
+                render={record =>
+                  _get(record, "productType", 0) === 1 ? (
+                    <RecIcon style={{ color: "grey" }} titleAccess="Cannabis" />
+                  ) : _get(record, "productType", 0) === 2 ? (
+                    <MedicalIcon
+                      style={{ color: "grey" }}
+                      titleAccess="Medical Only"
+                    />
+                  ) : (
+                        <NonCannaIcon
+                          style={{ color: "grey" }}
+                          titleAccess="Non Cannabis"
+                        />
+                      )
+                }
+              />
+              {this.props.location.search == '?isMap=true' ? null : <EditButton />}
+              {this.props.location.search == '?isMap=true' ? null : <ShowButton label="View" />}
+            </Datagrid>
+          }
+        />
+      </List>
+    );
+  }
+}
 
 // class TabbedDatagrid extends React.Component {
 //   tabs = [
@@ -208,4 +279,4 @@ const ProductList = props => (
 //   </List>
 // );
 
-export default ProductList;
+export default withDataProvider(ProductList);

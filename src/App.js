@@ -30,6 +30,7 @@ import terminals from './terminals'
 import saleHistory from './saleHistory';
 import operators from './operators';
 import rooms from './rooms';
+import storeProducts from './storeProducts';
 
 const messages = {
   en: englishMessages
@@ -70,7 +71,8 @@ const App = () => (
         <Resource name="Inventory" {...inventory}  />,
         <Resource name="UnfinishedProducts" {...unfinishedProducts} />,
         <Resource name="SaleHistory" {...saleHistory} />,
-        <Resource name="Rooms" {...rooms} />
+        <Resource name="Rooms" {...rooms} />,
+        <Resource name="StoreProducts" {...storeProducts} />
       ]}
 
     </Admin>

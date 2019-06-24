@@ -30,6 +30,8 @@ import tax from "../tax";
 import purchaseOrders from "../purchaseOrders";
 import operators from "../operators";
 import rooms from '../rooms';
+import storeProducts from '../storeProducts';
+
 class Menu extends Component {
   state = {
     menuCustomers: false,
@@ -130,6 +132,15 @@ class Menu extends Component {
                   leftIcon={<stores.icon />}
                   onClick={onMenuClick}
                 />) : null
+              }
+              {
+                permissions === "1" ? null : (<MenuItemLink
+                    to={`/StoreProducts`}
+                    primaryText={"Store Products"}
+                    leftIcon={<stores.icon />}
+                    onClick={onMenuClick}
+                  />
+                )
               }
               <MenuItemLink
                 to={`/Terminal`}
