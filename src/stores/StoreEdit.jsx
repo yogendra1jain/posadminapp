@@ -67,6 +67,7 @@ const StoreEdit = ({ classes, ...props }) => (
           source="name"
           validate={required()}
         />
+        <TextInput label="METRC License" source="MetrcLicense" disabled />
         <TextInput
           label="Address Line 1"
           source="address.addressLine1"

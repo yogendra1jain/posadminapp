@@ -6,6 +6,8 @@ import {
   SelectInput,
   NumberInput,
   FormTab,
+  Query,
+  LinearProgress,
   required
 } from "react-admin";
 import React from "react";
@@ -31,24 +33,31 @@ export const styles = {
   height: { width: "5em" },
   heightFormGroup: { display: "inline-block", marginLeft: 32 }
 };
-// let createSource = (paymentMethods, availablePaymentMethods) => {
-//     let source = paymentMethods.map(paymentMethod => {
-//         return _find(availablePaymentMethods,'id',paymentMethod)
-//     })
-//     return source
-// }
 
-// const PaymentMethods = ({ record = {} }) => {
-//     return  <Query type="GET_ONE" resource="PaymentMethods" payload={{}}>
-//         {({ data, loading, error }) => {
-//             if (loading) { return <Loading />; }
-//             if (error) { return <p>Some Error Occured!</p>; }
-//             if(!_isEmpty(data)) {
-//                 return <SelectArrayInput label="Payment Methods" source="paymentMethods" choices={data} options={{ fullWidth: true }} />
-//             }
-//         }}
-//     </Query>
-// }
+const FacilityRenderer = choice => `${choice.name} (${choice.id})`;
+
+const FacilityList = () => (
+  <Query type="GET_LIST" resource="facility" payload={{}}>
+    {({ data, loading, error }) => {
+      debugger;
+      if (loading) {
+        return <LinearProgress />;
+      }
+      if (error) {
+        return <p>Error Getting Facilities</p>;
+      }
+      return (
+        <SelectInput
+          validate={required()}
+          choices={data}
+          source="metrcLicense"
+          optionValue="id"
+          optionText={FacilityRenderer}
+        />
+      );
+    }}
+  </Query>
+);
 
 const UtcDateChoices = [
   { id: "UTC-10", name: "US/Hawaii (GMT -10:00)" },
@@ -67,6 +76,7 @@ const StoreCreate = ({ classes, ...props }) => (
           source="name"
           validate={required()}
         />
+        <FacilityList />
         <TextInput
           label="Address Line 1"
           source="address.addressLine1"
