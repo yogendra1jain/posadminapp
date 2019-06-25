@@ -142,7 +142,7 @@ class PackagePendingList extends React.Component {
       });
   };
   componentDidMount() {
-    this.setState({ lastSynched: localStorage.getItem("incomingPkgSyncTime") });
+    this.setState({ lastSynched: localStorage.getItem("lastSynched") });
   }
 
   render() {
