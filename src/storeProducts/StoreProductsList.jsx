@@ -97,7 +97,7 @@ class StoreProductList extends React.Component {
         actions={<ListActions {...this.props} />}
         filters={<StoreProductFilter />}
         bulkActionButtons={<BulkActionButtons {...this.props} />}
-        filterDefaultValues={{ productType : 1 }}
+        filterDefaultValues={{ productType : "1" }}
       >
         <Responsive
           // small={<MobileGrid />}
