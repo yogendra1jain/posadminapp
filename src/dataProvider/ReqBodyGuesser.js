@@ -249,7 +249,11 @@ const ReqBodyGuesser = (obj) => {
         // return reqObjMaker(url, params.data)
 
         case 'Store/MapProducts':
-            return reqObjMaker(url, params)
+            reqBody = {
+                storeid: params.data.storeId,
+                productIds: params.ids
+            }
+            return reqObjMaker(url, reqBody)
 
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':

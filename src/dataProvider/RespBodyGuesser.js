@@ -30,12 +30,6 @@ const ResBodyGuesser = (obj) => {
                 }
         }
 
-        if(url == 'Store/MapProducts') {
-            return {
-                data: { id: response.status }
-            }
-        }
-
         return {
             data: {
                 ...params.data,
@@ -216,6 +210,10 @@ const ResBodyGuesser = (obj) => {
             };
         case 'Store/Get':
             return (url, params)
+        case 'Store/MapProducts': 
+            return {
+                data: json.storeProducts
+            }
         //For PaymentMethods ******************************************************************************************
         // case 'Store/AvailablePaymentMethods':
         //     return (url, params)

@@ -11,8 +11,10 @@ import {
   Responsive,
   TextInput,
   ExportButton,
-  withDataProvider
+  // withDataProvider,
+  crudUpdateMany
 } from "react-admin";
+import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
 import DineroPrice from "../global/components/DineroPrice";
 import MedicalIcon from "@material-ui/icons/Healing";
@@ -47,16 +49,17 @@ const ListActions = (props) => {
 };
 
 const mapProductsWithStore = (props) => {
-  props.dataProvider("CREATE", "MapProductWithStore", {
-    storeId: localStorage.getItem("storeId"),
-    productIds: _get(props,'selectedIds', [])
-  }).then(data => {
-    console.log(data)
-  })
-    .catch(err => {
-      console.log(err)
-    })
-
+  // props.dataProvider("CREATE", "MapProductWithStore", {
+  //   storeId: localStorage.getItem("storeId"),
+  //   productIds: _get(props,'selectedIds', [])
+  // }).then(data => {
+  //   console.log(data)
+  // })
+  //   .catch(err => {
+  //     console.log(err)
+  //   })
+  const { basePath, crudUpdateMany, resource, selectedIds } = props;
+  crudUpdateMany(resource, selectedIds, { storeId: localStorage.getItem("storeId") }, basePath);
 }
 
 const BulkActionButtons = (props) => {
@@ -64,6 +67,7 @@ const BulkActionButtons = (props) => {
   <Fragment>
     {_get(props,'filterValues.productType', 0) == 2 ? <Button onClick={() => mapProductsWithStore(props)}>Map Products</Button> : false }
   </Fragment>
+  
 )};
 
 const ProductField = ({ record = {} }) => (
@@ -94,7 +98,7 @@ const StoreProductFilter = props => {
 
 const Title = () => <span>Store Products</span>
 
-class SampleList extends React.Component {
+class StoreProductList extends React.Component {
   render() {
     return (
       <List
@@ -140,4 +144,4 @@ class SampleList extends React.Component {
   }
 }
 
-export default withDataProvider(SampleList)
+export default connect(undefined, { crudUpdateMany })(StoreProductList)
