@@ -20,6 +20,7 @@ import MedicalIcon from "@material-ui/icons/Healing";
 import RecIcon from "@material-ui/icons/Spa";
 import NonCannaIcon from "@material-ui/icons/ShoppingCart";
 import Avatar from "@material-ui/core/Avatar";
+import MobileGrid from './MobileGrid';
 
 const filterChoices = [
   { id: "1", name: "Mapped Products" },
@@ -100,7 +101,7 @@ class StoreProductList extends React.Component {
         filterDefaultValues={{ productType : "1" }}
       >
         <Responsive
-          // small={<MobileGrid />}
+          small={<MobileGrid />}
           medium={
             <Datagrid>
               <ProductField label="Product" />
