@@ -97,6 +97,8 @@ const UrlGuesser = (obj) => {
             return 'Store/MapProducts';
         case 'StoreProducts/GET_LIST':
             return 'Search/Products'
+        case 'StoreProducts/GET_ONE':
+            return 'Store/Product/GetById'
         case "facility/GET_LIST":
             return 'Get/FacilitiesRetailer/ByRetailerId'
 

@@ -49,6 +49,14 @@ const ResBodyGuesser = (obj) => {
                 }
             }
         }
+        if (url === 'Store/Product/GetById') {
+            return {
+                data: {
+                    ...json.storeProduct,
+                    id: json.storeProduct.productId
+                }
+            }
+        }         
         if (url == "Get/Metrc/Package/ByLabel") {
                 return {
                     data: {
