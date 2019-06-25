@@ -11,7 +11,6 @@ import {
   Responsive,
   TextInput,
   ExportButton,
-  // withDataProvider,
   crudUpdateMany
 } from "react-admin";
 import { connect } from 'react-redux';
@@ -49,15 +48,6 @@ const ListActions = (props) => {
 };
 
 const mapProductsWithStore = (props) => {
-  // props.dataProvider("CREATE", "MapProductWithStore", {
-  //   storeId: localStorage.getItem("storeId"),
-  //   productIds: _get(props,'selectedIds', [])
-  // }).then(data => {
-  //   console.log(data)
-  // })
-  //   .catch(err => {
-  //     console.log(err)
-  //   })
   const { basePath, crudUpdateMany, resource, selectedIds } = props;
   crudUpdateMany(resource, selectedIds, { storeId: localStorage.getItem("storeId") }, basePath);
 }
