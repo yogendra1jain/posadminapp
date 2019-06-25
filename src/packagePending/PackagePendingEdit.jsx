@@ -21,6 +21,10 @@ const Aside = ({ record, ...props }) => {
                             <Typography>{record.packageLabel}</Typography>
                         </div>
                         <div className="mt-10">
+                            <Typography variant="caption">METRC Product</Typography>
+                            <Typography>{record.productName}</Typography>
+                        </div>
+                        <div className="mt-10">
                             <Typography variant="caption">Manifest Number</Typography>
                             <Typography>{record.manifestNumber}</Typography>
                         </div>
