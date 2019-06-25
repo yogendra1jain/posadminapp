@@ -1,5 +1,5 @@
 
-import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField   , aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
+import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField, aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
 import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -91,17 +91,24 @@ class PackagePendingEdit extends React.Component {
                     </ReferenceInput>
                     <FormDataConsumer>
                         {({ formData, ...rest }) => {
+
                             return (
                                 <React.Fragment>
-                                    <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
-                                        <NumberInput source='quantity' label='Quantity' defaultValue={1} />
-                                        <Button onClick={this.addScan}  variant="contained" color="secondary">
-                                        <AddIcon style={{marginRight:'5px'}} /> 
-                                            Add
-                                        </Button>
-                                    </div>
-                                    <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
+                                    {formData.shippedUnitOfMeasureName == "Each" ? <React.Fragment>
+                                        <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
+                                            <NumberInput source='quantity' label='Quantity' defaultValue={1} />
+                                            <Button onClick={this.addScan} variant="contained" color="secondary">
+                                                <AddIcon style={{ marginRight: '5px' }} />
+                                                Add
+                                   </Button>
+                                        </div>
+                                        <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
+                                    </React.Fragment> :
+                                        <React.Fragment>
+                                            <Quantity/>
+                                        </React.Fragment>
+                                    }
                                 </React.Fragment>
 
 
