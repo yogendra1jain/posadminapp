@@ -83,8 +83,8 @@ const ReqBodyGuesser = (obj) => {
             }
         }
         if (url == 'PackagePending/UPDATE') {
-            url = 'Package/Split';
-            params.data.sourcePackageId = params.data.id
+            url = 'Package/Checkin';
+            params.data.sourcePackageId = params.data.packageLabel
             reqBody = {
                 ...params.data,
                 retailerId: localStorage.getItem('retailerId'),

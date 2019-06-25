@@ -134,7 +134,7 @@ class PackagePendingList extends React.Component {
     setTimeout(this.setTimOutCb, 60 * 1000);
     this.props
       .dataProvider("GET_ONE", "Sync/Metrc/IncomingTransfers", {
-        id: localStorage.getItem("retailerId")
+        id: localStorage.getItem("storeId")
       })
       .then(data => {
         localStorage.setItem("lastSynched", Date.now());
@@ -142,7 +142,7 @@ class PackagePendingList extends React.Component {
       });
   };
   componentDidMount() {
-    this.setState({ lastSynched: localStorage.getItem("incomingPkgSyncTime") });
+    this.setState({ lastSynched: localStorage.getItem("lastSynched") });
   }
 
   render() {

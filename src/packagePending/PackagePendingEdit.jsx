@@ -1,5 +1,5 @@
 
-import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField   , aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
+import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField, aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
 import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -55,47 +55,7 @@ const Aside = ({ record, ...props }) => {
         </div>
     );
 }
-const MyDatagridRow = ({ record, resource, id, onToggleItem, children, selected, basePath }) => {
-    console.log(record, "inchild");
-    return (
-        <TableRow key={id}>
-            {/* first column: selection checkbox */}
-            <TableCell padding="none">
-                {record.selectable && <Checkbox
-                    checked={selected}
-                    onClick={() => onToggleItem(id)}
-                />}
-            </TableCell>
-            {/* data columns based on children */}
-            {React.Children.map(children, field => (
-                <TableCell key={`${id}-${field.props.source}`}>
-                    {React.cloneElement(field, {
-                        record,
-                        basePath,
-                        resource,
-                    })}
-                </TableCell>
-            ))}
-        </TableRow>
-    )
-}
-const MyDatagridBody = props => <DatagridBody {...props} row={<MyDatagridRow />} />;
-const MyDatagrid = props => <Datagrid {...props} record={props.record} body={<MyDatagridBody record={props.record} />} />;
 
-const ScanFields = ({ itemPackages }) => {
-    return (
-        <TableRow>
-            {(itemPackages || []).map(item => {
-                console.log(item, "itemPackages")
-                return (
-                    [
-                        <TableCell key={item.label}>{item.label}</TableCell>,
-                        <TableCell key={item.quantity}>{item.quantity}</TableCell>]
-                )
-            })}
-        </TableRow>
-    )
-}
 class PackagePendingEdit extends React.Component {
     scan = (e, formData, rest) => {
         debugger;
@@ -131,17 +91,24 @@ class PackagePendingEdit extends React.Component {
                     </ReferenceInput>
                     <FormDataConsumer>
                         {({ formData, ...rest }) => {
+
                             return (
                                 <React.Fragment>
-                                    <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
-                                        <NumberInput source='quantity' label='Quantity' defaultValue={1} />
-                                        <Button onClick={this.addScan}  variant="contained" color="secondary">
-                                        <AddIcon style={{marginRight:'5px'}} /> 
-                                            Add
-                                        </Button>
-                                    </div>
-                                    <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
+                                    {formData.shippedUnitOfMeasureName == "Each" ? <React.Fragment>
+                                        <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
+                                            <NumberInput source='quantity' label='Quantity' defaultValue={1} />
+                                            <Button onClick={this.addScan} variant="contained" color="secondary">
+                                                <AddIcon style={{ marginRight: '5px' }} />
+                                                Add
+                                   </Button>
+                                        </div>
+                                        <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
+                                    </React.Fragment> :
+                                        <React.Fragment>
+                                            <Quantity/>
+                                        </React.Fragment>
+                                    }
                                 </React.Fragment>
 
 
