@@ -91,7 +91,17 @@ const ReqBodyGuesser = (obj) => {
             }
             return reqObjMaker(url, reqBody)
         }
-        return reqObjMaker(url, params.data)
+        if(url == 'Store/Product/Update'){
+            reqBody = {
+                id: params.data.id,
+                productId: params.data.productId,
+                storeId: params.data.storeId,
+                override: params.data.override,
+                overrideInfo: params.data.overrideInfo
+            }
+            return reqObjMaker(url, reqBody)
+        }
+        return reqObjMaker(url, reqBody)
     }
     switch (url) {
         // For Products ******************************************************************************************
