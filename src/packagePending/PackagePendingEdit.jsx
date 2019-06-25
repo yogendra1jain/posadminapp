@@ -1,5 +1,5 @@
 
-    import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField, aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
+import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField, aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
 import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -61,14 +61,16 @@ class PackagePendingEdit extends React.Component {
         debugger;
         if (e.key === 'Enter') {
             debugger;
-            console.log('do validate');
-            console.log(e, formData, rest);
-            let i = _get(formData, 'itemPackages.length', 0);
-            rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].label`, e.target.value))
-            rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].quantity`, formData.quantity))
-            rest.dispatch(change(REDUX_FORM_NAME, `scan`, ''))
-            rest.dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
+            this.addData(e.target.value,formData, rest);
+
         }
+    }
+    addData = (value,formData, rest) => {
+        let i = _get(formData, 'itemPackages.length', 0);
+        rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].label`, value))
+        rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].quantity`, formData.quantity))
+        rest.dispatch(change(REDUX_FORM_NAME, `scan`, ''))
+        rest.dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
     }
     handleDelete = (index, rows, rest) => {
         rows.splice(index, 1)
@@ -99,7 +101,7 @@ class PackagePendingEdit extends React.Component {
                                         <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
                                             <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
                                             <NumberInput source='quantity' label='Quantity' defaultValue={1} />
-                                            <Button onClick={this.addScan} variant="contained" color="secondary">
+                                            <Button onClick={()=>this.addData(formData.scan,formData, rest)} variant="contained" color="secondary">
                                                 <AddIcon style={{ marginRight: '5px' }} />
                                                 Add
                                    </Button>
@@ -107,7 +109,7 @@ class PackagePendingEdit extends React.Component {
                                         <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
                                     </React.Fragment> :
                                         <React.Fragment>
-                                            <Quantity/>
+                                            <Quantity />
                                         </React.Fragment>
                                     }
                                 </React.Fragment>
