@@ -77,12 +77,12 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                         Sale Price:&nbsp;
                         <DineroPrice record={data[id]} source="salePrice.amount" />
                     </span>
-                    {/* <EditButton
-                        resource="Products"
+                    <EditButton
+                        resource="StoreProducts"
                         basePath={basePath}
                         record={data[id]}
                     />
-                    <ShowButton
+                    {/* <ShowButton
                         resource="Products"
                         basePath={basePath}
                         record={data[id]}
