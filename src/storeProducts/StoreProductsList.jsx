@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import _find from "lodash/find";
 import _get from "lodash/get";
 import {
@@ -9,7 +9,9 @@ import {
   Filter,
   SelectInput,
   Responsive,
-  TextInput
+  TextInput,
+  ExportButton,
+  withDataProvider
 } from "react-admin";
 import Button from "@material-ui/core/Button";
 import DineroPrice from "../global/components/DineroPrice";
@@ -19,29 +21,50 @@ import NonCannaIcon from "@material-ui/icons/ShoppingCart";
 import Avatar from "@material-ui/core/Avatar";
 
 const filterChoices = [
-  { id: "1", name: "Not Mapped Products" },
-  { id: "2", name: "Mapped Products" }
+  { id: "1", name: "Mapped Products" },
+  { id: "2", name: "Not Mapped Products" }
 ];
 
 const ListActions = (props) => {
+  const { 
+    currentSort,
+    exporter,
+    filterValues,
+    resource,
+    total
+  } = props
   return (
     <div>
-      <Button
-        color="primary"
-        variant="contained"
-        onClick={
-          () => {
-            props.history.push({
-              pathname: '/Products',
-              search: 'isMap=true'
-            })
-          }
-        }
-      > Map Products
-      </Button>
+      <ExportButton
+        disabled={total === 0}
+        resource={resource}
+        sort={currentSort}
+        filter={filterValues}
+        exporter={exporter}
+      />
     </div>
   );
 };
+
+const mapProductsWithStore = (props) => {
+  props.dataProvider("CREATE", "MapProductWithStore", {
+    storeId: localStorage.getItem("storeId"),
+    productIds: _get(props,'selectedIds', [])
+  }).then(data => {
+    console.log(data)
+  })
+    .catch(err => {
+      console.log(err)
+    })
+
+}
+
+const BulkActionButtons = (props) => {
+  return (
+  <Fragment>
+    {_get(props,'filterValues.productType', 0) == 2 ? <Button onClick={() => mapProductsWithStore(props)}>Map Products</Button> : false }
+  </Fragment>
+)};
 
 const ProductField = ({ record = {} }) => (
   <div style={{ display: "flex", flexWrap: "nowrap", alignItems: "center" }}>
@@ -69,21 +92,18 @@ const StoreProductFilter = props => {
   );
 };
 
+const Title = () => <span>Store Products</span>
+
 class SampleList extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      showMasterProducts: false
-    }
-  }
-
   render() {
     return (
       <List
         {...this.props}
+        title={<Title />}
         actions={<ListActions {...this.props} />}
         filters={<StoreProductFilter />}
+        bulkActionButtons={<BulkActionButtons {...this.props} />}
+        filterDefaultValues={{ productType : 1 }}
       >
         <Responsive
           // small={<MobileGrid />}
@@ -112,8 +132,6 @@ class SampleList extends React.Component {
                       )
                 }
               />
-              {/* {this.props.location.search == '?isMap=true' ? null : <EditButton />}
-              {this.props.location.search == '?isMap=true' ? null : <ShowButton label="View" />} */}
             </Datagrid>
           }
         />
@@ -122,4 +140,4 @@ class SampleList extends React.Component {
   }
 }
 
-export default SampleList
+export default withDataProvider(SampleList)

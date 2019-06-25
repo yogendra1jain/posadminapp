@@ -95,13 +95,12 @@ const ReqBodyGuesser = (obj) => {
         case 'Search/Products':
             if (resource == 'StoreProducts') {
                 reqBody = makePaginationReqBody(url, params)
-                reqBody.filters.pop()
-                reqBody.filters.push({
-                    field: 'availableAtStores',
-                    value: localStorage.getItem('storeId')
-                })
                 if (_get(params, 'filter.productType') == 1) {
-                    delete reqBody.filters
+                    reqBody.filters.push({
+                        field: 'availableAtStores',
+                        value: localStorage.getItem('storeId')
+                    })
+                } else if (_get(params, 'filter.productType') == 2) {
                     reqBody.notFilters = []
                     reqBody.notFilters.push({
                         field: 'availableAtStores',
@@ -204,16 +203,16 @@ const ReqBodyGuesser = (obj) => {
 
 
         case 'Store/Create':
-        let data = { ...params.data };
-        data.image = _get(params, 'data.newImage.newImage', '');
-        // data.operatingHoursStart = _get(params, 'data.operatingHoursStart').getHours() + ':' + _get(params, 'data.operatingHoursStart').getMinutes();
-        // data.operatingHoursEnd = _get(params, 'data.operatingHoursEnd').getHours() + ':' + _get(params, 'data.operatingHoursEnd').getMinutes();
-        return reqObjMaker(url, { ...data, retailerId })
+            let data = { ...params.data };
+            data.image = _get(params, 'data.newImage.newImage', '');
+            // data.operatingHoursStart = _get(params, 'data.operatingHoursStart').getHours() + ':' + _get(params, 'data.operatingHoursStart').getMinutes();
+            // data.operatingHoursEnd = _get(params, 'data.operatingHoursEnd').getHours() + ':' + _get(params, 'data.operatingHoursEnd').getMinutes();
+            return reqObjMaker(url, { ...data, retailerId })
         case 'Store/Update':
             return reqObjMaker(url, params.data)
 
         case 'Get/FacilitiesRetailer/ByRetailerId':
-                return reqObjMaker(url,  { id: retailerId })
+            return reqObjMaker(url, { id: retailerId })
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             reqBody = makePaginationReqBody(url, params)
