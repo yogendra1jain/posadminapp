@@ -66,7 +66,7 @@ class PackageLabel extends Component {
         </div>
 
 
-        <iframe id="ifmcontentstoprint" style={{
+        <iframe id="ifmcontentstoprint" style={{  
           height: '0px',
           width: '0px',
           position: 'absolute'

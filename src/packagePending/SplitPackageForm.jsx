@@ -1,187 +1,160 @@
 import React from 'react';
-/* Material Styles */
-// import { splitPackageStyles } from './styles'
-/* Lodash Imports */
-import _get from 'lodash/get';
-/* Material import */
-import withStyles from '@material-ui/core/styles/withStyles';
-import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import DeleteIcons from '@material-ui/icons/DeleteForever';
 
-import { TextInput,NumberInput } from 'react-admin';
-import Quantity from './Quantity';
-/* Admin Imports */
 
-/* Component Imports */
 
-const splitPackageStyles = {
-    spiltForm: {
+function TablePaginationActions(props) {
+    const classes = {
+        root: {
+            flexShrink: 0,
+            color: '#EEEEEE',
+            marginLeft: '1px',
+            fontSize: '100px'
+        },
 
-    },
-    scanBar: {
-
-    },
-    packageListing: {
-
-    },
-    packageCard: {
-        border: '1px solid black',
-        margin: '10px'
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    menu: {
-        width: 200,
-    },
-    cardTitle: {
-        fontSize: '1.1em',
-        color: 'rgba(0,0,0,0.6)',
-        padding: '10px',
-        width: '90%',
-    },
-    cardQty: {
-        fontSize: '0.9em',
-        color: 'rgba(0,0,0,0.8)',
-        padding: '10px',
-        width: '10%',
-    },
-    upcList: {
-        background: '#ececec',
-        display: 'flex',
-        flexDirection: 'column',
-        margin: '10px',
-        height: '50px',
-        overflow: 'auto'
     }
+    const theme = {};
+    const { count, page, rowsPerPage, onChangePage } = props;
+
+    function handleFirstPageButtonClick(event) {
+        onChangePage(event, 0);
+    }
+
+    function handleBackButtonClick(event) {
+        onChangePage(event, page - 1);
+    }
+
+    function handleNextButtonClick(event) {
+        onChangePage(event, page + 1);
+    }
+
+    function handleLastPageButtonClick(event) {
+        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    }
+
+    return (
+        <div style={classes.root}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="First Page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="Previous Page">
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="Next Page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="Last Page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </div>
+    );
+}
+
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onChangePage: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
 };
 
 
-class SplitPackageForm extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-            SearchText: ''
-        }
+
+
+export default function CustomPaginationActionsTable(props) {
+    let rows = props.itemPackages || []
+    const classes = {
+        root: {
+            width: '100%',
+            marginTop: '3px',
+        },
+        table: {
+            minWidth: 500,
+        },
+        tableWrapper: {
+            overflowX: 'auto',
+        },
+    }
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
+    function handleChangePage(event, newPage) {
+        setPage(newPage);
     }
 
-    handleChange = name => event => {
-        this.setState(
-            { [name]: event.target.value }
-        );
-    };
-
-    populatePackages = (classes) => {
-        return (
-            <Grid container spacing={3}>
-                <Grid item xs={4}>
-                    <div className={classes.packageCard}>
-                        <div className='flex-column'>
-                            <div className='flex-row justify-space-between align-center'>
-                                <span className={classes.cardTitle}>Product Name</span>
-                                <span className={classes.cardQty}> 0/20 </span>
-                            </div>
-                            <div className={classes.upcList}>
-                                <ol>
-                                    <li>234546576877</li>
-                                    <li>654324564352</li>
-                                    <li>892374987934</li>
-                                    <li>546839034522</li>
-
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </Grid>
-                <Grid item xs={4}>
-                    <div className={classes.packageCard}>
-                        <div className='flex-column'>
-                            <div className='flex-row justify-space-between'>
-                                <span className={classes.cardTitle}>Product Name</span>
-                                <span className={classes.cardQty}> 0/20 </span>
-                            </div>
-                            <div className={classes.upcList}>
-                                <ol>
-                                    <li>234546576877</li>
-                                    <li>654324564352</li>
-                                    <li>892374987934</li>
-                                    <li>546839034522</li>
-
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </Grid>
-                <Grid item xs={4}>
-                    <div className={classes.packageCard}>
-                        <div className='flex-column'>
-                            <div className='flex-row justify-space-between'>
-                                <span className={classes.cardTitle}>Product Name</span>
-                                <span className={classes.cardQty}> 0/20 </span>
-                            </div>
-                            <div className={classes.upcList}>
-                                <ol>
-                                    <li>234546576877</li>
-                                    <li>654324564352</li>
-                                    <li>892374987934</li>
-                                    <li>546839034522</li>
-
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </Grid>
-                <Grid item xs={4}>
-                    <div className={classes.packageCard}>
-                        <div className='flex-column'>
-                            <div className='flex-row justify-space-between'>
-                                <span className={classes.cardTitle}>Product Name</span>
-                                <span className={classes.cardQty}> 0/20 </span>
-                            </div>
-                            <div className={classes.upcList}>
-                                <ol>
-                                    <li>234546576877</li>
-                                    <li>654324564352</li>
-                                    <li>892374987934</li>
-                                    <li>546839034522</li>
-
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </Grid>
-            </Grid>
-        )
+    function handleChangeRowsPerPage(event) {
+        setRowsPerPage(parseInt(event.target.value, 10));
     }
 
-    render() {
-        const { classes } = this.props;
-        let quantity = this.props.record.shippedQuantity;
-        let arr = [];
-        if (this.props.record.shippedUnitOfMeasureName == "Each") {
-            for (let i = 1; i <= quantity; i++) {
-                arr.push(
-                    <div>
-                        <TextInput label={`Scan${i}`} source={`itemPackages[${i-1}].label`} />
-                        <NumberInput label='Quantity' defaultValue={1}  source={`itemPackages[${i-1}].quantity`} />
+    return (
+        <Paper className={classes.root}>
+            <div className={classes.tableWrapper}>
+                <Table className={classes.table}>
+                    <TableBody>
+                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                            <TableRow key={row.name}>
+                                <TableCell component="th" scope="row">
+                                    <DeleteIcons
+                                        onClick={() => props.handleDelete(index, rows, props.rest)}
+                                        style={{ color: '#ff000096', fontSize: '2em', cursor: 'pointer' }} />
+                                </TableCell>
+                                <TableCell style={{ fontSize: '1.2em' }} align="right">{row.label}</TableCell>
+                                <TableCell style={{ fontSize: '1.2em' }} align="right">{row.quantity}</TableCell>
+                            </TableRow>
+                        ))}
 
-                    </div>)
-            }
-        }
-        if (this.props.record.shippedUnitOfMeasureName == "Grams") {
-            arr = <div><Quantity /></div>
-        }
-
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                {arr}
-                {/* {this.populatePackages(classes)} */}
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 48 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                colSpan={3}
+                                count={rows.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                SelectProps={{
+                                    inputProps: { 'aria-label': 'Rows per page' },
+                                }}
+                                onChangePage={handleChangePage}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
             </div>
-
-        );
-    }
+        </Paper>
+    );
 }
-
-
-export default withStyles(splitPackageStyles)(SplitPackageForm);
