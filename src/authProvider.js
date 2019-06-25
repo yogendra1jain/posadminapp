@@ -37,7 +37,9 @@ const authProvider = (type, params) => {
             });
     }
     if (type === AUTH_LOGOUT) {
+        let lastSynched = localStorage.getItem('lastSynched')
         localStorage.clear();
+        localStorage.setItem('lastSynched',lastSynched);
         return Promise.resolve();
     }
     if (type === AUTH_ERROR) {
