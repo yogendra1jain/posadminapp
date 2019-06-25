@@ -29,6 +29,13 @@ const ResBodyGuesser = (obj) => {
                     }
                 }
         }
+
+        if(url == 'Store/MapProducts') {
+            return {
+                data: { id: response.status }
+            }
+        }
+
         return {
             data: {
                 ...params.data,

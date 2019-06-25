@@ -22,21 +22,22 @@ import vendors from "./vendors";
 import vendorProducts from "./vendorProducts";
 import stores from "./stores";
 // import employees from './employees';
-import packagepending from "./packagePending";
-import Login from "./global/components/LoginPage";
-import strains from "./strains";
-import Layout from "./layout/Layout";
-import saleReport from "./reports/saleReport";
-import requisition from "./requisition";
-import packageIn from "./package";
-import purchaseOrders from "./purchaseOrders";
-import tax from "./tax";
-import routes from "./routes";
-import inventory from "./inventory";
-import terminals from "./terminals";
-import saleHistory from "./saleHistory";
-import operators from "./operators";
-import rooms from "./rooms";
+import packagepending from './packagePending';
+import Login from './global/components/LoginPage';
+import strains from './strains';
+import Layout from './layout/Layout';
+import saleReport from './reports/saleReport';
+import requisition from './requisition';
+import packageIn from './package'
+import purchaseOrders from './purchaseOrders';
+import tax from './tax';
+import routes from './routes';
+import inventory from './inventory';
+import terminals from './terminals'
+import saleHistory from './saleHistory';
+import operators from './operators';
+import rooms from './rooms';
+import storeProducts from './storeProducts';
 
 const messages = {
   en: englishMessages
@@ -99,7 +100,8 @@ const App = () => (
         <Resource name="Inventory" {...inventory} />,
         <Resource name="UnfinishedProducts" {...unfinishedProducts} />,
         <Resource name="SaleHistory" {...saleHistory} />,
-        <Resource name="Rooms" {...rooms} />
+        <Resource name="Rooms" {...rooms} />,
+        <Resource name="StoreProducts" {...storeProducts} />
       ]}
     </Admin>
   </div>
