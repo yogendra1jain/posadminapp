@@ -14,7 +14,7 @@ import ResBodyGuesser from './RespBodyGuesser';
  */
 const convertDataProviderRequestToHTTP = (type, resource, params) => {
     let url = UrlGuesser({ type, resource });
-    return ReqBodyGuesser({ params, url, type })
+    return ReqBodyGuesser({ params, url, type, resource })
 };
 
 /**

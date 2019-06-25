@@ -46,10 +46,13 @@ const ReqBodyGuesser = (obj) => {
     let {
         params,
         url,
-        type
+        type,
+        resource
     } = obj;
     let reqBody = {};
+
     const retailerId = localStorage.getItem('retailerId')
+
     if (type == 'GET_ONE') {
         if (url == 'Upload/File') {
             const formData = new FormData();
@@ -57,6 +60,16 @@ const ReqBodyGuesser = (obj) => {
             let req = formObjectMaker(url, formData);
             return req
         }
+        if (url === 'Inventory/Get') {
+            reqBody.storeId = localStorage.getItem('storeId')
+            reqBody.productId = _get(params, 'id')
+            return reqObjMaker(url, reqBody);
+        }
+        if (url === 'Store/Product/GetById') {
+            reqBody.storeId = localStorage.getItem('storeId')
+            reqBody.productId = _get(params, 'id')
+            return reqObjMaker(url, reqBody)
+        } 
         return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
         if (url == 'Product/Update') {
@@ -78,26 +91,34 @@ const ReqBodyGuesser = (obj) => {
             }
             return reqObjMaker(url, reqBody)
         }
-
         return reqObjMaker(url, params.data)
-
     }
     switch (url) {
         // For Products ******************************************************************************************
         case 'Search/Products':
-            reqBody = makePaginationReqBody(url, params)
-            if (_get(params, 'filter.productType')) {
-                reqBody.filters.push({
-                    field: 'productType',
-                    value: _get(params, 'filter.productType')
-                })
+            if (resource == 'StoreProducts') {
+                reqBody = makePaginationReqBody(url, params)
+                if (_get(params, 'filter.productType') == 1) {
+                    reqBody.filters.push({
+                        field: 'availableAtStores',
+                        value: localStorage.getItem('storeId')
+                    })
+                } else if (_get(params, 'filter.productType') == 2) {
+                    reqBody.notFilters = []
+                    reqBody.notFilters.push({
+                        field: 'availableAtStores',
+                        value: localStorage.getItem('storeId')
+                    })
+                }
+            } else {
+                reqBody = makePaginationReqBody(url, params)
+                if (_get(params, 'filter.productType')) {
+                    reqBody.filters.push({
+                        field: 'productType',
+                        value: _get(params, 'filter.productType')
+                    })
+                }
             }
-            // if(_get(params,'filter.undefined')) {
-            //     reqBody.filters.push({
-            //         field: 'syncStatus',
-            //         value: _get(params, 'filter.undefined')
-            //     })
-            // }
             return reqObjMaker(url, reqBody);
         case 'Product/Create':
             reqBody = {
@@ -183,18 +204,60 @@ const ReqBodyGuesser = (obj) => {
                 return reqObjMaker(url, params)
             }
 
+
         case 'Store/Create':
             let data = { ...params.data };
             data.image = _get(params, 'data.newImage.newImage', '');
             // data.operatingHoursStart = _get(params, 'data.operatingHoursStart').getHours() + ':' + _get(params, 'data.operatingHoursStart').getMinutes();
             // data.operatingHoursEnd = _get(params, 'data.operatingHoursEnd').getHours() + ':' + _get(params, 'data.operatingHoursEnd').getMinutes();
             return reqObjMaker(url, { ...data, retailerId })
-
         case 'Store/Update':
             return reqObjMaker(url, params.data)
-            
+
         case 'Get/FacilitiesRetailer/ByRetailerId':
-                return reqObjMaker(url,  { id: retailerId })
+            return reqObjMaker(url, { id: retailerId })
+        //For Vendors ******************************************************************************************
+        case 'Search/Vendors':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
+        case 'Vendor/Get':
+            return reqObjMaker(url, params)
+        case 'Vendor/Update':
+            return reqObjMaker(url, params.data)
+        case 'Vendor/Create':
+            reqBody = params.data
+            reqBody.retailerId = retailerId
+            return reqObjMaker(url, params.data)
+        case 'Vendor/GetByIds':
+            return reqObjMaker(url, params)
+        //For Vendors Products ******************************************************************************************
+        case 'Search/VendorProducts':
+            reqBody = makePaginationReqBody(url, params)
+            return reqObjMaker(url, reqBody)
+        case 'VendorProduct/Get':
+            if (Array.isArray(params.ids)) {
+                let reqBody = {
+                    id: params.ids[0]
+                }
+                return reqObjMaker(url, reqBody)
+            } else {
+                return reqObjMaker(url, params)
+            }
+        case 'VendorProduct/Save':
+            reqBody = {
+                ...params.data,
+                retailerId: localStorage.getItem('retailerId'),
+            }
+            return reqObjMaker(url, reqBody)
+        // return reqObjMaker(url, params.data)
+
+        case 'Store/MapProducts':
+            reqBody = {
+                storeid: params.data.storeId,
+                productIds: params.ids
+            }
+            return reqObjMaker(url, reqBody)
+        
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             reqBody = makePaginationReqBody(url, params)
@@ -259,6 +322,8 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, {
                 active: true, storeId: "90fce   e1b-fef3-4af7-a686-80159751d127"
             })
+        //For Package Pending ******************************************************************************************
+
         //For Package Pending ******************************************************************************************
         case 'Search/IncomingPackages':
             reqBody = makePaginationReqBody(url, params);
@@ -350,6 +415,7 @@ const ReqBodyGuesser = (obj) => {
         case 'Search/Inventory':
             let reqObj = makePaginationReqBody(url, params)
             reqObj.filters.push({ 'field': 'productType', 'value': '3' })
+            reqObj.filters.push({ 'field': 'availableAtStores', 'value': localStorage.getItem('storeId') })
             reqBody = {
                 request: reqObj,
                 storeId: localStorage.getItem('storeId')

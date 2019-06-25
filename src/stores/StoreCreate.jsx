@@ -39,7 +39,6 @@ const FacilityRenderer = choice => `${choice.name} (${choice.id})`;
 const FacilityList = () => (
   <Query type="GET_LIST" resource="facility" payload={{}}>
     {({ data, loading, error }) => {
-      debugger;
       if (loading) {
         return <LinearProgress />;
       }

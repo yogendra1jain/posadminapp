@@ -55,49 +55,53 @@ const ProductFilter = props => {
   );
 };
 
-const ProductList = props => (
-  <List
-    {...props}
-    title={<ProductListTitle />}
-    filters={<ProductFilter />}
-    // filterDefaultValues={{ productType: "1" }}
-  >
-    <Responsive
-      small={<MobileGrid />}
-      medium={
-        <Datagrid>
-          {/* <TextField label="Name" source="name" /> */}
-          <ProductField label="Product" />
-          <TextField label="SKU" source="sku" />
-          <DineroPrice label="Cost Price" source="costPrice.amount" />
-          <DineroPrice label="Sale Price" source="salePrice.amount" />
+class ProductList extends React.Component {
+  render() {
+    return (
+      <List
+        {...this.props}
+        title={<ProductListTitle />}
+        filters={<ProductFilter />}
+      // filterDefaultValues={{ productType: "1" }}
+      >
+        <Responsive
+          small={<MobileGrid />}
+          medium={
+            <Datagrid>
+              {/* <TextField label="Name" source="name" /> */}
+              <ProductField label="Product" />
+              <TextField label="SKU" source="sku" />
+              <DineroPrice label="Cost Price" source="costPrice.amount" />
+              <DineroPrice label="Sale Price" source="salePrice.amount" />
 
-          <FunctionField
-            text-align="left"
-            label="Product Type"
-            render={record =>
-              _get(record, "productType", 0) === 1 ? (
-                <RecIcon style={{ color: "grey" }} titleAccess="Cannabis" />
-              ) : _get(record, "productType", 0) === 2 ? (
-                <MedicalIcon
-                  style={{ color: "grey" }}
-                  titleAccess="Medical Only"
-                />
-              ) : (
-                <NonCannaIcon
-                  style={{ color: "grey" }}
-                  titleAccess="Non Cannabis"
-                />
-              )
-            }
-          />
-          <EditButton />
-          <ShowButton label="View" />
-        </Datagrid>
-      }
-    />
-  </List>
-);
+              <FunctionField
+                text-align="left"
+                label="Product Type"
+                render={record =>
+                  _get(record, "productType", 0) === 1 ? (
+                    <RecIcon style={{ color: "grey" }} titleAccess="Cannabis" />
+                  ) : _get(record, "productType", 0) === 2 ? (
+                    <MedicalIcon
+                      style={{ color: "grey" }}
+                      titleAccess="Medical Only"
+                    />
+                  ) : (
+                        <NonCannaIcon
+                          style={{ color: "grey" }}
+                          titleAccess="Non Cannabis"
+                        />
+                      )
+                }
+              />
+              <EditButton />
+              <ShowButton label="View" />
+            </Datagrid>
+          }
+        />
+      </List>
+    );
+  }
+}
 
 // class TabbedDatagrid extends React.Component {
 //   tabs = [

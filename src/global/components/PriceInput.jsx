@@ -11,7 +11,8 @@ class PriceInput extends React.Component {
     }
     render() {
         let { record, source, label } = this.props;
-        let originSource = this.props.source.split('.')[0];
+        let priceSplit = this.props.source.split('.');
+        let originSource = this.props.source.split('.')[priceSplit.length - 2];
         return (
             <React.Fragment>
                 <NumberInput

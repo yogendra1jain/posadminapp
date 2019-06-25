@@ -5,7 +5,6 @@ import SalesDashboardContainer from './dashboard/SalesDashboardContainer';
 import PackageLabel from './global/components/PackageLabel';
 
 export default [
-
     <Route exact path="/SalesDashboard" component={SalesDashboardContainer} />,
     <Route exact path="/InventoryDashboard" component={InventoryDashBoardContainer} />,
     <Route exact path="/PackageLabel" component={PackageLabel} />,

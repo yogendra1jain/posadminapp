@@ -29,6 +29,7 @@ const ResBodyGuesser = (obj) => {
                     }
                 }
         }
+
         return {
             data: {
                 ...params.data,
@@ -40,6 +41,22 @@ const ResBodyGuesser = (obj) => {
         if (json.id == null) {
             json.id = "uuid";
         }
+        if (url === "Inventory/Get") {
+            return {
+                data : {
+                    ...json.inventory,
+                    id: json.inventory.productId
+                }
+            }
+        }
+        if (url === 'Store/Product/GetById') {
+            return {
+                data: {
+                    ...json.storeProduct,
+                    id: json.storeProduct.productId
+                }
+            }
+        }         
         if (url == "Get/Metrc/Package/ByLabel") {
                 return {
                     data: {
@@ -201,6 +218,10 @@ const ResBodyGuesser = (obj) => {
             };
         case 'Store/Get':
             return (url, params)
+        case 'Store/MapProducts': 
+            return {
+                data: json.storeProducts
+            }
         //For PaymentMethods ******************************************************************************************
         // case 'Store/AvailablePaymentMethods':
         //     return (url, params)
