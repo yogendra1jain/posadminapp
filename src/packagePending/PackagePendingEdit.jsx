@@ -55,47 +55,7 @@ const Aside = ({ record, ...props }) => {
         </div>
     );
 }
-const MyDatagridRow = ({ record, resource, id, onToggleItem, children, selected, basePath }) => {
-    console.log(record, "inchild");
-    return (
-        <TableRow key={id}>
-            {/* first column: selection checkbox */}
-            <TableCell padding="none">
-                {record.selectable && <Checkbox
-                    checked={selected}
-                    onClick={() => onToggleItem(id)}
-                />}
-            </TableCell>
-            {/* data columns based on children */}
-            {React.Children.map(children, field => (
-                <TableCell key={`${id}-${field.props.source}`}>
-                    {React.cloneElement(field, {
-                        record,
-                        basePath,
-                        resource,
-                    })}
-                </TableCell>
-            ))}
-        </TableRow>
-    )
-}
-const MyDatagridBody = props => <DatagridBody {...props} row={<MyDatagridRow />} />;
-const MyDatagrid = props => <Datagrid {...props} record={props.record} body={<MyDatagridBody record={props.record} />} />;
 
-const ScanFields = ({ itemPackages }) => {
-    return (
-        <TableRow>
-            {(itemPackages || []).map(item => {
-                console.log(item, "itemPackages")
-                return (
-                    [
-                        <TableCell key={item.label}>{item.label}</TableCell>,
-                        <TableCell key={item.quantity}>{item.quantity}</TableCell>]
-                )
-            })}
-        </TableRow>
-    )
-}
 class PackagePendingEdit extends React.Component {
     scan = (e, formData, rest) => {
         debugger;
