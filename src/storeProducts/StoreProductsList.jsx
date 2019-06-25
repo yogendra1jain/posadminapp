@@ -11,7 +11,8 @@ import {
   Responsive,
   TextInput,
   ExportButton,
-  crudUpdateMany
+  crudUpdateMany,
+  EditButton
 } from "react-admin";
 import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
@@ -56,7 +57,7 @@ const mapProductsWithStore = (props) => {
 const BulkActionButtons = (props) => {
   return (
   <Fragment>
-    {_get(props,'filterValues.productType', 0) == 2 ? <Button onClick={() => mapProductsWithStore(props)}>Map Products</Button> : false }
+    {_get(props,'filterValues.productType', 0) == 2 ? <Button color="secondary" onClick={() => mapProductsWithStore(props)}>Map</Button> : false }
   </Fragment>
   
 )};
@@ -127,6 +128,7 @@ class StoreProductList extends React.Component {
                       )
                 }
               />
+              <EditButton />
             </Datagrid>
           }
         />
