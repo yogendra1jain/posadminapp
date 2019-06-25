@@ -8,14 +8,9 @@ import {
   TextField,
   TextInput,
   SelectInput,
-  Responsive,
-  CardActions,
-  CreateButton,
-  ExportButton,
-  RefreshButton,
-  withDataProvider
+  Responsive
 } from "react-admin";
-import React, { Fragment } from "react";
+import React from "react";
 import DineroPrice from "../global/components/DineroPrice";
 import _get from "lodash/get";
 import MobileGrid from "./MobileGrid";
@@ -24,7 +19,6 @@ import SyncIcon from "@material-ui/icons/Sync";
 import MedicalIcon from "@material-ui/icons/Healing";
 import RecIcon from "@material-ui/icons/Spa";
 import NonCannaIcon from "@material-ui/icons/ShoppingCart";
-import Button from '@material-ui/core/Button';
 
 const ProductListTitle = ({ record }) => {
   return <span>Product List</span>;
@@ -55,70 +49,11 @@ const ProductFilter = props => {
         choices={productTypeChoices}
         label="Product Type"
         source="productType"
-        alwaysOn
         allowEmpty={false}
       />
     </Filter>
   );
 };
-
-const mapProductsWithStore = (props) => {
-  props.dataProvider("CREATE", "MapProductWithStore", {
-    storeId: localStorage.getItem("storeId"),
-    productIds: _get(props,'selectedIds', [])
-  }).then(data => {
-    props.history.push('/StoreProducts')
-  })
-    .catch(err => {
-      console.log(err)
-    })
-
-}
-
-
-const BulkActionButtons = (props) => {
-  return (
-  <Fragment>
-    <Button onClick={() => mapProductsWithStore(props)}>{props.location.search == '?isMap=true' ? 'Map' : 'Delete'}</Button>
-  </Fragment>
-)};
-
-const CustomActions = (props) => {
-  const { bulkActions,
-    basePath,
-    currentSort,
-    displayedFilters,
-    exporter,
-    filters,
-    filterValues,
-    onUnselectItems,
-    resource,
-    selectedIds,
-    showFilter,
-    total,
-    ...rest } = props
-  return (
-    <CardActions>
-      {props.location.search == '?isMap=true' ? null :
-        <CreateButton
-          {...rest}
-          basePath={basePath}
-          to={{
-            pathname: "/Products/create",
-          }}
-        />
-      }
-      <ExportButton
-        disabled={total === 0}
-        resource={resource}
-        sort={currentSort}
-        filter={filterValues}
-        exporter={exporter}
-      />
-      <RefreshButton />
-    </CardActions>
-  );
-}
 
 class ProductList extends React.Component {
   render() {
@@ -127,8 +62,6 @@ class ProductList extends React.Component {
         {...this.props}
         title={<ProductListTitle />}
         filters={<ProductFilter />}
-        bulkActionButtons={<BulkActionButtons {...this.props} />}
-        actions={<CustomActions {...this.props} />}
       // filterDefaultValues={{ productType: "1" }}
       >
         <Responsive
@@ -160,8 +93,8 @@ class ProductList extends React.Component {
                       )
                 }
               />
-              {this.props.location.search == '?isMap=true' ? null : <EditButton />}
-              {this.props.location.search == '?isMap=true' ? null : <ShowButton label="View" />}
+              <EditButton />
+              <ShowButton label="View" />
             </Datagrid>
           }
         />
@@ -279,4 +212,4 @@ class ProductList extends React.Component {
 //   </List>
 // );
 
-export default withDataProvider(ProductList);
+export default ProductList;
