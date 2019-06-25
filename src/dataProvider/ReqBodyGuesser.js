@@ -65,8 +65,11 @@ const ReqBodyGuesser = (obj) => {
             reqBody.productId = _get(params, 'id')
             return reqObjMaker(url, reqBody);
         }
-
-
+        if (url === 'Store/Product/GetById') {
+            reqBody.storeId = localStorage.getItem('storeId')
+            reqBody.productId = _get(params, 'id')
+            return reqObjMaker(url, reqBody)
+        } 
         return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
         if (url == 'Product/Update') {
@@ -254,7 +257,7 @@ const ReqBodyGuesser = (obj) => {
                 productIds: params.ids
             }
             return reqObjMaker(url, reqBody)
-
+        
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             reqBody = makePaginationReqBody(url, params)
