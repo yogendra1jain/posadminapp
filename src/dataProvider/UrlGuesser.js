@@ -101,6 +101,8 @@ const UrlGuesser = (obj) => {
             return 'Store/Product/GetById'
         case "facility/GET_LIST":
             return 'Get/FacilitiesRetailer/ByRetailerId'
+        case 'StoreProducts/UPDATE':
+            return 'Store/Product/Update'
 
         //For PaymentMethods ******************************************************************************************
         // case 'PaymentMethods/GET_ONE':
