@@ -65,6 +65,7 @@ const StoreProductEdit = props => {
   return (
     <Edit
       title="Override Store Product"
+      undoable={false}
       {...props}
     >
       <SimpleForm redirect="list">
