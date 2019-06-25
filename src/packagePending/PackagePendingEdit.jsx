@@ -1,5 +1,5 @@
 
-import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField, aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
+    import { Edit, SimpleForm, Show, DatagridBody, field, SimpleShowLayout, ArrayField, REDUX_FORM_NAME, NumberInput, Datagrid, FormDataConsumer, required, DateField, aside, FormTab, TextInput, BooleanInput, ReferenceInput, AutocompleteInput, SelectInput, TextField, AutoComplete, FormInput, ArrayInput, SimpleFormIterator, DateInput } from 'react-admin';
 import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -80,6 +80,7 @@ class PackagePendingEdit extends React.Component {
         return (
             <Edit
                 {...this.props}
+                undoable={false}
                 aside={<Aside />}>
                 <SimpleForm submitOnEnter={false} >
                     <ReferenceInput
