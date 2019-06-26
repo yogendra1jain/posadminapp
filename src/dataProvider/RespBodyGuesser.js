@@ -2,8 +2,6 @@ import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty';
 import Dinero from 'dinero.js';
 import moment from 'moment';
-import map from 'lodash/map';
-import { uuidv1 } from 'uuid/v1';
 
 const DineroInit = (amount, currency, precision) => (
     Dinero({ amount: parseInt(amount) || 0, currency: currency || 'USD', precision: precision || 2 })
@@ -102,6 +100,13 @@ const ResBodyGuesser = (obj) => {
         if(url == 'Get/InventoryLocation/Id') {
             return {
                 data: json.room
+            }
+        }
+
+        if(url == 'Get/Metrc/Item/MetrcId') {
+            return {
+                data: json.metrcItem,
+                id: json.metrcItem.id
             }
         }
 
@@ -432,7 +437,13 @@ const ResBodyGuesser = (obj) => {
                 data: _get(json, 'inventoryLocations', []),
                 total: json.total || 0,
             };
-
+        
+        //For METRC Products       ******************************************************************************************
+        case 'Search/MetrcItems':
+            return {
+                data: _get(json, 'metrcItems', []),
+                total: json.total || 0
+            }
         default:
             if (json.id == null) {
                 json.id = "uuid";

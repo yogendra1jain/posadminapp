@@ -15,7 +15,7 @@ import englishMessages from "ra-language-english";
 import authProvider from "./authProvider";
 import dataProvider from "./dataProvider";
 import products from "./products";
-import unfinishedProducts from "./unfinishedProducts";
+import METRCProducts from "./METRCProducts";
 import customers from "./customers";
 import categories from "./categories";
 import vendors from "./vendors";
@@ -98,7 +98,7 @@ const App = () => (
         <Resource name="Requisition" {...requisition} />,
         <Resource name="PurchaseOrders" {...purchaseOrders} />,
         <Resource name="Inventory" {...inventory} />,
-        <Resource name="UnfinishedProducts" {...unfinishedProducts} />,
+        <Resource name="METRCProducts" {...METRCProducts} />,
         <Resource name="SaleHistory" {...saleHistory} />,
         <Resource name="Rooms" {...rooms} />,
         <Resource name="StoreProducts" {...storeProducts} />

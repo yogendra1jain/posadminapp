@@ -69,7 +69,7 @@ const ReqBodyGuesser = (obj) => {
             reqBody.storeId = localStorage.getItem('storeId')
             reqBody.productId = _get(params, 'id')
             return reqObjMaker(url, reqBody)
-        } 
+        }
         return reqObjMaker(url, params)
     } else if (type == 'UPDATE') {
         if (url == 'Product/Update') {
@@ -91,13 +91,21 @@ const ReqBodyGuesser = (obj) => {
             }
             return reqObjMaker(url, reqBody)
         }
-        if(url == 'Store/Product/Update'){
+        if (url == 'Store/Product/Update') {
             reqBody = {
                 id: params.data.id,
                 productId: params.data.productId,
                 storeId: params.data.storeId,
                 override: params.data.override,
                 overrideInfo: params.data.overrideInfo
+            }
+            return reqObjMaker(url, reqBody)
+        }
+        if (url == 'Store/ImportedItems/Map') {
+            reqBody = {
+                storeId: _get(params, 'data.storeId', ''),
+                posProductId: _get(params, 'data.productId', ''),
+                metrcId: _get(params, 'data.id', '').toString()
             }
             return reqObjMaker(url, reqBody)
         }
@@ -110,8 +118,8 @@ const ReqBodyGuesser = (obj) => {
     switch (url) {
         // For Products ******************************************************************************************
         case 'Search/Products':
+            reqBody = makePaginationReqBody(url, params)
             if (resource == 'StoreProducts') {
-                reqBody = makePaginationReqBody(url, params)
                 if (_get(params, 'filter.productType') == 1) {
                     reqBody.filters.push({
                         field: 'availableAtStores',
@@ -125,12 +133,27 @@ const ReqBodyGuesser = (obj) => {
                     })
                 }
             } else {
-                reqBody = makePaginationReqBody(url, params)
-                if (_get(params, 'filter.productType')) {
+                if (_get(params, 'filter.unmappedProducts', false)) {
                     reqBody.filters.push({
                         field: 'productType',
-                        value: _get(params, 'filter.productType')
+                        value: "1"
                     })
+                    reqBody.filters.push({
+                        field: 'productType',
+                        value: "2"
+                    })
+                    reqBody.notFilters = []
+                    reqBody.notFilters.push({
+                        field: 'availableAtStores',
+                        value: localStorage.getItem('storeId')
+                    })
+                } else {
+                    if (_get(params, 'filter.productType')) {
+                        reqBody.filters.push({
+                            field: 'productType',
+                            value: _get(params, 'filter.productType')
+                        })
+                    }
                 }
             }
             return reqObjMaker(url, reqBody);
@@ -272,7 +295,7 @@ const ReqBodyGuesser = (obj) => {
                 productIds: params.ids
             }
             return reqObjMaker(url, reqBody)
-        
+
         //For Vendors ******************************************************************************************
         case 'Search/Vendors':
             reqBody = makePaginationReqBody(url, params)
@@ -348,12 +371,12 @@ const ReqBodyGuesser = (obj) => {
                     value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
                 })
             }
-            
+
             reqBody.notFilters = [{
                 field: 'checkedIn',
                 value: 'true'
             }]
-                
+
             return reqObjMaker(url, reqBody);
 
 
@@ -511,6 +534,12 @@ const ReqBodyGuesser = (obj) => {
             return reqObjMaker(url, params)
         case 'Update/InventoryLocation':
             return reqObjMaker(url, params)
+
+        // For METRCProducts *********************************************************************************
+        case 'Search/MetrcItems':
+            reqBody = makePaginationReqBody(url, params, 'storeId')
+            return reqObjMaker(url, reqBody)
+
         default:
             break;
 
