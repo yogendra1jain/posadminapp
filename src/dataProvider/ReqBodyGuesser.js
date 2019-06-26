@@ -348,6 +348,12 @@ const ReqBodyGuesser = (obj) => {
                     value: _get(params, 'filter.storeId') || localStorage.getItem('storeId')
                 })
             }
+            
+            reqBody.notFilters = [{
+                field: 'checkedIn',
+                value: 'true'
+            }]
+                
             return reqObjMaker(url, reqBody);
 
 
@@ -356,6 +362,12 @@ const ReqBodyGuesser = (obj) => {
         case 'Search/Packages':
             reqBody = makePaginationReqBody(url, params)
             reqBody = makePaginationReqBody(url, params);
+            if (_get(params, 'filter.status')) {
+                reqBody.filters.push({
+                    field: 'status',
+                    value: _get(params, 'filter.status')
+                })
+            }
             if (_get(params, 'filter.posProductId')) {
                 reqBody.filters.push({
                     field: 'posProductId',

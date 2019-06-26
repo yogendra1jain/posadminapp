@@ -37,7 +37,7 @@ const ListActionButton = ({
 }) => {
   return (
     <div>
-      <Typography>{`Last Synced: ${moment(
+      <Typography variant="caption">{`Last Synced: ${moment(
         lastSynched * 1
       ).fromNow()}`}</Typography>
       <Button
