@@ -112,6 +112,9 @@ class PackagePendingEdit extends React.Component {
         if(qtyValidation(formData.quantity,formData)){
             return;
         }
+        if(_get(formData, 'itemPackages',[]).find(v=>v.label==value)){
+            return;
+        }
         let i = _get(formData, 'itemPackages.length', 0);
         rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].label`, value))
         rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].quantity`, quantity))
@@ -193,8 +196,8 @@ class PackagePendingEdit extends React.Component {
 
                                     return (<React.Fragment>
                                         <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
-                                            <NumberInput  validate={qtyValidation} source='quantity' label='Quantity' defaultValue={1} />
+                                            <TextInput  label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
+                                            <NumberInput parse={val=>val<=0?1:parseInt(val)}  validate={qtyValidation} source='quantity' label='Quantity' defaultValue={1} />
                                             <Button onClick={() => this.addData(formData.scan, formData.quantity, rest, formData)} variant="contained" color="secondary">
                                                 <AddIcon style={{ marginRight: '5px' }} />
                                                 Add
