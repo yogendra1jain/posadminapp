@@ -128,7 +128,7 @@ class PackagePendingEdit extends React.Component {
         debugger;
         switch (weightType) {
             case 'grams':
-                if (!this.state.choices.find(ch => ch.name == "grams")) {
+                if (!this.state.choices.find(ch => ch.id == "grams")) {
                     this.state.choices.push({ id: 'grams', name: 'grams' });
                     this.setState({ choices: this.state.choices, key: uuidv1() });
                     // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
@@ -136,28 +136,28 @@ class PackagePendingEdit extends React.Component {
 
                 break;
             case 'byEight':
-                if (!this.state.choices.find(ch => ch.name == "byEight")) {
+                if (!this.state.choices.find(ch => ch.id == "byEight")) {
                     this.state.choices.push({ id: 'byEight', name: '1/8 oz' });
                     this.setState({ choices: this.state.choices, key: uuidv1() });
                     // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
                 }
                 break;
             case 'byFour':
-                if (!this.state.choices.find(ch => ch.name == "byFour")) {
+                if (!this.state.choices.find(ch => ch.id == "byFour")) {
                     this.state.choices.push({ id: 'byFour', name: '1/4 oz' });
                     this.setState({ choices: this.state.choices, key: uuidv1() });
                     // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
                 }
                 break;
             case 'byTwo':
-                if (!this.state.choices.find(ch => ch.name == "byTwo")) {
+                if (!this.state.choices.find(ch => ch.id == "byTwo")) {
                     this.state.choices.push({ id: 'byTwo', name: '1/2 oz' });
                     this.setState({ choices: this.state.choices, key: uuidv1() });
                     // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
                 }
                 break;
             case 'byOne':
-                if (!this.state.choices.find(ch => ch.name == "byOne")) {
+                if (!this.state.choices.find(ch => ch.id == "byOne")) {
                     this.state.choices.push({ id: 'byOne', name: '1 oz' });
                     this.setState({ choices: this.state.choices, key: uuidv1() });
                     // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
