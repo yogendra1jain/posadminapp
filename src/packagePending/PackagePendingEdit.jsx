@@ -14,6 +14,7 @@ import { change } from "redux-form";
 import _get from 'lodash/get';
 import Button from '@material-ui/core/Button';
 import uuidv1 from "uuid/v1";
+import { qtyValidation } from './validations';
 const queryString = require('query-string');
 
 
@@ -106,6 +107,11 @@ class PackagePendingEdit extends React.Component {
         }
     }
     addData = (value, quantity, rest, formData) => {
+        if(value=='')
+        return;
+        if(qtyValidation(formData.quantity,formData)){
+            return;
+        }
         let i = _get(formData, 'itemPackages.length', 0);
         rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].label`, value))
         rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].quantity`, quantity))
@@ -188,7 +194,7 @@ class PackagePendingEdit extends React.Component {
                                     return (<React.Fragment>
                                         <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
                                             <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
-                                            <NumberInput source='quantity' label='Quantity' defaultValue={1} />
+                                            <NumberInput  validate={qtyValidation} source='quantity' label='Quantity' defaultValue={1} />
                                             <Button onClick={() => this.addData(formData.scan, formData.quantity, rest, formData)} variant="contained" color="secondary">
                                                 <AddIcon style={{ marginRight: '5px' }} />
                                                 Add
