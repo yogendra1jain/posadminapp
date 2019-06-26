@@ -101,6 +101,10 @@ const ReqBodyGuesser = (obj) => {
             }
             return reqObjMaker(url, reqBody)
         }
+        reqBody = {
+            ...params.data,
+            retailerId
+        }
         return reqObjMaker(url, reqBody)
     }
     switch (url) {
@@ -222,6 +226,7 @@ const ReqBodyGuesser = (obj) => {
             // data.operatingHoursEnd = _get(params, 'data.operatingHoursEnd').getHours() + ':' + _get(params, 'data.operatingHoursEnd').getMinutes();
             return reqObjMaker(url, { ...data, retailerId })
         case 'Store/Update':
+            debugger
             return reqObjMaker(url, params.data)
 
         case 'Get/FacilitiesRetailer/ByRetailerId':
