@@ -439,7 +439,7 @@ const ReqBodyGuesser = (obj) => {
         case 'PurchaseOrder/GetByCriteria':
             return reqObjMaker(url, { retailerId })
         //For Inventory       ******************************************************************************************
-        case 'Search/Inventory':
+        case 'Search/NonCannabis/Inventory':
             let reqObj = makePaginationReqBody(url, params)
             reqObj.filters.push({ 'field': 'productType', 'value': '3' })
             reqObj.filters.push({ 'field': 'availableAtStores', 'value': localStorage.getItem('storeId') })
