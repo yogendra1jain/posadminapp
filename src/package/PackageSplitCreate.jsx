@@ -16,6 +16,7 @@ import {
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import { qtyValidation } from "./validations";
 
 const Aside = props => (
   <div style={{ width: 400, margin: "1em" }}>
@@ -84,13 +85,13 @@ class PackageSplitCreate extends React.Component {
                 source="quantity"
                 label="Quantity"
                 parse={val=>val<=0?1:parseInt(val)}
-                validate={required()}
+                validate={[required(),(values,allData)=>qtyValidation(values,allData,this.state.quantity)]}
               />: <NumberInput
               source="quantity"
               label="Quantity"
               parse={val=>val<=0?0:val}
-              validate={required()}
-            />}
+              validate={[required(),(values,allData)=>qtyValidation(values,allData,this.state.quantity)]}
+              />}
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleForm>
