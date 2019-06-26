@@ -18,7 +18,7 @@ import PackageSplitCreate from './PackageSplitCreate';
 
 
 const PackageCreate = props => {
-  const { sourcePackageId: sourcePackageId } = parse(props.location.search);
+  const { sourcePackageId: sourcePackageId } = parse(props.location.search.split("?")[1]);
   console.log(sourcePackageId, "sourcePackageId_stringsourcePackageId_string")
   return (
     <React.Fragment>
