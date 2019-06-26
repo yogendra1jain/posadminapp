@@ -22,8 +22,10 @@ import {
   EmailField,
   NumberField,
   ReferenceField,
-  TextInput
+  TextInput,
+  Responsive
 } from "react-admin";
+import MobileGrid from "./MobileGrid";
 
 const FilterActions = ({ basePath, ...rest }) => {
   return (
@@ -94,36 +96,36 @@ const SampleList = ({ permissions, ...props }) => {
       filters={<OperatorFilter permissions={permissions} />}
       actions={<FilterActions />}
     >
-      <Datagrid>
-        <FullNameField label="Name" />
-        {permissions === "1" ? (
-          <ReferenceField
-            label="Store"
-            source="storeId"
-            reference="Store"
-            linkType="show"
-          >
-            <TextField source="name" />
-          </ReferenceField>
-        ) : null}
-        {/* <TextField label="First Name" source="person.firstName" /> */}
-        {/* <TextField label="Last Name" source="person.lastName" /> */}
-        <TextField label="Phone Number" source="phoneNumber.phoneNumber" />
-        <EmailField source="email" />
-        <BooleanField source="active" />
-        {/* <NumberField source="loginPin" /> */}
-        <FunctionField
-          label="Role"
-          render={record =>
-            _get(record, "role", "cashier") === "cashier"
-              ? "Budtender"
-              : "Manager"
-          }
-        />
+      <Responsive
+        small={<MobileGrid />}
+        medium={<Datagrid>
+          <FullNameField label="Name" />
+          {permissions === "1" ? (
+            <ReferenceField
+              label="Store"
+              source="storeId"
+              reference="Store"
+              linkType="show"
+            >
+              <TextField source="name" />
+            </ReferenceField>
+          ) : null}
+          <TextField label="Phone Number" source="phoneNumber.phoneNumber" />
+          <EmailField source="email" />
+          <BooleanField source="active" />
+          <FunctionField
+            label="Role"
+            render={record =>
+              _get(record, "role", "cashier") === "cashier"
+                ? "Budtender"
+                : "Manager"
+            }
+          />
 
-        <MyEditButton />
-        <MyShowButton />
-      </Datagrid>
+          <MyEditButton />
+          <MyShowButton />
+        </Datagrid>}
+      />
     </List>
   );
 };

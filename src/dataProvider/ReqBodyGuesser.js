@@ -538,6 +538,11 @@ const ReqBodyGuesser = (obj) => {
         // For METRCProducts *********************************************************************************
         case 'Search/MetrcItems':
             reqBody = makePaginationReqBody(url, params, 'storeId')
+            reqBody.notFilters = []
+            reqBody.notFilters.push({
+                field: "importStatus",
+                value: "true"
+            })
             return reqObjMaker(url, reqBody)
 
         default:
