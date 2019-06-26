@@ -22,10 +22,22 @@ import MobileGrid from "./MobileGrid";
 import { Link } from "react-router-dom";
 import ProductReferenceField from "../products/ProductReferenceField";
 
+const statusChoices = [
+  { id: "1", name: "Available" },
+  { id: "2", name: "Consumed" }
+];
+
 const PackageFilter = ({ permissions, ...props }) => {
   return (
     <Filter {...props}>
       <TextInput label="Search" source="q" alwaysOn />
+      <SelectInput
+        label="Status"
+        source="status"
+        choices={statusChoices}
+        allowEmpty={false}
+        alwaysOn
+      />
       {permissions === "1" ? (
         <ReferenceInput
           label="Select Store"
@@ -53,16 +65,16 @@ const FilterActions = ({ permissions, basePath, ...rest }) => {
           }}
         />
       ) : (
-          <CreateButton
-            {...rest}
-            basePath={basePath}
-            to={{
-              pathname: "/Package/create",
-              search: `?storeId=${localStorage.getItem("storeId")}`
-              // state: { record: { storeId: storeId } }
-            }}
-          />
-        )}
+        <CreateButton
+          {...rest}
+          basePath={basePath}
+          to={{
+            pathname: "/Package/create",
+            search: `?storeId=${localStorage.getItem("storeId")}`
+            // state: { record: { storeId: storeId } }
+          }}
+        />
+      )}
     </CardActions>
   );
 };
@@ -82,18 +94,24 @@ const AddNewSplitButton = ({ record }) => (
     Split
   </Button>
 );
-const PrintLabelButton = ({ record,...rest }) => (
+const PrintLabelButton = ({ record, ...rest }) => (
   <Button
     title="Print Label"
     color="primary"
     component={Link}
     to={{
       pathname: "/PackageLabel",
-      state:{sourcePackageId:record.id,label:record.label,name:record.metrcProduct},
-      search:`?sourcePackageId=${record.id}&label=${record.label}&name=${record.metrcProduct}`
+      state: {
+        sourcePackageId: record.id,
+        label: record.label,
+        name: record.metrcProduct
+      },
+      search: `?sourcePackageId=${record.id}&label=${record.label}&name=${
+        record.metrcProduct
+      }`
     }}
   >
-    <Print/>
+    <Print />
     {rest.label}
   </Button>
 );
@@ -108,6 +126,7 @@ const PackageList = ({ permissions, ...props }) => (
     filters={<PackageFilter permissions={permissions} />}
     actions={<FilterActions permissions={permissions} />}
     title={<PackageTitle />}
+    filterDefaultValues={{ status: "1" }}
   >
     <Responsive
       small={<MobileGrid />}
@@ -129,9 +148,11 @@ const PackageList = ({ permissions, ...props }) => (
           <FunctionField
             label="Quantity"
             render={record =>
-              _get(record, "quantity", 0) === 0
-                ? `0 ${record.uom}`
-                : `${record.quantity} ${record.uom}`
+              _get(record, "status", 2) === 1
+                ? _get(record, "quantity", 0) === 0
+                  ? `0 ${record.uom}`
+                  : `${record.quantity} ${record.uom}`
+                : null
             }
           />
 
@@ -150,12 +171,22 @@ const PackageList = ({ permissions, ...props }) => (
                   titleAccess={record.metrcError}
                 />
               ) : (
-                    <SyncIcon style={{ color: "green" }} />
-                  )
+                <SyncIcon style={{ color: "green" }} />
+              )
             }
           />
-          <EditButton label="Edit" />
-          <AddNewSplitButton label="Split" />
+
+          <FunctionField
+            render={record =>
+              _get(record, "status", 2) === 1 ? (
+                <React.Fragment>
+                  <EditButton label="Edit" />
+                  <AddNewSplitButton record={record} label="Split" />
+                </React.Fragment>
+              ) : null
+            }
+          />
+
           <PrintLabelButton label="Print" />
         </Datagrid>
       }

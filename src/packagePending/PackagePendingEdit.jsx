@@ -13,6 +13,9 @@ import AddIcon from '@material-ui/icons/Add'
 import { change } from "redux-form";
 import _get from 'lodash/get';
 import Button from '@material-ui/core/Button';
+import uuidv1 from "uuid/v1";
+const queryString = require('query-string');
+
 
 
 
@@ -57,18 +60,55 @@ const Aside = ({ record, ...props }) => {
 }
 
 class PackagePendingEdit extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { choices: [], key: uuidv1() };
+    }
+
+    weightedQuantity = (formData) => {
+        let quantity = 0;
+        switch (formData.weightSelection) {
+            case 'grams':
+                quantity = 1;
+                break;
+            case 'byEight':
+                quantity = 3.5;
+                break;
+            case 'byFour':
+                quantity = 7;
+
+                break;
+            case 'byTwo':
+                quantity = 14;
+                break;
+            case 'byOne':
+                quantity = 28;
+                break;
+
+
+            default:
+                break;
+        }
+        return quantity
+    }
     scan = (e, formData, rest) => {
         debugger;
         if (e.key === 'Enter') {
             debugger;
-            this.addData(e.target.value,formData, rest);
+            if (formData.weightSelection) {
+
+                this.addData(e.target.value, this.weightedQuantity(formData), rest, formData);
+            }
+            else {
+                this.addData(e.target.value, formData.quantity, rest, formData);
+            }
 
         }
     }
-    addData = (value,formData, rest) => {
+    addData = (value, quantity, rest, formData) => {
         let i = _get(formData, 'itemPackages.length', 0);
         rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].label`, value))
-        rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].quantity`, formData.quantity))
+        rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].quantity`, quantity))
         rest.dispatch(change(REDUX_FORM_NAME, `scan`, ''))
         rest.dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
     }
@@ -78,11 +118,59 @@ class PackagePendingEdit extends React.Component {
         this.setState({})
 
     }
+    pcsSelection = (weightType, pcs, dispatch) => {
+        debugger;
+        switch (weightType) {
+            case 'grams':
+                if (!this.state.choices.find(ch => ch.name == "grams")) {
+                    this.state.choices.push({ id: 'grams', name: 'grams' });
+                    this.setState({ choices: this.state.choices, key: uuidv1() });
+                    // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
+                }
+
+                break;
+            case 'byEight':
+                if (!this.state.choices.find(ch => ch.name == "byEight")) {
+                    this.state.choices.push({ id: 'byEight', name: '1/8 oz' });
+                    this.setState({ choices: this.state.choices, key: uuidv1() });
+                    // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
+                }
+                break;
+            case 'byFour':
+                if (!this.state.choices.find(ch => ch.name == "byFour")) {
+                    this.state.choices.push({ id: 'byFour', name: '1/4 oz' });
+                    this.setState({ choices: this.state.choices, key: uuidv1() });
+                    // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
+                }
+                break;
+            case 'byTwo':
+                if (!this.state.choices.find(ch => ch.name == "byTwo")) {
+                    this.state.choices.push({ id: 'byTwo', name: '1/2 oz' });
+                    this.setState({ choices: this.state.choices, key: uuidv1() });
+                    // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
+                }
+                break;
+            case 'byOne':
+                if (!this.state.choices.find(ch => ch.name == "byOne")) {
+                    this.state.choices.push({ id: 'byOne', name: '1 oz' });
+                    this.setState({ choices: this.state.choices, key: uuidv1() });
+                    // dispatch(change(REDUX_FORM_NAME, `quantity`, 1))
+                }
+                break;
+
+
+            default:
+                break;
+        }
+    }
     render() {
+        const parsed = queryString.parse(this.props.location.search);
+        console.log(parsed, "parsed");
         return (
             <Edit
                 {...this.props}
                 undoable={false}
+                key={this.state.key}
                 aside={<Aside />}>
                 <SimpleForm submitOnEnter={false} >
                     <ReferenceInput
@@ -92,34 +180,48 @@ class PackagePendingEdit extends React.Component {
                     >
                         <AutocompleteInput source="posProductId" optionText="name" />
                     </ReferenceInput>
-                    <FormDataConsumer>
-                        {({ formData, ...rest }) => {
+                    {
+                        parsed.shippedUnitOfMeasureName == "Each" ?
+                            <FormDataConsumer>
+                                {({ formData, ...rest }) => {
 
-                            return (
-                                <React.Fragment>
-                                    {formData.shippedUnitOfMeasureName == "Each" ? <React.Fragment>
+                                    return (<React.Fragment>
                                         <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
                                             <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
                                             <NumberInput source='quantity' label='Quantity' defaultValue={1} />
-                                            <Button onClick={()=>this.addData(formData.scan,formData, rest)} variant="contained" color="secondary">
+                                            <Button onClick={() => this.addData(formData.scan, formData.quantity, rest, formData)} variant="contained" color="secondary">
                                                 <AddIcon style={{ marginRight: '5px' }} />
                                                 Add
-                                   </Button>
+                                                </Button>
                                         </div>
                                         <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
-                                    </React.Fragment> :
-                                        <React.Fragment>
-                                            <Quantity />
-                                        </React.Fragment>
-                                    }
-                                </React.Fragment>
+                                    </React.Fragment>)
+                                }}
+                            </FormDataConsumer> :
+                            <React.Fragment>
+                                <FormDataConsumer>
+                                    {({ formData, ...rest }) => {
+                                        return (
+                                            <React.Fragment>
+                                                <Quantity pcsSelection={this.pcsSelection} rest={rest} />
+                                                <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
+                                                    <SelectInput source='weightSelection' choices={this.state.choices} />
+                                                    <Button onClick={() => this.addData(formData.scan, this.weightedQuantity(formData),rest,formData)} variant="contained" color="secondary">
+                                                        <AddIcon style={{ marginRight: '5px' }} />
+                                                        Add
+                                                    </Button>
+                                                </div>
+                                                <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
+                                            </React.Fragment>
+                                        )
+                                    }}
+                                </FormDataConsumer>
 
+                            </React.Fragment>
 
-                            )
-                        }}
-                    </FormDataConsumer>
+                    }
 
-                    {/* <SplitPackageForm {...props} /> */}
                 </SimpleForm>
             </Edit>
         );

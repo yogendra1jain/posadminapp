@@ -33,21 +33,26 @@ const ListActionButton = ({
   resource,
   syncClick,
   lastSynched,
-  disable
+  disable,
+  permissions
 }) => {
   return (
     <div>
-      <Typography>{`Last Synced: ${moment(
-        lastSynched * 1
-      ).fromNow()}`}</Typography>
-      <Button
-        disabled={disable}
-        color="primary"
-        variant="contained"
-        onClick={syncClick}
-      >
-        synchronize
-      </Button>
+      {permissions === "2" ? (
+        <div>
+          <Typography variant="caption">{`Last Synced: ${moment(
+            lastSynched * 1
+          ).fromNow()}`}</Typography>
+          <Button
+            disabled={disable}
+            color="primary"
+            variant="contained"
+            onClick={syncClick}
+          >
+            synchronize
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -72,23 +77,28 @@ const PackageFilter = ({ permissions, ...props }) => {
 const MyEditButton = ({ record, ...props }) => {
   return (
     <React.Fragment>
-      {record.shipmentPackageState !== 'Accepted' ?
+      {record.shipmentPackageState !== "Accepted" ? (
         <InfoOutline
           titleAccess="Please Accept Package on METRC UI"
           color="red"
-        /> :
+        />
+      ) : (
         <EditButton
           {...props}
           label="Check in"
           component={Link}
           to={{
-            pathname: props.basePath + "/" + record.packageLabel,
+            pathname: `${props.basePath}/${record.packageLabel}`,
+            search: `?shippedUnitOfMeasureName=${
+              record.shippedUnitOfMeasureName
+            }`,
             state: { record: { storeId: localStorage.getItem("storeId") } }
           }}
-        />}
+        />
+      )}
     </React.Fragment>
   );
-}
+};
 const MyShowButton = ({ record, ...props }) => (
   <ShowButton
     {...props}
@@ -103,10 +113,15 @@ const MyShowButton = ({ record, ...props }) => (
 const FilterActions = ({ permissions, basePath, ...rest }) => {
   return (
     <CardActions>
-      {localStorage.getItem('role') === "1" ? <CreateButton {...rest} basePath={basePath}
-        to={{
-          pathname: "/Package/create",
-        }} /> :
+      {localStorage.getItem("role") === "1" ? (
+        <CreateButton
+          {...rest}
+          basePath={basePath}
+          to={{
+            pathname: "/Package/create"
+          }}
+        />
+      ) : (
         <CreateButton
           {...rest}
           basePath={basePath}
@@ -116,11 +131,10 @@ const FilterActions = ({ permissions, basePath, ...rest }) => {
             // state: { record: { storeId: storeId } }
           }}
         />
-      }
-
+      )}
     </CardActions>
   );
-}
+};
 class PackagePendingList extends React.Component {
   constructor(props) {
     super(props);
@@ -160,25 +174,32 @@ class PackagePendingList extends React.Component {
               disable={this.state.disable}
               lastSynched={this.state.lastSynched}
               syncClick={this.syncClick}
+              permissions={permissions}
             />
           }
         >
           <Responsive
             small={<MobileGrid />}
-            medium={<Datagrid>
-              <TextField label="Manifest" source="manifestNumber" />
-              <TextField label="Label" source="packageLabel" />
-              <TextField label="METRC Product" source="productName" />
-              <TextField label="Category" source="productCategoryName" />
-              <TextField label="Shipment Status" source="shipmentPackageState" />
-              <TextField label="Quantity" source="shippedQuantity" />
-              <TextField
-                label="UOM"
-                source="shippedUnitOfMeasureName"
-                defaultValue={0}
-              />
-              <MyEditButton />
-            </Datagrid>} />
+            medium={
+              <Datagrid>
+                <TextField label="Manifest" source="manifestNumber" />
+                <TextField label="Label" source="packageLabel" />
+                <TextField label="METRC Product" source="productName" />
+                <TextField label="Category" source="productCategoryName" />
+                <TextField
+                  label="Shipment Status"
+                  source="shipmentPackageState"
+                />
+                <TextField label="Quantity" source="shippedQuantity" />
+                <TextField
+                  label="UOM"
+                  source="shippedUnitOfMeasureName"
+                  defaultValue={0}
+                />
+                <MyEditButton />
+              </Datagrid>
+            }
+          />
         </List>
       </div>
     );
@@ -186,5 +207,3 @@ class PackagePendingList extends React.Component {
 }
 
 export default withDataProvider(PackagePendingList);
-
-
