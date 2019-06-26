@@ -397,7 +397,7 @@ const ResBodyGuesser = (obj) => {
                 total: json ? json.length : 0
             }
         //For Inventory       ******************************************************************************************
-        case 'Search/Inventory':
+        case 'Search/NonCannabis/Inventory':
 
             return {
 

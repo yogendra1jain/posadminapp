@@ -217,7 +217,7 @@ const UrlGuesser = (obj) => {
 
         //For Inventory       ******************************************************************************************
         case 'Inventory/GET_LIST':
-            return 'Search/Inventory'
+            return 'Search/NonCannabis/Inventory'
 
         case 'Inventory/GET_ONE':
             return 'Inventory/Get'
