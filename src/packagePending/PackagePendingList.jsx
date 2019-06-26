@@ -82,7 +82,8 @@ const MyEditButton = ({ record, ...props }) => {
           label="Check in"
           component={Link}
           to={{
-            pathname: props.basePath + "/" + record.packageLabel,
+            pathname:`${props.basePath}/${record.packageLabel}`,
+            search:`?shippedUnitOfMeasureName=${record.shippedUnitOfMeasureName}`,
             state: { record: { storeId: localStorage.getItem("storeId") } }
           }}
         />}
