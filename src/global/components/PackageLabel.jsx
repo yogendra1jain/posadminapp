@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 var Barcode = require('react-barcode');
-const queryString = require('query-string');
+const queryString = require('querystring');
 import { } from 'react-router-dom';
 
 

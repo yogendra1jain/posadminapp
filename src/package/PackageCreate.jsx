@@ -11,7 +11,7 @@ import {
 } from "react-admin";
 import { SimpleForm } from "react-admin";
 import { FormDataConsumer } from "ra-core";
-import { parse } from "query-string";
+import { parse } from "querystring";
 import NewPackageCreate from "./NewPackageCreate";
 import PackageSplitCreate from './PackageSplitCreate';
 
