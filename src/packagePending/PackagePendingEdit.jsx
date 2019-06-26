@@ -66,50 +66,16 @@ class PackagePendingEdit extends React.Component {
         this.state = { choices: [], key: uuidv1() };
     }
 
-    weightedQuantity = (formData) => {
-        let quantity = 0;
-        switch (formData.weightSelection) {
-            case 'grams':
-                quantity = 1;
-                break;
-            case 'byEight':
-                quantity = 3.5;
-                break;
-            case 'byFour':
-                quantity = 7;
-
-                break;
-            case 'byTwo':
-                quantity = 14;
-                break;
-            case 'byOne':
-                quantity = 28;
-                break;
-
-
-            default:
-                break;
-        }
-        return quantity
-    }
     scan = (e, formData, rest) => {
         debugger;
         if (e.key === 'Enter') {
-            debugger;
-            if (formData.weightSelection) {
-
-                this.addData(e.target.value, this.weightedQuantity(formData), rest, formData);
-            }
-            else {
-                this.addData(e.target.value, formData.quantity, rest, formData);
-            }
-
+            this.addData(e.target.value, formData.quantity, rest, formData);
         }
     }
     addData = (value, quantity, rest, formData) => {
         if (value == '')
             return;
-        if (qtyValidation(formData.quantity, formData)) {
+        if (qtyValidation(quantity, formData)) {
             return;
         }
         if (_get(formData, 'itemPackages', []).find(v => v.label == value)) {
@@ -132,7 +98,7 @@ class PackagePendingEdit extends React.Component {
         if (e.key === 'Enter') {
             switch (weightType) {
                 case 'grams':
-                rest.dispatch(change(REDUX_FORM_NAME, `grams`, ''));
+                rest.dispatch(change(REDUX_FORM_NAME, `gram`, ''));
                     this.addData(e.target.value, 1, rest, formData)
 
                     break;
@@ -161,7 +127,7 @@ class PackagePendingEdit extends React.Component {
 
     }
     render() {
-        const parsed = queryString.parse(this.props.location.search);
+        const parsed = queryString.parse(this.props.location.search.split('?')[1]);
         console.log(parsed, "parsed");
         return (
             <Edit
@@ -201,14 +167,7 @@ class PackagePendingEdit extends React.Component {
                                         return (
                                             <React.Fragment>
                                                 <Quantity pcsSelection={this.pcsSelection} formData={formData} rest={rest} />
-                                                <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
-                                                    <SelectInput source='weightSelection' choices={this.state.choices} />
-                                                    <Button onClick={() => this.addData(formData.scan, this.weightedQuantity(formData), rest, formData)} variant="contained" color="secondary">
-                                                        <AddIcon style={{ marginRight: '5px' }} />
-                                                        Add
-                                                    </Button>
-                                                </div>
+
                                                 <SplitPackageForm rest={rest} handleDelete={this.handleDelete} itemPackages={formData.itemPackages} />
                                             </React.Fragment>
                                         )

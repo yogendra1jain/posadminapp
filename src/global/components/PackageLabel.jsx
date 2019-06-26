@@ -27,7 +27,7 @@ class PackageLabel extends Component {
   }
 
   render() {
-    const parsed = queryString.parse(this.props.location.search);
+    const parsed = queryString.parse(this.props.location.search.split('?')[1]);
     return (
       <React.Fragment>
         <div id="printarea" syle={{ marginTop: '10px' }}>
