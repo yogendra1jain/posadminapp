@@ -27,14 +27,12 @@ const UrlGuesser = (obj) => {
             return 'Get/Metrc/UnitOfMeasure'
 
         //For Unfinished Products ******************************************************************************************
-        case 'UnfinishedProducts/GET_LIST':
-            return 'Search/Products'
-        case 'UnfinishedProducts/GET_ONE':
-            return 'Product/Get'
-        case 'UnfinishedProducts/UPDATE':
-            return 'Product/Import/Update'
-        case 'UnfinishedProducts/GET_MANY':
-            return 'Product/GetByIds'
+        case 'METRCProducts/GET_LIST':
+            return 'Search/MetrcItems';
+        case 'METRCProducts/GET_ONE':
+            return 'Get/Metrc/Item/MetrcId';
+        case 'METRCProducts/UPDATE':
+            return 'Store/ImportedItems/Map';
 
         //For Category ******************************************************************************************
         case 'Level1ByRetailerId/GET_LIST':

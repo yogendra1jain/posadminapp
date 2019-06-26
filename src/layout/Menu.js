@@ -103,12 +103,6 @@ class Menu extends Component {
             leftIcon={<products.icon />}
             onClick={onMenuClick}
           />
-          <MenuItemLink
-            to={`/UnfinishedProducts`}
-            primaryText={"METRC Items"}
-            leftIcon={<products.icon />}
-            onClick={onMenuClick}
-          />
           {/* <MenuItemLink
             to={`/SaleHistory`}
             primaryText={"SaleHistory"}
@@ -135,12 +129,20 @@ class Menu extends Component {
               }
               {
                 permissions === "1" ? null : (<MenuItemLink
-                    to={`/StoreProducts`}
-                    primaryText={"Store Products"}
-                    leftIcon={<stores.icon />}
-                    onClick={onMenuClick}
-                  />
+                  to={`/StoreProducts`}
+                  primaryText={"Store Products"}
+                  leftIcon={<stores.icon />}
+                  onClick={onMenuClick}
+                />
                 )
+              }
+              {
+                permissions === "1" ? null : <MenuItemLink
+                  to={`/METRCProducts`}
+                  primaryText={"METRC Items"}
+                  leftIcon={<products.icon />}
+                  onClick={onMenuClick}
+                />
               }
               <MenuItemLink
                 to={`/Terminal`}

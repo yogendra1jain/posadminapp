@@ -1,9 +1,8 @@
 import React from "react";
-import { TextField } from "react-admin";
+import { TextField, EditButton, ShowButton } from "react-admin";
 import Card from "@material-ui/core/Card";
 import { withStyles } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
 import _get from "lodash/get";
 
 const listStyles = theme => ({
@@ -36,23 +35,37 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
     {ids.map(id => (
       <Card key={id} className={classes.card}>
         <CardContent className={classes.cardContent}>
-          <CardHeader title={<TextField record={data[id]} source="name" />} />
           <span className={classes.cardContentRow}>
-            Metrc Id:&nbsp;
-            <TextField record={data[id]} source="metrcId" />
+            METRC Id:&nbsp;
+              <TextField record={data[id]} source="id" />
+          </span>
+          <span className={classes.cardContentRow}>
+            METRC Item:&nbsp;
+              <TextField record={data[id]} source="name" />
           </span>
           <span className={classes.cardContentRow}>
             Type:&nbsp;
-            <TextField record={data[id]} source="metrcItemType" />
+          <TextField record={data[id]} source="ProductCategoryType" />
           </span>
           <span className={classes.cardContentRow}>
-            Metrc Category:&nbsp;
-            <TextField record={data[id]} source="metrcCategory" />
+            Category:&nbsp;
+            <TextField record={data[id]} source="productCategoryName" />
           </span>
           <span className={classes.cardContentRow}>
-            Unit Of Measure:&nbsp;
-            <TextField record={data[id]} source="metrcUom" />
+            Unit of Measure:&nbsp;
+            <TextField record={data[id]} source="unitOfMeasureName" />
           </span>
+          <EditButton
+            label="Import"
+            resource="METRCProducts"
+            basePath={basePath}
+            record={data[id]}
+          />
+          <ShowButton
+            resource="METRCProducts"
+            basePath={basePath}
+            record={data[id]}
+          />
         </CardContent>
       </Card>
     ))}
