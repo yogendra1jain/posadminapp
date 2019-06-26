@@ -64,43 +64,48 @@ class PackagePendingEdit extends React.Component {
         super(props);
         this.state = { choices: [], key: uuidv1() };
     }
+
+    weightedQuantity = (formData) => {
+        let quantity = 0;
+        switch (formData.weightSelection) {
+            case 'grams':
+                quantity = 1;
+                break;
+            case 'byEight':
+                quantity = 3.5;
+                break;
+            case 'byFour':
+                quantity = 7;
+
+                break;
+            case 'byTwo':
+                quantity = 14;
+                break;
+            case 'byOne':
+                quantity = 28;
+                break;
+
+
+            default:
+                break;
+        }
+        return quantity
+    }
     scan = (e, formData, rest) => {
         debugger;
         if (e.key === 'Enter') {
             debugger;
             if (formData.weightSelection) {
-                let quantity = 0;
-                switch (formData.weightSelection) {
-                    case 'grams':
-                    quantity =1;
-                        break;
-                    case 'byEight':
-                    quantity = 3.5;
-                        break;
-                    case 'byFour':
-                    quantity = 7;
 
-                        break;
-                    case 'byTwo':
-                    quantity = 14;
-                        break;
-                    case 'byOne':
-                    quantity = 28;
-                        break;
-
-
-                    default:
-                        break;
-                }
-                this.addData(e.target.value,quantity , rest,formData);
+                this.addData(e.target.value, this.weightedQuantity(formData), rest, formData);
             }
             else {
-                this.addData(e.target.value, formData.quantity, rest,formData);
+                this.addData(e.target.value, formData.quantity, rest, formData);
             }
 
         }
     }
-    addData = (value, quantity, rest,formData) => {
+    addData = (value, quantity, rest, formData) => {
         let i = _get(formData, 'itemPackages.length', 0);
         rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].label`, value))
         rest.dispatch(change(REDUX_FORM_NAME, `itemPackages[${i}].quantity`, quantity))
@@ -184,7 +189,7 @@ class PackagePendingEdit extends React.Component {
                                         <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
                                             <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
                                             <NumberInput source='quantity' label='Quantity' defaultValue={1} />
-                                            <Button onClick={() => this.addData(formData.scan, formData, rest)} variant="contained" color="secondary">
+                                            <Button onClick={() => this.addData(formData.scan, formData.quantity, rest, formData)} variant="contained" color="secondary">
                                                 <AddIcon style={{ marginRight: '5px' }} />
                                                 Add
                                                 </Button>
@@ -202,7 +207,7 @@ class PackagePendingEdit extends React.Component {
                                                 <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
                                                     <TextInput label="Scan Here" source='scan' onKeyDown={(e) => this.scan(e, formData, rest)} />
                                                     <SelectInput source='weightSelection' choices={this.state.choices} />
-                                                    <Button onClick={() => this.addData(formData.scan, formData, rest)} variant="contained" color="secondary">
+                                                    <Button onClick={() => this.addData(formData.scan, this.weightedQuantity(formData),rest,formData)} variant="contained" color="secondary">
                                                         <AddIcon style={{ marginRight: '5px' }} />
                                                         Add
                                                     </Button>
