@@ -39,7 +39,7 @@ const listStyles = theme => ({
     }
 });
 
-const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
+const MobileGrid = ({ classes, ids, data, basePath, translate, filterValues }) => (
     <div style={{ margin: '1em' }}>
         {ids.map(id => (
             <Card key={id} className={classes.card}>
@@ -77,11 +77,11 @@ const MobileGrid = ({ classes, ids, data, basePath, translate }) => (
                         Sale Price:&nbsp;
                         <DineroPrice record={data[id]} source="salePrice.amount" />
                     </span>
-                    <EditButton
+                    {_get(filterValues,'productType', 0) == 1 ? <EditButton
                         resource="StoreProducts"
                         basePath={basePath}
                         record={data[id]}
-                    />
+                    /> : ''}
                     {/* <ShowButton
                         resource="Products"
                         basePath={basePath}

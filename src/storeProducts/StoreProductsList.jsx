@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import _find from "lodash/find";
 import _get from "lodash/get";
 import {
@@ -29,13 +29,17 @@ const filterChoices = [
 ];
 
 const ListActions = (props) => {
-  const { 
+  const {
     currentSort,
     exporter,
     filterValues,
     resource,
-    total
+    total,
+    checkForProductType
   } = props
+
+  checkForProductType(_get(filterValues,'productType', 0))
+
   return (
     <div>
       <ExportButton
@@ -56,11 +60,12 @@ const mapProductsWithStore = (props) => {
 
 const BulkActionButtons = (props) => {
   return (
-  <Fragment>
-    {_get(props,'filterValues.productType', 0) == 2 ? <Button color="secondary" onClick={() => mapProductsWithStore(props)}>Map</Button> : false }
-  </Fragment>
-  
-)};
+    <Fragment>
+      {_get(props, 'filterValues.productType', 0) == 2 ? <Button color="secondary" onClick={() => mapProductsWithStore(props)}>Map</Button> : false}
+    </Fragment>
+
+  )
+};
 
 const ProductField = ({ record = {} }) => (
   <div style={{ display: "flex", flexWrap: "nowrap", alignItems: "center" }}>
@@ -91,15 +96,20 @@ const StoreProductFilter = props => {
 const Title = () => <span>Store Products</span>
 
 class StoreProductList extends React.Component {
+
+  setProductType = (productType) => {
+    this.setState({ productType })
+  }
+
   render() {
     return (
       <List
         {...this.props}
         title={<Title />}
-        actions={<ListActions {...this.props} />}
+        actions={<ListActions {...this.props} checkForProductType={this.setProductType} />}
         filters={<StoreProductFilter />}
         bulkActionButtons={<BulkActionButtons {...this.props} />}
-        filterDefaultValues={{ productType : "1" }}
+        filterDefaultValues={{ productType: "1" }}
       >
         <Responsive
           small={<MobileGrid />}
@@ -128,7 +138,7 @@ class StoreProductList extends React.Component {
                       )
                 }
               />
-              <EditButton />
+              {_get(this.state,'productType', 0) == 1 ? <EditButton /> : ''}
             </Datagrid>
           }
         />
