@@ -180,7 +180,7 @@ const PackageList = ({ permissions, ...props }) => (
             render={record =>
               _get(record, "status", 2) === 1 ? (
                 <React.Fragment>
-                  <EditButton label="Edit" />
+                  {/* <EditButton label="Edit" /> */}
                   <AddNewSplitButton record={record} label="Split" />
                 </React.Fragment>
               ) : null

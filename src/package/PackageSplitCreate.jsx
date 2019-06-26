@@ -80,11 +80,17 @@ class PackageSplitCreate extends React.Component {
           >
             <SimpleFormIterator>
               <TextInput label="METRC Tag (Label)" source="label" validate={required()} />
-              <NumberInput
+              {this.state.uom=="Each"? <NumberInput
                 source="quantity"
                 label="Quantity"
+                parse={val=>val<=0?1:parseInt(val)}
                 validate={required()}
-              />
+              />: <NumberInput
+              source="quantity"
+              label="Quantity"
+              parse={val=>val<=0?0:val}
+              validate={required()}
+            />}
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleForm>
